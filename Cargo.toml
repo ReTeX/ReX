@@ -4,3 +4,5 @@ version = "0.1.0"
 authors = ["Christopher Breeden <github@u.breeden.cc>"]
 
 [dependencies]
+phf="*"
+phf_macros="*"
