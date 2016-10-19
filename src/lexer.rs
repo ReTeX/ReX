@@ -27,6 +27,7 @@ impl<'a> Lexer<'a> {
             None       => LexToken::EOF,
             Some(' ')  => LexToken::WhiteSpace,
             Some('\\') => self.extract_control_sequence(),
+            // Should we filter out unrecognized characters here?
             Some(c)    => LexToken::Symbol(c),
         }
     }

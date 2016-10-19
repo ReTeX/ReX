@@ -1,4 +1,13 @@
+#![feature(plugin)]
+#![plugin(phf_macros)]
+extern crate phf;
+ 
+//use phf;
+
 mod lexer;
+mod parsenodes;
+mod parser;
+mod symbols;
 
 #[cfg(test)]
 mod tests {
