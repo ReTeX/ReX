@@ -64,7 +64,7 @@ template = '    "{}" => Symbol {{ code: {}, atom_type: AtomType::{} }}, // {}\n'
 
 # Parse 'unicode-math-table.tex'.  Store relavent information in
 # `symbols` as 4-tuples:
-#     (Unicode, TeX command, AtomType, Description)
+#     (TeX command, Unicode, AtomType, Description)
 with open('unicode-math-table.tex', 'r') as f:
     for line in f:
         code = "0x" + line[20:25]
@@ -75,9 +75,7 @@ with open('unicode-math-table.tex', 'r') as f:
         atom = line[56:cursor]
 
         cursor += 2  # Skip next `}{` sequence
-        end = cursor
-        while line[end] != '}': end += 1
-        desc = line[cursor:end]
+        desc = line[cursor:-3]
 
         symbols.append((cmd, code, convert_type[atom], desc))
 
