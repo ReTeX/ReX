@@ -1,8 +1,7 @@
 #![allow(dead_code)]
 
 use lexer::{Lexer, LexToken};
-//use parsenodes::*;
-use symbols::{UNICODEMATH, Symbol, IsSymbol, FontMode};
+use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
 
 #[derive(Debug)]
 enum ParsingMode {
@@ -38,7 +37,7 @@ impl Parser {
 }
 
 fn parse_control(cs: &str) -> Option<Symbol> {
-    UNICODEMATH.get(cs).cloned()
+    SYMBOLS.get(cs).cloned()
 }
 
 fn parse_symbol(ch: &char) -> Option<Symbol> {
