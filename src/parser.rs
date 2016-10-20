@@ -1,6 +1,8 @@
+#![allow(dead_code)]
+
 use lexer::{Lexer, LexToken};
 //use parsenodes::*;
-use symbols::{MATHUNICODE, Symbol, IsSymbol};
+use symbols::{UNICODEMATH, Symbol, IsSymbol, FontMode};
 
 #[derive(Debug)]
 enum ParsingMode {
@@ -36,14 +38,11 @@ impl Parser {
 }
 
 fn parse_control(cs: &str) -> Option<Symbol> {
-    MATHUNICODE.get(cs).cloned()
+    UNICODEMATH.get(cs).cloned()
 }
 
 fn parse_symbol(ch: &char) -> Option<Symbol> {
-    Some(Symbol {
-        code: *ch as u32,
-        atom_type: ch.atom_type().unwrap(),
-    })
+    ch.atom_type(FontMode::Italic)
 }
 
 #[cfg(test)]

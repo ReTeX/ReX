@@ -21,19 +21,121 @@ pub struct Symbol {
     pub atom_type: AtomType,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum FontMode {
+    Bold,
+    Italic,
+    BoldItalic,
+    Script,
+    ScriptBold,
+    Fraktur,
+    DoubleStruck,
+    BoldFraktur,
+    SansSerif,
+    BoldSansSerif,
+    ItalicSansSerif,
+    BoldItalicSansSerif,
+    Monospace,
+}
+
 pub trait IsSymbol {
-    fn atom_type(&self) -> Option<AtomType>;
+    fn atom_type(&self, FontMode) -> Option<Symbol>;
+}
+
+// For the following three functions, we place the default FontMode
+// on top, even though it is redundant, since these modes should have
+// the fastest path.
+
+fn greek_offset(mode: FontMode) -> u32 {
+    match mode {
+        FontMode::Italic          => 0x1D351,
+        FontMode::Bold            => 0x1D317,
+        FontMode::BoldItalic      => 0x1D38B,
+        FontMode::SansSerif        => 0x1D3C5,
+        FontMode::ItalicSansSerif => 0x1D790,
+
+        // We default to Italic
+        _               => 0x1D351,
+    }
+}
+
+fn alphabetic_offset(mode: FontMode) -> u32 {
+    match mode {
+        FontMode::Italic              => 0x1D3F3,
+        FontMode::Bold                => 0x1D3BF,
+        FontMode::BoldItalic          => 0x1D427,
+        FontMode::Script              => 0x1D45B,
+        FontMode::ScriptBold          => 0x1D48F,
+        FontMode::Fraktur             => 0x1D4C3,
+        FontMode::DoubleStruck        => 0x1D4F7,
+        FontMode::BoldFraktur         => 0x1D52B,
+        FontMode::SansSerif           => 0x1D55F,
+        FontMode::BoldSansSerif       => 0x1D593,
+        FontMode::ItalicSansSerif     => 0x1D5C7,
+        FontMode::BoldItalicSansSerif => 0x1D5FB,
+        FontMode::Monospace           => 0x1D62F,
+    }
+}
+
+fn numeric_offset(mode: FontMode) -> u32 {
+    match mode {
+        FontMode::SansSerif     => 0x1D7B2,
+        FontMode::Bold          => 0x1D79E,
+        FontMode::DoubleStruck  => 0x1D7A8,
+        FontMode::BoldSansSerif => 0x1D7EC,
+        FontMode::Monospace     => 0x1D7C6,
+
+        // We default to SansSerif
+        _                       => 0x1D7B2,
+    }
 }
 
 impl IsSymbol for char {
-    fn atom_type(&self) -> Option<AtomType> {
+    fn atom_type(&self, mode: FontMode) -> Option<Symbol> {
         match *self {
-            'a'...'z' | 'A'...'Z' | '1'...'9' => Some(AtomType::Ord),
-            '+' | '-' | '*' => Some(AtomType::Bin),
-            '=' | '<' | '>' => Some(AtomType::Rel),
-            '(' | '['  => Some(AtomType::Open),
-            ')' | ']'  => Some(AtomType::Close),
-            '.' | ',' => Some(AtomType::Punct),
+            c @ 'a'...'z' => Some(Symbol{
+                code: c as u32 - 6 + alphabetic_offset(mode),
+                atom_type: AtomType::Alpha,
+            }),
+            c @ 'A'...'Z' => Some(Symbol{
+                code: c as u32 + alphabetic_offset(mode),
+                atom_type: AtomType::Alpha,
+            }),
+            c @ '0'...'9' => Some(Symbol{
+                code: c as u32 + numeric_offset(mode),
+                atom_type: AtomType::Alpha,
+            }),
+            c @ '*' | c @ '+' => Some(Symbol{
+                code: c as u32,
+                atom_type: AtomType::Binary,
+            }),
+            c @ '(' | c @ '[' => Some(Symbol{
+                code: c as u32,
+                atom_type: AtomType::Open,
+            }),
+            c @ ']' | c @ ')' | c @ '?' | c @ '!' => Some(Symbol {
+                code: c as u32,
+                atom_type: AtomType::Close,
+            }),
+            c @ '=' | c @ '<' | c @ '>' | c @ ':' => Some(Symbol {
+                code: c as u32,
+                atom_type: AtomType::Relation,
+            }),
+            c @ ',' | c @ ';' => Some(Symbol {
+                code: c as u32,
+                atom_type: AtomType::Punctuation,
+            }),
+            c @ '|' | c @ '/' | c @ '@' | c @ '.' | c @ '"' => Some(Symbol {
+                code: c as u32,
+                atom_type: AtomType::Ordinal,
+            }),
+
+            // Greek Leters
+            c @ '\u0391'...'\u03C9' => Some(Symbol {
+                code: c as u32 + greek_offset(mode),
+                atom_type: AtomType::Alpha,
+            }),
+
             _ => None,
         }
     }
@@ -48,7 +150,7 @@ convert_type = {
     "mathclose": "Close",
     "mathord": "Ordinal",
     "mathbin": "Binary",
-    "mathrel": "Relelation",
+    "mathrel": "Relation",
     "mathop": "Operator",
     "mathfence": "Fence",
     "mathover": "Over",
@@ -82,53 +184,103 @@ with open('unicode-math-table.tex', 'r') as f:
 # Write '.../syc/symbols.rs'
 with open('../src/symbols.rs', 'w') as f:
     f.write(header)
-    # TODO: Codepoint -> AtomType implementation & conflicts
-
     # Write TeX Command -> Symbol hashmap.
     f.write("\npub static UNICODEMATH: phf::Map<&'static str, Symbol> = phf_map! {\n")
     for tpl in symbols:
         f.write(template.format(*tpl))
     f.write('};')
 
+# The following is scratch work, kept in case it's need later
+
 # This list is sorted, ordered by code point.
 # Print the distribution of code points
 # Starting from first, to last.
-collisions = defaultdict(set)
-previous   = [0,"0"]
-output = ""
+# collisions = defaultdict(set)
+# previous   = [0,"0"]
+# output = ""
 
-for symbol in symbols:
-    code          = int(symbol[1], 0)
-    previous_code = int(previous[1], 0)
+# for symbol in symbols:
+#     code          = int(symbol[1], 0)
+#     previous_code = int(previous[1], 0)
 
-    # We have found a collision
-    if code == previous_code:
-        collisions[code].update([symbol, previous])
+#     # We have found a collision
+#     if code == previous_code:
+#         collisions[code].update([symbol, previous])
     
-    # No collision, so count how far we've gone and print out symbols
-    else:
-        output += '.'*(code - previous_code - 1) + '#'
-        previous = symbol
+#     # No collision, so count how far we've gone and print out symbols
+#     else:
+#         output += '.'*(code - previous_code - 1) + '#'
+#         previous = symbol
 
 # This output is being used for helping me determine how to group
 # the unicode points for when creating a map from unicode -> atom type.
 # The groups still need to be figured out.
 #
 # . means there is no atom-type and # means the is.
-print(output)
-print("\n")
+#
+# with open('dist.txt', 'w') as f:
+#    f.write(output)
+# print(output)
+# print("\n")
 
 # Use this to determine the collisions from unicode -> atom type.
-print(collisions)
+# print(collisions)
 
 # Default values for symbols that have multiple TeX commands.
-# Currently only accent's collide with Accent vs AccentWide.
+# Currently only accents collide with Accent vs AccentWide.
 # We will choose AccentWide by default, but I don't think it's
-# likely people will manual input combining characters.
-collision_defaults = {
-    "0x020D0": "AccentWide",
-    "0x020D1": "AccentWide",
-    "0x00302": "AccentWide",
-    "0x00303": "AccentWide",
-    "0x020D7": "AccentWide",
-}
+# likely people will manually input combining characters.
+
+# collision_defaults = {
+#     "0x020D0": "AccentWide",
+#     "0x020D1": "AccentWide",
+#     "0x00302": "AccentWide",
+#     "0x00303": "AccentWide",
+#     "0x020D7": "AccentWide",
+# }
+
+# The following table gives offsets to the code point for various styles.
+# This will be need to convert input code points to the proper math font
+# code points.
+
+# *         -> 0x2217  //  Centered asterisk
+# 
+
+# A...Za...z           // Substract 6 from 'a' to make A...Za...z adjacent
+#                      // Substract 0x41 to find offset from A
+# mbf       -> 0x1D400 // Math Bold
+# mit       -> 0x1D434 // Math Italic
+# mbfit     -> 0x1D468 // Math Bold Italic
+# mscr      -> 0x1D49C // Math Script
+# mbfscr    -> 0x1D4D0 // Math Bold Script
+# mfrak     -> 0x1D504 // Math Fraktur
+# Bbb       -> 0x1D538 // Math double-struck
+# mbffrak   -> 0x1D56C // Math Bold Fraktur
+# msans     -> 0x1D5A0 // Math Sans-serif
+# mbfsans   -> 0x1D5D4 // Math Bold Sans-serif
+# mitsans   -> 0x1D608 // Math Italic Sans-serif
+# mbfitsans -> 0x1D63C // Math Bold Italic Sans-serif
+# mtt       -> 0x1D670 // Math Monospace
+
+# Greek: 0391-03C9      // Lots of gaps here
+# mbf       -> 0x1D6A8  // Greek Bold
+# mit       -> 0x1D6E2  // Greek italic
+# mbfit     -> 0x1D71C  // Greek Bold Italic
+# mbfsans   -> 0x1D756  // Greek Bold Sans-serif
+# mbfitsans -> 0x1D790  // Greek Bold Italic Sans-serif
+
+# 0..9                  // Subtract by 0x30 to get relative offset
+# mbf       -> 0x1D7CE  // Math Bold Digit
+# Bbb       -> 0x1D7D8  // Math doube-struck Digit
+# msans     -> 0x1D7E2  // Math Sans-serif Digit
+# mbfsans   -> 0x1D7EC  // Math Bold Sans-serif Digit
+# mtt       -> 0x1D7F6  // Math Monospace Digit
+
+# Recognize
+# ----------
+# Binary    -> *+
+# Open      -> ([
+# Close     -> )]?!
+# Relative  -> =<>:
+# Punct     -> ,;
+# Ord       -> |a...zA...Z0123456789/@."

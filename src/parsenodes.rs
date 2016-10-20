@@ -65,19 +65,19 @@ pub type BoxedMathList = Box<MathList>;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum AtomType {
-    Punct,
-    Ord,
+    Punctuation,
+    Ordinal,
     Open,
     Close,
-    Bin,
-    Rel,
+    Binary,
+    Relation,
     Accent,
     AccentWide,
     BotAccent,
     BotAccentWide,
     Alpha,
     Fence,
-    Op,
+    Operator,
     Over,
     Under,
 }
@@ -144,7 +144,7 @@ pub struct Scripts {
     pub subscript: SymOrMathList,
     pub supscript: SymOrMathList,
     pub base:  SymOrMathList,
-    pub AtomType: AtomType,
+    pub atom_type: AtomType,
 }
 
 #[derive(Debug)]
