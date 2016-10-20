@@ -1,4 +1,4 @@
-use parsenodes::AtomType;
+use parser::nodes::AtomType;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Symbol {

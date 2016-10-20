@@ -8,7 +8,7 @@
 
 #![allow(dead_code)]
 use phf;
-use parsenodes::AtomType;
+use parser::nodes::AtomType;
 use symbols::Symbol;
 
 pub static SYMBOLS: phf::Map<&'static str, Symbol> = phf_map! {
