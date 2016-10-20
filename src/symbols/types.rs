@@ -6,27 +6,42 @@ pub struct Symbol {
     pub atom_type: AtomType,
 }
 
+// TODO: Add normal?
+// TODO: Note that STIX fonts have no real smallcaps, the smallcaps below are
+//  synthesized (scaled down upper case letters).
+// TODO: Use bitflags?
+
 #[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum FontMode {
+    Roman,
     Bold,
     Italic,
     BoldItalic,
+    Caligraphic,  // Non-standard in UNICODE
+                  // Many fonts treat Script <-> Caligraphic
     Script,
     ScriptBold,
-    Fraktur,
-    DoubleStruck,
-    BoldFraktur,
     SansSerif,
     BoldSansSerif,
     ItalicSansSerif,
     BoldItalicSansSerif,
+    DoubleStruck,       
+    BoldDoubleStruck,       // Non-standard
+    ItalicDoubleStruck,     // Non-standard
+    BoldItalicDoubleStruck, // Non-standard
+    Fraktur,
+    BoldFraktur,
     Monospace,
 }
 
 pub trait IsSymbol {
     fn atom_type(&self, FontMode) -> Option<Symbol>;
 }
+
+// These are the ranges defined by unicode for the respective symbols
+// given the current FontMode.  Some of these may by non-standard
+// as defined by STIX.
 
 // For the following three functions, we place the default FontMode
 // on top, even though it is redundant, since these modes should have
@@ -37,7 +52,7 @@ fn greek_offset(mode: FontMode) -> u32 {
         FontMode::Italic          => 0x1D351,
         FontMode::Bold            => 0x1D317,
         FontMode::BoldItalic      => 0x1D38B,
-        FontMode::SansSerif        => 0x1D3C5,
+        FontMode::SansSerif       => 0x1D3C5,
         FontMode::ItalicSansSerif => 0x1D790,
 
         // We default to Italic
@@ -54,12 +69,17 @@ fn alphabetic_offset(mode: FontMode) -> u32 {
         FontMode::ScriptBold          => 0x1D48F,
         FontMode::Fraktur             => 0x1D4C3,
         FontMode::DoubleStruck        => 0x1D4F7,
+        FontMode::BoldDoubleStruck    => 0x0E349,    // unstandard, see unicode-math-usv.dtx
+        FontMode::ItalicDoubleStruck  => 0x0E113,    // unstandard, see unicode-math-usv.dtx
+        FontMode::BoldItalicDoubleStruck => 0x0E1BF, // unstandard, see unicode-math-usv.dtx
+        FontMode::Caligraphic         => 0x0E1EC,    // unstandard, see unicode-math-usv.dtx 
         FontMode::BoldFraktur         => 0x1D52B,
         FontMode::SansSerif           => 0x1D55F,
         FontMode::BoldSansSerif       => 0x1D593,
         FontMode::ItalicSansSerif     => 0x1D5C7,
         FontMode::BoldItalicSansSerif => 0x1D5FB,
         FontMode::Monospace           => 0x1D62F,
+        _                             => 0,          // Roman?
     }
 }
 
