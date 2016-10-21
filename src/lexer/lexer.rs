@@ -1,50 +1,36 @@
 #![allow(dead_code)]
-
-#[derive(Clone, Copy, Debug)]
-pub struct Lexer<'a> {
-    input: &'a str,
-    pos: usize,
-}
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum LexToken<'a> {
-    ControlSequence(&'a str),
-    Symbol(char),
-    WhiteSpace,
-    EOF,
-}
+use super::{ Lexer, Token };
 
 impl<'a> Lexer<'a> {
     pub fn new(input: &'a str) -> Lexer<'a> {
         Lexer {
             input: input,
-            pos: 0,
+            ..Default::default()
         }
     }
 
-    pub fn next_token(&mut self) -> LexToken {
+    pub fn next(&mut self) -> Token<'a> {
         match self.next_char() {
-            None       => LexToken::EOF,
-            Some(' ')  => LexToken::WhiteSpace,
+            None       => Token::EOF,
+            Some(' ')  => Token::WhiteSpace,
             Some('\\') => self.extract_control_sequence(),
-            // Should we filter out unrecognized characters here?
-            Some(c)    => LexToken::Symbol(c),
+            Some(c)    => Token::Symbol(c),
         }
     }
 
     // This assumes that we have consumed '\'
     // remember to consume all spaces following it.
-    pub fn extract_control_sequence(&mut self) -> LexToken {
+    fn extract_control_sequence(&mut self) -> Token<'a> {
         let start = self.pos;
 
         // The first character is special in that non-alphabetic
         // characters are valid, but will terminate the search.
         match self.next_char() {
-            None => return LexToken::EOF,
+            None => return Token::EOF,
             Some(c) if !c.is_alphabetic() => {
                 let end = self.pos;
                 self.consume_whitespace();
-                return LexToken::ControlSequence(&self.input[start..end]);
+                return Token::ControlSequence(&self.input[start..end]);
             }
             _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ }
         };
@@ -60,10 +46,10 @@ impl<'a> Lexer<'a> {
 
         let end = self.pos;
         self.consume_whitespace();
-        LexToken::ControlSequence(&self.input[start..end])
+        Token::ControlSequence(&self.input[start..end])
     }
 
-    pub fn consume_whitespace(&mut self) {
+    fn consume_whitespace(&mut self) {
         while let Some(c) = self.peek_char() {
             match c {
                 ' ' | '\t' | '\r' | '\n' => self.pos += 1,
@@ -73,7 +59,7 @@ impl<'a> Lexer<'a> {
     }
 
     #[inline]
-    pub fn next_char(&mut self) -> Option<char> {
+    fn next_char(&mut self) -> Option<char> {
         match self.peek_char() {
             None => None,
             Some(c) => {
@@ -84,22 +70,9 @@ impl<'a> Lexer<'a> {
     }
 
     #[inline]
-    pub fn peek_char(&mut self) -> Option<char> {
+    fn peek_char(&mut self) -> Option<char> {
         self.input[self.pos..].chars().next()
     }
-}
-
-macro_rules! print_token_stream {
-    ($x:expr) => {{
-        let mut lex = Lexer::new($x);
-        loop {
-            let tok = lex.next_token();
-            print!("{:?}", tok);
-            if tok == LexToken::EOF {
-                break
-            }
-        }
-    }}
 }
 
 macro_rules! assert_eq_token_stream {
@@ -108,12 +81,12 @@ macro_rules! assert_eq_token_stream {
         let mut right = Lexer::new($right);
 
         loop {
-            let l_tok = left.next_token();
-            let r_tok = right.next_token();
+            let l_tok = left.next();
+            let r_tok = right.next();
 
             assert_eq!(l_tok, r_tok);
 
-            if l_tok == LexToken::EOF {
+            if l_tok == Token::EOF {
                 break
             }
         }
@@ -122,7 +95,7 @@ macro_rules! assert_eq_token_stream {
 
 #[cfg(test)]
 mod tests {
-    use super::{Lexer, LexToken};
+    use super::super::{Lexer, Token};
 
     #[test]
     fn lextokens() {
