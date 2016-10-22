@@ -30,12 +30,11 @@ impl ParserState {
         lex.advance();
         
         loop {
+            self.consume_whitespace(lex);
             let token = match lex.current() {
                 Some(t) => t,
                 None => break,
             };
-
-            self.consume_whitespace(lex);
 
             // Handle end of expressions
             if token.ends_expression() { break; }
@@ -96,14 +95,44 @@ impl ParserState {
                 right: right,
                 inner: inner,
             }));
+        } if let Ok(res) = tex_command(lex) {
+            lex.advance();
+            return Ok(res)
         }
 
+        println!("{:?}", token);
         Ok(match token {
             Token::Symbol(c)           => { lex.advance(); parse_symbol(c) },
             Token::ControlSequence(cs) => { lex.advance(); parse_control(cs) },
             _ => unreachable!(),
         })
     }
+}
+
+use parser::nodes::{RadicalBuilder, TexCommand};
+
+pub fn tex_command(lex: &mut Lexer) -> Result<ParseNode, String> {
+    let mut cmd: Box<TexCommand> = match lex.current {
+        Some(Token::ControlSequence("sqrt")) => Box::new(RadicalBuilder{}),
+        _ => return Err("Command not found!".to_string())
+    };
+    cmd.parse_command(lex)
+}
+
+// <Math_Field> = <filler><Symbol> | <filler>{<mathmode>}
+pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
+    while lex.current == Some(Token::WhiteSpace) {
+        lex.advance();
+    }
+    match lex.current.unwrap() {
+        Token::Symbol(ch) => Ok(parse_symbol(ch)),
+        Token::ControlSequence(cs) => Ok(parse_control(cs)),
+        _ => Err("Expected Symbol after".to_string())
+    } 
+}
+
+pub fn group(lex: &mut Lexer) -> Result<ParseNode, String> {
+    unimplemented!()
 }
 
 
@@ -130,8 +159,9 @@ mod tests {
     fn parser() {
         println!("");
         println!("'a+b=c': {:?}", parse("a+b=c").unwrap());
-        println!("'\\int(x+y)=z': {:?}", parse(r"\int(x+y)=z").unwrap());
-        println!("'1 + {{2 + 3}} = 4': {:?}", parse(r"1 + {2 + 3} = 4").unwrap());
+        println!("'\\int(x + y)=z': {:?}", parse(r"\int(x+y)=z").unwrap());
+        println!("'1 + {{2 + 3}} = 4': {:?}", parse(r"1 +").unwrap());
         println!("'1+\\left(3+2\\right)=6': {:?}", parse(r"1+\left(3+2\right)=6").unwrap());
+        println!("1+\\sqrt2: {:?}", parse(r"1+\sqrt2"));
     }
 }

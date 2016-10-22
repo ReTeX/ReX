@@ -96,6 +96,34 @@ pub enum ParseNode {
     Symbol(Symbol),
     Delimited(Delimited),
     Group(Vec<ParseNode>),
+    Radical(Radical),
+}
+
+#[derive(Debug)]
+pub struct Radical {
+    pub inner: Box<ParseNode>,
+    // We will handle optional arguments at a later day
+    // pub superscript: Vec<ParseNode>,
+}
+
+pub struct RadicalBuilder { }
+
+use lexer::Lexer;
+
+pub trait TexCommand {
+    fn parse_command(&mut self, &mut Lexer) -> Result<ParseNode, String>;
+}
+
+// <math field>
+use parser;
+impl TexCommand for RadicalBuilder {
+    fn parse_command(&mut self, lex: &mut Lexer) -> Result<ParseNode, String> {
+        lex.advance();
+        // Parse expression
+        Ok(ParseNode::Radical(Radical {
+            inner: Box::new(try!(parser::math_field(lex))),
+        }))
+    }
 }
 
 // /// Every symbol will need a font family
@@ -147,12 +175,6 @@ pub enum ParseNode {
 //     pub inner: SymOrMathList,
 //     pub accent: Symbol,
 //     pub kern: u32,
-// }
-
-// #[derive(Debug)]
-// pub struct Radical {
-//     pub inner: SymOrMathList,
-//     pub superscript: SymOrMathList,
 // }
 
 // #[derive(Debug)]
