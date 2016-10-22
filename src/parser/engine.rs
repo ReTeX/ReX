@@ -35,19 +35,7 @@ impl ParserState {
                 None => break,
             };
 
-            // Consume whitespaces as necessary
-            if token == Token::WhiteSpace {
-                if self.mode != ParsingMode::Math
-                && self.mode != ParsingMode::WhiteSpace {
-                    self.mode = ParsingMode::WhiteSpace;
-                    ml.push(ParseNode::Symbol(Symbol {
-                        code: ' ' as u32,
-                        atom_type: AtomType::Ordinal,
-                    }))
-                }
-                lex.advance();
-                continue;
-            }
+            self.consume_whitespace(lex);
 
             // Handle end of expressions
             if token.ends_expression() { break; }
@@ -59,6 +47,36 @@ impl ParserState {
         Ok(ml)
     }
 
+    // FIXME: We will need to actually keep track of whitespaces
+    // when we start support textmode.
+    fn consume_whitespace(&self, lex: &mut Lexer) {
+        while lex.current == Some(Token::WhiteSpace) {
+            lex.advance();
+        }
+    }
+
+    fn expect_symbol(&mut self, lex: &mut Lexer, expected: AtomType) 
+            -> Result<Symbol, String> {
+        let token = lex.current;
+        self.consume_whitespace(lex);
+
+        let token = match token {
+            Some(Token::Symbol(c))           => { lex.advance(); parse_symbol(c) },
+            Some(Token::ControlSequence(cs)) => { lex.advance(); parse_control(cs) },
+            _ => return Err("Expect specific token".to_string()),
+        };
+
+        if let ParseNode::Symbol(sym) = token {
+            if sym.atom_type == expected {
+                Ok(sym)
+            } else {
+                Err("Got wrong symbol type".to_string())
+            }
+        } else {
+            Err("Expected a symbol".to_string())
+        }
+    }
+
     fn parse_atom(&mut self, lex: &mut Lexer, token: Token) -> Result<ParseNode, String> {
         // Check for a groups and implicit groups
         if token == Token::Symbol('{') {
@@ -67,27 +85,15 @@ impl ParserState {
             return Ok(ret);
         } if token == Token::ControlSequence("left") {
             lex.advance();
-            let left  = match lex.current().unwrap() {
-                Token::Symbol(c) => parse_symbol(c),
-                _ => return Err("Expected delimiter".to_string())
-            };
+            let left  = try!(self.expect_symbol(lex, AtomType::Open));
             let inner = try!(self.parse_expression(lex));
             try!(lex.expect_and_advance(Token::ControlSequence("right")));
-            let right = match lex.current().unwrap() {
-                Token::Symbol(c) => parse_symbol(c),
-                _ => return Err("Expected delimiter".to_string())
-            };
+            let right = try!(self.expect_symbol(lex, AtomType::Close));
             lex.advance();
 
             return Ok(ParseNode::Delimited(Delimited{
-                left: match left {
-                    ParseNode::Symbol(s) => s,
-                    _ => unreachable!(),
-                },
-                right: match right {
-                    ParseNode::Symbol(s) => s,
-                    _ => unreachable!(),   
-                },
+                left: left,
+                right: right,
                 inner: inner,
             }));
         }
