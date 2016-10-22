@@ -2,7 +2,7 @@
 
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
-use parser::nodes::AtomType;
+use parser::nodes::{ AtomType, Delimited, ParseNode };
 use std::default::Default;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -21,20 +21,19 @@ impl Default for ParsingMode {
 // TODO: Add font family here?
 #[derive(Debug, Clone, Copy, Default)]
 struct ParserState {
-    mode: ParsingMode,
-}
-
-#[derive(Debug)]
-pub enum ParseNode {
-    Symbol(Symbol),
-    Group(Vec<ParseNode>),
+    mode:  ParsingMode,
 }
 
 impl ParserState {
     fn parse_expression(&mut self, lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         let mut ml: Vec<ParseNode> = Vec::new();
+        lex.advance();
+        
         loop {
-            let token = lex.next();
+            let token = match lex.current() {
+                Some(t) => t,
+                None => break,
+            };
 
             // Consume whitespaces as necessary
             if token == Token::WhiteSpace {
@@ -46,6 +45,7 @@ impl ParserState {
                         atom_type: AtomType::Ordinal,
                     }))
                 }
+                lex.advance();
                 continue;
             }
 
@@ -62,14 +62,39 @@ impl ParserState {
     fn parse_atom(&mut self, lex: &mut Lexer, token: Token) -> Result<ParseNode, String> {
         // Check for a groups and implicit groups
         if token == Token::Symbol('{') {
-            return Ok(ParseNode::Group(try!(self.parse_expression(lex))))
+            let ret = ParseNode::Group(try!(self.parse_expression(lex)));
+            try!(lex.expect_and_advance(Token::Symbol('}')));
+            return Ok(ret);
         } if token == Token::ControlSequence("left") {
-            return Ok(ParseNode::Group(try!(self.parse_expression(lex))))
+            lex.advance();
+            let left  = match lex.current().unwrap() {
+                Token::Symbol(c) => parse_symbol(c),
+                _ => return Err("Expected delimiter".to_string())
+            };
+            let inner = try!(self.parse_expression(lex));
+            try!(lex.expect_and_advance(Token::ControlSequence("right")));
+            let right = match lex.current().unwrap() {
+                Token::Symbol(c) => parse_symbol(c),
+                _ => return Err("Expected delimiter".to_string())
+            };
+            lex.advance();
+
+            return Ok(ParseNode::Delimited(Delimited{
+                left: match left {
+                    ParseNode::Symbol(s) => s,
+                    _ => unreachable!(),
+                },
+                right: match right {
+                    ParseNode::Symbol(s) => s,
+                    _ => unreachable!(),   
+                },
+                inner: inner,
+            }));
         }
 
         Ok(match token {
-            Token::Symbol(c)           => parse_symbol(&c),
-            Token::ControlSequence(cs) => parse_control(&cs),
+            Token::Symbol(c)           => { lex.advance(); parse_symbol(c) },
+            Token::ControlSequence(cs) => { lex.advance(); parse_control(cs) },
             _ => unreachable!(),
         })
     }
@@ -88,7 +113,7 @@ fn parse_control(cs: &str) -> ParseNode {
     ParseNode::Symbol(SYMBOLS.get(cs).cloned().unwrap())
 }
 
-fn parse_symbol(ch: &char) -> ParseNode {
+fn parse_symbol(ch: char) -> ParseNode {
     ParseNode::Symbol(ch.atom_type(FontMode::Italic).unwrap())
 }
 

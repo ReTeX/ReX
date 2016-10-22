@@ -55,10 +55,10 @@
 ///
 /// TODO: Environment ???
 
-use std::boxed::Box;
+// use std::boxed::Box;
 
-pub type MathList = Vec<ParseNode>;
-pub type BoxedMathList = Box<MathList>;
+// pub type MathList = Vec<ParseNode>;
+// pub type BoxedMathList = Box<MathList>;
 
 // There are additional classes defined from unicode-math 
 // in addition to those defined by TeX.
@@ -82,87 +82,103 @@ pub enum AtomType {
     Under,
 }
 
-/// Every symbol will need a font family
-/// and a code point for how the symbol will be rendered.
-/// This font family and code point will be used to look up
-/// additional information regarding the dimensions if needed.
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub struct SymbolIdentifier {
-    pub font_family: u8,
-    pub code_point: u32,
-}
+use symbols::Symbol;
 
 #[derive(Debug)]
-pub struct Symbol {
-    pub font_family: u8,
-    pub code_point: u32, 
-    pub height: u32,
-    pub width: u32,
-    pub depth: u32,
-    pub atom_type: AtomType,
-}
-
-#[derive(Debug)]
-pub struct Operator {
-    pub symbol: Symbol,
-    pub limits: bool,
-    pub largeop: bool,
-    pub successor: Option<SymbolIdentifier>,
-}
-
-#[derive(Debug)]
-pub struct Delimiter {
-    pub symbol: Symbol,
-    pub successor: Option<SymbolIdentifier>,
-}
-
-// The following are wrapper types,
-// which mean they can wrap either a symbol
-// or mathlist.
-#[derive(Debug)]
-pub enum SymOrMathList {
-    Symbol(Symbol),
-    MathList(Box<MathList>),
-}
-
-#[derive(Debug)]
-pub struct Accent {
-    pub inner: SymOrMathList,
-    pub accent: Symbol,
-    pub kern: u32,
-}
-
-#[derive(Debug)]
-pub struct Radical {
-    pub inner: SymOrMathList,
-    pub superscript: SymOrMathList,
-}
-
-#[derive(Debug)]
-pub struct Scripts {
-    pub subscript: SymOrMathList,
-    pub supscript: SymOrMathList,
-    pub base:  SymOrMathList,
-    pub atom_type: AtomType,
-}
-
-#[derive(Debug)]
-pub struct GenFraction {
-    pub numerator: Box<MathList>,
-    pub denominator: Box<MathList>,
-    pub barwidth: u32,
-    pub leftdelim: Delimiter,
-    pub rightdelim: Delimiter,
+pub struct Delimited {
+    pub left:  Symbol,
+    pub right: Symbol,
+    pub inner: Vec<ParseNode>,
 }
 
 #[derive(Debug)]
 pub enum ParseNode {
     Symbol(Symbol),
-    Operator(Operator),
-    Delimiter(Delimiter),
-    Accent(Accent),
-    Radical(Radical),
-    Scripts(Scripts),
-    GenFraction(GenFraction),
+    Delimited(Delimited),
+    Group(Vec<ParseNode>),
 }
+
+// /// Every symbol will need a font family
+// /// and a code point for how the symbol will be rendered.
+// /// This font family and code point will be used to look up
+// /// additional information regarding the dimensions if needed.
+
+// #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+// pub struct SymbolIdentifier {
+//     pub font_family: u8,
+//     pub code_point: u32,
+// }
+
+// #[derive(Debug)]
+// pub struct Symbol {
+//     pub font_family: u8,
+//     pub code_point: u32, 
+//     pub height: u32,
+//     pub width: u32,
+//     pub depth: u32,
+//     pub atom_type: AtomType,
+// }
+
+// #[derive(Debug)]
+// pub struct Operator {
+//     pub symbol: Symbol,
+//     pub limits: bool,
+//     pub largeop: bool,
+//     pub successor: Option<SymbolIdentifier>,
+// }
+
+// #[derive(Debug)]
+// pub struct Delimiter {
+//     pub symbol: Symbol,
+//     pub successor: Option<SymbolIdentifier>,
+// }
+
+// // The following are wrapper types,
+// // which mean they can wrap either a symbol
+// // or mathlist.
+// #[derive(Debug)]
+// pub enum SymOrMathList {
+//     Symbol(Symbol),
+//     MathList(Box<MathList>),
+// }
+
+// #[derive(Debug)]
+// pub struct Accent {
+//     pub inner: SymOrMathList,
+//     pub accent: Symbol,
+//     pub kern: u32,
+// }
+
+// #[derive(Debug)]
+// pub struct Radical {
+//     pub inner: SymOrMathList,
+//     pub superscript: SymOrMathList,
+// }
+
+// #[derive(Debug)]
+// pub struct Scripts {
+//     pub subscript: SymOrMathList,
+//     pub supscript: SymOrMathList,
+//     pub base:  SymOrMathList,
+//     pub atom_type: AtomType,
+// }
+
+// #[derive(Debug)]
+// pub struct GenFraction {
+//     pub numerator: Box<MathList>,
+//     pub denominator: Box<MathList>,
+//     pub barwidth: u32,
+//     pub leftdelim: Delimiter,
+//     pub rightdelim: Delimiter,
+// }
+
+// #[derive(Debug)]
+// pub enum ParseNode {
+//     Symbol(Symbol),
+//     Operator(Operator),
+//     Delimiter(Delimiter),
+//     Accent(Accent),
+//     Radical(Radical),
+//     Scripts(Scripts),
+//     GenFraction(GenFraction),
+// }

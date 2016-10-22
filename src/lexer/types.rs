@@ -1,7 +1,8 @@
 #[derive(Clone, Copy, Debug, Default)]
 pub struct Lexer<'a> {
     pub input: &'a str,
-    pub pos: usize,                    // cursor position of lexer
+    pub pos: usize,         // cursor position of lexer
+    pub current: Option<Token<'a>>,
 }
 
 #[allow(dead_code)]
@@ -14,6 +15,7 @@ pub enum Token<'a> {
 }
 
 impl<'a> Token<'a> {
+    #[allow(dead_code)]
     pub fn ends_expression(&self) -> bool {
         match *self {
             Token::EOF |

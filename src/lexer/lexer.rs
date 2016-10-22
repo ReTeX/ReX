@@ -9,13 +9,36 @@ impl<'a> Lexer<'a> {
         }
     }
 
+    pub fn current(&self) -> Option<Token<'a>> {
+        self.current
+    }
+
     pub fn next(&mut self) -> Token<'a> {
-        match self.next_char() {
+        self.advance();
+        self.current.unwrap()
+    }
+
+    pub fn advance(&mut self) {
+        self.current = Some(match self.next_char() {
             None       => Token::EOF,
             Some(' ')  => Token::WhiteSpace,
             Some('\\') => self.extract_control_sequence(),
             Some(c)    => Token::Symbol(c),
+        })
+    }
+
+    pub fn expect(&self, expected: Token<'a>) -> Result<(), String> {
+        if self.current == Some(expected) {
+            return Ok(())
+        } else {
+            Err("Unexpected symbol!".to_string())
         }
+    }
+
+    pub fn expect_and_advance(&mut self, expected: Token) -> Result<(), String> {
+        try!(self.expect(expected));
+        self.advance();
+        Ok(())
     }
 
     // This assumes that we have consumed '\'
