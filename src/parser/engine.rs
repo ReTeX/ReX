@@ -183,7 +183,7 @@ pub fn required_macro_argument(lex: &mut Lexer) -> Result<Vec<ParseNode>, String
     }
 }
 
-/// 
+/// DOCUMENT ME
 
 #[allow(unused_variables)]
 pub fn optional_macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
@@ -219,13 +219,12 @@ fn expect_type(lex: &mut Lexer, expected: AtomType) -> Result<Symbol, String> {
     }
 }
 
+/// This function is the API entry point for parsing a macro.  For now, it takes a `&str`
+/// and outputs a vector of parsing nodes, or an error message.
+
 pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
     let mut lexer = Lexer::new(input);
     expression(&mut lexer)
-}
-
-fn parse_control(cs: &str) -> ParseNode {
-    ParseNode::Symbol(SYMBOLS.get(cs).cloned().expect(&format!("Expected command: {}", cs)))
 }
 
 
