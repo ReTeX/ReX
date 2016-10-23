@@ -101,6 +101,7 @@ pub enum ParseNode {
     Delimited(Delimited),
     Group(Vec<ParseNode>),
     Radical(Radical),
+    GenFraction(GenFraction),
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -108,6 +109,16 @@ pub struct Radical {
     pub inner: Vec<ParseNode>,
     // We will handle optional arguments at a later day
     // pub superscript: Vec<ParseNode>,
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct GenFraction {
+    pub numerator: Vec<ParseNode>,
+    pub denominator: Vec<ParseNode>,
+    pub bar_thickness: u32,
+    pub left_delimiter: Option<Symbol>,
+    pub right_delimiter: Option<Symbol>,
+
 }
 
 // /// Every symbol will need a font family
@@ -167,15 +178,6 @@ pub struct Radical {
 //     pub supscript: SymOrMathList,
 //     pub base:  SymOrMathList,
 //     pub atom_type: AtomType,
-// }
-
-// #[derive(Debug)]
-// pub struct GenFraction {
-//     pub numerator: Box<MathList>,
-//     pub denominator: Box<MathList>,
-//     pub barwidth: u32,
-//     pub leftdelim: Delimiter,
-//     pub rightdelim: Delimiter,
 // }
 
 // #[derive(Debug)]

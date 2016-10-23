@@ -63,9 +63,20 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
 
 pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands 
-    let mut cmd = if let Token::ControlSequence(cmd) = lex.current {
+    let mut cmd: Box<TexCommand> 
+        = if let Token::ControlSequence(cmd) = lex.current {
         match cmd {
             "sqrt" => Box::new(functions::RadicalBuilder{}),
+            "frac" => Box::new(functions::GenFractionBuilder{
+                left_delimiter: None,
+                right_delimiter: None,
+                bar_thickness: 4,
+            }),
+            "binom" => Box::new(functions::GenFractionBuilder{
+                left_delimiter: Some(Symbol { code: '(' as u32, atom_type: AtomType::Open }),
+                right_delimiter: Some(Symbol { code: ')' as u32, atom_type: AtomType::Close }),
+                bar_thickness: 0,
+            }),
             _ => return Ok(None),
         }
     } else {
@@ -275,5 +286,7 @@ mod tests {
 
         assert_eq!(parse(r"1+\sqrt2"), parse(r"1+\sqrt{2}"));
         assert_ne!(parse(r"1+\sqrt2 + 3"), parse(r"1+\sqrt{2 + 3}"));
+        assert_eq!(parse(r"\frac12"), parse(r"\frac{1}{2}"));
+        assert_eq!(parse(r"\binom{2}1"), parse(r"\binom2{1}"));
     }
 }
