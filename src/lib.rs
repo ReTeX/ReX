@@ -7,6 +7,7 @@ extern crate phf;
 mod lexer;
 mod parser;
 mod symbols;
+mod functions;
 
 #[cfg(test)]
 mod tests {

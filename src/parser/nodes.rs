@@ -91,6 +91,10 @@ pub struct Delimited {
     pub inner: Vec<ParseNode>,
 }
 
+// TODO: It might be worth letting the `Group` variant
+//   to have an atomtype associated with it.  By default,
+//   it will be a `Ordinal`.
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum ParseNode {
     Symbol(Symbol),
@@ -101,27 +105,9 @@ pub enum ParseNode {
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct Radical {
-    pub inner: Box<ParseNode>,
+    pub inner: Vec<ParseNode>,
     // We will handle optional arguments at a later day
     // pub superscript: Vec<ParseNode>,
-}
-
-pub struct RadicalBuilder { }
-
-use lexer::Lexer;
-
-pub trait TexCommand {
-    fn parse_command(&mut self, &mut Lexer) -> Result<Option<ParseNode>, String>;
-}
-
-// <math field>
-use parser;
-impl TexCommand for RadicalBuilder {
-    fn parse_command(&mut self, lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
-        Ok(Some(ParseNode::Radical(Radical {
-            inner: Box::new(try!(parser::math_field(lex))),
-        })))
-    }
 }
 
 // /// Every symbol will need a font family

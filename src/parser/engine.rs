@@ -3,7 +3,10 @@
 
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
-use parser::nodes::{ AtomType, Delimited, ParseNode, RadicalBuilder, TexCommand };
+use parser::nodes::{ AtomType, Delimited, ParseNode };
+
+use functions;
+use functions::TexCommand;
 
 macro_rules! first_some {
     ($lex:ident, $first:ident, $($expr:ident,)* )  => (
@@ -80,7 +83,7 @@ pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands 
     let mut cmd = if let Token::ControlSequence(cmd) = lex.current {
         match cmd {
-            "sqrt" => Box::new(RadicalBuilder{}),
+            "sqrt" => Box::new(functions::RadicalBuilder{}),
             _ => return Ok(None),
         }
     } else {
@@ -168,6 +171,50 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
     }
 }
 
+/// This method expects to parse a single macro argument.  Whitespace will not be consumed
+/// while parsing this argument, unless the argument is a command.
+/// A macro argument will consume a single token, unless there is a group found { }.
+/// In which case, a macro_argument will strip the surrounding { }.  Because of this,
+/// the result may be either a single ParseNode, or a vector of ParseNodes.
+///
+/// Open questions:
+///   - How to properly inline a vector of parsenodes?
+///   - When can this possible fail?
+///   - How to handle custom validators/parsers for arguments. ie: Argument is a color.
+
+pub fn macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
+    // Must figure out how to properly handle implicit groups here.
+    match first_some!(lex, group, symbol,) {
+        Some(ParseNode::Symbol(sym)) => Ok(Some(vec![ParseNode::Symbol(sym)])),
+        Some(ParseNode::Group(inner)) => Ok(Some(inner)),
+        _ => Ok(None),
+    }
+}
+
+/// This method is like `macro_argument` except that it requires an argument to be present.
+
+pub fn required_macro_argument(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
+    let arg = macro_argument(lex)?;
+    match arg {
+        None => Err(format!("Expected a required macro argument! {:?}", arg)),
+        Some(res) => Ok(res),
+    }
+}
+
+/// 
+
+#[allow(unused_variables)]
+pub fn optional_macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
+    unimplemented!()
+}
+
+/// This method will be used to allow for customized macro argument parsing?
+
+#[allow(unused_variables)]
+pub fn special_macro_argument(lex: &mut Lexer) -> () {
+    unimplemented!()
+}
+
 /// This method expects that the current token has a given atom type.  This method
 /// will frist strip all whitespaces first before inspecting the current token.
 /// This function will Err if the expected symbol doesn't have the given type,
@@ -242,7 +289,10 @@ mod tests {
             vec![ParseNode::Symbol(Symbol { code: 120803, atom_type: AtomType::Alpha }), 
                  ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
                  ParseNode::Radical(Radical { 
-                    inner: Box::new(ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })) 
+                    inner: vec![ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })] 
                  })]);
+
+        assert_eq!(parse(r"1+\sqrt2"), parse(r"1+\sqrt{2}"));
+        assert_ne!(parse(r"1+\sqrt2 + 3"), parse(r"1+\sqrt{2 + 3}"));
     }
 }
