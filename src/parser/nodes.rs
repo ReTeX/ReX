@@ -84,14 +84,14 @@ pub enum AtomType {
 
 use symbols::Symbol;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Delimited {
     pub left:  Symbol,
     pub right: Symbol,
     pub inner: Vec<ParseNode>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum ParseNode {
     Symbol(Symbol),
     Delimited(Delimited),
@@ -99,7 +99,7 @@ pub enum ParseNode {
     Radical(Radical),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Radical {
     pub inner: Box<ParseNode>,
     // We will handle optional arguments at a later day
@@ -118,7 +118,6 @@ pub trait TexCommand {
 use parser;
 impl TexCommand for RadicalBuilder {
     fn parse_command(&mut self, lex: &mut Lexer) -> Result<ParseNode, String> {
-        lex.advance();
         // Parse expression
         Ok(ParseNode::Radical(Radical {
             inner: Box::new(try!(parser::math_field(lex))),

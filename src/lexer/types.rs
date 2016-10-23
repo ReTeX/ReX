@@ -1,8 +1,15 @@
-#[derive(Clone, Copy, Debug, Default)]
-pub struct Lexer<'a> {
+#[derive(Clone, Copy, Debug)]
+
+pub struct Lexer<'a> {    
     pub input: &'a str,
-    pub pos: usize,         // cursor position of lexer
-    pub current: Option<Token<'a>>,
+
+    /// The position of the _next_ token to be lexed.  So it
+    /// is a true statement that `self.input[0..self.pos]` displays
+    /// all characters that have and is currently being processed. 
+    pub pos: usize,
+
+    /// The token currently being processed.
+    pub current: Token<'a>,
 }
 
 #[allow(dead_code)]
@@ -23,5 +30,15 @@ impl<'a> Token<'a> {
             Token::ControlSequence("right") => true,
             _ => false,
         }
+    }
+
+    #[allow(dead_code)]
+    pub fn expect(&self, expected: Token<'a>) -> Result<(), String> {
+        if *self == expected {
+            Ok(())
+        } else {
+            Err(format!("Expected token '{:?}', found the token '{:?}'",
+                expected, self))
+        }        
     }
 }
