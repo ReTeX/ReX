@@ -3,7 +3,7 @@
 
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
-use parser::nodes::{ AtomType, Delimited, ParseNode };
+use parser::nodes::{ AtomType, Delimited, ParseNode, RadicalBuilder, TexCommand };
 
 macro_rules! first_some {
     ($lex:ident, $first:ident, $($expr:ident,)* )  => (
@@ -40,7 +40,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let node = first_some!(lex, group, symbol, implicit_group,)
+        let node = first_some!(lex, command, group, symbol, implicit_group,)
             .expect(&format!("Unable to parse token: {:?}", lex.current));
 
         // TODO: We need to handle script parsing here.
@@ -68,6 +68,28 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
 
     let result = first_some!(lex, group, symbol,);
     result.ok_or("Expected a math field, but no matches were found.".to_string())
+}
+
+/// Parse a TeX command. These commands define the "primitive" commands for our
+/// typesetting system.  It (should) include a large portion of the TeX primitives,
+/// along with the most useful primitives you find from amsmath and LaTeX.
+/// If no matching command is found, this will return `Ok(None)`.  This method
+/// can fail while parsing parameters for a TeX command.
+
+pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+    // TODO: We need to build a framework, that will match commands 
+    let mut cmd = if let Token::ControlSequence(cmd) = lex.current {
+        match cmd {
+            "sqrt" => Box::new(RadicalBuilder{}),
+            _ => return Ok(None),
+        }
+    } else {
+        return Ok(None);
+    };
+
+    // A command has been found.  Consume the token and parse for arguments.    
+    lex.next();
+    cmd.parse_command(lex)
 }
 
 /// Parse an implicit group.  An implicit group is often defined by a command
@@ -177,17 +199,6 @@ fn parse_control(cs: &str) -> ParseNode {
     ParseNode::Symbol(SYMBOLS.get(cs).cloned().expect(&format!("Expected command: {}", cs)))
 }
 
-use parser::nodes::{RadicalBuilder, TexCommand};
-
-pub fn tex_command(lex: &mut Lexer) -> Result<ParseNode, String> {
-    let mut cmd: Box<TexCommand> = match lex.current {
-        Token::ControlSequence("sqrt") => Box::new(RadicalBuilder{}),
-        _ => return Err("Command not found!".to_string())
-    };
-    lex.next();
-    cmd.parse_command(lex)
-}
-
 
 // --------------
 //     TESTS      
@@ -202,6 +213,9 @@ mod tests {
     #[test]
     fn parser() {
         assert_eq!(parse(r"").unwrap(), vec![]);
+        
+        assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
+        assert_eq!(parse(r"\sqrt  {  \sqrt  2 }").unwrap(), parse(r"\sqrt{\sqrt2}").unwrap());
 
         assert_eq!(parse(r"1 + {2 + 3}").unwrap(),
             vec![ParseNode::Symbol(Symbol { code: 120803, atom_type: AtomType::Alpha }), 
@@ -230,7 +244,5 @@ mod tests {
                  ParseNode::Radical(Radical { 
                     inner: Box::new(ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })) 
                  })]);
-
-        // assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
     }
 }
