@@ -1,17 +1,11 @@
 #![feature(plugin)]
 #![plugin(phf_macros)]
 extern crate phf;
- 
-//use phf;
+
+#[macro_use]
+mod macros; 
 
 mod lexer;
 mod parser;
 mod symbols;
 mod functions;
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-    }
-}

@@ -8,24 +8,6 @@ use parser::nodes::{ AtomType, Delimited, ParseNode };
 use functions;
 use functions::TexCommand;
 
-macro_rules! first_some {
-    ($lex:ident, $first:ident, $($expr:ident,)* )  => (
-        {
-            if let Some(res) = $first($lex)? {
-                Some(res)
-            }
-
-            $(
-                else if let Some(res) = $expr($lex)? {
-                    Some(res) 
-                }
-            )*
-
-            else { None }
-        }
-    )
-}
-
 /// This method is served as an entry point to parsing the input.
 /// It can also but used to parse sub-expressions (or more formally known)
 /// as `mathlists` which can be found from parsing groups.
