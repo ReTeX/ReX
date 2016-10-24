@@ -1,12 +1,51 @@
-
+use phf;
 use lexer::Lexer;
 use parser;
 use parser::nodes::{ ParseNode, Radical, GenFraction };
 use symbols::Symbol;
 
-// For now, we will use trait objects to handle custom parsing.
-pub trait TexCommand {
-    fn parse_command(&mut self, &mut Lexer) -> Result<Option<ParseNode>, String>;
+enum MathStyle {
+    Display,
+    Text,
+    Script,
+    ScriptScript,
+    NoChange,
+}
+
+enum TexCommand {
+    Radical,
+    GenFraction {
+        pub left_delimiter: Option<Symbol>,
+        pub right_delimiter: Option<Symbol>,
+        pub bar_thickness: u32,
+        pub math_style: Option<MathStyle>,
+    },
+}
+
+macro_rules! gen_frac {
+    ($l:expr, $r:expr, $b:expr, $m:expr) => (
+        TexCommand::GenFraction{ 
+            pub left_delimiter: $l,
+            pub right_delimiter: $r,
+            pub bar_thickness: $b,
+            pub math_style: $m,            
+         }
+    )
+    ($l:expr, $r:expr, $b:expr) => (
+        TexCommand::GenFraction{ 
+            pub left_delimiter: $l,
+            pub right_delimiter: $r,
+            pub bar_thickness: $b,
+            pub math_style: MathStyle::NoChange,            
+         }
+    )
+}
+
+pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
+    "sqrt" => TexCommand::Radical,
+    "frac" => gen_frac!{ None, None, 4 }
+    "binom" => gen_frac!{ Symbol{ code: '(', size)}}
+    ""
 }
 
 #[derive(Debug)]

@@ -77,7 +77,7 @@ pub enum AtomType {
     BotAccentWide,
     Alpha,
     Fence,
-    Operator,
+    Operator(bool),     // bool := limits or nolimits?
     Over,
     Under,
 }
