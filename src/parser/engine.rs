@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
-
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
 use parser::nodes::{ AtomType, Delimited, ParseNode };
@@ -236,6 +235,8 @@ mod tests {
     use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
     use symbols::Symbol;
+    use render::render;
+    
 
     #[test]
     fn parser() {
@@ -276,5 +277,7 @@ mod tests {
         assert_ne!(parse(r"1+\sqrt2 + 3"), parse(r"1+\sqrt{2 + 3}"));
         assert_eq!(parse(r"\frac12"), parse(r"\frac{1}{2}"));
         assert_eq!(parse(r"\binom{2}1"), parse(r"\binom2{1}"));
+
+        render(parse(r"\int f(x)dx = \pm 2").unwrap());
     }
 }
