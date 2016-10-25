@@ -115,7 +115,7 @@ pub struct Radical {
 pub struct GenFraction {
     pub numerator: Vec<ParseNode>,
     pub denominator: Vec<ParseNode>,
-    pub bar_thickness: u32,
+    pub bar_thickness: u8,
     pub left_delimiter: Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
 

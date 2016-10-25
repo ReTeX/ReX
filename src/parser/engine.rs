@@ -5,8 +5,7 @@ use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
 use parser::nodes::{ AtomType, Delimited, ParseNode };
 
-use functions;
-use functions::TexCommand;
+use functions::COMMANDS;
 
 /// This method is served as an entry point to parsing the input.
 /// It can also but used to parse sub-expressions (or more formally known)
@@ -63,29 +62,18 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
 
 pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands 
-    let mut cmd: Box<TexCommand> 
-        = if let Token::ControlSequence(cmd) = lex.current {
-        match cmd {
-            "sqrt" => Box::new(functions::RadicalBuilder{}),
-            "frac" => Box::new(functions::GenFractionBuilder{
-                left_delimiter: None,
-                right_delimiter: None,
-                bar_thickness: 4,
-            }),
-            "binom" => Box::new(functions::GenFractionBuilder{
-                left_delimiter: Some(Symbol { code: '(' as u32, atom_type: AtomType::Open }),
-                right_delimiter: Some(Symbol { code: ')' as u32, atom_type: AtomType::Close }),
-                bar_thickness: 0,
-            }),
-            _ => return Ok(None),
+    let cmd = if let Token::ControlSequence(cmd) = lex.current {
+        match COMMANDS.get(cmd).cloned() {
+            Some(command) => command,
+            None => return Ok(None),
         }
     } else {
-        return Ok(None);
+        return Ok(None)
     };
 
-    // A command has been found.  Consume the token and parse for arguments.    
+    // A command has been found.  Consume the token and parse for arguments. 
     lex.next();
-    cmd.parse_command(lex)
+    cmd.parse(lex)
 }
 
 /// Parse an implicit group.  An implicit group is often defined by a command
@@ -215,7 +203,7 @@ pub fn special_macro_argument(lex: &mut Lexer) -> () {
 ///
 /// This function _will_ advance the lexer.
 
-fn expect_type(lex: &mut Lexer, expected: AtomType) -> Result<Symbol, String> {
+pub fn expect_type(lex: &mut Lexer, expected: AtomType) -> Result<Symbol, String> {
     lex.consume_whitespace();
 
     if let Some(ParseNode::Symbol(sym)) = symbol(lex)? {
