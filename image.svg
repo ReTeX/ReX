@@ -1,0 +1,20 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      @font-face {
+        font-family: XITS;
+        src: url('XITS-Math.otf');
+      }
+    </style>
+  </defs>
+  <g font-family="XITS" font-size="1em" kerning="0">
+    <text x="5" y="24" dx="0 -1em 0 1" dy="0 10 -40 30">
+        ∫<tspan font-size="0.5em">2</tspan>
+         <tspan font-size="0.5em">3</tspan><tspan dy="0">𝑓(𝑥)𝑑𝑥=±𝟤</tspan>
+    </text>
+    <text y="48">More!</text>
+  </g>
+</svg>

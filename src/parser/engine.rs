@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
-
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
 use parser::nodes::{ AtomType, Delimited, ParseNode, MathField, Scripts };
@@ -288,6 +287,8 @@ mod tests {
     use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
     use symbols::Symbol;
+    use render::render;
+    
 
     #[test]
     fn parser() {
