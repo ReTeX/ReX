@@ -84,7 +84,14 @@ pub enum AtomType {
 
 use symbols::Symbol;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub struct Scripts {
+    pub base: Box<ParseNode>,
+    pub superscript: Option<Box<ParseNode>>,
+    pub subscript: Option<Box<ParseNode>>,
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Delimited {
     pub left:  Symbol,
     pub right: Symbol,
@@ -95,23 +102,36 @@ pub struct Delimited {
 //   to have an atomtype associated with it.  By default,
 //   it will be a `Ordinal`.
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum ParseNode {
     Symbol(Symbol),
     Delimited(Delimited),
     Group(Vec<ParseNode>),
     Radical(Radical),
     GenFraction(GenFraction),
+    Scripts(Scripts),
 }
 
-#[derive(Debug, PartialEq, Eq)]
+// impl ParseNode {
+//     fn has_superscript(&self) -> bool {
+//         if let ParseNode::Scripts()
+//     }
+// }
+
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum MathField {
+    Symbol(Symbol),
+    Group(Vec<ParseNode>),
+}
+
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Radical {
     pub inner: Vec<ParseNode>,
     // We will handle optional arguments at a later day
     // pub superscript: Vec<ParseNode>,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub struct GenFraction {
     pub numerator: Vec<ParseNode>,
     pub denominator: Vec<ParseNode>,

@@ -3,7 +3,7 @@
 
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
-use parser::nodes::{ AtomType, Delimited, ParseNode };
+use parser::nodes::{ AtomType, Delimited, ParseNode, MathField, Scripts };
 
 use functions::COMMANDS;
 
@@ -24,11 +24,60 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let node = first_some!(lex, command, group, symbol, implicit_group,)
+        let mut node = first_some!(lex, command, group, symbol, implicit_group,)
             .expect(&format!("Unable to parse token: {:?}", lex.current));
 
-        // TODO: We need to handle script parsing here.
+        // Here we handle all post-fix operators, like superscripts, subscripts
+        // `\limits`, `\nolimits`, and anything that may require us to modify
+        // the current vector of ParseNodes
+        loop {
+            lex.consume_whitespace();
+            match lex.current {
+                Token::Symbol('_') => {
+                    lex.next();
+                    let script = math_field(lex)?;
 
+                    if let ParseNode::Scripts(ref mut b) = node {
+                        // We are already parsing a script, place the next
+                        // group into the appropriate field.  If we already
+                        // have a subscript, this is an error.
+                        if b.subscript.is_some() {
+                            return Err("Multiple subscripts!".to_string());
+                        }
+                        b.subscript = Some(Box::new(script));
+                    } else {
+                        // This is our first script, so we need to create a 
+                        // new one.
+                        node = ParseNode::Scripts(Scripts {
+                            base: Box::new(node),
+                            subscript: Some(Box::new(script)),
+                            superscript: None,
+                        });
+                    }
+                },
+                Token::Symbol('^') => {
+                    println!("{:?}", lex.current);
+                    lex.next();
+                    println!("{:?}", lex.current);
+                    let script = math_field(lex)?;
+                    if let ParseNode::Scripts(ref mut b) = node {
+                        if b.superscript.is_some() {
+                            return Err("Multiple superscripts!".to_string());
+                        }
+                        b.superscript = Some(Box::new(script));
+                    } else {
+                        node = ParseNode::Scripts(Scripts {
+                            base: Box::new(node),
+                            superscript: Some(Box::new(script)),
+                            subscript: None,
+                        });
+                    }
+                },
+                _ => { break; }
+            }
+            // End of post-fix processing
+        }
+ 
         ml.push(node);
     }
 
@@ -50,8 +99,8 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
         lex.next();
     }
 
-    let result = first_some!(lex, group, symbol,);
-    result.ok_or("Expected a math field, but no matches were found.".to_string())
+    first_some!(lex, command, group, symbol,)
+        .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
 }
 
 /// Parse a TeX command. These commands define the "primitive" commands for our
@@ -144,7 +193,8 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
         Token::Symbol(c) => {
             // TODO: Properly handle fontmode here.
             match c.atom_type(FontMode::Italic) {
-                None => Err(format!("Unable to find symbol representation for {}", c)),
+                //None => Err(format!("Unable to find symbol representation for {}", c)),
+                None => Ok(None),
                 Some(sym) => { lex.next(); Ok(Some(ParseNode::Symbol(sym))) },
             }
         },
@@ -276,5 +326,8 @@ mod tests {
         assert_ne!(parse(r"1+\sqrt2 + 3"), parse(r"1+\sqrt{2 + 3}"));
         assert_eq!(parse(r"\frac12"), parse(r"\frac{1}{2}"));
         assert_eq!(parse(r"\binom{2}1"), parse(r"\binom2{1}"));
+
+        println!("{:?}", parse(r"1 + \bigl (\bigr)").unwrap());
+        println!("{:?}", parse(r"1^\sqrt2").unwrap());
     }
 }

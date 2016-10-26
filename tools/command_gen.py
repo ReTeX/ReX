@@ -1,8 +1,9 @@
 header = """\
 use phf;
 use symbols::Symbol;
-use parser::nodes::{ AtomType, ParseNode };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
 use lexer::Lexer;
+use parser;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -30,26 +31,39 @@ pub enum TexCommand {
     }
 }
 
+macro_rules! default {
+    ($t:ident) => ({
+        if $t.is_none 
+    })
+}
+
 impl TexCommand {
+    #[allow(dead_code, unused_variables)]
     pub fn parse(self, lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
         Ok(match self {
-            TexCommand::Radical => {
-                ParseNode(parse::nodes::Radical {
-                    pub inner: parser::required_macro_argument(lex)?;
-                })
-            },
-            TexCommand::GenFraction(opts) => {
-                "frac" => Box::new(functions::GenFractionBuilder{
-                    left_delimiter: None,
-                    right_delimiter: None,
-                    bar_thickness: 4,
-                }),
-                "binom" => Box::new(functions::GenFractionBuilder{
-                    left_delimiter: Some(Symbol { code: '(' as u32, atom_type: AtomType::Open }),
-                    right_delimiter: Some(Symbol { code: ')' as u32, atom_type: AtomType::Close }),
-                    bar_thickness: 0,
-                }),
-            }
+            TexCommand::Radical =>
+                Some(ParseNode::Radical(Radical {
+                    inner: parser::required_macro_argument(lex)?,
+                })),
+            TexCommand::GenFraction { 
+                left_delimiter: ld, 
+                right_delimiter: rd, 
+                bar_thickness: bt, 
+                math_style: ms 
+            } =>
+                // TODO: Change math style here.
+                Some(ParseNode::GenFraction(GenFraction{
+                    left_delimiter: ld,
+                    right_delimiter: rd,
+                    bar_thickness: bt,
+                    numerator: parser::required_macro_argument(lex)?,
+                    denominator: parser::required_macro_argument(lex)?,
+                })),
+            TexCommand::DelimiterSize {
+                size: s,
+                atom_type: at,
+            } =>
+                Some(ParseNode::Symbol(parser::expect_type(lex, at)?)),
         })
     }
 }

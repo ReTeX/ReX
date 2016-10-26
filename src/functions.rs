@@ -30,12 +30,6 @@ pub enum TexCommand {
     }
 }
 
-macro_rules! default {
-    ($t:ident) => ({
-        if $t.is_none 
-    })
-}
-
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
     pub fn parse(self, lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
