@@ -288,7 +288,47 @@ mod tests {
     use parser::parse;
     use symbols::Symbol;
     use render::render;
-    
+
+    macro_rules! should_fail {
+        ($errs:ident, $func:ident, $iter:expr) => ({
+            for item in $iter.iter() {
+                if let Ok(_) = $func(item) {
+                    $errs.push(format!("{:?} - should have errored.\n", item));
+                }
+            } 
+        })
+    }
+
+    macro_rules! should_pass {
+        ($errs:ident, $func:ident, $iter:expr) => ({
+            for item in $iter.iter() {
+                if let Err(s) = $func(item) {
+                    $errs.push(format!("{:?} - should have passed.\n\tError: {:?}\n", item, s));
+                }
+            }
+        })
+    }
+
+    macro_rules! should_equate {
+        ($errs:ident, $func:ident, $iter:expr) => ({
+            for &(l, r) in $iter.iter() {
+                if $func(l) != $func(r) {
+                    $errs.push(format!("{:?} and {:?} - should have yielded that same results.", l, r));
+                }
+            }
+        })    
+    }
+
+    macro_rules! display_errors {
+        ($errs:ident) => (
+            if $errs.len() > 0 {
+                for err in $errs {
+                    println!("\n{}", err);
+                }
+                panic!();
+            }            
+        )
+    }
 
     #[test]
     fn parser() {
@@ -324,61 +364,54 @@ mod tests {
                  ParseNode::Radical(Radical { 
                     inner: vec![ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })] 
                  })]);
+    }
 
-        assert_eq!(parse(r"1+\sqrt2"), parse(r"1+\sqrt{2}"));
-        assert_ne!(parse(r"1+\sqrt2 + 3"), parse(r"1+\sqrt{2 + 3}"));
-        assert_eq!(parse(r"\frac12"), parse(r"\frac{1}{2}"));
-        assert_eq!(parse(r"\binom{2}1"), parse(r"\binom2{1}"));
+    #[test]
+    fn fractions() {
+        let mut errs: Vec<String> = Vec::new();
+        should_pass!(errs, parse,
+          [ r"\frac\alpha\beta", r"\frac\int2" ]);
+        should_fail!(errs, parse,
+          [ r"\frac \left(1 + 2\right) 3" ]);
+        should_equate!(errs, parse,
+          [ (r"\frac12", r"\frac{1}{2}"), 
+            (r"\frac \sqrt2 3", r"\frac{\sqrt2}{3}"),
+            (r"\frac \frac 1 2 3", r"\frac{\frac12}{3}"),
+            (r"\frac 1 \sqrt2", r"\frac{1}{\sqrt2}") ]);
+        display_errors!(errs);
+    }
 
-        println!("{:?}", parse(r"1 + \bigl (\bigr)").unwrap());
-        println!("{:?}", parse(r"1^\sqrt2").unwrap());
+    #[test]
+    fn radicals() {
+        let mut errs: Vec<String> = Vec::new();
+        // TODO: Add optional paramaters for radicals
+        should_pass!(errs, parse,
+          [ r"\sqrt{x}", r"\sqrt2", r"\sqrt\alpha", r"1^\sqrt2", 
+            r"\alpha_\sqrt{1+2}", r"\sqrt\sqrt2" ]);
+        should_fail!(errs, parse,
+          [ r"\sqrt", r"\sqrt_2", r"\sqrt^2" ]);
+        // TODO: Require r"\sqrt2_3" != r"\sqrt{2_3}"
+        should_equate!(errs, parse,
+          [ (r"\sqrt2", r"\sqrt{2}") ]);
+        display_errors!(errs);
     }
 
     #[test]
     fn scripts() {
-        let should_err = [ 
-            r"1_", r"1^", 
-            r"x_x_x", r"x^x_x^x", r"x^x^x", r"x_x^x_x" ];
-        let should_parse = [
-            r"1_2^3",     
+        let mut errs: Vec<String> = Vec::new();
+        should_pass!(errs, parse,
+          [ r"1_2^3",     
             r"_1", r"^\alpha", r"_2^\alpha",
             r"1_\frac12", r"2^\alpha", 
             r"x_{1+2}", r"x^{2+3}", r"x^{1+2}_{2+3}",
             r"a^{b^c}", r"{a^b}^c", r"a_{b^c}", r"{a_b}^c",
-            r"a^{b_c}", r"{a^b}_c", r"a_{b_c}", r"{a_b}_c" ];
-        let should_parse_like = [
-            (r"x_\alpha^\beta", r"x^\beta_\alpha"), 
-            (r"_2^3", r"^3_2") ];
-
-        let mut errs: Vec<String> = Vec::new();
-        for item in should_err.iter() {
-            if let Ok(s) = parse(item) { 
-                errs.push(
-                    format!("Should not have parse: {:?}\nError: {:?}", item, s)); 
-            }
-        }
-
-        for item in should_parse.iter() {
-            if let Err(s) = parse(item) { 
-                errs.push(
-                    format!("Should have parsed: {:?}\nError: {:?}", item, s));
-            }
-        }
-
-        for &(l, r) in should_parse_like.iter() {
-            let left = parse(l);
-            let right = parse(r);
-            if left != right {
-                errs.push(
-                    format!("Should parse a the same: {:?} != {:?}", left, right));
-            }
-        }
-
-        if errs.len() > 0 {
-            for err in errs {
-                println!("{}", err);
-            }
-            panic!();
-        }
+            r"a^{b_c}", r"{a^b}_c", r"a_{b_c}", r"{a_b}_c" ]);
+        should_fail!(errs, parse,
+          [ r"1_", r"1^", 
+            r"x_x_x", r"x^x_x^x", r"x^x^x", r"x_x^x_x" ]);
+        should_equate!(errs, parse,
+          [ (r"x_\alpha^\beta", r"x^\beta_\alpha"), 
+            (r"_2^3", r"^3_2") ]);
+        display_errors!(errs);
     }
 }
