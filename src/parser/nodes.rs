@@ -86,7 +86,7 @@ use symbols::Symbol;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Scripts {
-    pub base: Box<ParseNode>,
+    pub base: Option<Box<ParseNode>>,
     pub superscript: Option<Box<ParseNode>>,
     pub subscript: Option<Box<ParseNode>>,
 }

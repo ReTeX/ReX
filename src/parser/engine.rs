@@ -23,12 +23,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let n = first_some!(lex, command, group, symbol, implicit_group,);
-
-        let mut node = match n {
-            None => return Err(format!("Unable to parse token: {:?}", lex.current)),
-            Some(inner) => inner,
-        };
+        let mut node = first_some!(lex, command, group, symbol, implicit_group,);
 
         // Here we handle all post-fix operators, like superscripts, subscripts
         // `\limits`, `\nolimits`, and anything that may require us to modify
@@ -40,7 +35,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
                     lex.next();
                     let script = math_field(lex)?;
 
-                    if let ParseNode::Scripts(ref mut b) = node {
+                    if let Some(ParseNode::Scripts(ref mut b)) = node {
                         // We are already parsing a script, place the next
                         // group into the appropriate field.  If we already
                         // have a subscript, this is an error.
@@ -51,35 +46,46 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
                     } else {
                         // This is our first script, so we need to create a 
                         // new one.
-                        node = ParseNode::Scripts(Scripts {
-                            base: Box::new(node),
+                        node = Some(ParseNode::Scripts(Scripts {
+                            base:
+                                match node {
+                                    None => None,
+                                    Some(n) => Some(Box::new(n))
+                                },
                             subscript: Some(Box::new(script)),
                             superscript: None,
-                        });
+                        }));
                     }
                 },
                 Token::Symbol('^') => {
                     lex.next();
                     let script = math_field(lex)?;
-                    if let ParseNode::Scripts(ref mut b) = node {
+                    if let Some(ParseNode::Scripts(ref mut b)) = node {
                         if b.superscript.is_some() {
                             return Err("Multiple superscripts!".to_string());
                         }
                         b.superscript = Some(Box::new(script));
                     } else {
-                        node = ParseNode::Scripts(Scripts {
-                            base: Box::new(node),
+                        node = Some(ParseNode::Scripts(Scripts {
+                            base: 
+                                match node {
+                                    None => None,
+                                    Some(n) => Some(Box::new(n))
+                                },
                             superscript: Some(Box::new(script)),
                             subscript: None,
-                        });
+                        }));
                     }
                 },
                 _ => { break; }
             }
             // End of post-fix processing
         }
- 
-        ml.push(node);
+
+        ml.push(match node {
+            None => return Err(format!("Unable to parse {:?}", node)),
+            Some(s) => s
+        });
     }
 
     Ok(ml)
@@ -96,10 +102,6 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
 /// `<mathmode material>` contains an error, or if no match is found.
 
 pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
-    while lex.current == Token::WhiteSpace {
-        lex.next();
-    }
-
     first_some!(lex, command, group, symbol,)
         .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
 }
