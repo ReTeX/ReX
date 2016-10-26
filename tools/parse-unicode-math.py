@@ -54,6 +54,58 @@ operator_limits = {
     "bigsqcup",
 }
 
+# Fixme: This should be sorted, use a list instead.
+additional_symbols = {
+    "Alpha":   ("0x391", "Alpha"),
+    "Beta":    ("0x392", "Alpha"),
+    "Gamma":   ("0x393", "Alpha"),
+    "Delta":   ("0x394", "Alpha"),
+    "Epsilon": ("0x395", "Alpha"),
+    "Zeta":    ("0x396", "Alpha"),
+    "Eta":     ("0x397", "Alpha"),
+    "Theta":   ("0x398", "Alpha"),
+    "Iota":    ("0x399", "Alpha"),
+    "Kappa":   ("0x39A", "Alpha"),
+    "Lambda":  ("0x39B", "Alpha"),
+    "Mu":      ("0x39C", "Alpha"),
+    "Nu":      ("0x39D", "Alpha"),
+    "Xi":      ("0x39E", "Alpha"),
+    "Omicron": ("0x39F", "Alpha"),
+    "Pi":      ("0x3A0", "Alpha"),
+    "Rho":     ("0x3A1", "Alpha"),
+    "Sigma":   ("0x3A3", "Alpha"),
+    "Tau":     ("0x3A4", "Alpha"),
+    "Upsilon": ("0x3A5", "Alpha"),
+    "Phi":     ("0x3A6", "Alpha"),
+    "Chi":     ("0x3A7", "Alpha"),
+    "Psi":     ("0x3A8", "Alpha"),
+    "Omega":   ("0x3A9", "Alpha"),
+    "alpha":   ("0x3B1", "Alpha"),
+    "beta":    ("0x3B2", "Alpha"),
+    "gamma":   ("0x3B3", "Alpha"),
+    "delta":   ("0x3B4", "Alpha"),
+    "epsilon": ("0x3B5", "Alpha"),
+    "zeta":    ("0x3B6", "Alpha"),
+    "eta":     ("0x3B7", "Alpha"),
+    "theta":   ("0x3B8", "Alpha"),
+    "iota":    ("0x3B9", "Alpha"),
+    "kappa":   ("0x3BA", "Alpha"),
+    "lambda":  ("0x3BB", "Alpha"),
+    "mu":      ("0x3BC", "Alpha"),
+    "nu":      ("0x3BD", "Alpha"),
+    "xi":      ("0x3BE", "Alpha"),
+    "omicron": ("0x3BF", "Alpha"),
+    "pi":      ("0x3C0", "Alpha"),
+    "rho":     ("0x3C1", "Alpha"),
+    "sigma":   ("0x3C3", "Alpha"),
+    "tau":     ("0x3C4", "Alpha"),
+    "upsilon": ("0x3C5", "Alpha"),
+    "phi":     ("0x3C6", "Alpha"),
+    "chi":     ("0x3C7", "Alpha"),
+    "psi":     ("0x3C8", "Alpha"),
+    "omega":   ("0x3C9", "Alpha"),
+}
+
 # TeX -> Unicode template
 template = '    "{}" => Symbol {{ code: {}, atom_type: AtomType::{} }}, // {}\n'
 
@@ -78,11 +130,16 @@ with open('unicode-math-table.tex', 'r') as f:
 with open('../src/symbols/table.rs', 'w', newline='\n') as f:
     f.write(header)
     # Write TeX Command -> Symbol hashmap.
+    f.write("    // unicode-math.dtx command table\n")
     for tpl in symbols:
         # For operators, we annotate if they have limits or not on default
         if tpl[2] == "Operator":
             tpl[2] += "({})".format(str(tpl[0] in operator_limits).lower())
         f.write(template.format(*tpl))
+    
+    f.write("    // Additional commands from TeX\b")
+    for name, (code, ty) in additional_symbols.items():
+        f.write(template.format(name, code, ty, ""))
     f.write('};')
 
 # The following is scratch work, kept in case it's need later
