@@ -24,8 +24,12 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let mut node = first_some!(lex, command, group, symbol, implicit_group,)
-            .expect(&format!("Unable to parse token: {:?}", lex.current));
+        let n = first_some!(lex, command, group, symbol, implicit_group,);
+
+        let mut node = match n {
+            None => return Err(format!("Unable to parse token: {:?}", lex.current)),
+            Some(inner) => inner,
+        };
 
         // Here we handle all post-fix operators, like superscripts, subscripts
         // `\limits`, `\nolimits`, and anything that may require us to modify
@@ -56,9 +60,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
                     }
                 },
                 Token::Symbol('^') => {
-                    println!("{:?}", lex.current);
                     lex.next();
-                    println!("{:?}", lex.current);
                     let script = math_field(lex)?;
                     if let ParseNode::Scripts(ref mut b) = node {
                         if b.superscript.is_some() {
@@ -329,5 +331,53 @@ mod tests {
 
         println!("{:?}", parse(r"1 + \bigl (\bigr)").unwrap());
         println!("{:?}", parse(r"1^\sqrt2").unwrap());
+    }
+
+    #[test]
+    fn scripts() {
+        let should_err = [ 
+            r"1_", r"1^", 
+            r"x_x_x", r"x^x_x^x", r"x^x^x", r"x_x^x_x" ];
+        let should_parse = [
+            r"1_2^3",     
+            r"_1", r"^\alpha", r"_2^\alpha",
+            r"1_\frac12", r"2^\alpha", 
+            r"x_{1+2}", r"x^{2+3}", r"x^{1+2}_{2+3}",
+            r"a^{b^c}", r"{a^b}^c", r"a_{b^c}", r"{a_b}^c",
+            r"a^{b_c}", r"{a^b}_c", r"a_{b_c}", r"{a_b}_c" ];
+        let should_parse_like = [
+            (r"x_\alpha^\beta", r"x^\beta_\alpha"), 
+            (r"_2^3", r"^3_2") ];
+
+        let mut errs: Vec<String> = Vec::new();
+        for item in should_err.iter() {
+            if let Ok(s) = parse(item) { 
+                errs.push(
+                    format!("Should not have parse: {:?}\nError: {:?}", item, s)); 
+            }
+        }
+
+        for item in should_parse.iter() {
+            if let Err(s) = parse(item) { 
+                errs.push(
+                    format!("Should have parsed: {:?}\nError: {:?}", item, s));
+            }
+        }
+
+        for &(l, r) in should_parse_like.iter() {
+            let left = parse(l);
+            let right = parse(r);
+            if left != right {
+                errs.push(
+                    format!("Should parse a the same: {:?} != {:?}", left, right));
+            }
+        }
+
+        if errs.len() > 0 {
+            for err in errs {
+                println!("{}", err);
+            }
+            panic!();
+        }
     }
 }
