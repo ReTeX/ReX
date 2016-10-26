@@ -43,8 +43,11 @@ macro_rules! should_pass {
 macro_rules! should_equate {
     ($errs:ident, $func:ident, $iter:expr) => ({
         for &(l, r) in $iter.iter() {
-            if $func(l) != $func(r) {
-                $errs.push(format!("{:?} and {:?} - should have yielded the same results.", l, r));
+            let l_res = $func(l);
+            let r_res = $func(r);
+            if l_res != r_res {
+                $errs.push(format!("{:?} and {:?} - should have yielded the same results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}", 
+                    l, r, l_res, r_res));
             }
         }
     })    
@@ -53,8 +56,11 @@ macro_rules! should_equate {
 macro_rules! should_differ {
     ($errs:ident, $func:ident, $iter:expr) => ({
         for &(l, r) in $iter.iter() {
-            if $func(l) == $func(r) {
-                $errs.push(format!("{:?} and {:?} - should have yielded different results.", l, r));
+            let l_res = $func(l);
+            let r_res = $func(r);
+            if l_res == r_res {
+                $errs.push(format!("{:?} and {:?} - should have yielded different results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}", 
+                    l, r, l_res, r_res));
             }
         }
     })    

@@ -113,7 +113,7 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
 /// can fail while parsing parameters for a TeX command.
 
 pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
-    // TODO: We need to build a framework, that will match commands 
+    // TODO: We need to build a framework, that will match commands
     let cmd = if let Token::ControlSequence(cmd) = lex.current {
         match COMMANDS.get(cmd).cloned() {
             Some(command) => command,
@@ -218,9 +218,11 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 
 pub fn macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
     // Must figure out how to properly handle implicit groups here.
-    match first_some!(lex, group, symbol,) {
-        Some(ParseNode::Symbol(sym)) => Ok(Some(vec![ParseNode::Symbol(sym)])),
+    while lex.current == Token::WhiteSpace { lex.next(); }
+
+    match first_some!(lex, command, group, symbol,) {
         Some(ParseNode::Group(inner)) => Ok(Some(inner)),
+        Some(node) => Ok(Some(vec![node])),
         _ => Ok(None),
     }
 }
@@ -350,7 +352,6 @@ mod tests {
             r"\alpha_\sqrt{1+2}", r"\sqrt\sqrt2" ]);
         should_fail!(errs, parse,
           [ r"\sqrt", r"\sqrt_2", r"\sqrt^2" ]);
-        // TODO: Require r"\sqrt2_3" != r"\sqrt{2_3}"
         should_equate!(errs, parse,
           [ (r"\sqrt2", r"\sqrt{2}") ]);
         should_differ!(errs, parse,
