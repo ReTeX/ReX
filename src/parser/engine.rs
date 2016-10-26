@@ -2,7 +2,7 @@
 // TODO: Figure out how to handle functions which are in Symbols table.
 use lexer::{Lexer, Token};
 use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
-use parser::nodes::{ AtomType, Delimited, ParseNode, MathField, Scripts };
+use parser::nodes::{ AtomType, Delimited, ParseNode, Scripts };
 
 use functions::COMMANDS;
 
@@ -287,48 +287,6 @@ mod tests {
     use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
     use symbols::Symbol;
-    use render::render;
-
-    macro_rules! should_fail {
-        ($errs:ident, $func:ident, $iter:expr) => ({
-            for item in $iter.iter() {
-                if let Ok(_) = $func(item) {
-                    $errs.push(format!("{:?} - should have errored.\n", item));
-                }
-            } 
-        })
-    }
-
-    macro_rules! should_pass {
-        ($errs:ident, $func:ident, $iter:expr) => ({
-            for item in $iter.iter() {
-                if let Err(s) = $func(item) {
-                    $errs.push(format!("{:?} - should have passed.\n\tError: {:?}\n", item, s));
-                }
-            }
-        })
-    }
-
-    macro_rules! should_equate {
-        ($errs:ident, $func:ident, $iter:expr) => ({
-            for &(l, r) in $iter.iter() {
-                if $func(l) != $func(r) {
-                    $errs.push(format!("{:?} and {:?} - should have yielded that same results.", l, r));
-                }
-            }
-        })    
-    }
-
-    macro_rules! display_errors {
-        ($errs:ident) => (
-            if $errs.len() > 0 {
-                for err in $errs {
-                    println!("\n{}", err);
-                }
-                panic!();
-            }            
-        )
-    }
 
     #[test]
     fn parser() {
@@ -393,6 +351,8 @@ mod tests {
         // TODO: Require r"\sqrt2_3" != r"\sqrt{2_3}"
         should_equate!(errs, parse,
           [ (r"\sqrt2", r"\sqrt{2}") ]);
+        should_differ!(errs, parse,
+          [ (r"\sqrt2_3", r"\sqrt{2_3}") ]);
         display_errors!(errs);
     }
 
