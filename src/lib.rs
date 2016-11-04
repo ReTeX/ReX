@@ -11,4 +11,4 @@ mod parser;
 mod symbols;
 mod functions;
 mod metrics;
-//mod render;
+mod render;
