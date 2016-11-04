@@ -2,7 +2,7 @@
 // 
 // Font File: master/xits.otf
 // Font Nmae: b'XITS Math'
-use metrics::Constants;
+use font::Constants;
 
 #[allow(dead_code)]
 pub static CONSTANTS: Constants = Constants {

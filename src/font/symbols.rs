@@ -9,7 +9,7 @@
 #![allow(dead_code)]
 use phf;
 use parser::nodes::AtomType;
-use symbols::Symbol;
+use font::Symbol;
 
 pub static SYMBOLS: phf::Map<&'static str, Symbol> = phf_map! {
     // unicode-math.dtx command table

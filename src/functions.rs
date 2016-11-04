@@ -1,5 +1,5 @@
 use phf;
-use symbols::Symbol;
+use font::Symbol;
 use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
 use lexer::Lexer;
 use parser;
@@ -65,9 +65,9 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "frac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: 4, math_style: MathStyle::NoChange },
     "tfrac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: 4, math_style: MathStyle::Text },
     "dfrac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: 4, math_style: MathStyle::Display },
-    "binom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { code: '{' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { code: '}' as u32, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::NoChange },
-    "tbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { code: '{' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { code: '}' as u32, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::Text },
-    "dbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { code: '{' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { code: '}' as u32, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::Display },
+    "binom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { id: '{' as u16, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { id: '}' as u16, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::NoChange },
+    "tbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { id: '{' as u16, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { id: '}' as u16, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::Text },
+    "dbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { id: '{' as u16, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { id: '}' as u16, atom_type: AtomType::Close }), bar_thickness: 0, math_style: MathStyle::Display },
     "sqrt" => TexCommand::Radical,
     "bigl" => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Open },
     "Bigl" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Open },

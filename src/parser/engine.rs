@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
+use font;
+use font::{SYMBOLS, Symbol, IsAtom};
 use lexer::{Lexer, Token};
-use symbols::{SYMBOLS, Symbol, IsSymbol, FontMode};
 use parser::nodes::{ AtomType, Delimited, ParseNode, Scripts };
-
 use functions::COMMANDS;
 
 /// This method is served as an entry point to parsing the input.
@@ -195,7 +195,7 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
         },
         Token::Symbol(c) => {
             // TODO: Properly handle fontmode here.
-            match c.atom_type(FontMode::Italic) {
+            match c.atom_type(font::Style::Italic) {
                 //None => Err(format!("Unable to find symbol representation for {}", c)),
                 None => Ok(None),
                 Some(sym) => { lex.next(); Ok(Some(ParseNode::Symbol(sym))) },

@@ -82,7 +82,7 @@ pub enum AtomType {
     Under,
 }
 
-use symbols::Symbol;
+use font::Symbol;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Scripts {
