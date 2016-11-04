@@ -1,7 +1,8 @@
 
 // Automatically generated... blah blah blah, you know the deal.
 
-static glyph_metrics = [
+#[allow(dead_code)]
+static GLYPHS: [Glyph; 4525] = [
   Glyph { unicode: 0, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },
   Glyph { unicode: 1, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },
   Glyph { unicode: 2, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },
@@ -201,7 +202,7 @@ static glyph_metrics = [
   Glyph { unicode: 196, bbox: BBox(6,-159,426,706), advance: 722, lsb: 15, italics: 0, attachment: 0 },
   Glyph { unicode: 197, bbox: BBox(48,25,637,475), advance: 722, lsb: 15, italics: 0, attachment: 0 },
   Glyph { unicode: 198, bbox: BBox(63,0,665,674), advance: 889, lsb: 0, italics: 0, attachment: 0 },
-  Glyph { unicode: 199, bbox: BBox(42,33,456,416), advance: 500, lsb: 42, italics: 0, attachment: 0 },
+  Glyph { unicode: 199, bbox: BBox(42,33,456,416), advance: 667, lsb: 28, italics: 0, attachment: 0 },
   Glyph { unicode: 200, bbox: BBox(43,33,458,416), advance: 500, lsb: 43, italics: 0, attachment: 0 },
   Glyph { unicode: 201, bbox: BBox(111,-11,888,100), advance: 611, lsb: 12, italics: 0, attachment: 0 },
   Glyph { unicode: 202, bbox: BBox(0,0,0,0), advance: 250, lsb: 0, italics: 0, attachment: 0 },
@@ -227,19 +228,19 @@ static glyph_metrics = [
   Glyph { unicode: 222, bbox: BBox(16,0,542,662), advance: 556, lsb: 16, italics: 0, attachment: 0 },
   Glyph { unicode: 223, bbox: BBox(12,-9,468,683), advance: 500, lsb: 12, italics: 0, attachment: 0 },
   Glyph { unicode: 224, bbox: BBox(58,-153,442,676), advance: 444, lsb: 37, italics: 0, attachment: 0 },
-  Glyph { unicode: 225, bbox: BBox(70,199,181,310), advance: 444, lsb: 37, italics: 0, attachment: 126 },
+  Glyph { unicode: 225, bbox: BBox(70,199,181,310), advance: 250, lsb: 70, italics: 0, attachment: 126 },
   Glyph { unicode: 226, bbox: BBox(79,-141,218,102), advance: 444, lsb: 37, italics: 0, attachment: 0 },
   Glyph { unicode: 227, bbox: BBox(45,-141,416,102), advance: 444, lsb: 37, italics: 0, attachment: 0 },
   Glyph { unicode: 228, bbox: BBox(61,-19,1048,706), advance: 444, lsb: 37, italics: 0, attachment: 0 },
   Glyph { unicode: 229, bbox: BBox(37,-10,442,713), advance: 444, lsb: 37, italics: 0, attachment: 0 },
-  Glyph { unicode: 230, bbox: BBox(38,-7,632,460), advance: 611, lsb: 12, italics: 0, attachment: 0 },
-  Glyph { unicode: 231, bbox: BBox(25,-215,412,460), advance: 722, lsb: 15, italics: 0, attachment: 0 },
+  Glyph { unicode: 230, bbox: BBox(38,-7,632,460), advance: 667, lsb: 38, italics: 0, attachment: 0 },
+  Glyph { unicode: 231, bbox: BBox(25,-215,412,460), advance: 444, lsb: 25, italics: 0, attachment: 0 },
   Glyph { unicode: 232, bbox: BBox(25,-10,424,678), advance: 444, lsb: 25, italics: 0, attachment: 0 },
   Glyph { unicode: 233, bbox: BBox(25,-10,424,678), advance: 444, lsb: 25, italics: 0, attachment: 0 },
   Glyph { unicode: 234, bbox: BBox(25,-10,424,674), advance: 444, lsb: 25, italics: 0, attachment: 0 },
-  Glyph { unicode: 235, bbox: BBox(25,-10,424,622), advance: 333, lsb: 10, italics: 0, attachment: 0 },
+  Glyph { unicode: 235, bbox: BBox(25,-10,424,622), advance: 444, lsb: 25, italics: 0, attachment: 0 },
   Glyph { unicode: 236, bbox: BBox(6,0,243,678), advance: 333, lsb: 17, italics: 0, attachment: 0 },
-  Glyph { unicode: 237, bbox: BBox(16,0,273,678), advance: 278, lsb: 16, italics: 0, attachment: 0 },
+  Glyph { unicode: 237, bbox: BBox(16,0,273,678), advance: 333, lsb: 18, italics: 0, attachment: 0 },
   Glyph { unicode: 238, bbox: BBox(-17,0,294,674), advance: 278, lsb: -17, italics: 0, attachment: 0 },
   Glyph { unicode: 239, bbox: BBox(-10,0,288,622), advance: 278, lsb: -10, italics: 0, attachment: 0 },
   Glyph { unicode: 240, bbox: BBox(29,-10,471,686), advance: 500, lsb: 29, italics: 0, attachment: 0 },
@@ -250,11 +251,11 @@ static glyph_metrics = [
   Glyph { unicode: 245, bbox: BBox(29,-10,470,638), advance: 500, lsb: 29, italics: 0, attachment: 0 },
   Glyph { unicode: 246, bbox: BBox(29,-10,470,622), advance: 500, lsb: 29, italics: 0, attachment: 0 },
   Glyph { unicode: 247, bbox: BBox(1,532,331,638), advance: 564, lsb: 30, italics: 0, attachment: 0 },
-  Glyph { unicode: 248, bbox: BBox(29,-112,470,551), advance: 500, lsb: 29, italics: 0, attachment: 0 },
+  Glyph { unicode: 248, bbox: BBox(29,-112,470,551), advance: 333, lsb: 11, italics: 0, attachment: 0 },
   Glyph { unicode: 249, bbox: BBox(9,-10,480,678), advance: 500, lsb: 9, italics: 0, attachment: 0 },
   Glyph { unicode: 250, bbox: BBox(9,-10,480,678), advance: 500, lsb: 9, italics: 0, attachment: 0 },
   Glyph { unicode: 251, bbox: BBox(9,-10,480,674), advance: 500, lsb: 9, italics: 0, attachment: 0 },
-  Glyph { unicode: 252, bbox: BBox(9,-10,480,622), advance: 333, lsb: 52, italics: 0, attachment: 0 },
+  Glyph { unicode: 252, bbox: BBox(9,-10,480,622), advance: 500, lsb: 9, italics: 0, attachment: 0 },
   Glyph { unicode: 253, bbox: BBox(14,-218,475,678), advance: 500, lsb: 14, italics: 0, attachment: 0 },
   Glyph { unicode: 254, bbox: BBox(5,-217,470,683), advance: 500, lsb: 5, italics: 0, attachment: 0 },
   Glyph { unicode: 255, bbox: BBox(14,-218,475,622), advance: 500, lsb: 14, italics: 0, attachment: 0 },
@@ -4527,4 +4528,4 @@ static glyph_metrics = [
   Glyph { unicode: 126649, bbox: BBox(53,-250,1162,617), advance: 1212, lsb: 53, italics: 0, attachment: 0 },
   Glyph { unicode: 126650, bbox: BBox(33,-50,740,752), advance: 792, lsb: 33, italics: 0, attachment: 0 },
   Glyph { unicode: 126651, bbox: BBox(50,-492,741,676), advance: 540, lsb: 50, italics: 0, attachment: 0 },
-]
+];
