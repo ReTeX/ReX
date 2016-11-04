@@ -2,7 +2,7 @@ use metrics::{Glyph, BBox};
 
 // Automatically generated... blah blah blah, you know the deal.
 #[allow(dead_code)]
-pub static GLYPHS: [Glyph; 4875] = [
+pub static GLYPHS: [Glyph; 4875] = [ 
   Glyph { unicode: 0, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },
   Glyph { unicode: 1, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },
   Glyph { unicode: 2, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 },

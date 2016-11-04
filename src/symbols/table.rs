@@ -2508,3 +2508,8 @@ pub static SYMBOLS: phf::Map<&'static str, Symbol> = phf_map! {
     "Alpha" => Symbol { code: 0x391, atom_type: AtomType::Alpha }, // 
     "phi" => Symbol { code: 0x3C6, atom_type: AtomType::Alpha }, // 
 };
+
+#[test]
+fn hash() {
+    panic!(format!("Hashmap: {}", ::std::mem::size_of_val(&SYMBOLS)));
+}
