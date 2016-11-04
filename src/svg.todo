@@ -1,0 +1,12 @@
+# Desired API for constructing an SVG tree.
+
+svg::Builder.new()                 // Creates a new SVG document ROOT
+    .attr("viewport", "x y w h")
+    .attr("width", "w")
+    .attr("height", "h")
+    .node("style")                 // Creates a new node, with parent as parent
+        .content("@font-face { ... }")
+        .build()
+    .node("g")
+        .
+        
