@@ -176,7 +176,7 @@ pub fn group(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 }
 
 /// Parse a symbol.  Symbols can be found from a TeX command (like `\infty`)
-/// or from a unicode character input.  This function will return `Ok(None)`
+/// or from a uniid character input.  This function will return `Ok(None)`
 /// if the current token is a TeX command which is not found in the symbols
 /// table. If there is no defined representation for the given `Token::Symbol`
 /// then this function will return with an error.
@@ -290,42 +290,52 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
 mod tests {
     use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
-    use symbols::Symbol;
+    use font::Symbol;
+
+    // #[test]
+    // fn parser() {
+    //     assert_eq!(parse(r"").unwrap(), vec![]);
+        
+    //     assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
+    //     assert_eq!(parse(r"\sqrt  {  \sqrt  2 }").unwrap(), parse(r"\sqrt{\sqrt2}").unwrap());
+
+    //     assert_eq!(parse(r"1 + {2 + 3}").unwrap(),
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
+    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //             ParseNode::Group(vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha }), 
+    //                 ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //                 ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha })
+    //         ])]);
+
+    //     assert_eq!(parse(r"1+\left(3+2\right)=6").unwrap(),
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
+    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //             ParseNode::Delimited(Delimited { 
+    //                 left: Symbol { id: 40, atom_type: AtomType::Open }, 
+    //                 right: Symbol { id: 41, atom_type: AtomType::Close }, 
+    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha }), 
+    //                    ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //                    ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })],
+    //             }), 
+    //             ParseNode::Symbol(Symbol { id: 61, atom_type: AtomType::Relation }), 
+    //             ParseNode::Symbol(Symbol { id: 120808, atom_type: AtomType::Alpha })]);
+        
+    //     assert_eq!(parse(r"1+\sqrt2").unwrap(),
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
+    //              ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //              ParseNode::Radical(Radical { 
+    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })] 
+    //              })]);
+    // }
 
     #[test]
-    fn parser() {
-        assert_eq!(parse(r"").unwrap(), vec![]);
-        
-        assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
-        assert_eq!(parse(r"\sqrt  {  \sqrt  2 }").unwrap(), parse(r"\sqrt{\sqrt2}").unwrap());
-
-        assert_eq!(parse(r"1 + {2 + 3}").unwrap(),
-            vec![ParseNode::Symbol(Symbol { code: 120803, atom_type: AtomType::Alpha }), 
-                ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
-                ParseNode::Group(vec![ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha }), 
-                    ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
-                    ParseNode::Symbol(Symbol { code: 120805, atom_type: AtomType::Alpha })
-            ])]);
-
-        assert_eq!(parse(r"1+\left(3+2\right)=6").unwrap(),
-            vec![ParseNode::Symbol(Symbol { code: 120803, atom_type: AtomType::Alpha }), 
-                ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
-                ParseNode::Delimited(Delimited { 
-                    left: Symbol { code: 40, atom_type: AtomType::Open }, 
-                    right: Symbol { code: 41, atom_type: AtomType::Close }, 
-                    inner: vec![ParseNode::Symbol(Symbol { code: 120805, atom_type: AtomType::Alpha }), 
-                       ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
-                       ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })],
-                }), 
-                ParseNode::Symbol(Symbol { code: 61, atom_type: AtomType::Relation }), 
-                ParseNode::Symbol(Symbol { code: 120808, atom_type: AtomType::Alpha })]);
-        
-        assert_eq!(parse(r"1+\sqrt2").unwrap(),
-            vec![ParseNode::Symbol(Symbol { code: 120803, atom_type: AtomType::Alpha }), 
-                 ParseNode::Symbol(Symbol { code: 43, atom_type: AtomType::Binary }), 
-                 ParseNode::Radical(Radical { 
-                    inner: vec![ParseNode::Symbol(Symbol { code: 120804, atom_type: AtomType::Alpha })] 
-                 })]);
+    fn render() {
+        use std::fs::File;
+        use std::io::Write;
+    
+        let output = ::render::render(parse(r"\Sigma\sigma(x)=2").unwrap());
+        let mut f = File::create("test.svg").unwrap();
+        f.write_all(output.as_bytes()).unwrap();
     }
 
     #[test]
