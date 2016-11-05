@@ -1,0 +1,52 @@
+# Rendering Notes
+
+State:
+    - Dispaly: SS' < SS < S' < S < T' < T < D' < D.  Bitflags?
+    - Size: Scaling factor?
+
+    - Box: { Height, Width, Depth }
+
+
+for Node in ParseNodes:
+    - Kern or glue: (these can be variable?)
+      + If \mskip or \mskip, convert to absolute with Constant
+      + If relative, require later calculation
+      continue;
+
+    - Style change.  Set Display to specified style, delete continue;
+    - FOURWAY #
+    - AtomType::Bin
+      + If first item or PREVIOUS item is Bin/Op/Rel/Open/Punct,
+        change to AtomType Op.  Goto 14, otherwise Goto 17.
+    - AtomType::Rel/Close/Punct, and PREVIOUS was Bin, change PREVIOUS to Ord.
+      Goto 17.
+    - AtomType::Open/Inner, Goto 17.
+    - Vcent.  
+       + Make nucleus a vbox of height+depth. 
+       + Center vertically (using axis-hieght CONSTANT)
+       + Assign atomtype ORD.  Goto 17.
+    - AtomType::Over
+       + Set box x to nucleus in display C'.
+       + Replace nuc. by vbox, kern T, hrule T, kern 3T, box x from top->bot.
+         T is a CONSTANT rule thickness
+       + Goto 16.
+    - AtomType::Under SIMILAR
+    - AtomType::Rad
+       + set box x to display C'.
+       + Calc mini clearance with Rule. ... GOTO 16
+    - AtomType::Accent
+       + 
+
+# Layout System
+struct HBox {
+    height:
+    width:
+    depth:
+    
+}  // baseline is used to position the characters.
+
+VBox
+
+HBox {
+    [ C
+}
