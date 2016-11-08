@@ -1,67 +1,57 @@
 // Spaces used for kerning between symbols
-#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-struct ScaledPoint(u32);
+use parser::nodes::AtomType;
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-enum MathSpace {
+pub enum MathSpace {
   None,
   Thin,
   Medium,
   Thick,
 }
 
-enum AtomType {
-    Ord,
-    Op,
-    Bin,
-    Rel,
-    Open,
-    Close,
-    Punct,
-    Inner,
+#[allow(unused)]
+impl MathSpace {
+    pub fn to_em(self) -> f64 {
+        match self {
+            MathSpace::None => 0_f64,
+            MathSpace::Thin => 1_f64/6_f64,
+            MathSpace::Medium => 2_f64/9_f64,
+            MathSpace::Thick => 3_f64/9_f64,
+        }
+    }
 }
 
-pub fn atom_spacing(left: MathSpace, right: MathSpace) -> MathSpace:: {
+#[allow(unused)]
+pub fn atom_spacing(left: AtomType, right: AtomType) -> MathSpace {
     match (left, right) {
-        (AtomType::Ord,   AtomType::Op)    => MathSpace::Thin,
-        (AtomType::Ord,   AtomType::Bin)   => MathSpace::Medium
-        (AtomType::Ord,   AtomType::Rel)   => MathSpace::Thick
-        (AtomType::Ord,   AtomType::Inner) => MathSpace::Thin,
-        (AtomType::Op,    AtomType::Ord)   => MathSpace::Thin,
-        (AtomType::Op,    AtomType::Op)    => MathSpace::Thin,
-        (AtomType::Op,    AtomType::Rel)   => MathSpace::Thick,
-        (AtomType::Op,    AtomType::Inner) => MathSpace::Thin,
-        (AtomType::Bin,   AtomType::Ord)   => MathSpace::Medium,
-        (AtomType::Bin,   AtomType::Op)    => MathSpace::Medium,
-        (AtomType::Bin,   AtomType::Open)  => MathSpace::Medium,
-        (AtomType::Bin,   AtomType::Inner) => MathSpace::Medium,
-        (AtomType::Rel,   AtomType::Ord)   => MathSpace::Thick,
-        (AtomType::Rel,   AtomType::Op)    => MathSpace::Thick,
-        (AtomType::Rel,   AtomType::Open)  => MathSpace::Thick,
-        (AtomType::Rel,   AtomType::Inner) => MathSpace::Thick,
-        (AtomType::Close, AtomType::Op)    => MathSpace::Thin,
-        (AtomType::Close, AtomType::Bin)   => MathSpace::Medium,
-        (AtomType::Close, AtomType::Rel)   => MathSpace::Thick,
+        (AtomType::Alpha,   AtomType::Operator(_))    => MathSpace::Thin,
+        (AtomType::Alpha,   AtomType::Binary)   => MathSpace::Medium,
+        (AtomType::Alpha,   AtomType::Relation)   => MathSpace::Thick,
+        (AtomType::Alpha,   AtomType::Inner) => MathSpace::Thin,
+        (AtomType::Operator(_),    AtomType::Alpha)   => MathSpace::Thin,
+        (AtomType::Operator(_),    AtomType::Operator(_))    => MathSpace::Thin,
+        (AtomType::Operator(_),    AtomType::Relation)   => MathSpace::Thick,
+        (AtomType::Operator(_),    AtomType::Inner) => MathSpace::Thin,
+        (AtomType::Binary,   AtomType::Alpha)   => MathSpace::Medium,
+        (AtomType::Binary,   AtomType::Operator(_))    => MathSpace::Medium,
+        (AtomType::Binary,   AtomType::Inner) => MathSpace::Medium,
+        (AtomType::Relation,   AtomType::Alpha)   => MathSpace::Thick,
+        (AtomType::Relation,   AtomType::Operator(_))    => MathSpace::Thick,
+        (AtomType::Relation,   AtomType::Inner) => MathSpace::Thick,
+        (AtomType::Close, AtomType::Operator(_))    => MathSpace::Thin,
+        (AtomType::Close, AtomType::Binary)   => MathSpace::Medium,
+        (AtomType::Close, AtomType::Relation)   => MathSpace::Thick,
         (AtomType::Close, AtomType::Inner) => MathSpace::Thin,
         
         // Here it is better to list everything but MathSpace::Thin
-        (AtomType::Inner, AtomType::Bin)   => MathSpace::Medium,
-        (AtomType::Inner, AtomType::Rel)   => MathSpace::Thick,
+        (AtomType::Inner, AtomType::Binary)   => MathSpace::Medium,
+        (AtomType::Inner, AtomType::Relation)   => MathSpace::Thick,
         (AtomType::Inner, AtomType::Close) => MathSpace::None,
         (AtomType::Inner, _)               => MathSpace::Thin,
 
         // Every valid (punct, _) pair is undefined or Thin
-        (AtomType::Punct, _)               => MathSpace::Thin,
+        (AtomType::Punctuation, _)               => MathSpace::Thin,
         _ => MathSpace::None,
-    }
-}
-
-pub fn scripts_atom_spacing(left: AtomType, right: AtomType) -> MathSpace {
-    match (left, right) {
-        (AtomType::Ord,   AtomType::Op) -> MathSpace::Thin,
-        (AtomType::Op,    AtomType::Op) -> MathSpace::Thin,
-        (AtomType::Close, AtomType::Op) -> MathSpace::Thin,
-        (AtomType::Inner, AtomType::Op) -> MathSpace::Thin,
-        _ -> MathSpace::None,
     }
 }

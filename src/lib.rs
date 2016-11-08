@@ -7,7 +7,8 @@ extern crate phf;
 mod macros; 
 
 mod lexer;
-mod parser;
+pub mod parser;
 mod functions;
-mod render;
+pub mod render;
 mod font;
+mod spacing;

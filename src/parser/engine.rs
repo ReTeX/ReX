@@ -333,7 +333,7 @@ mod tests {
         use std::fs::File;
         use std::io::Write;
     
-        let output = ::render::render(parse(r"\Sigma\sigma(x)=2").unwrap());
+        let output = ::render::render(parse(r"\int f(x,t)dx=\sum \xi(t)").unwrap());
         let mut f = File::create("test.svg").unwrap();
         f.write_all(output.as_bytes()).unwrap();
     }

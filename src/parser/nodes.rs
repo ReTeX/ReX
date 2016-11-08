@@ -80,6 +80,7 @@ pub enum AtomType {
     Operator(bool),     // bool := limits or nolimits?
     Over,
     Under,
+    Inner,
 }
 
 use font::Symbol;

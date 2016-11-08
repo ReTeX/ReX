@@ -90,6 +90,7 @@ pub struct Symbol {
     pub atom_type: AtomType,
 }
 
+#[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Style {
     Roman,

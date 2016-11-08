@@ -1,22 +1,58 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="88.44800000000001" height="32.784" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,29.951999999999998)">
-<rect x="0" y="-7.20" width="8.77" height="7.36" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>σ</text></g>
-<g transform="translate(24.768,29.951999999999998)">
-<rect x="0" y="-13.95" width="10.06" height="13.95" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>Ё</text></g>
-<g transform="translate(34.832,29.951999999999998)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="192.40533333333335" height="34.304" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,29.184)">
+<rect x="0" y="-13.18" width="14.90" height="18.30" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>∬</text></g>
+<g transform="translate(33.562666666666665,29.184)">
+<rect x="0" y="-10.93" width="5.33" height="10.93" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>f</text></g>
+<g transform="translate(38.89066666666667,29.184)">
 <rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>(</text></g>
-<g transform="translate(40.160000000000004,29.951999999999998)">
+<g transform="translate(44.21866666666667,29.184)">
 <rect x="0" y="-7.20" width="8.00" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>x</text></g>
-<g transform="translate(48.160000000000004,29.951999999999998)">
+<g transform="translate(52.21866666666667,29.184)">
+<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>,</text></g>
+<g transform="translate(58.885333333333335,29.184)">
+<rect x="0" y="-7.20" width="8.00" height="10.69" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>y</text></g>
+<g transform="translate(66.88533333333334,29.184)">
+<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>,</text></g>
+<g transform="translate(73.552,29.184)">
+<rect x="0" y="-9.26" width="4.45" height="9.42" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>t</text></g>
+<g transform="translate(78,29.184)">
 <rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>)</text></g>
-<g transform="translate(53.48800000000001,29.951999999999998)">
+<g transform="translate(83.328,29.184)">
+<rect x="0" y="-10.93" width="8.00" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>d</text></g>
+<g transform="translate(91.328,29.184)">
+<rect x="0" y="-7.20" width="8.00" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>x</text></g>
+<g transform="translate(99.328,29.184)">
+<rect x="0" y="-10.93" width="8.00" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>d</text></g>
+<g transform="translate(107.328,29.184)">
+<rect x="0" y="-7.20" width="8.00" height="10.69" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>y</text></g>
+<g transform="translate(120.66133333333333,29.184)">
 <rect x="0" y="-6.18" width="10.96" height="4.26" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>=</text></g>
-<g transform="translate(64.44800000000001,29.951999999999998)">
-<rect x="0" y="-10.82" width="8.00" height="10.82" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>2</text></g>
+<g transform="translate(136.95466666666667,29.184)">
+<rect x="0" y="-12.21" width="14.62" height="16.35" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>∑</text></g>
+<g transform="translate(154.24533333333332,29.184)">
+<rect x="0" y="-10.93" width="7.06" height="14.42" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>ξ</text></g>
+<g transform="translate(161.30133333333333,29.184)">
+<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>(</text></g>
+<g transform="translate(166.62933333333334,29.184)">
+<rect x="0" y="-9.26" width="4.45" height="9.42" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>t</text></g>
+<g transform="translate(171.07733333333334,29.184)">
+<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>)</text></g>
 </g></svg>
