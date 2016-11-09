@@ -2,13 +2,31 @@
 use parser::nodes::AtomType;
 use font::{Style, Symbol};
 
+use super::glyphs::range;
+use super::glyphs::offset;
+
 pub trait IsAtom {
     fn atom_type(&self, Style) -> Option<Symbol>;
 }
 
+// This macro implements IsAtom for char
+//   [Encoding Range], [Atom Type], [Offset]
+
+atom_types! {
+    LATIN_LOWER => Alpha,
+    LATIN_UPPER => Alpha,
+    DIGITS      => Alpha,
+    GREEK_UPPER => Alpha,
+    @single '*' =>
+    @single '+'
+    @single '('
+    @single '
+}
+
 impl IsAtom for char {
     fn atom_type(&self, mode: Style) -> Option<Symbol> {
-        match *self {
+        match *self as u32 {
+            range::LATIN_LOWER =>
             c @ 'a'...'z' => Some(Symbol {
                 id: (c as i32 + 164) as u16,
                 atom_type: AtomType::Alpha,
