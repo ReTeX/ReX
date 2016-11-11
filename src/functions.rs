@@ -3,6 +3,7 @@ use font::Symbol;
 use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
 use lexer::Lexer;
 use parser;
+use parser::Locals;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -32,11 +33,11 @@ pub enum TexCommand {
 
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
-    pub fn parse(self, lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+    pub fn parse(self, lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
         Ok(match self {
             TexCommand::Radical =>
                 Some(ParseNode::Radical(Radical {
-                    inner: parser::required_macro_argument(lex)?,
+                    inner: parser::required_macro_argument(lex, local)?,
                 })),
             TexCommand::GenFraction { 
                 left_delimiter: ld, 
@@ -49,14 +50,14 @@ impl TexCommand {
                     left_delimiter: ld,
                     right_delimiter: rd,
                     bar_thickness: bt,
-                    numerator: parser::required_macro_argument(lex)?,
-                    denominator: parser::required_macro_argument(lex)?,
+                    numerator: parser::required_macro_argument(lex, local)?,
+                    denominator: parser::required_macro_argument(lex, local)?,
                 })),
             TexCommand::DelimiterSize {
                 size: s,
                 atom_type: at,
             } =>
-                Some(ParseNode::Symbol(parser::expect_type(lex, at)?)),
+                Some(ParseNode::Symbol(parser::expect_type(lex, local, at)?)),
         })
     }
 }

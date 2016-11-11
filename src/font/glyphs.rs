@@ -4532,6 +4532,31 @@ lazy_static! {
     m.insert(60070, Glyph { unicode: 60070, bbox: BBox(133,-289,503,1586), advance: 636, lsb: 133, italics: 0, attachment: 0 });
     m.insert(60071, Glyph { unicode: 60071, bbox: BBox(0,-35,315,541), advance: 315, lsb: 0, italics: 0, attachment: 0 });
     m.insert(65533, Glyph { unicode: 65533, bbox: BBox(55,-217,817,662), advance: 872, lsb: 55, italics: 0, attachment: 0 });
+    // Replacement UNICODE values from unicode.toml exceptions
+    m.insert(119965, Glyph { unicode: 8492, bbox: BBox(34,-15,902,687), advance: 950, lsb: 34, italics: 45, attachment: 808 });
+    m.insert(119980, Glyph { unicode: 8475, bbox: BBox(34,-15,876,687), advance: 944, lsb: 34, italics: 45, attachment: 770 });
+    m.insert(120085, Glyph { unicode: 8476, bbox: BBox(50,-22,829,704), advance: 874, lsb: 50, italics: 0, attachment: 0 });
+    m.insert(120136, Glyph { unicode: 8474, bbox: BBox(45,-65,715,676), advance: 765, lsb: 45, italics: 0, attachment: 0 });
+    m.insert(120093, Glyph { unicode: 8488, bbox: BBox(50,-204,676,695), advance: 726, lsb: 50, italics: 0, attachment: 0 });
+    m.insert(120075, Glyph { unicode: 8460, bbox: BBox(43,-204,773,695), advance: 824, lsb: 43, italics: 0, attachment: 0 });
+    m.insert(120133, Glyph { unicode: 8469, bbox: BBox(70,0,628,662), advance: 698, lsb: 70, italics: 0, attachment: 0 });
+    m.insert(119968, Glyph { unicode: 8496, bbox: BBox(100,-15,734,687), advance: 690, lsb: 100, italics: 105, attachment: 633 });
+    m.insert(119976, Glyph { unicode: 8499, bbox: BBox(38,-15,1056,674), advance: 1072, lsb: 38, italics: 45, attachment: 867 });
+    m.insert(120145, Glyph { unicode: 8484, bbox: BBox(50,0,677,662), advance: 727, lsb: 50, italics: 0, attachment: 0 });
+    m.insert(120127, Glyph { unicode: 8461, bbox: BBox(70,0,648,662), advance: 718, lsb: 70, italics: 0, attachment: 0 });
+    m.insert(119975, Glyph { unicode: 8466, bbox: BBox(33,-15,931,687), advance: 866, lsb: 33, italics: 125, attachment: 850 });
+    m.insert(119972, Glyph { unicode: 8464, bbox: BBox(26,-15,888,675), advance: 746, lsb: 26, italics: 195, attachment: 647 });
+    m.insert(119971, Glyph { unicode: 8459, bbox: BBox(53,-15,991,687), advance: 897, lsb: 53, italics: 145, attachment: 700 });
+    m.insert(119969, Glyph { unicode: 8497, bbox: BBox(43,0,907,680), advance: 769, lsb: 43, italics: 195, attachment: 658 });
+    m.insert(120135, Glyph { unicode: 8473, bbox: BBox(70,0,628,662), advance: 678, lsb: 70, italics: 0, attachment: 0 });
+    m.insert(120122, Glyph { unicode: 8450, bbox: BBox(45,-14,663,676), advance: 705, lsb: 45, italics: 0, attachment: 0 });
+    m.insert(120070, Glyph { unicode: 8493, bbox: BBox(47,-24,675,695), advance: 717, lsb: 47, italics: 0, attachment: 0 });
+    m.insert(120076, Glyph { unicode: 8465, bbox: BBox(45,-34,711,695), advance: 762, lsb: 45, italics: 0, attachment: 0 });
+    m.insert(120137, Glyph { unicode: 8477, bbox: BBox(70,0,712,662), advance: 747, lsb: 70, italics: 0, attachment: 0 });
+    m.insert(120004, Glyph { unicode: 8500, bbox: BBox(30,-11,680,441), advance: 697, lsb: 30, italics: 0, attachment: 0 });
+    m.insert(119893, Glyph { unicode: 8462, bbox: BBox(47,-10,545,683), advance: 577, lsb: 47, italics: 0, attachment: 246 });
+    m.insert(119996, Glyph { unicode: 8458, bbox: BBox(30,-219,678,441), advance: 738, lsb: 30, italics: 0, attachment: 491 });
+    m.insert(119994, Glyph { unicode: 8495, bbox: BBox(30,-11,554,441), advance: 627, lsb: 30, italics: 0, attachment: 463 });
     m
   };
 }

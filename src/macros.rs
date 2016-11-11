@@ -1,12 +1,12 @@
 macro_rules! first_some {
-    ($lex:ident, $first:ident, $($expr:ident,)* )  => (
+    ($lex:ident, $locals:ident, $first:ident, $($expr:ident,)* )  => (
         {
-            if let Some(res) = $first($lex)? {
+            if let Some(res) = $first($lex, $locals)? {
                 Some(res)
             }
 
             $(
-                else if let Some(res) = $expr($lex)? {
+                else if let Some(res) = $expr($lex, $locals)? {
                     Some(res) 
                 }
             )*

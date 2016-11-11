@@ -11,6 +11,7 @@ macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 
 pub fn render(nodes: Vec<ParseNode>) -> String {
+    println!("{:?}", nodes);
     let mut body   = String::new();
     let mut output = String::from("<?xml version=\"1.0\" standalone=\"no\"?>\
         <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \

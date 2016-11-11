@@ -6,15 +6,49 @@ use lexer::{Lexer, Token};
 use parser::nodes::{ AtomType, Delimited, ParseNode, Scripts };
 use functions::COMMANDS;
 
+/// This struct contains many of the local variables that we will be passing
+/// around while we are recursing.  It is designed to make it easier to
+/// change variables while recursing, but keep the original variables
+/// once we are done.
+
+#[derive(Copy, Clone, Debug)]
+pub struct Locals {
+    family: Family,
+    weight: Weight,
+}
+
+impl Locals {
+    fn new() -> Locals {
+        Locals {
+            family: Family::Normal,
+            weight: Weight::None,
+        }
+    }
+
+    fn with_family(&self, fam: Family) -> Locals {
+        Locals {
+            family: fam,
+            weight: self.weight,
+        }
+    }
+
+    fn with_weight(&self, weight: Weight) -> Locals {
+        Locals {
+            family: self.family,
+            weight: weight,
+        }
+    }
+}
+
 /// This method is served as an entry point to parsing the input.
 /// It can also but used to parse sub-expressions (or more formally known)
 /// as `mathlists` which can be found from parsing groups.
 ///
 /// This method will always return something, though it may be an emptylist.
 /// This method itself will not fail, but it is possible that expressions
-/// inside this method will fail and raise and error. 
+/// inside this method will fail and raise and error.
 
-fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
+fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
     let mut ml: Vec<ParseNode> = Vec::new();
 
     loop {
@@ -23,7 +57,54 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let mut node = first_some!(lex, command, group, symbol, implicit_group,);
+        let mut node = first_some!(lex, local,
+            command, group, symbol, implicit_group,);
+
+        // Handle commands that can change that state of the parser
+        if node.is_none() {
+            if let Token::ControlSequence(cmd) = lex.current {
+                println!("cmd: {}", cmd);
+                let family = match cmd {
+                    "mathbb"     => Some(Family::Blackboard),
+                    "mathrm"     => Some(Family::Roman),
+                    "mathcal"    => Some(Family::Calligraphic),
+                    "mathfrak"   => Some(Family::Fraktur),
+                    "mathnormal" => Some(Family::Normal),
+                    "mathsf"     => Some(Family::SansSerif),
+                    "mathscr"    => Some(Family::Script),
+                    "mathtt"     => Some(Family::Teletype),
+                    _ => None,
+                };
+
+                if family.is_some() {
+                    lex.next();
+                    ml.append(&mut macro_argument(lex, local.with_family(family.unwrap()))?.unwrap_or(vec![]));
+                    continue
+                }
+
+                let weight = match cmd {
+                    "bf" | "mathbf" => {
+                        match local.weight {
+                            Weight::BoldItalic | Weight::Italic => Some(Weight::BoldItalic),
+                            _ => Some(Weight::Bold),
+                        }
+                    },
+                    "it" | "mathit" => {
+                        match local.weight {
+                            Weight::BoldItalic | Weight::Bold => Some(Weight::BoldItalic),
+                            _ => Some(Weight::Italic)
+                        }
+                    }
+                    _ => None,
+                };
+
+                if weight.is_some() {
+                    lex.next();
+                    ml.append(&mut macro_argument(lex, local.with_weight(weight.unwrap()))?.unwrap_or(vec![]));
+                    continue
+                }
+            }
+        }
 
         // Here we handle all post-fix operators, like superscripts, subscripts
         // `\limits`, `\nolimits`, and anything that may require us to modify
@@ -33,7 +114,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
             match lex.current {
                 Token::Symbol('_') => {
                     lex.next();
-                    let script = math_field(lex)?;
+                    let script = math_field(lex, local)?;
 
                     if let Some(ParseNode::Scripts(ref mut b)) = node {
                         // We are already parsing a script, place the next
@@ -59,7 +140,7 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
                 },
                 Token::Symbol('^') => {
                     lex.next();
-                    let script = math_field(lex)?;
+                    let script = math_field(lex, local)?;
                     if let Some(ParseNode::Scripts(ref mut b)) = node {
                         if b.superscript.is_some() {
                             return Err("Multiple superscripts!".to_string());
@@ -101,8 +182,9 @@ fn expression(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
 /// This method will result in an error if either the `Symbol` or
 /// `<mathmode material>` contains an error, or if no match is found.
 
-pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
-    first_some!(lex, command, group, symbol,)
+pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
+    first_some!(lex, local,
+            command, group, symbol,)
         .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
 }
 
@@ -112,7 +194,7 @@ pub fn math_field(lex: &mut Lexer) -> Result<ParseNode, String> {
 /// If no matching command is found, this will return `Ok(None)`.  This method
 /// can fail while parsing parameters for a TeX command.
 
-pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands
     let cmd = if let Token::ControlSequence(cmd) = lex.current {
         match COMMANDS.get(cmd).cloned() {
@@ -125,7 +207,7 @@ pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 
     // A command has been found.  Consume the token and parse for arguments. 
     lex.next();
-    cmd.parse(lex)
+    cmd.parse(lex, local)
 }
 
 /// Parse an implicit group.  An implicit group is often defined by a command
@@ -135,16 +217,16 @@ pub fn command(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 ///
 /// This should be used almost anywhere `group()` is used.
 
-pub fn implicit_group(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+pub fn implicit_group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     let token = lex.current;
 
     if token == Token::ControlSequence("left") {
         lex.next(); // consume the `\left` token`
-        let left  = expect_type(lex, AtomType::Open)?;
-        let inner = expression(lex)?;
+        let left  = expect_type(lex, local, AtomType::Open)?;
+        let inner = expression(lex, local)?;
         lex.current.expect(Token::ControlSequence("right"))?;
         lex.next();
-        let right = expect_type(lex, AtomType::Close)?;
+        let right = expect_type(lex, local, AtomType::Close)?;
 
         Ok(Some(ParseNode::Delimited(Delimited{
             left: left,
@@ -163,10 +245,10 @@ pub fn implicit_group(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 
 // TODO: This should also recognize `\bgroup` if we decide to go that route.
 
-pub fn group(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+pub fn group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     if lex.current == Token::Symbol('{') {
         lex.next();
-        let inner = expression(lex)?;
+        let inner = expression(lex, local)?;
         lex.current.expect(Token::Symbol('}'))?;
         lex.next();
         Ok(Some(ParseNode::Group(inner)))
@@ -185,7 +267,7 @@ pub fn group(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 /// the `{` will not be recognized here and will therefore result in an `Err`.
 /// So in general, you should always parse for a group before parsing for a symbol.
 
-pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
+pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     match lex.current {
         Token::ControlSequence(cs) => {
             match SYMBOLS.get(cs).cloned() {
@@ -199,7 +281,7 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
                 //None => Err(format!("Unable to find symbol representation for {}", c)),
                 None => Ok(None),
                 Some(sym) => { lex.next(); Ok(Some(ParseNode::Symbol(Symbol{
-                    unicode: c as u32 + style_offset(c as u32, Family::Blackboard, Weight::None),
+                    unicode: c as u32 + style_offset(c as u32, local.family, local.weight),
                     atom_type: sym,
                 }))) },
             }
@@ -219,11 +301,12 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
 ///   - When can this possible fail?
 ///   - How to handle custom validators/parsers for arguments. ie: Argument is a color.
 
-pub fn macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
+pub fn macro_argument(lex: &mut Lexer, local: Locals) -> Result<Option<Vec<ParseNode>>, String> {
     // Must figure out how to properly handle implicit groups here.
     while lex.current == Token::WhiteSpace { lex.next(); }
 
-    match first_some!(lex, command, group, symbol,) {
+    match first_some!(lex, local,
+            command, group, symbol,) {
         Some(ParseNode::Group(inner)) => Ok(Some(inner)),
         Some(node) => Ok(Some(vec![node])),
         _ => Ok(None),
@@ -232,8 +315,8 @@ pub fn macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String>
 
 /// This method is like `macro_argument` except that it requires an argument to be present.
 
-pub fn required_macro_argument(lex: &mut Lexer) -> Result<Vec<ParseNode>, String> {
-    let arg = macro_argument(lex)?;
+pub fn required_macro_argument(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
+    let arg = macro_argument(lex, local)?;
     match arg {
         None => Err(format!("Expected a required macro argument! {:?}", arg)),
         Some(res) => Ok(res),
@@ -261,10 +344,10 @@ pub fn special_macro_argument(lex: &mut Lexer) -> () {
 ///
 /// This function _will_ advance the lexer.
 
-pub fn expect_type(lex: &mut Lexer, expected: AtomType) -> Result<Symbol, String> {
+pub fn expect_type(lex: &mut Lexer, local: Locals, expected: AtomType) -> Result<Symbol, String> {
     lex.consume_whitespace();
 
-    if let Some(ParseNode::Symbol(sym)) = symbol(lex)? {
+    if let Some(ParseNode::Symbol(sym)) = symbol(lex, local)? {
         if sym.atom_type == expected {
             Ok(sym)
         } else {
@@ -281,7 +364,8 @@ pub fn expect_type(lex: &mut Lexer, expected: AtomType) -> Result<Symbol, String
 
 pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
     let mut lexer = Lexer::new(input);
-    expression(&mut lexer)
+    let local = Locals::new();
+    expression(&mut lexer, local)
 }
 
 

@@ -1,58 +1,28 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="201.09333333333333" height="34.304" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,29.184)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="115.13066666666667" height="34.304" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,29.184)">
 <rect x="0" y="-13.18" width="14.90" height="18.30" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>∬</text></g>
 <g transform="translate(33.562666666666665,29.184)">
 <rect x="0" y="-10.93" width="5.89" height="10.93" fill="none" stroke="blue" stroke-width="0.2"/>
 <text>𝕗</text></g>
 <g transform="translate(39.45066666666666,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>(</text></g>
-<g transform="translate(44.778666666666666,29.184)">
-<rect x="0" y="-7.20" width="8.96" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕩</text></g>
-<g transform="translate(53.73866666666667,29.184)">
-<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>,</text></g>
-<g transform="translate(60.40533333333333,29.184)">
-<rect x="0" y="-7.20" width="7.49" height="10.69" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕪</text></g>
-<g transform="translate(67.89333333333333,29.184)">
-<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>,</text></g>
-<g transform="translate(74.56,29.184)">
-<rect x="0" y="-10.13" width="5.26" height="10.29" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕥</text></g>
-<g transform="translate(79.824,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>)</text></g>
-<g transform="translate(85.152,29.184)">
-<rect x="0" y="-10.93" width="9.18" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕕</text></g>
-<g transform="translate(94.336,29.184)">
-<rect x="0" y="-7.20" width="8.96" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕩</text></g>
-<g transform="translate(103.29599999999999,29.184)">
-<rect x="0" y="-10.93" width="9.18" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕕</text></g>
-<g transform="translate(112.47999999999999,29.184)">
-<rect x="0" y="-7.20" width="7.49" height="10.69" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕪</text></g>
-<g transform="translate(125.30133333333332,29.184)">
-<rect x="0" y="-6.18" width="10.96" height="4.26" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>=</text></g>
-<g transform="translate(141.59466666666665,29.184)">
-<rect x="0" y="-12.21" width="14.62" height="16.35" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>∑</text></g>
-<g transform="translate(158.8853333333333,29.184)">
-<rect x="0" y="-10.59" width="10.29" height="10.59" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>Ξ</text></g>
-<g transform="translate(169.17333333333332,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>(</text></g>
-<g transform="translate(174.50133333333332,29.184)">
-<rect x="0" y="-10.13" width="5.26" height="10.29" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝕥</text></g>
-<g transform="translate(179.76533333333333,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>)</text></g>
+<rect x="0" y="-7.20" width="8.70" height="7.36" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>𝕦</text></g>
+<g transform="translate(48.154666666666664,29.184)">
+<rect x="0" y="-7.36" width="8.32" height="7.52" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>𝕔</text></g>
+<g transform="translate(56.474666666666664,29.184)">
+<rect x="0" y="-10.93" width="8.82" height="10.93" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>𝕜</text></g>
+<g transform="translate(65.29066666666667,29.184)">
+<rect x="0" y="-10.69" width="8.88" height="13.68" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>𝑓</text></g>
+<g transform="translate(74.17066666666666,29.184)">
+<rect x="0" y="-7.06" width="7.58" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>𝑢</text></g>
+<g transform="translate(81.75466666666667,29.184)">
+<rect x="0" y="-7.36" width="8.69" height="7.52" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>α</text></g>
+<g transform="translate(90.44266666666667,29.184)">
+<rect x="0" y="-7.36" width="8.69" height="7.52" fill="none" stroke="blue" stroke-width="0.2"/>
+<text>α</text></g>
 </g></svg>
