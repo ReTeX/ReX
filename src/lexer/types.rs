@@ -1,5 +1,6 @@
-#[derive(Clone, Copy, Debug)]
+use font::fontselection::{ Family, Weight };
 
+#[derive(Clone, Copy, Debug)]
 pub struct Lexer<'a> {    
     pub input: &'a str,
 
@@ -10,6 +11,10 @@ pub struct Lexer<'a> {
 
     /// The token currently being processed.
     pub current: Token<'a>,
+
+    // TODO: Remove this, just a patch to test
+    pub family: Family,
+    pub weight: Weight,
 }
 
 #[allow(dead_code)]

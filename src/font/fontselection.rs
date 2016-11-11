@@ -85,6 +85,7 @@ const GREEK_LOWER_END: u32 = 0x3B1 + 25;
 const GREEK_UPPER_START: u32 = 0x391;
 const GREEK_UPPER_END: u32 = 0x391 + 24;
 
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum Family {
     Normal,
     Roman,
@@ -96,6 +97,7 @@ pub enum Family {
     Teletype,
 }
 
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum Weight {
     None,
     Bold,

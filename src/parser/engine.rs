@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
-use font;
 use font::fontselection::{ style_offset, Family, Weight };
 use font::{SYMBOLS, Symbol, IsAtom};
 use lexer::{Lexer, Token};
@@ -200,7 +199,7 @@ pub fn symbol(lex: &mut Lexer) -> Result<Option<ParseNode>, String> {
                 //None => Err(format!("Unable to find symbol representation for {}", c)),
                 None => Ok(None),
                 Some(sym) => { lex.next(); Ok(Some(ParseNode::Symbol(Symbol{
-                    unicode: c as u32 + style_offset(c as u32, Family::Normal, Weight::None),
+                    unicode: c as u32 + style_offset(c as u32, Family::Blackboard, Weight::None),
                     atom_type: sym,
                 }))) },
             }

@@ -21,10 +21,13 @@ impl<'a> Lexer<'a> {
     /// to be processed.
 
     pub fn new(input: &'a str) -> Lexer<'a> {
+        use font::fontselection::{Family, Weight};
         let mut lex = Lexer {
             input: input,
             current: Token::EOF,
             pos: 0,
+            family: Family::Normal,
+            weight: Weight::None,
         };
 
         lex.next();
