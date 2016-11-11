@@ -7,3 +7,4 @@ authors = ["Christopher Breeden <github@u.breeden.cc>"]
 phf="*"
 phf_macros="*"
 svg="^0.5.3"
+lazy_static="*"

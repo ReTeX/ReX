@@ -2,6 +2,7 @@ mod glyphs;
 mod constants;
 mod symbols;
 mod offsets;
+pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;
 pub use self::constants::CONSTANTS;
@@ -86,7 +87,7 @@ pub struct Constants {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Symbol {
-    pub id: u16,
+    pub unicode: u32,
     pub atom_type: AtomType,
 }
 

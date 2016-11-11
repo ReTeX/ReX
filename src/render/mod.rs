@@ -27,7 +27,7 @@ pub fn render(nodes: Vec<ParseNode>) -> String {
     // First calculate the height to determine the baseline
     for node in &nodes {
         if let &ParseNode::Symbol(sym) = node {
-            let glyph = &GLYPHS[sym.id as usize];
+            let glyph = &GLYPHS[&sym.unicode];
             height = height.max(glyph.bbox.3 as f64 * UNITS_TO_EM * EM_TO_PX);
             depth  = depth.min(glyph.bbox.1 as f64 * UNITS_TO_EM * EM_TO_PX);
         }
@@ -38,7 +38,7 @@ pub fn render(nodes: Vec<ParseNode>) -> String {
             n
         } else { continue };
 
-        let glyph  = &GLYPHS[node.id as usize];
+        let glyph  = &GLYPHS[&node.unicode];
 
         println!("{:?}", node);
 
