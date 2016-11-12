@@ -111,6 +111,7 @@ pub enum ParseNode {
     Radical(Radical),
     GenFraction(GenFraction),
     Scripts(Scripts),
+    Spacing(Spacing),
 }
 
 // impl ParseNode {
@@ -140,6 +141,13 @@ pub struct GenFraction {
     pub left_delimiter: Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
 
+}
+
+#[derive(Copy, Clone, PartialEq, Eq, Debug)]
+pub enum Spacing {
+    Thin,
+    Medium,
+    Thick,
 }
 
 // /// Every symbol will need a font family

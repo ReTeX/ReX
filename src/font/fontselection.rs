@@ -97,12 +97,41 @@ pub enum Family {
     Teletype,
 }
 
+use ::std::convert::TryFrom;
+impl<'a> TryFrom<&'a str> for Family {
+    type Err = ();
+    fn try_from(s: &str) -> Result<Family, Self::Err> {
+        match s {
+            "mathbb"     => Ok(Family::Blackboard),
+            "mathrm"     => Ok(Family::Roman),
+            "mathcal"    => Ok(Family::Calligraphic),
+            "mathfrak"   => Ok(Family::Fraktur),
+            "mathnormal" => Ok(Family::Normal),
+            "mathsf"     => Ok(Family::SansSerif),
+            "mathscr"    => Ok(Family::Script),
+            "mathtt"     => Ok(Family::Teletype),
+            _ => Err(())
+        }
+    }
+}
+
 #[derive(Copy, Clone, PartialEq, Eq, Debug)]
 pub enum Weight {
     None,
     Bold,
     Italic,
     BoldItalic,
+}
+
+impl<'a> TryFrom<&'a str> for Weight {
+    type Err = ();
+    fn try_from(s: &str) -> Result<Weight, Self::Err> {
+        match s {
+            "bf" | "mathbf" => Ok(Weight::Bold),
+            "it" | "mathit" => Ok(Weight::Italic),
+            _ => Err(())
+        }
+    }
 }
 
 pub fn style_offset(unicode: u32, family: Family, weight: Weight) -> u32 {

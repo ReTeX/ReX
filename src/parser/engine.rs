@@ -4,41 +4,8 @@ use font::fontselection::{ style_offset, Family, Weight };
 use font::{SYMBOLS, Symbol, IsAtom};
 use lexer::{Lexer, Token};
 use parser::nodes::{ AtomType, Delimited, ParseNode, Scripts };
+use parser::Locals;
 use functions::COMMANDS;
-
-/// This struct contains many of the local variables that we will be passing
-/// around while we are recursing.  It is designed to make it easier to
-/// change variables while recursing, but keep the original variables
-/// once we are done.
-
-#[derive(Copy, Clone, Debug)]
-pub struct Locals {
-    family: Family,
-    weight: Weight,
-}
-
-impl Locals {
-    fn new() -> Locals {
-        Locals {
-            family: Family::Normal,
-            weight: Weight::None,
-        }
-    }
-
-    fn with_family(&self, fam: Family) -> Locals {
-        Locals {
-            family: fam,
-            weight: self.weight,
-        }
-    }
-
-    fn with_weight(&self, weight: Weight) -> Locals {
-        Locals {
-            family: self.family,
-            weight: weight,
-        }
-    }
-}
 
 /// This method is served as an entry point to parsing the input.
 /// It can also but used to parse sub-expressions (or more formally known)
@@ -62,48 +29,8 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
 
         // Handle commands that can change that state of the parser
         if node.is_none() {
-            if let Token::ControlSequence(cmd) = lex.current {
-                println!("cmd: {}", cmd);
-                let family = match cmd {
-                    "mathbb"     => Some(Family::Blackboard),
-                    "mathrm"     => Some(Family::Roman),
-                    "mathcal"    => Some(Family::Calligraphic),
-                    "mathfrak"   => Some(Family::Fraktur),
-                    "mathnormal" => Some(Family::Normal),
-                    "mathsf"     => Some(Family::SansSerif),
-                    "mathscr"    => Some(Family::Script),
-                    "mathtt"     => Some(Family::Teletype),
-                    _ => None,
-                };
-
-                if family.is_some() {
-                    lex.next();
-                    ml.append(&mut macro_argument(lex, local.with_family(family.unwrap()))?.unwrap_or(vec![]));
-                    continue
-                }
-
-                let weight = match cmd {
-                    "bf" | "mathbf" => {
-                        match local.weight {
-                            Weight::BoldItalic | Weight::Italic => Some(Weight::BoldItalic),
-                            _ => Some(Weight::Bold),
-                        }
-                    },
-                    "it" | "mathit" => {
-                        match local.weight {
-                            Weight::BoldItalic | Weight::Bold => Some(Weight::BoldItalic),
-                            _ => Some(Weight::Italic)
-                        }
-                    }
-                    _ => None,
-                };
-
-                if weight.is_some() {
-                    lex.next();
-                    ml.append(&mut macro_argument(lex, local.with_weight(weight.unwrap()))?.unwrap_or(vec![]));
-                    continue
-                }
-            }
+            state_change(lex, local, &mut ml)?;
+            continue
         }
 
         // Here we handle all post-fix operators, like superscripts, subscripts
@@ -171,6 +98,45 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
 
     Ok(ml)
 }
+
+/// Theses commands may change the state of the parser, and so will
+/// be handled in a special manner.  Changinge the state of the parser
+/// may also require direct access to the current list of parse nodes.
+
+pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<(), String> {
+    if let Token::ControlSequence(cmd) = lex.current {
+        use ::std::convert::TryFrom;
+        if let Ok(family) = Family::try_from(cmd) {
+            lex.next();
+            nodes.append(
+                &mut macro_argument(lex, local.with_family(family))?
+                    .unwrap_or(vec![]));
+            return Ok(());
+        }
+
+        if let Some(weight) =
+            match cmd {
+                "bf" | "mathbf" =>
+                    match local.weight {
+                        Weight::BoldItalic | Weight::Italic => Some(Weight::BoldItalic),
+                        _ => Some(Weight::Bold),
+                    },
+                "it" | "mathit" =>
+                    match local.weight {
+                        Weight::BoldItalic | Weight::Bold => Some(Weight::BoldItalic),
+                        _ => Some(Weight::Italic),
+                    },
+                _ => None,
+            } {
+            lex.next();
+            nodes.append(&mut macro_argument(lex, local.with_weight(weight))?
+                .unwrap_or(vec![]));
+            return Ok(());
+        }
+    }
+    // No state modifying commands found
+    Ok(())
+} 
 
 /// Parse a `<Math Field>`.  A math field is defined by
 ///

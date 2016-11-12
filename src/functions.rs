@@ -1,6 +1,6 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Spacing };
 use lexer::Lexer;
 use parser;
 use parser::Locals;
@@ -28,6 +28,9 @@ pub enum TexCommand {
     DelimiterSize {
         atom_type: AtomType,
         size: u8,
+    },
+    Spacing {
+        size: Spacing,
     }
 }
 
@@ -58,6 +61,8 @@ impl TexCommand {
                 atom_type: at,
             } =>
                 Some(ParseNode::Symbol(parser::expect_type(lex, local, at)?)),
+            TexCommand::Spacing { size: sp } =>
+                Some(ParseNode::Spacing(sp)),
         })
     }
 }
@@ -86,4 +91,6 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "Big" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Ordinal },
     "bigg" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Ordinal },
     "Bigg" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
+    "," => TexCommand::Spacing { size: Spacing::Thin },
+    " " => TexCommand::Spacing { size: Spacing::Medium },
 };
