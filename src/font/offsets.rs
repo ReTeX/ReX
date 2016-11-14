@@ -11,7 +11,7 @@ impl IsAtom for char {
             'a'...'z' | 'A'...'Z' | 
             '0'...'9' | 'Α'...'Ω' | 'α'...'ω'  => AtomType::Alpha,
 
-            '*' | '+' => AtomType::Binary,
+            '*' | '+' | '-' => AtomType::Binary,
             '[' | '(' => AtomType::Open,
             ']' | ')' | '?' | '!' => AtomType::Close,
             '=' | '<' | '>' | ':' => AtomType::Relation,

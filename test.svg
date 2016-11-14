@@ -1,58 +1,7 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="201.21600000000004" height="34.304" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,29.184)">
-<rect x="0" y="-13.18" width="14.90" height="18.30" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>∬</text></g>
-<g transform="translate(33.562666666666665,29.184)">
-<rect x="0" y="-10.69" width="8.88" height="13.68" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑓</text></g>
-<g transform="translate(42.44266666666667,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>(</text></g>
-<g transform="translate(47.77066666666667,29.184)">
-<rect x="0" y="-7.06" width="8.80" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑥</text></g>
-<g transform="translate(56.57066666666667,29.184)">
-<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>,</text></g>
-<g transform="translate(63.23733333333333,29.184)">
-<rect x="0" y="-7.04" width="7.94" height="9.97" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑦</text></g>
-<g transform="translate(71.17333333333333,29.184)">
-<rect x="0" y="-1.63" width="4.00" height="3.89" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>,</text></g>
-<g transform="translate(77.84,29.184)">
-<rect x="0" y="-9.07" width="5.01" height="9.22" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑡</text></g>
-<g transform="translate(82.848,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>)</text></g>
-<g transform="translate(90.84266666666667,29.184)">
-<rect x="0" y="-10.93" width="8.00" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>d</text></g>
-<g transform="translate(98.84266666666667,29.184)">
-<rect x="0" y="-7.06" width="8.80" height="7.20" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑥</text></g>
-<g transform="translate(107.64266666666667,29.184)">
-<rect x="0" y="-10.93" width="8.00" height="11.09" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>d</text></g>
-<g transform="translate(115.64266666666667,29.184)">
-<rect x="0" y="-7.04" width="7.94" height="9.97" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑦</text></g>
-<g transform="translate(128.912,29.184)">
-<rect x="0" y="-6.18" width="10.96" height="4.26" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>=</text></g>
-<g transform="translate(145.20533333333336,29.184)">
-<rect x="0" y="-12.21" width="14.62" height="16.35" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>∑</text></g>
-<g transform="translate(162.496,29.184)">
-<rect x="0" y="-10.93" width="7.06" height="14.42" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>ξ</text></g>
-<g transform="translate(169.55200000000002,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>(</text></g>
-<g transform="translate(174.88000000000002,29.184)">
-<rect x="0" y="-9.07" width="5.01" height="9.22" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>𝑡</text></g>
-<g transform="translate(179.88800000000003,29.184)">
-<rect x="0" y="-10.82" width="5.33" height="13.65" fill="none" stroke="blue" stroke-width="0.2"/>
-<text>)</text></g>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="73.47555555555556" height="27.472" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="16px"><g transform="translate(16,26.816000000000003)">
+<text>1</text></g>
+<g transform="translate(24,26.816000000000003)">
+<text>+</text></g>
+<g transform="translate(38.51555555555556,26.816000000000003)">
+<text>1</text></g>
 </g></svg>

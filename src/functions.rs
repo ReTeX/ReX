@@ -1,6 +1,7 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Spacing };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
+use spacing::Spacing;
 use lexer::Lexer;
 use parser;
 use parser::Locals;

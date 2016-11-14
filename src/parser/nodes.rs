@@ -83,8 +83,6 @@ pub enum AtomType {
     Inner,
 }
 
-use font::Symbol;
-
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Scripts {
     pub base: Option<Box<ParseNode>>,
@@ -92,6 +90,7 @@ pub struct Scripts {
     pub subscript: Option<Box<ParseNode>>,
 }
 
+use font::Symbol;
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub struct Delimited {
     pub left:  Symbol,
@@ -103,6 +102,7 @@ pub struct Delimited {
 //   to have an atomtype associated with it.  By default,
 //   it will be a `Ordinal`.
 
+use spacing::Spacing;
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum ParseNode {
     Symbol(Symbol),
@@ -114,11 +114,35 @@ pub enum ParseNode {
     Spacing(Spacing),
 }
 
+use font::IsAtom;
+impl IsAtom for ParseNode {
+    fn atom_type(&self) -> Option<AtomType> {
+        match *self {
+            ParseNode::Symbol(ref sym) => Some(sym.atom_type),
+            ParseNode::Group(_) => Some(AtomType::Ordinal),
+            ParseNode::Delimited(_) => Some(AtomType::Fence),
+            ParseNode::Radical(_) => Some(AtomType::Ordinal),
+            ParseNode::GenFraction(_) => Some(AtomType::Inner),
+            ParseNode::Scripts(_) => Some(AtomType::Ordinal), // Change to recursion
+            ParseNode::Spacing(_) => None,
+        }
+    } 
+}
+
+impl ParseNode {
+    pub fn set_atom_type(&mut self, at: AtomType) {
+        match *self {
+            ParseNode::Symbol(ref mut sym) => sym.atom_type = at,
+            _ => (),
+        }
+    }
+}
+
 // impl ParseNode {
 //     fn has_superscript(&self) -> bool {
 //         if let ParseNode::Scripts()
 //     }
-// }
+// 
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum MathField {
@@ -141,13 +165,6 @@ pub struct GenFraction {
     pub left_delimiter: Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
 
-}
-
-#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-pub enum Spacing {
-    Thin,
-    Medium,
-    Thick,
 }
 
 // /// Every symbol will need a font family

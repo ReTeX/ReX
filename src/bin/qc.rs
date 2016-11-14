@@ -6,6 +6,7 @@ extern crate rex;
 
 use rex::parser::parse;
 use rex::render::render;
+use rex::layout::reduce::reduce;
 
 fn main() {
     let input = env::args().skip(2).collect::<String>();
@@ -14,7 +15,7 @@ fn main() {
         return
     }
 
-    let output = render(parse(&input).unwrap());
+    let output = render(reduce(&mut parse(&input).unwrap()));
     let mut f = File::create("test.svg").unwrap();
     f.write_all(output.as_bytes()).unwrap();
 }
