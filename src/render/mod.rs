@@ -4,7 +4,7 @@ use font::{GLYPHS};
 use spacing::atom_spacing;
 use constants::{ UNITS_TO_EM, EM_TO_PX };
 use layout::LayoutNode;
-use layout::dimensions::HasBoundingBox;
+use layout::boundingbox::HasBoundingBox;
 
 const SCALE: f64 = 8 as f64/450 as f64;
 
@@ -16,8 +16,8 @@ macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 pub fn render_inline(nodes: &[LayoutNode]) -> String {
     let mut result = String::new();
 
-    let height = nodes.get_height(); 
-    let mut width = 16f64; //TODO: Should be left side padding
+    let height = nodes.get_height();
+    let mut width = 16f64; // TODO: Should be left side padding
     let padding_y = 16f64; // TODO: Should be top padding
 
     for node in nodes { match *node {

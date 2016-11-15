@@ -112,6 +112,13 @@ pub enum ParseNode {
     GenFraction(GenFraction),
     Scripts(Scripts),
     Spacing(Spacing),
+    Rule(Rule),
+}
+
+#[derive(Copy, Clone, PartialEq, Debug, Eq)]
+pub struct Rule {
+    pub width: u16,
+    pub height: u16,
 }
 
 use font::IsAtom;
@@ -125,6 +132,7 @@ impl IsAtom for ParseNode {
             ParseNode::GenFraction(_) => Some(AtomType::Inner),
             ParseNode::Scripts(_) => Some(AtomType::Ordinal), // Change to recursion
             ParseNode::Spacing(_) => None,
+            ParseNode::Rule(_) => None,
         }
     } 
 }

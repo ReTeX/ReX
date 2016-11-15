@@ -1,12 +1,13 @@
 #![allow(dead_code)]
 use constants::{ UNITS_TO_EM, EM_TO_PX };
+use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
 
 /// Every object that will be rendered will be required to report their size.
 /// If the object is a list of other objects, such as typesetting on a horizontal
 /// line, or a vectical layout of fractions, then it can recursively read its size
 /// from it's children.
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct BoundingBox {
     width: f64,
     height: f64,
@@ -15,7 +16,7 @@ pub struct BoundingBox {
 
 pub trait HasBoundingBox {
     fn bounding_box(&self) -> BoundingBox;
-    
+
     fn get_width(&self) -> f64 {
         self.bounding_box().width
     }
@@ -29,22 +30,6 @@ pub trait HasBoundingBox {
     }
 }
 
-use spacing::Spacing;
-#[derive(Clone, Debug)]
-pub enum LayoutNode {
-    HorizontalBox(HorizontalBox),
-    Glyph(Glyph),
-    Space(Spacing),
-    Rule(Rule),
-}
-
-#[derive(Copy, Clone, Debug)]
-pub struct Rule {
-    width: f64,
-    height: f64,
-    depth: f64,
-}
-
 impl  HasBoundingBox for Rule {
     fn bounding_box(&self) -> BoundingBox {
         BoundingBox {
@@ -55,21 +40,12 @@ impl  HasBoundingBox for Rule {
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct HorizontalBox {
-    pub inner: Vec<LayoutNode>,
-}
-
-pub struct VerticalBox {
-    pub inner: Vec<LayoutNode>,
-}
-
 impl HasBoundingBox for HorizontalBox {
     fn bounding_box(&self) -> BoundingBox  {
         let mut width  = 0f64;
         let mut height = 0f64;
         let mut depth  = 0f64;
-        for bx in &self.inner {
+        for bx in &self.contents {
             width += bx.get_width();
             height = height.max(bx.get_height());
             depth  = depth.min(bx.get_depth());
@@ -87,7 +63,7 @@ impl HasBoundingBox for VerticalBox {
         let mut width  = 0f64;
         let mut height = 0f64;
         let mut depth  = 0f64;
-        for bx in &self.inner {
+        for bx in &self.contents {
             width   = width.max(bx.get_width());
             height += bx.get_height();
             depth   = depth.min(bx.get_depth());
@@ -129,6 +105,7 @@ impl HasBoundingBox for Glyph {
     }
 }
 
+use spacing::Spacing;
 impl HasBoundingBox for Spacing {
     fn bounding_box(&self) -> BoundingBox {
         let width = match *self {

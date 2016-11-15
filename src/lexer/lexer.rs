@@ -118,6 +118,18 @@ impl<'a> Lexer<'a> {
         Token::ControlSequence(&self.input[start..end])
     }
 
+    pub fn dimension(&mut self) -> Option<u32> {
+        let pos = self.pos;
+        while let Some(n) = self.next_char() {
+            if !n.is_numeric() {
+                break
+            }
+        }
+
+        if pos == self.pos { return None }
+        Some(self.input[pos..self.pos].parse::<u32>().unwrap())
+    }
+
     /// This method and `current_char` return the same value.
     /// The only difference is that this method will advance
     /// the cursor.

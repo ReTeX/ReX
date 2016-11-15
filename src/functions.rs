@@ -20,6 +20,7 @@ pub enum MathStyle {
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum TexCommand {
     Radical,
+    Rule,
     GenFraction {
         left_delimiter: Option<Symbol>,
         right_delimiter: Option<Symbol>,
@@ -32,7 +33,7 @@ pub enum TexCommand {
     },
     Spacing {
         size: Spacing,
-    }
+    },
 }
 
 impl TexCommand {
@@ -64,6 +65,25 @@ impl TexCommand {
                 Some(ParseNode::Symbol(parser::expect_type(lex, local, at)?)),
             TexCommand::Spacing { size: sp } =>
                 Some(ParseNode::Spacing(sp)),
+            TexCommand::Rule => {
+                lex.consume_whitespace();
+                let mut w = 0;
+                use lexer::Token;
+                match lex.current {
+                    Token::Symbol('{') => {
+                        lex.next();
+                        w = lex.dimension().unwrap();
+                        lex.next();
+                    },
+                    _ => { w = lex.dimension().unwrap(); }
+                }
+
+                use parser::nodes::Rule;
+                Some(ParseNode::Rule(Rule {
+                    width: w as u16,
+                    height: 0,
+                }))
+            }
         })
     }
 }
@@ -94,4 +114,5 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "Bigg" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
     "," => TexCommand::Spacing { size: Spacing::Thin },
     " " => TexCommand::Spacing { size: Spacing::Medium },
+    "rule" => TexCommand::Rule,
 };
