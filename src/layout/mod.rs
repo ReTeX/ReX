@@ -38,6 +38,7 @@ pub struct Rule {
     depth: f64,
 }
 
+#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 enum Alignment {
     Centered,

@@ -10,7 +10,7 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
     // to an Ordinal item.
     use font::IsAtom;
     if let Some(mut node) = nodes.get_mut(0) {
-        if node.atom_type() == Some(AtomType::Binary) {
+        if node.atom_type() == Some(AtomType::Binary) { 
             node.set_atom_type(AtomType::Ordinal)
         }
     }

@@ -29,8 +29,9 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
 
         // Handle commands that can change that state of the parser
         if node.is_none() {
-            state_change(lex, local, &mut ml)?;
-            continue
+            if Some(()) == state_change(lex, local, &mut ml)? {
+                continue
+            }
         }
 
         // Here we handle all post-fix operators, like superscripts, subscripts
@@ -103,7 +104,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
-pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<(), String> {
+pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<Option<()>, String> {
     if let Token::ControlSequence(cmd) = lex.current {
         use ::std::convert::TryFrom;
         if let Ok(family) = Family::try_from(cmd) {
@@ -111,7 +112,7 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
             nodes.append(
                 &mut macro_argument(lex, local.with_family(family))?
                     .unwrap_or(vec![]));
-            return Ok(());
+            return Ok(Some(()));
         }
 
         if let Some(weight) =
@@ -131,11 +132,11 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
             lex.next();
             nodes.append(&mut macro_argument(lex, local.with_weight(weight))?
                 .unwrap_or(vec![]));
-            return Ok(());
+            return Ok(Some(()));
         }
     }
     // No state modifying commands found
-    Ok(())
+    Ok(None)
 } 
 
 /// Parse a `<Math Field>`.  A math field is defined by
@@ -381,15 +382,15 @@ mod tests {
     //              })]);
     // }
 
-    #[test]
-    fn render() {
-        use std::fs::File;
-        use std::io::Write;
+    // #[test]
+    // fn render() {
+    //     use std::fs::File;
+    //     use std::io::Write;
     
-        let output = ::render::render(parse(r"\int f(x,t)dx=\sum \xi(t)").unwrap());
-        let mut f = File::create("test.svg").unwrap();
-        f.write_all(output.as_bytes()).unwrap();
-    }
+    //     let output = ::render::render(parse(r"\int f(x,t)dx=\sum \xi(t)").unwrap());
+    //     let mut f = File::create("test.svg").unwrap();
+    //     f.write_all(output.as_bytes()).unwrap();
+    // }
 
     #[test]
     fn fractions() {

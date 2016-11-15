@@ -118,16 +118,33 @@ impl<'a> Lexer<'a> {
         Token::ControlSequence(&self.input[start..end])
     }
 
+    /// This method will parse a dimension.  It assumes
+    /// that the lexer is currently pointed to the first valid 
+    /// character in a dimension.  So it may be necessary to 
+    /// consume_whitespace() prior to using this method.
+
     pub fn dimension(&mut self) -> Option<u32> {
+        // We need to backtrack.
+        match self.current {
+            Token::Symbol(sym) => self.pos -= sym.len_utf8(),
+            // TODO: If we accept dimensions such as \textwidth
+            //  we need to recognize them here, for now we don't.
+            _ => return None,
+        }
+
         let pos = self.pos;
         while let Some(n) = self.next_char() {
             if !n.is_numeric() {
+                self.pos -= n.len_utf8();
                 break
             }
         }
 
         if pos == self.pos { return None }
-        Some(self.input[pos..self.pos].parse::<u32>().unwrap())
+        let result = Some(self.input[pos..self.pos].parse::<u32>().unwrap());
+        self.next();
+        println!("{:?}", self);
+        result
     }
 
     /// This method and `current_char` return the same value.
@@ -187,10 +204,16 @@ mod tests {
     use super::super::{Lexer, Token};
 
     #[test]
-    fn lextokens() {
+    fn lex_tokens() {
         assert_eq_token_stream!(r"\cs1", r"\cs 1");
         assert_eq_token_stream!(r"\cs1", r"\cs  1");
         assert_eq_token_stream!(r"\cs1", "\\cs\n\t\r 1");
         assert_eq_token_stream!(r"\test\test", r"\test  \test");
+    }
+
+    #[test]
+    fn lex_numbers() {
+        let mut lex = Lexer::new(r"123 abc");
+        assert_eq!(lex.dimension(), Some(123));
     }
 }
