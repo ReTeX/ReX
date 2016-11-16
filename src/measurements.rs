@@ -15,3 +15,10 @@
 //
 // DeviceResolution - Specifies number of device units (pixels) per inch. 
 //                    Typical values might be 300 for a laser printer or 96 for a VGA screen.
+
+/// Font independent units of measurment
+
+// Recommended units for screen: em, px.
+// Recommended units for print: em, cm, mm, in, pt, pc
+// Not recommended for screen: Absolute (pt, cm, mm, in, pc)
+

@@ -39,10 +39,10 @@ pub enum TexCommand {
 /// With this method you can pass a parser function which will
 /// first unwrap any group items if there are any.
 
-fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>) 
-        -> Result<Option<T>, String> {
-    unimplemented!()
-}
+// fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>) 
+//         -> Result<Option<T>, String> {
+//     unimplemented!()
+// }
 
 impl TexCommand {
     #[allow(dead_code, unused_variables)]

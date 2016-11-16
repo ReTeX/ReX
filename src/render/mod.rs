@@ -1,7 +1,7 @@
 #![allow(dead_code)]
-use parser::nodes::{ ParseNode };
-use font::{GLYPHS};
-use spacing::atom_spacing;
+// use parser::nodes::{ ParseNode };
+// use font::{GLYPHS};
+// use spacing::atom_spacing;
 use constants::{ UNITS_TO_EM, EM_TO_PX };
 use layout::LayoutNode;
 use layout::boundingbox::HasBoundingBox;
@@ -46,7 +46,6 @@ pub fn render_inline(nodes: &[LayoutNode]) -> String {
 pub fn render(nodes: Vec<LayoutNode>) -> String {
     println!("{:?}", nodes);
 
-    let mut result = String::new();
     let mut output = String::from("<?xml version=\"1.0\" standalone=\"no\"?>\
          <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \
          \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");

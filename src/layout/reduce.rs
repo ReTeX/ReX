@@ -1,4 +1,4 @@
-use super::{ LayoutNode, HorizontalBox, Rule };
+use super::{ LayoutNode, Rule };
 use parser::nodes::{ ParseNode, AtomType };
 use font::GLYPHS;
 use constants::EM_TO_PX;
@@ -65,21 +65,20 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
 
         // TODO: May need to ignore this if transparent atom_type.
         prev_at = node.atom_type();
-        use super::builders::*;
         match *node {
             ParseNode::Symbol(sym) =>
                 layout.push(LayoutNode::Glyph(GLYPHS[&sym.unicode].clone())),
             ParseNode::Spacing(sp) =>
                 layout.push(LayoutNode::Space(sp)),
             ParseNode::Group(ref mut gp) =>
-                layout.push(LayoutNode::build().HorizontalBox(reduce(&mut gp.clone()))),
+                layout.push(LayoutNode::build().horizontal_box(reduce(&mut gp.clone()))),
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
                     width: rule.width as f64 * EM_TO_PX,
                     height: rule.height as f64 * EM_TO_PX,
                     depth: 0.0,
                 })),
-            ParseNode::Radical(ref rad) => {
+            //ParseNode::Radical(ref rad) => {
                 // Reference rule 11 from pg 443 of TeXBook
                 // use font::SYMBOLS;
                 // use font::CONSTANTS;
@@ -96,8 +95,12 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 //     ]
                 // }))
 
-                unimplemented!()
-            },
+                //unimplemented!()
+            //},
+            ParseNode::Scripts(ref scripts) => {
+                
+                unimplemented!();
+            }
             _ => (),
        }
     }
