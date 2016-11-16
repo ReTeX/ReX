@@ -143,7 +143,6 @@ impl<'a> Lexer<'a> {
         if pos == self.pos { return None }
         let result = Some(self.input[pos..self.pos].parse::<u32>().unwrap());
         self.next();
-        println!("{:?}", self);
         result
     }
 

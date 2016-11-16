@@ -1,6 +1,7 @@
-use super::{ LayoutNode, HorizontalBox };
+use super::{ LayoutNode, HorizontalBox, Rule };
 use parser::nodes::{ ParseNode, AtomType };
 use font::GLYPHS;
+use constants::EM_TO_PX;
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
@@ -72,6 +73,12 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 layout.push(LayoutNode::Space(sp)),
             ParseNode::Group(ref mut gp) =>
                 layout.push(LayoutNode::build().HorizontalBox(reduce(&mut gp.clone()))),
+            ParseNode::Rule(rule) =>
+                layout.push(LayoutNode::Rule(Rule {
+                    width: rule.width as f64 * EM_TO_PX,
+                    height: rule.height as f64 * EM_TO_PX,
+                    depth: 0.0,
+                })),
             ParseNode::Radical(ref rad) => {
                 // Reference rule 11 from pg 443 of TeXBook
                 // use font::SYMBOLS;

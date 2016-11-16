@@ -12,6 +12,7 @@ macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{}\" height=\"{}\" xmlns=\"ht
 macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({},{})\">\n" } }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
+macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
 
 pub fn render_inline(nodes: &[LayoutNode]) -> String {
     let mut result = String::new();
@@ -31,6 +32,11 @@ pub fn render_inline(nodes: &[LayoutNode]) -> String {
         },
         LayoutNode::Space(_) =>
             width += node.get_width(),
+        LayoutNode::Rule(rule) => {
+            result += &format!(RULE_TEMPLATE!(), 
+                width, (height + padding_y) - rule.height, rule.width, rule.height);
+            width += rule.width;
+        },
         _ => (),
     }}
 

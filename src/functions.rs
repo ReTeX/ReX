@@ -1,6 +1,6 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule };
 use spacing::Spacing;
 use lexer::Lexer;
 use parser;
@@ -36,6 +36,14 @@ pub enum TexCommand {
     },
 }
 
+/// With this method you can pass a parser function which will
+/// first unwrap any group items if there are any.
+
+fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>) 
+        -> Result<Option<T>, String> {
+    unimplemented!()
+}
+
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
     pub fn parse(self, lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
@@ -67,21 +75,15 @@ impl TexCommand {
                 Some(ParseNode::Spacing(sp)),
             TexCommand::Rule => {
                 lex.consume_whitespace();
-                let mut w = 0;
-                use lexer::Token;
-                match lex.current {
-                    Token::Symbol('{') => {
-                        lex.next();
-                        w = lex.dimension().unwrap();
-                        lex.next();
-                    },
-                    _ => { w = lex.dimension().unwrap(); }
-                }
+                let w = lex.dimension()
+                    .expect("Unable to parse dimension for Rule.");
+                lex.consume_whitespace();
+                let h = lex.dimension()
+                    .expect("Unable to parse dimension for Rule.");
 
-                use parser::nodes::Rule;
                 Some(ParseNode::Rule(Rule {
                     width: w as u16,
-                    height: 0,
+                    height: h as u16,
                 }))
             }
         })

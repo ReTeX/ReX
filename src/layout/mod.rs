@@ -33,9 +33,9 @@ pub enum LayoutNode {
 
 #[derive(Copy, Clone, Debug)]
 pub struct Rule {
-    width: f64,
-    height: f64,
-    depth: f64,
+    pub width: f64,
+    pub height: f64,
+    pub depth: f64,
 }
 
 #[allow(dead_code)]

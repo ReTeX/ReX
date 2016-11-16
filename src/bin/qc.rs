@@ -15,7 +15,12 @@ fn main() {
         return
     }
 
-    let output = render(reduce(&mut parse(&input).unwrap()));
+    let mut p = parse(&input).unwrap();
+    println!("Parse: {:?}", p);
+    let r = reduce(&mut p);
+    println!("Reduce: {:?}", r);
+    
+    let output = render(r);
     let mut f = File::create("test.svg").unwrap();
     f.write_all(output.as_bytes()).unwrap();
 }
