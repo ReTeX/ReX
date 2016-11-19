@@ -98,7 +98,7 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 //unimplemented!()
             //},
             ParseNode::Scripts(ref scripts) => {
-                
+                println!("{:?}", scripts);
                 unimplemented!();
             }
             _ => (),

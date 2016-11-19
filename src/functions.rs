@@ -75,15 +75,15 @@ impl TexCommand {
                 Some(ParseNode::Spacing(sp)),
             TexCommand::Rule => {
                 lex.consume_whitespace();
-                let w = lex.dimension()
+                let w = lex.dimension()?
                     .expect("Unable to parse dimension for Rule.");
                 lex.consume_whitespace();
-                let h = lex.dimension()
+                let h = lex.dimension()?
                     .expect("Unable to parse dimension for Rule.");
 
                 Some(ParseNode::Rule(Rule {
-                    width: w as u16,
-                    height: h as u16,
+                    width: w,
+                    height: h,
                 }))
             }
         })

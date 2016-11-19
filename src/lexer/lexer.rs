@@ -14,20 +14,16 @@ use super::{ Lexer, Token };
 // TODO: Implement a replacement unicode for malformed unicode
 //       or issued a EOF
 
-
 impl<'a> Lexer<'a> {
 
     /// Create a new lexer, whose current token is the first token
     /// to be processed.
 
     pub fn new(input: &'a str) -> Lexer<'a> {
-        use font::fontselection::{Family, Weight};
         let mut lex = Lexer {
             input: input,
             current: Token::EOF,
             pos: 0,
-            family: Family::Normal,
-            weight: Weight::None,
         };
 
         lex.next();
@@ -39,11 +35,10 @@ impl<'a> Lexer<'a> {
 
     pub fn next(&mut self) -> Token<'a> {
         self.current = match self.next_char() {
-            None       => Token::EOF,
-            Some(' ') | Some('\t') | Some('\r') | Some('\n')  
-                       => Token::WhiteSpace,
+            Some(c) if c.is_whitespace() => Token::WhiteSpace,
             Some('\\') => self.control_sequence(),
             Some(c)    => Token::Symbol(c),
+            None       => Token::EOF,
         };
 
         self.current
@@ -60,15 +55,13 @@ impl<'a> Lexer<'a> {
         // while the current character points to a 
         // whitespace token, advance the position.
         while let Some(c) = self.current_char() {
-            match c {
-                ' ' | '\t' | '\r' | '\n' => self.pos += 1,
-                _ => { break; },
-            }
+            if !c.is_whitespace() { break; }
+            self.pos += 1;
         }
 
         // The cursor (self.pos) now points to the first
         // non-whitespace character.  Lex this token to
-        // place it as currently processed token
+        // place it as current token to process
         self.next();
     }
 
@@ -91,28 +84,26 @@ impl<'a> Lexer<'a> {
                 let end = self.pos;
                 self.consume_whitespace();
                 return Token::ControlSequence(&self.input[start..end]);
-            }
-            _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ }
+            },
+            _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ },
         };
 
         while let Some(c) = self.next_char()  {
-            if !c.is_alphabetic() {
-                // backtrack, this is not part of the cs name
-                self.pos -= c.len_utf8();
-                break
-            }
+            if c.is_alphabetic() { continue; }
+            
+            // backtrack, this is not part of the cs name
+            self.pos -= c.len_utf8();
+            break;
         };
 
         // We can not relay on the `self.consume_whitespace()` method 
         // since it assumes that `self.current` points to the token
-        // that is currently being processed -- this control sequence,
-        // which we have not yet placed into `self.current`.
+        // that is currently being processed--this control sequence--which
+        // we have not yet placed into `self.current`.
         let end = self.pos;
         while let Some(c) = self.current_char() {
-            match c {
-                ' ' | '\t' | '\r' | '\n' => self.pos += 1,
-                _ => { break; },
-            }
+            if !c.is_whitespace() { break; }
+            self.pos += 1;
         }
 
         Token::ControlSequence(&self.input[start..end])
@@ -123,14 +114,14 @@ impl<'a> Lexer<'a> {
     /// character in a dimension.  So it may be necessary to 
     /// consume_whitespace() prior to using this method.
 
-    pub fn dimension(&mut self) -> Option<u32> {
-        // We need to backtrack.
-        match self.current {
-            Token::Symbol(sym) => self.pos -= sym.len_utf8(),
-            // TODO: If we accept dimensions such as \textwidth
-            //  we need to recognize them here, for now we don't.
-            _ => return None,
-        }
+    pub fn dimension(&mut self) -> Result<Option<f64>, String> {
+        // We need to backtrack since 
+        self.backtrack();
+
+        // Parse optional sign
+        let sign: i8 = self.possible_sign();
+        self.consume_whitespace();
+        self.backtrack();
 
         let pos = self.pos;
         while let Some(n) = self.next_char() {
@@ -140,17 +131,41 @@ impl<'a> Lexer<'a> {
             }
         }
 
-        if pos == self.pos { return None }
-        let result = Some(self.input[pos..self.pos].parse::<u32>().unwrap());
+        if pos == self.pos { return Ok(None) }
+        let result = Some(self.input[pos..self.pos].parse::<f64>()
+            .or(Err(String::from_str("Unable to parse dimension!")))?);
         self.next();
-        result
+        Ok(result)
     }
 
     /// This method and `current_char` return the same value.
     /// The only difference is that this method will advance
     /// the cursor.
 
-    #[inline]
+    fn possible_sign(&mut self) -> i8 {
+        match self.current {
+            Token::Symbol('-') => { self.pos += 1; -1 },
+            Token::Symbol('+') => { self.pos += 1; 1 },
+            _ => 1,
+        }
+    }
+
+    fn backtrack(&mut self) {
+        match self.current {
+            Token::Symbol(sym) => self.pos -= sym.len_utf8(),
+            Token::WhiteSpace => {
+                self.pos -= 1;
+                while let Token::WhiteSpace = self.current {
+                    self.pos -= 1;
+                } 
+            },
+            Token::ControlSequence(_) => {
+                /* TODO: Implement me */
+            },
+            _ => { /* EOF? */ }
+        }
+    }
+
     fn next_char(&mut self) -> Option<char> {
         match self.current_char() {
             None => None,
@@ -161,11 +176,26 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    #[inline]
     fn current_char(&mut self) -> Option<char> {
         self.input[self.pos..].chars().next()
     }
 }
+
+
+trait CanBeWhitespace {
+    fn is_whitespace(&self) -> bool;
+}
+
+impl CanBeWhitespace for char {
+    fn is_whitespace(&self) -> bool {
+        match *self {
+            ' ' | '\t' | '\n' | '\r' => true,
+            _ => false,
+        }
+    }
+}
+
+
 
 macro_rules! assert_eq_token_stream {
     ($left:expr, $right:expr) => {{

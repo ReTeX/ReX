@@ -83,7 +83,7 @@ pub enum AtomType {
     Inner,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Scripts {
     pub base: Option<Box<ParseNode>>,
     pub superscript: Option<Box<ParseNode>>,
@@ -91,7 +91,7 @@ pub struct Scripts {
 }
 
 use font::Symbol;
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Delimited {
     pub left:  Symbol,
     pub right: Symbol,
@@ -103,7 +103,7 @@ pub struct Delimited {
 //   it will be a `Ordinal`.
 
 use spacing::Spacing;
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum ParseNode {
     Symbol(Symbol),
     Delimited(Delimited),
@@ -115,10 +115,10 @@ pub enum ParseNode {
     Rule(Rule),
 }
 
-#[derive(Copy, Clone, PartialEq, Debug, Eq)]
+#[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Rule {
-    pub width: u16,
-    pub height: u16,
+    pub width: f64,
+    pub height: f64,
 }
 
 use font::IsAtom;
@@ -152,20 +152,20 @@ impl ParseNode {
 //     }
 // 
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum MathField {
     Symbol(Symbol),
     Group(Vec<ParseNode>),
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Radical {
     pub inner: Vec<ParseNode>,
     // We will handle optional arguments at a later day
     // pub superscript: Vec<ParseNode>,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct GenFraction {
     pub numerator: Vec<ParseNode>,
     pub denominator: Vec<ParseNode>,
