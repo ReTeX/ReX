@@ -1,20 +1,48 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="220.14" height="69.14" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="530.15" height="72.06" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="506.15" height="46.70" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0.00,46.70)">
-<text>√</text></g>
-<g transform="translate(44.54,0.00)">
-<rect x="0" y="0" width="45.599999999999994" height="3.168" fill="\#000"/><g transform="translate(0.00,3.17)">
-<g transform="translate(0.00,22.37)">
-<g transform="translate(0.00,21.17)">
-<text>𝑥</text></g>
-</g><g transform="translate(26.40,0.00)">
-<g transform="scale(0.75 0.75)"><g transform="translate(0.00,32.45)">
-<text>2</text></g>
-</g></g></g></g><g transform="translate(98.14,46.70)">
+<text>A</text></g>
+<g transform="translate(34.66,46.70)">
+<text>r</text></g>
+<g transform="translate(50.64,46.70)">
+<text>c</text></g>
+<g transform="translate(71.95,46.70)">
+<text>(</text></g>
+<g transform="translate(87.94,46.70)">
+<text>𝑓</text></g>
+<g transform="translate(114.58,46.70)">
+<text>)</text></g>
+<g transform="translate(146.56,46.70)">
 <text>=</text></g>
-<g transform="translate(139.02,46.70)">
-<text>|</text></g>
-<g transform="translate(154.38,46.70)">
-<text>𝑥</text></g>
-<g transform="translate(180.78,46.70)">
-<text>|</text></g>
+<g transform="translate(195.44,46.70)">
+<text>∫</text></g>
+<g transform="translate(228.66,46.70)">
+<text>√</text></g>
+<g transform="translate(273.20,0.00)">
+<rect x="0" y="0" width="185.92533333333338" height="3.168" fill="\#000"/><g transform="translate(0.00,3.17)">
+<rect x="0" y="0" width="185.93" height="43.54" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0.00,43.54)">
+<text>1</text></g>
+<g transform="translate(34.67,43.54)">
+<text>+</text></g>
+<g transform="translate(78.21,43.54)">
+<text>𝑓</text></g>
+<g transform="translate(104.85,7.78)">
+<rect x="0" y="0" width="14.88" height="35.76" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0.00,35.76)">
+<text>′</text></g>
+</g><g transform="translate(119.73,0.00)">
+<g transform="scale(0.75 0.75)"><rect x="0" y="0" width="24.00" height="32.45" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0.00,32.45)">
+<text>2</text></g>
+</g></g><g transform="translate(138.93,43.54)">
+<text>(</text></g>
+<g transform="translate(154.92,43.54)">
+<text>𝑡</text></g>
+<g transform="translate(169.94,43.54)">
+<text>)</text></g>
+</g></g><g transform="translate(467.13,46.70)">
+<text>d</text></g>
+<g transform="translate(491.13,46.70)">
+<text>𝑡</text></g>
 </g></g></svg>

@@ -67,6 +67,10 @@ impl Renderer {
         let height = nodes.get_height() * FONT_SIZE;
         let mut width: f64 = 0.0;
 
+        use layout::boundingbox::HasBoundingBox;
+        result += &format!(BBOX_TEMPLATE!(), 0, 0, 
+            nodes.get_width() * FONT_SIZE, nodes.get_height() * FONT_SIZE);
+
         for node in nodes { match *node {
             LayoutNode::Glyph(ref gly) => {
                 result += &format!(G_TEMPLATE!(), width, height);
