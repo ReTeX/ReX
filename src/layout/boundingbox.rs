@@ -132,6 +132,14 @@ impl HasBoundingBox for LayoutNode {
             LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),
             LayoutNode::Kern(k)                 => BoundingBox { width: k, height: k, depth: 0f64 },
+            LayoutNode::Scale(scale, ref node)  => {
+                let bb = node.bounding_box();
+                BoundingBox {
+                    width: bb.width * scale,
+                    height: bb.height * scale,
+                    depth: bb.depth * scale,
+                }
+            },
         }
     }
 }

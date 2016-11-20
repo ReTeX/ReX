@@ -11,6 +11,7 @@ macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
+macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({} {})">"# } }
 
 struct Cursor {
     x: f64,
@@ -89,7 +90,21 @@ impl Renderer {
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
                 width += vbox.get_width() * FONT_SIZE;
-            }
+            },
+            LayoutNode::HorizontalBox(ref hbox) => {
+                result += &format!(G_TEMPLATE!(), width, height - hbox.get_height() * FONT_SIZE);
+                result += &self.render_hbox(&hbox.contents);
+                result += "</g>";
+                width += hbox.get_width() * FONT_SIZE;                
+            },
+            LayoutNode::Scale(scale, ref node) => {
+                let b_in = *node.clone();
+                result += &format!(SCALE_TEMPLATE!(), scale, scale);
+                if let LayoutNode::HorizontalBox(ref hbox) = b_in {
+                    result += &self.render_hbox(&hbox.contents);
+                }
+                result += "</g>";                
+            },
             _ => (),
         }}
 
@@ -115,10 +130,18 @@ impl Renderer {
                 result += &format!(G_TEMPLATE!(), width, height);
                 result += &self.render_hbox(&hbox.contents);
                 result += "</g>";
-                height += hbox.get_height() * FONT_SIZE;                
+                height += hbox.get_height() * FONT_SIZE;      
             },
             LayoutNode::Kern(k) =>
                 height += k * FONT_SIZE,
+            LayoutNode::Scale(scale, ref node) => {
+                let b_in = *node.clone();
+                result += &format!(SCALE_TEMPLATE!(), scale, scale);
+                if let LayoutNode::HorizontalBox(ref hbox) = b_in {
+                    result += &self.render_hbox(&hbox.contents);
+                }
+                result += "</g>";                  
+            }
             _ => (),
         }}
 

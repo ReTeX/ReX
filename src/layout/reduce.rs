@@ -83,23 +83,22 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 })),
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
-                use font::SYMBOLS;
-                // use font::CONSTANTS;
-
-                let rad_glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
-
                 // TODO: Change style to C'
                 // TODO: Select radical symbol large enough
-                layout.push(LayoutNode::Glyph(rad_glyph.clone()));
-
+                use font::SYMBOLS;
+                use font::CONSTANTS;
                 use layout::boundingbox::HasBoundingBox;
+
+                let rad_glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
+                
+                layout.push(LayoutNode::Glyph(rad_glyph.clone()));
                 let contents = LayoutNode::HorizontalBox(HorizontalBox {
                     contents: reduce(&mut rad.inner.clone()),
                     ..Default::default()
                 });
 
-                let rule_thickness = ::font::CONSTANTS.radical_rule_thickness as f64 * UNITS_TO_EM;
-                let extra_ascender = ::font::CONSTANTS.radical_extra_ascender as f64 * UNITS_TO_EM;
+                let rule_thickness = CONSTANTS.radical_rule_thickness as f64 * UNITS_TO_EM;
+                let extra_ascender = CONSTANTS.radical_extra_ascender as f64 * UNITS_TO_EM;
                 let rad_height     = rad_glyph.bbox.3 as f64 * UNITS_TO_EM;
                 let kerning        = rad_height - contents.get_height() - rule_thickness - extra_ascender;
 
@@ -119,9 +118,34 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                     }));
             },
             ParseNode::Scripts(ref scripts) => {
-                println!("{:?}", scripts);
-                unimplemented!();
-            }
+                use font::CONSTANTS;
+                use std::boxed::Box;
+
+                let script_base = reduce(&mut [ *scripts.base.clone().unwrap_or(Box::new(ParseNode::Group(vec![]))) ]);
+                layout.push(
+                    LayoutNode::HorizontalBox(HorizontalBox {
+                        contents: script_base,
+                        ..Default::default() 
+                    })
+                );
+
+                let super_script = Box::new(
+                    LayoutNode::HorizontalBox(HorizontalBox {
+                        contents: reduce(&mut [ *scripts.superscript.clone().unwrap_or(Box::new(ParseNode::Group(vec![]))) ]),
+                        ..Default::default()
+                    }));
+                
+                layout.push(LayoutNode::VerticalBox(VerticalBox {
+                    contents: vec![
+                        LayoutNode::Scale(
+                            CONSTANTS.script_percent_scale_down as f64 / 100f64,   // TODO: Script or ScriptScript?
+                            super_script
+                        ),
+                        LayoutNode::Kern(CONSTANTS.superscript_shift_up as f64 * UNITS_TO_EM),
+                    ],
+                    ..Default::default()
+                }));
+            },
             _ => (),
        }
     }

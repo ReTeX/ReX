@@ -1,16 +1,20 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="188.58" height="69.14" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="220.14" height="69.14" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <g transform="translate(0.00,46.70)">
 <text>√</text></g>
 <g transform="translate(44.54,0.00)">
-<rect x="0" y="0" width="126.94400000000002" height="3.168" fill="\#000"/><g transform="translate(0.00,10.08)">
-<g transform="translate(0.00,36.62)">
-<text>∑</text></g>
-<g transform="translate(51.87,36.62)">
-<text>ξ</text></g>
-<g transform="translate(73.04,36.62)">
-<text>(</text></g>
-<g transform="translate(89.02,36.62)">
-<text>𝑡</text></g>
-<g transform="translate(104.05,36.62)">
-<text>)</text></g>
-</g></g></g></g></svg>
+<rect x="0" y="0" width="45.599999999999994" height="3.168" fill="\#000"/><g transform="translate(0.00,3.17)">
+<g transform="translate(0.00,22.37)">
+<g transform="translate(0.00,21.17)">
+<text>𝑥</text></g>
+</g><g transform="translate(26.40,0.00)">
+<g transform="scale(0.75 0.75)"><g transform="translate(0.00,32.45)">
+<text>2</text></g>
+</g></g></g></g><g transform="translate(98.14,46.70)">
+<text>=</text></g>
+<g transform="translate(139.02,46.70)">
+<text>|</text></g>
+<g transform="translate(154.38,46.70)">
+<text>𝑥</text></g>
+<g transform="translate(180.78,46.70)">
+<text>|</text></g>
+</g></g></svg>

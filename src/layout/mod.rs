@@ -31,6 +31,7 @@ pub enum LayoutNode {
     Space(Spacing),
     Rule(Rule),
     Kern(f64),
+    Scale(f64, Box<LayoutNode>),
 }
 
 #[derive(Copy, Clone, Debug)]
