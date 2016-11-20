@@ -5,7 +5,7 @@ use std::env;
 extern crate rex;
 
 use rex::parser::parse;
-use rex::render::render;
+use rex::render::Renderer;
 use rex::layout::reduce::reduce;
 
 fn main() {
@@ -20,7 +20,7 @@ fn main() {
     let r = reduce(&mut p);
     println!("Reduce: {:?}", r);
     
-    let output = render(r);
+    let output = Renderer::new(r).render();
     let mut f = File::create("test.svg").unwrap();
     f.write_all(output.as_bytes()).unwrap();
 }

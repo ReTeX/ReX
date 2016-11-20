@@ -1,41 +1,40 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="202.24" height="34.304" xmlns="http://www.w3.org/2000/svg" aria-labelledby="desc"><defs><style type="text/css">@font-face{font-family: rex;src: url('out/rex-xits.otf');}</style></defs>
-    <desc>\iint f(x,y,t)\,dxdy = \sum \xi(t)</desc>
-<g font-family="rex" font-size="16px"><g transform="translate(16,29.184)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="542.72" height="64.91" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<g transform="translate(0.00,39.55)">
 <text>∬</text></g>
-<g transform="translate(33.562666666666665,29.184)">
+<g transform="translate(52.69,39.55)">
 <text>𝑓</text></g>
-<g transform="translate(42.44266666666667,29.184)">
+<g transform="translate(79.33,39.55)">
 <text>(</text></g>
-<g transform="translate(47.77066666666667,29.184)">
+<g transform="translate(95.31,39.55)">
 <text>𝑥</text></g>
-<g transform="translate(56.57066666666667,29.184)">
+<g transform="translate(121.71,39.55)">
 <text>,</text></g>
-<g transform="translate(63.23733333333333,29.184)">
+<g transform="translate(141.71,39.55)">
 <text>𝑦</text></g>
-<g transform="translate(71.17333333333333,29.184)">
+<g transform="translate(165.52,39.55)">
 <text>,</text></g>
-<g transform="translate(77.84,29.184)">
+<g transform="translate(185.52,39.55)">
 <text>𝑡</text></g>
-<g transform="translate(82.848,29.184)">
+<g transform="translate(200.54,39.55)">
 <text>)</text></g>
-<g transform="translate(90.84266666666667,29.184)">
+<g transform="translate(224.53,39.55)">
 <text>𝑑</text></g>
-<g transform="translate(99.35466666666667,29.184)">
+<g transform="translate(250.06,39.55)">
 <text>𝑥</text></g>
-<g transform="translate(108.15466666666667,29.184)">
+<g transform="translate(284.46,39.55)">
 <text>𝑑</text></g>
-<g transform="translate(116.66666666666667,29.184)">
+<g transform="translate(310.00,39.55)">
 <text>𝑦</text></g>
-<g transform="translate(129.936,29.184)">
+<g transform="translate(349.81,39.55)">
 <text>=</text></g>
-<g transform="translate(146.22933333333336,29.184)">
+<g transform="translate(398.69,39.55)">
 <text>∑</text></g>
-<g transform="translate(163.52,29.184)">
+<g transform="translate(450.56,39.55)">
 <text>ξ</text></g>
-<g transform="translate(170.57600000000002,29.184)">
+<g transform="translate(471.73,39.55)">
 <text>(</text></g>
-<g transform="translate(175.90400000000002,29.184)">
+<g transform="translate(487.71,39.55)">
 <text>𝑡</text></g>
-<g transform="translate(180.91200000000003,29.184)">
+<g transform="translate(502.74,39.55)">
 <text>)</text></g>
-</g></svg>
+</g></g></svg>

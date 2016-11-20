@@ -342,9 +342,9 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
 
 #[cfg(test)]
 mod tests {
-    use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
+    // use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
-    use font::Symbol;
+    // use font::Symbol;
 
     // #[test]
     // fn parser() {

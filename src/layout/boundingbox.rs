@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use constants::{ UNITS_TO_EM, EM_TO_PX };
+use constants::{ UNITS_TO_EM };
 use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
 
 /// Every object that will be rendered will be required to report their size.
@@ -98,9 +98,9 @@ use font::Glyph;
 impl HasBoundingBox for Glyph {
     fn bounding_box(&self) -> BoundingBox {
         BoundingBox {
-            width:  self.advance as f64 * UNITS_TO_EM * EM_TO_PX,
-            height: self.bbox.3 as f64  * UNITS_TO_EM * EM_TO_PX,
-            depth:  self.bbox.1 as f64  * UNITS_TO_EM * EM_TO_PX,
+            width:  self.advance as f64 * UNITS_TO_EM,
+            height: self.bbox.3 as f64  * UNITS_TO_EM,
+            depth:  self.bbox.1 as f64  * UNITS_TO_EM,
         }
     }
 }
@@ -113,7 +113,7 @@ impl HasBoundingBox for Spacing {
             Spacing::Thin   => 1_f64/6_f64,
             Spacing::Medium => 2_f64/9_f64,
             Spacing::Thick  => 3_f64/9_f64,
-        } * EM_TO_PX;
+        };
 
         BoundingBox {
             width: width,
@@ -127,6 +127,7 @@ impl HasBoundingBox for LayoutNode {
     fn bounding_box(&self) -> BoundingBox {
         match *self {
             LayoutNode::HorizontalBox(ref hbox) => hbox.bounding_box(),
+            LayoutNode::VerticalBox(ref vbox)   => vbox.bounding_box(),
             LayoutNode::Glyph(ref gly)          => gly.bounding_box(),
             LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),

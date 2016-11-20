@@ -2,60 +2,91 @@
 // use parser::nodes::{ ParseNode };
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
-use constants::{ UNITS_TO_EM, EM_TO_PX };
+use constants::UNITS_TO_EM;
 use layout::LayoutNode;
 use layout::boundingbox::HasBoundingBox;
 
-const SCALE: f64 = 8 as f64/450 as f64;
-
-macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{}\" height=\"{}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"16px\">" } }
-macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({},{})\">\n" } }
+macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
+macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
 
-pub fn render_inline(nodes: &[LayoutNode]) -> String {
-    let mut result = String::new();
-
-    let height = nodes.get_height();
-    let mut width = 16f64; // TODO: Should be left side padding
-    let padding_y = 16f64; // TODO: Should be top padding
-
-    for node in nodes { match *node {
-        LayoutNode::Glyph(ref gly) => {
-            let gw = gly.advance;
-            result += &format!(G_TEMPLATE!(), width, (height + padding_y));
-            //result += &format!(BBOX_TEMPLATE!(), 0, -gh, gw, gh-gd);
-            result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
-                .expect("Unable to decode unicode!"));
-            width += gw as f64 * UNITS_TO_EM * EM_TO_PX;          
-        },
-        LayoutNode::Space(_) =>
-            width += node.get_width(),
-        LayoutNode::Rule(rule) => {
-            result += &format!(RULE_TEMPLATE!(), 
-                width, (height + padding_y) - rule.height, rule.width, rule.height);
-            width += rule.width;
-        },
-        _ => (),
-    }}
-
-    result
+struct Cursor {
+    x: f64,
+    y: f64,
 }
 
-pub fn render(nodes: Vec<LayoutNode>) -> String {
-    println!("{:?}", nodes);
+pub struct Renderer {
+    cursor: Cursor,
+    nodes: Vec<LayoutNode>
+}
 
-    let mut output = String::from("<?xml version=\"1.0\" standalone=\"no\"?>\
-         <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \
-         \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
+const LEFT_PADDING: f64 = 12.0;
+const TOP_PADDING: f64  = 5.0;
+const FONT_SIZE: f64    = 48.0;
+const SVG_HEADER: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\
+    <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
 
-    let width  = nodes.get_width() + 16f64;
-    let height = nodes.get_height();
-    let depth  = nodes.get_depth();
+impl Renderer {
+    pub fn new(nodes: Vec<LayoutNode>) -> Renderer {
+        let cursor = Cursor {
+            x: LEFT_PADDING, // Left padding
+            y: TOP_PADDING,  // Top  padding
+        };
 
-    output += &format!(HEAD_TEMPLATE!(), width + 16f64, height - depth + 16f64, "rex-xits.otf");
-    output += &render_inline(&nodes);
-    output += "</g></svg>";
-    output
+        Renderer {
+            cursor: cursor,
+            nodes: nodes,
+        }
+    }
+
+    pub fn render(&self) -> String {
+        let nodes = &self.nodes;
+        println!("{:?}", nodes);
+
+        let mut output = String::from(SVG_HEADER);
+
+        let width  = nodes.get_width() * FONT_SIZE  + 2.0 * LEFT_PADDING;   // Left and right padding
+        let height = nodes.get_height() * FONT_SIZE + 2.0 * TOP_PADDING;   // Top and bot padding
+        let depth  = nodes.get_depth() * FONT_SIZE;
+
+        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", FONT_SIZE);
+        
+        output += &format!(G_TEMPLATE!(), LEFT_PADDING, TOP_PADDING);
+        output += &self.render_hbox(&nodes);
+        output += "</g>";
+        output += "</g></svg>";
+        output
+    }
+
+    pub fn render_hbox(&self, nodes: &[LayoutNode]) -> String {
+        let mut result = String::new();
+
+        let height = nodes.get_height() * FONT_SIZE;
+        let mut width: f64 = 0.0;
+
+        for node in nodes { match *node {
+            LayoutNode::Glyph(ref gly) => {
+                result += &format!(G_TEMPLATE!(), width, height);
+                //result += &format!(BBOX_TEMPLATE!(), 0, -gh, gw, gh-gd);
+                result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
+                    .expect("Unable to decode unicode!"));
+
+                let gw = gly.advance as f64 * UNITS_TO_EM * FONT_SIZE;
+                width += gw;          
+            },
+            LayoutNode::Space(_) =>
+                width += node.get_width() * FONT_SIZE,
+            LayoutNode::Rule(rule) => {
+                result += &format!(RULE_TEMPLATE!(), 
+                    width, height - rule.height * FONT_SIZE, 
+                    rule.width * FONT_SIZE, rule.height * FONT_SIZE);
+                width += rule.width * FONT_SIZE;
+            },
+            _ => (),
+        }}
+
+        result
+    }
 }

@@ -17,7 +17,7 @@
 
 pub mod boundingbox;
 pub mod reduce;
-pub mod builders;
+//pub mod builders;
 
 pub use self::boundingbox::BoundingBox;
 
@@ -26,6 +26,7 @@ use font::Glyph;
 #[derive(Clone, Debug)]
 pub enum LayoutNode {
     HorizontalBox(HorizontalBox),
+    VerticalBox(VerticalBox),
     Glyph(Glyph),
     Space(Spacing),
     Rule(Rule),

@@ -1,4 +1,4 @@
-use super::{ LayoutNode, Rule };
+use super::{ LayoutNode, Rule, HorizontalBox };
 use parser::nodes::{ ParseNode, AtomType };
 use font::GLYPHS;
 use constants::EM_TO_PX;
@@ -71,7 +71,10 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
             ParseNode::Spacing(sp) =>
                 layout.push(LayoutNode::Space(sp)),
             ParseNode::Group(ref mut gp) =>
-                layout.push(LayoutNode::build().horizontal_box(reduce(&mut gp.clone()))),
+                layout.push(LayoutNode::HorizontalBox(HorizontalBox {
+                    contents: reduce(&mut gp.clone()),
+                    ..Default::default()
+                })),
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
                     width: rule.width as f64 * EM_TO_PX,

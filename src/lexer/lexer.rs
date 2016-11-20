@@ -115,25 +115,27 @@ impl<'a> Lexer<'a> {
     /// consume_whitespace() prior to using this method.
 
     pub fn dimension(&mut self) -> Result<Option<f64>, String> {
-        // We need to backtrack since 
-        self.backtrack();
-
         // Parse optional sign
-        let sign: i8 = self.possible_sign();
+        let sign = self.possible_sign() as f64;
         self.consume_whitespace();
-        self.backtrack();
 
+        // We should've hit our first numeric value
+        // Backtrack to parse this favlue.
+        self.backtrack();
         let pos = self.pos;
         while let Some(n) = self.next_char() {
-            if !n.is_numeric() {
-                self.pos -= n.len_utf8();
-                break
-            }
+            if n.is_numeric() || n == '.' { continue; }            
+            self.pos -= n.len_utf8();
+            break
         }
 
+        // Unable to find any numeric values
+        // Otherwise parse the result using the standard library.
         if pos == self.pos { return Ok(None) }
-        let result = Some(self.input[pos..self.pos].parse::<f64>()
-            .or(Err(String::from_str("Unable to parse dimension!")))?);
+        let result = Some(sign * self.input[pos..self.pos].parse::<f64>()
+            .or(Err("Unable to parse dimension!".to_string()))?);
+
+        // TODO: Handle dimensions, px, em, etc.
         self.next();
         Ok(result)
     }
@@ -144,8 +146,8 @@ impl<'a> Lexer<'a> {
 
     fn possible_sign(&mut self) -> i8 {
         match self.current {
-            Token::Symbol('-') => { self.pos += 1; -1 },
-            Token::Symbol('+') => { self.pos += 1; 1 },
+            Token::Symbol('-') => { self.next(); -1 },
+            Token::Symbol('+') => { self.next(); 1 },
             _ => 1,
         }
     }
@@ -241,8 +243,22 @@ mod tests {
     }
 
     #[test]
-    fn lex_numbers() {
-        let mut lex = Lexer::new(r"123 abc");
-        assert_eq!(lex.dimension(), Some(123));
+    fn lex_dimension() {
+        macro_rules! assert_dim {
+            ($input:expr, $result:expr) => (
+                let mut _l = Lexer::new($input);
+                assert_eq!(_l.dimension().unwrap(), Some($result));
+            )
+        }
+
+        assert_dim!(r"123 abc", 123.0);
+        assert_dim!(r"1.23 abc", 1.23);
+        assert_dim!(r"- 1.23 123", -1.23);
+        assert_dim!(r"+1.34 134", 1.34);
+        assert_dim!("-   12", -12.0);
+        assert_dim!("+   12", 12.0);
+        assert_dim!("-  .12", -0.12);
+        assert_dim!("00.123000", 0.123);
+        assert_dim!("001.10000", 1.1);
     }
 }

@@ -2,19 +2,27 @@
 use super::{ HorizontalBox, LayoutNode };
 use font::Glyph;
 use ::std::default::Default;
+use super::boundingbox::HasBoundingBox;
 
 pub struct LayoutNodeBuilder {}
 
 impl LayoutNodeBuilder {
     pub fn horizontal_box(&mut self, contents: Vec<LayoutNode>) -> LayoutNode {
-        LayoutNode::HorizontalBox(HorizontalBox {
-            contents: contents,
-            ..Default::default()
-        })
+        let bbox = contents.bounding_box();
+        LayoutNode {
+            bounding_box: bbox,
+            data: LayoutNodeData::HorizontalBox(HorizontalBox {
+                contents: contents,
+                ..Default::default()
+            }),
+        }
     }
 
     fn glyph(&mut self, glyph: Glyph) -> LayoutNode {
-        LayoutNode::Glyph(glyph)
+        LayoutNode {
+            bounding_box: glyph.bbox,
+            data: LayoutNodeData::Glyph(glyph),
+        }
     }
 }
 
@@ -23,3 +31,7 @@ impl LayoutNode {
         LayoutNodeBuilder {}
     }
 }
+
+// LayoutNode::build().horiztonal_box(vec![
+//     ln::Build
+// ])
