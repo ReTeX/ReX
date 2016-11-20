@@ -113,6 +113,12 @@ pub enum ParseNode {
     Scripts(Scripts),
     Spacing(Spacing),
     Rule(Rule),
+    Kerning(Kerning),
+}
+
+#[derive(Copy, Clone, PartialEq, Debug)]
+pub struct Kerning {
+    pub width: f64,
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -133,6 +139,7 @@ impl IsAtom for ParseNode {
             ParseNode::Scripts(_) => Some(AtomType::Ordinal), // Change to recursion
             ParseNode::Spacing(_) => None,
             ParseNode::Rule(_) => None,
+            ParseNode::Kerning(_) => None,
         }
     } 
 }
@@ -145,12 +152,6 @@ impl ParseNode {
         }
     }
 }
-
-// impl ParseNode {
-//     fn has_superscript(&self) -> bool {
-//         if let ParseNode::Scripts()
-//     }
-// 
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum MathField {
@@ -179,68 +180,3 @@ pub struct GenFraction {
 // /// and a code point for how the symbol will be rendered.
 // /// This font family and code point will be used to look up
 // /// additional information regarding the dimensions if needed.
-
-// #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-// pub struct SymbolIdentifier {
-//     pub font_family: u8,
-//     pub code_point: u32,
-// }
-
-// #[derive(Debug)]
-// pub struct Symbol {
-//     pub font_family: u8,
-//     pub code_point: u32, 
-//     pub height: u32,
-//     pub width: u32,
-//     pub depth: u32,
-//     pub atom_type: AtomType,
-// }
-
-// #[derive(Debug)]
-// pub struct Operator {
-//     pub symbol: Symbol,
-//     pub limits: bool,
-//     pub largeop: bool,
-//     pub successor: Option<SymbolIdentifier>,
-// }
-
-// #[derive(Debug)]
-// pub struct Delimiter {
-//     pub symbol: Symbol,
-//     pub successor: Option<SymbolIdentifier>,
-// }
-
-// // The following are wrapper types,
-// // which mean they can wrap either a symbol
-// // or mathlist.
-// #[derive(Debug)]
-// pub enum SymOrMathList {
-//     Symbol(Symbol),
-//     MathList(Box<MathList>),
-// }
-
-// #[derive(Debug)]
-// pub struct Accent {
-//     pub inner: SymOrMathList,
-//     pub accent: Symbol,
-//     pub kern: u32,
-// }
-
-// #[derive(Debug)]
-// pub struct Scripts {
-//     pub subscript: SymOrMathList,
-//     pub supscript: SymOrMathList,
-//     pub base:  SymOrMathList,
-//     pub atom_type: AtomType,
-// }
-
-// #[derive(Debug)]
-// pub enum ParseNode {
-//     Symbol(Symbol),
-//     Operator(Operator),
-//     Delimiter(Delimiter),
-//     Accent(Accent),
-//     Radical(Radical),
-//     Scripts(Scripts),
-//     GenFraction(GenFraction),
-// }

@@ -81,6 +81,8 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                     height: rule.height as f64,
                     depth: 0.0,
                 })),
+            ParseNode::Kerning(kern) =>
+                layout.push(LayoutNode::Kern(kern.width)),
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 // TODO: Change style to C'

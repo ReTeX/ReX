@@ -1,6 +1,6 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule };
+use parser::nodes::{ Kerning, AtomType, ParseNode, Radical, GenFraction, Rule };
 use spacing::Spacing;
 use lexer::Lexer;
 use parser;
@@ -17,7 +17,7 @@ pub enum MathStyle {
 }
 
 #[allow(dead_code)]
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub enum TexCommand {
     Radical,
     Rule,
@@ -34,6 +34,7 @@ pub enum TexCommand {
     Spacing {
         size: Spacing,
     },
+    Kerning(f64),
 }
 
 /// With this method you can pass a parser function which will
@@ -85,7 +86,11 @@ impl TexCommand {
                     width: w,
                     height: h,
                 }))
-            }
+            },
+            TexCommand::Kerning(k) =>
+                Some(ParseNode::Kerning(Kerning {
+                    width: k,
+                })),
         })
     }
 }
@@ -114,7 +119,12 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "Big" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Ordinal },
     "bigg" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Ordinal },
     "Bigg" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
-    "," => TexCommand::Spacing { size: Spacing::Thin },
-    " " => TexCommand::Spacing { size: Spacing::Medium },
+    "!" => TexCommand::Kerning(-3f64/18f64),
+    "," => TexCommand::Kerning(3f64/18f64),
+    ":" => TexCommand::Kerning(4f64/18f64),
+    " " => TexCommand::Kerning(1f64/4f64),  // TODO: ?? Must measure U+0020??
+    ";" => TexCommand::Kerning(5f64/18f64),
+    "quad" => TexCommand::Kerning(1.0f64),
+    "qquad" => TexCommand::Kerning(2.0f64),
     "rule" => TexCommand::Rule,
 };
