@@ -1,7 +1,7 @@
-use super::{ LayoutNode, Rule, HorizontalBox };
+use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
 use parser::nodes::{ ParseNode, AtomType };
 use font::GLYPHS;
-use constants::EM_TO_PX;
+use constants::UNITS_TO_EM;
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
@@ -77,29 +77,47 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 })),
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
-                    width: rule.width as f64 * EM_TO_PX,
-                    height: rule.height as f64 * EM_TO_PX,
+                    width: rule.width as f64,
+                    height: rule.height as f64,
                     depth: 0.0,
                 })),
-            //ParseNode::Radical(ref rad) => {
-                // Reference rule 11 from pg 443 of TeXBook
-                // use font::SYMBOLS;
+            ParseNode::Radical(ref rad) => {
+                //Reference rule 11 from pg 443 of TeXBook
+                use font::SYMBOLS;
                 // use font::CONSTANTS;
 
-                // let rad_sym = &GLYPHS[&SYMBOLS["sqrt"].unicode];
+                let rad_glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
-                // // TODO: Change style to C'
-                // // TODO: Select radical symbol large enough
-                // layout.push(LayoutNode::VerticalBox(VerticalBox {
-                //     inner: vec![
-                //         LayoutNode::Rule(Rule {
-                //             height: 
-                //         })
-                //     ]
-                // }))
+                // TODO: Change style to C'
+                // TODO: Select radical symbol large enough
+                layout.push(LayoutNode::Glyph(rad_glyph.clone()));
 
-                //unimplemented!()
-            //},
+                use layout::boundingbox::HasBoundingBox;
+                let contents = LayoutNode::HorizontalBox(HorizontalBox {
+                    contents: reduce(&mut rad.inner.clone()),
+                    ..Default::default()
+                });
+
+                let rule_thickness = ::font::CONSTANTS.radical_rule_thickness as f64 * UNITS_TO_EM;
+                let extra_ascender = ::font::CONSTANTS.radical_extra_ascender as f64 * UNITS_TO_EM;
+                let rad_height     = rad_glyph.bbox.3 as f64 * UNITS_TO_EM;
+                let kerning        = rad_height - contents.get_height() - rule_thickness - extra_ascender;
+
+                layout.push(
+                    LayoutNode::VerticalBox(VerticalBox {
+                        contents: vec![
+                            LayoutNode::Kern(extra_ascender),
+                            LayoutNode::Rule(Rule {
+                                width: 0f64,
+                                height: rule_thickness,
+                                depth: 0f64,
+                            }),
+                            LayoutNode::Kern(kerning),
+                            contents,
+                        ],
+                        ..Default::default()
+                    }));
+            },
             ParseNode::Scripts(ref scripts) => {
                 println!("{:?}", scripts);
                 unimplemented!();

@@ -1,40 +1,16 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="542.72" height="64.91" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<g transform="translate(0.00,39.55)">
-<text>∬</text></g>
-<g transform="translate(52.69,39.55)">
-<text>𝑓</text></g>
-<g transform="translate(79.33,39.55)">
-<text>(</text></g>
-<g transform="translate(95.31,39.55)">
-<text>𝑥</text></g>
-<g transform="translate(121.71,39.55)">
-<text>,</text></g>
-<g transform="translate(141.71,39.55)">
-<text>𝑦</text></g>
-<g transform="translate(165.52,39.55)">
-<text>,</text></g>
-<g transform="translate(185.52,39.55)">
-<text>𝑡</text></g>
-<g transform="translate(200.54,39.55)">
-<text>)</text></g>
-<g transform="translate(224.53,39.55)">
-<text>𝑑</text></g>
-<g transform="translate(250.06,39.55)">
-<text>𝑥</text></g>
-<g transform="translate(284.46,39.55)">
-<text>𝑑</text></g>
-<g transform="translate(310.00,39.55)">
-<text>𝑦</text></g>
-<g transform="translate(349.81,39.55)">
-<text>=</text></g>
-<g transform="translate(398.69,39.55)">
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="188.58" height="69.14" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<g transform="translate(0.00,46.70)">
+<text>√</text></g>
+<g transform="translate(44.54,0.00)">
+<rect x="0" y="0" width="126.94400000000002" height="3.168" fill="\#000"/><g transform="translate(0.00,10.08)">
+<g transform="translate(0.00,36.62)">
 <text>∑</text></g>
-<g transform="translate(450.56,39.55)">
+<g transform="translate(51.87,36.62)">
 <text>ξ</text></g>
-<g transform="translate(471.73,39.55)">
+<g transform="translate(73.04,36.62)">
 <text>(</text></g>
-<g transform="translate(487.71,39.55)">
+<g transform="translate(89.02,36.62)">
 <text>𝑡</text></g>
-<g transform="translate(502.74,39.55)">
+<g transform="translate(104.05,36.62)">
 <text>)</text></g>
-</g></g></svg>
+</g></g></g></g></svg>

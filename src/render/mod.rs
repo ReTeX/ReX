@@ -84,6 +84,41 @@ impl Renderer {
                     rule.width * FONT_SIZE, rule.height * FONT_SIZE);
                 width += rule.width * FONT_SIZE;
             },
+            LayoutNode::VerticalBox(ref vbox) => {
+                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height() * FONT_SIZE);
+                result += &self.render_vbox(&vbox.contents);
+                result += "</g>";
+                width += vbox.get_width() * FONT_SIZE;
+            }
+            _ => (),
+        }}
+
+        result
+    }
+
+    pub fn render_vbox(&self, nodes: &[LayoutNode]) -> String {
+        let mut result = String::new();
+        
+        let mut height: f64 = 0.0;
+        let mut width: f64 = 0.0;
+
+        for node in nodes { match *node {
+            LayoutNode::Rule(rule) => {
+                result += &format!(RULE_TEMPLATE!(), 
+                    width, height - rule.height * FONT_SIZE, 
+                    nodes.get_width() * FONT_SIZE, rule.height * FONT_SIZE);
+                height += rule.height * FONT_SIZE;
+            },
+            LayoutNode::Space(_) =>
+                height += node.get_width() * FONT_SIZE,
+            LayoutNode::HorizontalBox(ref hbox) => {
+                result += &format!(G_TEMPLATE!(), width, height);
+                result += &self.render_hbox(&hbox.contents);
+                result += "</g>";
+                height += hbox.get_height() * FONT_SIZE;                
+            },
+            LayoutNode::Kern(k) =>
+                height += k * FONT_SIZE,
             _ => (),
         }}
 

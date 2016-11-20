@@ -131,6 +131,7 @@ impl HasBoundingBox for LayoutNode {
             LayoutNode::Glyph(ref gly)          => gly.bounding_box(),
             LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),
+            LayoutNode::Kern(k)                 => BoundingBox { width: k, height: k, depth: 0f64 },
         }
     }
 }

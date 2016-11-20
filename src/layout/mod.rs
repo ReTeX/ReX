@@ -30,6 +30,7 @@ pub enum LayoutNode {
     Glyph(Glyph),
     Space(Spacing),
     Rule(Rule),
+    Kern(f64),
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -41,7 +42,7 @@ pub struct Rule {
 
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-enum Alignment {
+pub enum Alignment {
     Centered,
     Right,
     Left,
@@ -57,8 +58,8 @@ impl Default for Alignment {
 
 #[derive(Clone, Debug, Default)]
 pub struct HorizontalBox {
-    contents: Vec<LayoutNode>,
-    alignment: Alignment,
+    pub contents: Vec<LayoutNode>,
+    pub alignment: Alignment,
 }
 
 use ::std::ops::Deref;
@@ -71,8 +72,8 @@ impl Deref for HorizontalBox {
 
 #[derive(Clone, Debug, Default)]
 pub struct VerticalBox {
-    contents: Vec<LayoutNode>,
-    alignment: Alignment,
+    pub contents: Vec<LayoutNode>,
+    pub alignment: Alignment,
 }
 
 impl Deref for VerticalBox {
