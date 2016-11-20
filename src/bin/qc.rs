@@ -9,7 +9,7 @@ use rex::render::Renderer;
 use rex::layout::reduce::reduce;
 
 fn main() {
-    let input = env::args().skip(2).collect::<String>();
+    let input = env::args().skip(1).collect::<String>();
     if input.len() == 0 {
         println!("Provide a TeX argument");
         return

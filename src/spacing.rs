@@ -45,10 +45,3 @@ pub fn atom_spacing(left: AtomType, right: AtomType) -> Spacing {
         _ => Spacing::None,
     }
 }
-
-// Atom Changing Rules:
-//   Rule 5:
-//   - If first item is a Bin, change current to Ord.
-//   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
-//   Rule 6:
-//   - Current in {Rel,Close,Punct} && Prev == Bin => Prev -> Ord.
