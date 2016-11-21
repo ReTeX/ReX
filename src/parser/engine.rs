@@ -28,10 +28,8 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
             command, group, symbol, implicit_group,);
 
         // Handle commands that can change that state of the parser
-        if node.is_none() {
-            if Some(()) == state_change(lex, local, &mut ml)? {
-                continue
-            }
+        if node.is_none() && Some(()) == state_change(lex, local, &mut ml)? {
+            continue
         }
 
         // Here we handle all post-fix operators, like superscripts, subscripts
@@ -53,7 +51,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
                         }
                         b.subscript = Some(Box::new(script));
                     } else {
-                        // This is our first script, so we need to create a 
+                        // This is our first script, so we need to create a
                         // new one.
                         node = Some(ParseNode::Scripts(Scripts {
                             base:
@@ -76,7 +74,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
                         b.superscript = Some(Box::new(script));
                     } else {
                         node = Some(ParseNode::Scripts(Scripts {
-                            base: 
+                            base:
                                 match node {
                                     None => None,
                                     Some(n) => Some(Box::new(n))
@@ -137,7 +135,7 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
     }
     // No state modifying commands found
     Ok(None)
-} 
+}
 
 /// Parse a `<Math Field>`.  A math field is defined by
 ///
@@ -172,7 +170,7 @@ pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Stri
         return Ok(None)
     };
 
-    // A command has been found.  Consume the token and parse for arguments. 
+    // A command has been found.  Consume the token and parse for arguments.
     lex.next();
     cmd.parse(lex, local)
 }
@@ -337,7 +335,7 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
 
 
 // --------------
-//     TESTS      
+//     TESTS
 // --------------
 
 #[cfg(test)]
@@ -349,36 +347,36 @@ mod tests {
     // #[test]
     // fn parser() {
     //     assert_eq!(parse(r"").unwrap(), vec![]);
-        
+
     //     assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
     //     assert_eq!(parse(r"\sqrt  {  \sqrt  2 }").unwrap(), parse(r"\sqrt{\sqrt2}").unwrap());
 
     //     assert_eq!(parse(r"1 + {2 + 3}").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
-    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
-    //             ParseNode::Group(vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha }), 
-    //                 ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
+    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
+    //             ParseNode::Group(vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha }),
+    //                 ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
     //                 ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha })
     //         ])]);
 
     //     assert_eq!(parse(r"1+\left(3+2\right)=6").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
-    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
-    //             ParseNode::Delimited(Delimited { 
-    //                 left: Symbol { id: 40, atom_type: AtomType::Open }, 
-    //                 right: Symbol { id: 41, atom_type: AtomType::Close }, 
-    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha }), 
-    //                    ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
+    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
+    //             ParseNode::Delimited(Delimited {
+    //                 left: Symbol { id: 40, atom_type: AtomType::Open },
+    //                 right: Symbol { id: 41, atom_type: AtomType::Close },
+    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha }),
+    //                    ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
     //                    ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })],
-    //             }), 
-    //             ParseNode::Symbol(Symbol { id: 61, atom_type: AtomType::Relation }), 
+    //             }),
+    //             ParseNode::Symbol(Symbol { id: 61, atom_type: AtomType::Relation }),
     //             ParseNode::Symbol(Symbol { id: 120808, atom_type: AtomType::Alpha })]);
-        
+
     //     assert_eq!(parse(r"1+\sqrt2").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }), 
-    //              ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }), 
-    //              ParseNode::Radical(Radical { 
-    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })] 
+    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
+    //              ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
+    //              ParseNode::Radical(Radical {
+    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })]
     //              })]);
     // }
 
@@ -386,7 +384,7 @@ mod tests {
     // fn render() {
     //     use std::fs::File;
     //     use std::io::Write;
-    
+
     //     let output = ::render::render(parse(r"\int f(x,t)dx=\sum \xi(t)").unwrap());
     //     let mut f = File::create("test.svg").unwrap();
     //     f.write_all(output.as_bytes()).unwrap();
@@ -400,7 +398,7 @@ mod tests {
         should_fail!(errs, parse,
           [ r"\frac \left(1 + 2\right) 3" ]);
         should_equate!(errs, parse,
-          [ (r"\frac12", r"\frac{1}{2}"), 
+          [ (r"\frac12", r"\frac{1}{2}"),
             (r"\frac \sqrt2 3", r"\frac{\sqrt2}{3}"),
             (r"\frac \frac 1 2 3", r"\frac{\frac12}{3}"),
             (r"\frac 1 \sqrt2", r"\frac{1}{\sqrt2}") ]);
@@ -412,7 +410,7 @@ mod tests {
         let mut errs: Vec<String> = Vec::new();
         // TODO: Add optional paramaters for radicals
         should_pass!(errs, parse,
-          [ r"\sqrt{x}", r"\sqrt2", r"\sqrt\alpha", r"1^\sqrt2", 
+          [ r"\sqrt{x}", r"\sqrt2", r"\sqrt\alpha", r"1^\sqrt2",
             r"\alpha_\sqrt{1+2}", r"\sqrt\sqrt2" ]);
         should_fail!(errs, parse,
           [ r"\sqrt", r"\sqrt_2", r"\sqrt^2" ]);
@@ -427,17 +425,17 @@ mod tests {
     fn scripts() {
         let mut errs: Vec<String> = Vec::new();
         should_pass!(errs, parse,
-          [ r"1_2^3",     
+          [ r"1_2^3",
             r"_1", r"^\alpha", r"_2^\alpha",
-            r"1_\frac12", r"2^\alpha", 
+            r"1_\frac12", r"2^\alpha",
             r"x_{1+2}", r"x^{2+3}", r"x^{1+2}_{2+3}",
             r"a^{b^c}", r"{a^b}^c", r"a_{b^c}", r"{a_b}^c",
             r"a^{b_c}", r"{a^b}_c", r"a_{b_c}", r"{a_b}_c" ]);
         should_fail!(errs, parse,
-          [ r"1_", r"1^", 
+          [ r"1_", r"1^",
             r"x_x_x", r"x^x_x^x", r"x^x^x", r"x_x^x_x" ]);
         should_equate!(errs, parse,
-          [ (r"x_\alpha^\beta", r"x^\beta_\alpha"), 
+          [ (r"x_\alpha^\beta", r"x^\beta_\alpha"),
             (r"_2^3", r"^3_2") ]);
         display_errors!(errs);
     }

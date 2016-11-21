@@ -83,3 +83,77 @@ impl Deref for VerticalBox {
         &self.contents
     }
 }
+
+/// Display styles which are used in scaling glyphs.  The associated
+/// methods are taken from pg.441 from the TeXBook
+
+#[allow(dead_code)]
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
+pub enum Style {
+    ScriptScriptCramped,
+    ScriptScript,
+    ScriptCramped,
+    Script,
+    TextCramped,
+    Text,
+    DisplayCramped,
+    Display,
+}
+
+impl Default for Style {
+    fn default() -> Style {
+        Style::Display
+    }
+}
+
+#[allow(dead_code)]
+impl Style {
+    fn cramped_variant(self) -> Style {
+        match self {
+            Style::ScriptScriptCramped | 
+            Style::ScriptScript 
+                => Style::ScriptScriptCramped,
+            Style::ScriptCramped | 
+            Style::Script 
+                => Style::ScriptCramped,
+            Style::TextCramped | 
+            Style::Text 
+                => Style::TextCramped,
+            Style::DisplayCramped | 
+            Style::Display 
+                => Style::DisplayCramped,
+        }
+    }
+
+    fn superscript_variant(self) -> Style {
+        match self {
+            Style::Display |
+            Style::Text
+                => Style::Script,
+            Style::DisplayCramped |
+            Style::TextCramped
+                => Style::ScriptCramped,
+            Style::Script |
+            Style::ScriptScript
+                => Style::ScriptScript,
+            Style::ScriptCramped |
+            Style::ScriptScriptCramped
+                => Style::ScriptScriptCramped,
+        }
+    }
+
+    fn subscript_style(self) -> Style {
+        match self {
+            Style::Display |
+            Style::Text |
+            Style::DisplayCramped |
+            Style::TextCramped
+                => Style::ScriptCramped,
+            Style::Script |
+            Style::ScriptScript |
+            Style::ScriptCramped |
+            Style::ScriptScriptCramped
+                => Style::ScriptScriptCramped,
+        }
+    }
+}
