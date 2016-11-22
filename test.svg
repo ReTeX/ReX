@@ -1,21 +1,9 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="180.49066666666667" height="69.136" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<rect x="0" y="0" width="156.49066666666667" height="46.704" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,46.704)">
-<text>√</text></g>
-<g transform="translate(44.544000000000004,0)">
-<rect x="0" y="0" width="121.24666666666667" height="3.168" fill="\#000"/><g transform="translate(0,12.468000000000004)">
-<rect x="0" y="0" width="111.94666666666667" height="34.236" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,34.236)">
-<text>1</text></g>
-<g transform="translate(34.666666666666664,34.236)">
-<text>+</text></g>
-<g transform="translate(67.54666666666667,13.067999999999998)">
-<rect x="0" y="0" width="26.400000000000002" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,21.168)">
-<text>𝑥</text></g>
-</g><g transform="translate(93.94666666666667,0)">
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75 0.75)"><text>2</text></g>
-</g></g></g></g></g></g></g></svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="126.816" height="44.848" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="102.816" height="33.647999999999996" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,33.647999999999996)">
+<text>𝕽</text></g>
+<g transform="translate(42.432,33.647999999999996)">
+<text>ε</text></g>
+<g transform="translate(63.504000000000005,33.647999999999996)">
+<text>𝖃</text></g>
+</g></g></svg>

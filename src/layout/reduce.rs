@@ -133,7 +133,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         contents: vec![
                             LayoutNode::Kern(extra_ascender),
                             LayoutNode::Rule(Rule {
-                                width:  Pixels(0f64),
+                                width:  contents.get_width(),
                                 height: rule_thickness,
                                 depth:  Pixels(0f64),
                             }),

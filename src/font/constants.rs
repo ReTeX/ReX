@@ -4,8 +4,12 @@
 // Font Nmae: b'XITS Math'
 use font::Constants;
 
+// UNITS_TO_EM and MIN_CONNECTOR_OVERLAP should be automatically generated.
 #[allow(dead_code)]
 pub const UNITS_TO_EM: f64 = 1000.0;
+
+#[allow(dead_code)]
+pub const MIN_CONNECTOR_OVERLAP: f64 = 20.0;
 
 #[allow(dead_code)]
 pub static CONSTANTS: Constants = Constants {
