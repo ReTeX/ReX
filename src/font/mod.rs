@@ -2,6 +2,7 @@ mod glyphs;
 mod constants;
 mod symbols;
 mod offsets;
+mod variants;
 pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;
@@ -21,7 +22,7 @@ pub fn glyph_metrics(code : u32) -> Glyph {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BBox(pub i16, pub i16, pub i16, pub i16);
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Glyph {
     pub unicode: u32,
     pub bbox: BBox,

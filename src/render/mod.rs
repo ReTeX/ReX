@@ -125,7 +125,7 @@ impl Renderer {
             LayoutNode::Rule(rule) => {
                 result += &format!(RULE_TEMPLATE!(), 
                     width, height - rule.height, 
-                    nodes.get_width(), rule.height);
+                    rule.width, rule.height);
                 height += rule.height;
             },
             LayoutNode::Space(_) =>
