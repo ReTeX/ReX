@@ -69,11 +69,11 @@ impl IsAtom for ParseNode {
     fn atom_type(&self) -> Option<AtomType> {
         match *self {
             ParseNode::Symbol(ref sym) => Some(sym.atom_type),
-            ParseNode::Group(_)        => Some(AtomType::Ordinal),
+            ParseNode::Group(_)        => Some(AtomType::Alpha),
             ParseNode::Delimited(_)    => Some(AtomType::Fence),
-            ParseNode::Radical(_)      => Some(AtomType::Ordinal),
+            ParseNode::Radical(_)      => Some(AtomType::Alpha),
             ParseNode::GenFraction(_)  => Some(AtomType::Inner),
-            ParseNode::Scripts(_)      => Some(AtomType::Ordinal), //TODO: Change to recursion
+            ParseNode::Scripts(_)      => Some(AtomType::Alpha), //TODO: Change to recursion
             ParseNode::Spacing(_)      => None,
             ParseNode::Rule(_)         => None,
             ParseNode::Kerning(_)      => None,
