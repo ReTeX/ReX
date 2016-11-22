@@ -28,12 +28,10 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
             command, group, symbol, implicit_group,);
 
         // Handle commands that can change that state of the parser
-        if node.is_none() && Some(()) == state_change(lex, local, &mut ml)? {
-            continue
-        }
+        if node.is_none() && state_change(lex, local, &mut ml)? { continue }
 
         // Here we handle all post-fix operators, like superscripts, subscripts
-        // `\limits`, `\nolimits`, and anything that may require us to modify
+        // `\limits`, `\nolimits`, and anything else that may require us to modify
         // the current vector of ParseNodes
         loop {
             lex.consume_whitespace();
@@ -102,7 +100,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
-pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<Option<()>, String> {
+pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<bool, String> {
     if let Token::ControlSequence(cmd) = lex.current {
         use ::std::convert::TryFrom;
         if let Ok(family) = Family::try_from(cmd) {
@@ -110,7 +108,7 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
             nodes.append(
                 &mut macro_argument(lex, local.with_family(family))?
                     .unwrap_or(vec![]));
-            return Ok(Some(()));
+            return Ok(true);
         }
 
         if let Some(weight) =
@@ -130,11 +128,11 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
             lex.next();
             nodes.append(&mut macro_argument(lex, local.with_weight(weight))?
                 .unwrap_or(vec![]));
-            return Ok(Some(()));
+            return Ok(true);
         }
     }
     // No state modifying commands found
-    Ok(None)
+    Ok(false)
 }
 
 /// Parse a `<Math Field>`.  A math field is defined by

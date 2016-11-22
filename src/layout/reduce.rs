@@ -14,15 +14,15 @@ use render::FONT_SIZE;
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
 pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
-    // Rule (5), pg 442.  If first item is a Bin atom, change it 
+    // Rule (5), pg 442.  If first item is a Bin atom, change it
     // to an Ordinal item.
     use font::IsAtom;
     if let Some(mut node) = nodes.get_mut(0) {
-        if node.atom_type() == Some(AtomType::Binary) { 
+        if node.atom_type() == Some(AtomType::Binary) {
             node.set_atom_type(AtomType::Ordinal)
         }
     }
-    
+
     // Atom Changing Rules:
     //   Rule 5:
     //   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
@@ -96,7 +96,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     width:  rule.width .as_pixels(FONT_SIZE).with_scale(style),
                     height: rule.height.as_pixels(FONT_SIZE).with_scale(style),
                     // TODO: Implement this (needs optional macro arguments parsing)
-                    depth:  Pixels(0f64), 
+                    depth:  Pixels(0f64),
                 })),
             ParseNode::Kerning(kern) =>
                 layout.push(LayoutNode::Kern(kern.as_pixels(FONT_SIZE).with_scale(style))),
@@ -171,9 +171,12 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     ..Default::default()
                 }));
             },
+            ParseNode::GenFraction(ref frac) => {
+
+            }
             _ => (),
        }
     }
-    
+
     layout
 }
