@@ -1,1 +1,0 @@
-pub const UNITS_TO_EM: f64 = 1f64/1000f64;

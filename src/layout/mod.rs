@@ -22,23 +22,32 @@ pub mod reduce;
 pub use self::boundingbox::BoundingBox;
 
 use spacing::Spacing;
-use font::Glyph;
+use dimensions::Pixels;
+
 #[derive(Clone, Debug)]
 pub enum LayoutNode {
-    HorizontalBox(HorizontalBox),
-    VerticalBox(VerticalBox),
-    Glyph(Glyph),
-    Space(Spacing),
-    Rule(Rule),
-    Kern(f64),
-    Scale(f64, Box<LayoutNode>),
+    HorizontalBox (HorizontalBox),
+    VerticalBox   (VerticalBox),
+    Glyph         (LayoutGlyph),
+    Space         (Spacing),
+    Rule          (Rule),
+    Kern          (Pixels),
+}
+
+#[derive(Clone, Debug)]
+pub struct LayoutGlyph {
+    pub scale:   f64,
+    pub height:  Pixels,
+    pub depth:   Pixels,
+    pub advance: Pixels,
+    pub unicode: u32,
 }
 
 #[derive(Copy, Clone, Debug)]
 pub struct Rule {
-    pub width: f64,
-    pub height: f64,
-    pub depth: f64,
+    pub width:  Pixels,
+    pub height: Pixels,
+    pub depth:  Pixels,
 }
 
 #[allow(dead_code)]
@@ -142,7 +151,7 @@ impl Style {
         }
     }
 
-    fn subscript_style(self) -> Style {
+    fn subscript_variant(self) -> Style {
         match self {
             Style::Display |
             Style::Text |
@@ -155,5 +164,63 @@ impl Style {
             Style::ScriptScriptCramped
                 => Style::ScriptScriptCramped,
         }
+    }
+
+    fn font_scale(self) -> f64 {
+        use font::CONSTANTS;
+        match self {
+            Style::Display |
+            Style::DisplayCramped |
+            Style::Text |
+            Style::TextCramped 
+                => 1f64,
+            Style::Script |
+            Style::ScriptCramped
+                => CONSTANTS.script_percent_scale_down as f64 / 100f64,
+            Style::ScriptScript |
+            Style::ScriptScriptCramped 
+                => CONSTANTS.script_script_percent_scale_down as f64 / 100f64,
+        }
+    }
+
+    fn sup_shift_up(self) -> Unit {
+        use font::CONSTANTS;
+        match self {
+            Style::Display |
+            Style::Text |
+            Style::Script |
+            Style::ScriptScript
+                => Unit::Font(CONSTANTS.superscript_shift_up as f64),
+            _   => Unit::Font(CONSTANTS.superscript_shift_up_cramped as f64),
+        }
+    }
+}
+
+trait ToPixels {
+    fn as_pixels(self, font_size: f64) -> Pixels;
+}
+
+use font::UNITS_TO_EM;
+use dimensions::Unit;
+
+impl ToPixels for Unit {
+    // TODO: You can't assign pt values to fonts with given `font_size: f64`
+    fn as_pixels(self, font_size: f64) -> Pixels {
+        Pixels(match self {
+            Unit::Font(u) => u / UNITS_TO_EM as f64 * font_size,
+            Unit::Em(u)   => u * font_size,
+            Unit::Ex(u)   => u * font_size, // TODO: measure x width here
+            Unit::Px(u)   => u
+        })
+    }
+}
+
+trait Scalable {
+     fn with_scale(self, sty: Style) -> Pixels;
+}
+
+impl Scalable for Pixels {
+    fn with_scale(self, sty: Style) -> Pixels {
+        self * sty.font_scale()
     }
 }

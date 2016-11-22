@@ -1,64 +1,5 @@
 #![allow(dead_code)]
-/// Intermediate Nodes
-///
-/// Mathlist    - A list of atoms
-///
-/// Nodes in our parse tree:
-///
-/// Rendering Requirements for Parsing Nodes
-///
-/// - Symbols
-///      + Font Family & Code Point
-///      + Font Dimensions [ width, height, depth ]
-///      + Lig/Kern -- todo
-///
-/// - Operators
-///      + Symbol (minus atom type)
-///      + limits [true/false]
-///      + Extensible?
-///      + Successor?    // 
-///      + largeop [true/false]?
-///
-/// - Delimiters
-///     + Symbol (minus atom type)
-///     + Extensible?
-///     + Successor?
-///
-/// - Accent
-///     + Accent Character
-///     + Inner Contents:
-///        - Symbol or MathList
-///     + Kerning if Symbol
-///
-/// - Radical
-///     + Inner Contents: Mathlist
-///     + Superscript: Mathlist
-///
-/// - Scripts Environment
-///     + Type: [ Atom type inherited?, if so expose? ]
-///     + Subscript: Mathlist
-///     + Superscript: Mathlist
-///     + Base: Mathlist
-///  
-/// - Generalized Fraction
-///     + Numerator: Mathlist
-///     + Denominator: Mathlist
-///     + Barwidth: TexDimension
-///     + Left Delimiter: Delimiter
-///     + Right Delimiter: Delimiter
-///
-/// - Style Changes
-///     + Enum: Text/Script/ScriptScript/Display..
-///
-/// - Size Change
-///     + Enum: Small, Large, LARGE, etc..
-///
-/// TODO: Environment ???
-
-// use std::boxed::Box;
-
-// pub type MathList = Vec<ParseNode>;
-// pub type BoxedMathList = Box<MathList>;
+use dimensions::Unit;
 
 // There are additional classes defined from unicode-math 
 // in addition to those defined by TeX.
@@ -85,9 +26,9 @@ pub enum AtomType {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Scripts {
-    pub base: Option<Box<ParseNode>>,
+    pub base:        Option<Box<ParseNode>>,
     pub superscript: Option<Box<ParseNode>>,
-    pub subscript: Option<Box<ParseNode>>,
+    pub subscript:   Option<Box<ParseNode>>,
 }
 
 use font::Symbol;
@@ -105,26 +46,22 @@ pub struct Delimited {
 use spacing::Spacing;
 #[derive(Debug, PartialEq, Clone)]
 pub enum ParseNode {
-    Symbol(Symbol),
-    Delimited(Delimited),
-    Group(Vec<ParseNode>),
-    Radical(Radical),
-    GenFraction(GenFraction),
-    Scripts(Scripts),
-    Spacing(Spacing),
-    Rule(Rule),
-    Kerning(Kerning),
-}
-
-#[derive(Copy, Clone, PartialEq, Debug)]
-pub struct Kerning {
-    pub width: f64,
+    Symbol      (Symbol),
+    Delimited   (Delimited),
+    Group       (Vec<ParseNode>),
+    Radical     (Radical),
+    GenFraction (GenFraction),
+    Scripts     (Scripts),
+    Spacing     (Spacing),
+    Rule        (Rule),
+    Kerning     (Unit),
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Rule {
-    pub width: f64,
-    pub height: f64,
+    pub width:  Unit,
+    pub height: Unit,
+    //pub depth:  Unit,
 }
 
 use font::IsAtom;
@@ -132,14 +69,14 @@ impl IsAtom for ParseNode {
     fn atom_type(&self) -> Option<AtomType> {
         match *self {
             ParseNode::Symbol(ref sym) => Some(sym.atom_type),
-            ParseNode::Group(_) => Some(AtomType::Ordinal),
-            ParseNode::Delimited(_) => Some(AtomType::Fence),
-            ParseNode::Radical(_) => Some(AtomType::Ordinal),
-            ParseNode::GenFraction(_) => Some(AtomType::Inner),
-            ParseNode::Scripts(_) => Some(AtomType::Ordinal), // Change to recursion
-            ParseNode::Spacing(_) => None,
-            ParseNode::Rule(_) => None,
-            ParseNode::Kerning(_) => None,
+            ParseNode::Group(_)        => Some(AtomType::Ordinal),
+            ParseNode::Delimited(_)    => Some(AtomType::Fence),
+            ParseNode::Radical(_)      => Some(AtomType::Ordinal),
+            ParseNode::GenFraction(_)  => Some(AtomType::Inner),
+            ParseNode::Scripts(_)      => Some(AtomType::Ordinal), //TODO: Change to recursion
+            ParseNode::Spacing(_)      => None,
+            ParseNode::Rule(_)         => None,
+            ParseNode::Kerning(_)      => None,
         }
     } 
 }
@@ -155,8 +92,8 @@ impl ParseNode {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum MathField {
-    Symbol(Symbol),
-    Group(Vec<ParseNode>),
+    Symbol (Symbol),
+    Group  (Vec<ParseNode>),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -168,15 +105,16 @@ pub struct Radical {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct GenFraction {
-    pub numerator: Vec<ParseNode>,
-    pub denominator: Vec<ParseNode>,
-    pub bar_thickness: u8,
-    pub left_delimiter: Option<Symbol>,
+    pub numerator:       Vec<ParseNode>,
+    pub denominator:     Vec<ParseNode>,
+    pub bar_thickness:   BarThickness,
+    pub left_delimiter:  Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
-
 }
 
-// /// Every symbol will need a font family
-// /// and a code point for how the symbol will be rendered.
-// /// This font family and code point will be used to look up
-// /// additional information regarding the dimensions if needed.
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum BarThickness {
+    Default,
+    None,
+    Unit (Unit),
+}

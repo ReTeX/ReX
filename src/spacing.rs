@@ -1,5 +1,6 @@
 // Spaces used for kerning between symbols
 use parser::nodes::AtomType;
+use dimensions::Unit;
 
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
@@ -10,7 +11,16 @@ pub enum Spacing {
   Thick,
 }
 
-
+impl Spacing {
+    pub fn to_unit(self) -> Unit {
+        match self {
+            Spacing::None   => Unit::Em(0f64),
+            Spacing::Thin   => Unit::Em(1_f64/6_f64),
+            Spacing::Medium => Unit::Em(2_f64/9_f64),
+            Spacing::Thick  => Unit::Em(3_f64/9_f64),
+        }
+    }
+}
 
 #[allow(unused)]
 pub fn atom_spacing(left: AtomType, right: AtomType) -> Spacing {

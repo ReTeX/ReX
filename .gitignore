@@ -3,3 +3,5 @@ Cargo.lock
 .vscode
 *.pdf
 *.log
+*.aux
+*.svg

@@ -5,6 +5,9 @@
 use font::Constants;
 
 #[allow(dead_code)]
+pub const UNITS_TO_EM: f64 = 1000.0;
+
+#[allow(dead_code)]
 pub static CONSTANTS: Constants = Constants {
     accent_base_height: 450,
     axis_height: 250,

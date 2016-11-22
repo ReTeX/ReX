@@ -1,12 +1,19 @@
-use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
-use parser::nodes::{ ParseNode, AtomType };
+use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox, Style };
+
+use dimensions::{ Pixels, Unit };
+use font;
+use font::CONSTANTS;
 use font::GLYPHS;
-use constants::UNITS_TO_EM;
+use font::SYMBOLS;
+use layout::{ ToPixels, Scalable };
+use layout::boundingbox::Bounded;
+use parser::nodes::{ ParseNode, AtomType };
+use render::FONT_SIZE;
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
+pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
     // Rule (5), pg 442.  If first item is a Bin atom, change it 
     // to an Ordinal item.
     use font::IsAtom;
@@ -58,60 +65,77 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                 use spacing::atom_spacing;
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
-                    layout.push(LayoutNode::Space(sp));
+                    layout.push(LayoutNode::Kern(sp.to_unit()
+                        .as_pixels(FONT_SIZE).with_scale(style)));
                 }
             }
         }
 
         // TODO: May need to ignore this if transparent atom_type.
         prev_at = node.atom_type();
+
+        use layout::LayoutGlyph;
         match *node {
-            ParseNode::Symbol(sym) =>
-                layout.push(LayoutNode::Glyph(GLYPHS[&sym.unicode].clone())),
-            ParseNode::Spacing(sp) =>
-                layout.push(LayoutNode::Space(sp)),
+            ParseNode::Symbol(sym) => {
+                let glyph = font::glyph_metrics(sym.unicode);
+                layout.push(LayoutNode::Glyph(LayoutGlyph {
+                    scale:   style.font_scale(),
+                    height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
+                    depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
+                    advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
+                    unicode: glyph.unicode,
+                }))
+            },
             ParseNode::Group(ref mut gp) =>
                 layout.push(LayoutNode::HorizontalBox(HorizontalBox {
-                    contents: reduce(&mut gp.clone()),
+                    contents: reduce(&mut gp.clone(), style),
                     ..Default::default()
                 })),
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
-                    width: rule.width as f64,
-                    height: rule.height as f64,
-                    depth: 0.0,
+                    width:  rule.width .as_pixels(FONT_SIZE).with_scale(style),
+                    height: rule.height.as_pixels(FONT_SIZE).with_scale(style),
+                    // TODO: Implement this (needs optional macro arguments parsing)
+                    depth:  Pixels(0f64), 
                 })),
             ParseNode::Kerning(kern) =>
-                layout.push(LayoutNode::Kern(kern.width)),
+                layout.push(LayoutNode::Kern(kern.as_pixels(FONT_SIZE).with_scale(style))),
+            ParseNode::Spacing(sp) => {
+                layout.push(LayoutNode::Kern(sp.to_unit()
+                    .as_pixels(FONT_SIZE).with_scale(style)))
+            },
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
-                // TODO: Change style to C'
-                // TODO: Select radical symbol large enough
-                use font::SYMBOLS;
-                use font::CONSTANTS;
-                use layout::boundingbox::HasBoundingBox;
+                let style = style.cramped_variant();
+                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
+                layout.push(LayoutNode::Glyph(LayoutGlyph {
+                    scale:   style.font_scale(),
+                    height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
+                    depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
+                    advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
+                    unicode: glyph.unicode,
+                }));
 
-                let rad_glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
-                
-                layout.push(LayoutNode::Glyph(rad_glyph.clone()));
                 let contents = LayoutNode::HorizontalBox(HorizontalBox {
-                    contents: reduce(&mut rad.inner.clone()),
+                    contents: reduce(&mut rad.inner.clone(), style),
                     ..Default::default()
                 });
 
-                let rule_thickness = CONSTANTS.radical_rule_thickness as f64 * UNITS_TO_EM;
-                let extra_ascender = CONSTANTS.radical_extra_ascender as f64 * UNITS_TO_EM;
-                let rad_height     = rad_glyph.bbox.3 as f64 * UNITS_TO_EM;
-                let kerning        = rad_height - contents.get_height() - rule_thickness - extra_ascender;
+                let rule_thickness = Unit::Font(CONSTANTS.radical_rule_thickness as f64)
+                    .as_pixels(FONT_SIZE).with_scale(style);
+                let extra_ascender = Unit::Font(CONSTANTS.radical_extra_ascender as f64)
+                    .as_pixels(FONT_SIZE).with_scale(style);
+                let height         = glyph.height().as_pixels(FONT_SIZE).with_scale(style);
+                let kerning        = height - contents.get_height() - rule_thickness - extra_ascender;
 
                 layout.push(
                     LayoutNode::VerticalBox(VerticalBox {
                         contents: vec![
                             LayoutNode::Kern(extra_ascender),
                             LayoutNode::Rule(Rule {
-                                width: 0f64,
+                                width:  Pixels(0f64),
                                 height: rule_thickness,
-                                depth: 0f64,
+                                depth:  Pixels(0f64),
                             }),
                             LayoutNode::Kern(kerning),
                             contents,
@@ -120,30 +144,29 @@ pub fn reduce(nodes: &mut [ParseNode]) -> Vec<LayoutNode> {
                     }));
             },
             ParseNode::Scripts(ref scripts) => {
-                use font::CONSTANTS;
                 use std::boxed::Box;
 
-                let script_base = reduce(&mut [ *scripts.base.clone().unwrap_or(Box::new(ParseNode::Group(vec![]))) ]);
+                let script_base = reduce(&mut [ *scripts.base.clone()
+                    .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
                 layout.push(
                     LayoutNode::HorizontalBox(HorizontalBox {
                         contents: script_base,
-                        ..Default::default() 
+                        ..Default::default()
                     })
                 );
 
-                let super_script = Box::new(
-                    LayoutNode::HorizontalBox(HorizontalBox {
-                        contents: reduce(&mut [ *scripts.superscript.clone().unwrap_or(Box::new(ParseNode::Group(vec![]))) ]),
+                let style = style.superscript_variant();
+                let super_script = LayoutNode::HorizontalBox(HorizontalBox {
+                        contents: reduce(&mut [ *scripts.superscript.clone()
+                            .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style),
                         ..Default::default()
-                    }));
-                
+                    });
+
                 layout.push(LayoutNode::VerticalBox(VerticalBox {
                     contents: vec![
-                        LayoutNode::Scale(
-                            CONSTANTS.script_percent_scale_down as f64 / 100f64,   // TODO: Script or ScriptScript?
-                            super_script
-                        ),
-                        LayoutNode::Kern(CONSTANTS.superscript_shift_up as f64 * UNITS_TO_EM),
+                        super_script,
+                        LayoutNode::Kern(style.sup_shift_up()
+                            .as_pixels(FONT_SIZE).with_scale(style)),
                     ],
                     ..Default::default()
                 }));

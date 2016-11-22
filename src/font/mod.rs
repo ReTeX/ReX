@@ -5,11 +5,17 @@ mod offsets;
 pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;
-pub use self::constants::CONSTANTS;
+pub use self::constants::{ CONSTANTS, UNITS_TO_EM };
 pub use self::symbols::SYMBOLS;
 pub use self::offsets::IsAtom;
 
 use parser::nodes::AtomType;
+
+pub fn glyph_metrics(code : u32) -> Glyph {
+    GLYPHS.get(&code)
+        .expect(&format!("Unable to find glyph for code {}", code))
+        .clone()
+}
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -25,6 +31,21 @@ pub struct Glyph {
     pub attachment: i16, // design units
 }
 
+use dimensions::Unit;
+impl Glyph {
+    pub fn height(&self) -> Unit { Unit::Font(self.bbox.3 as f64) }
+    pub fn depth(&self) -> Unit { Unit::Font(self.bbox.1 as f64) }
+    pub fn advance(&self) -> Unit { Unit::Font(self.advance as f64) }
+    #[allow(dead_code)]
+    pub fn lsb(&self) -> Unit { Unit::Font(self.lsb as f64) }
+    #[allow(dead_code)]
+    pub fn italic_correction(&self) -> Unit { Unit::Font(self.italics as f64) }
+    #[allow(dead_code)]
+    pub fn attachment_offset(&self) -> Unit { Unit::Font(self.attachment as f64) }
+}
+
+
+// TODO: All of these should probably be in Unit
 #[derive(Debug, Clone)]
 pub struct Constants {
     pub accent_base_height: i16,

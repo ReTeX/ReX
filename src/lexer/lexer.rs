@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 use super::{ Lexer, Token };
+use dimensions::Unit;
 
 /// The Lexer API.  No method here should fail.
 
@@ -114,7 +115,7 @@ impl<'a> Lexer<'a> {
     /// character in a dimension.  So it may be necessary to 
     /// consume_whitespace() prior to using this method.
 
-    pub fn dimension(&mut self) -> Result<Option<f64>, String> {
+    pub fn dimension(&mut self) -> Result<Option<Unit>, String> {
         // Parse optional sign
         let sign = self.possible_sign() as f64;
         self.consume_whitespace();
@@ -132,8 +133,9 @@ impl<'a> Lexer<'a> {
         // Unable to find any numeric values
         // Otherwise parse the result using the standard library.
         if pos == self.pos { return Ok(None) }
-        let result = Some(sign * self.input[pos..self.pos].parse::<f64>()
-            .or(Err("Unable to parse dimension!".to_string()))?);
+        let num = sign * self.input[pos..self.pos].parse::<f64>()
+            .or(Err("Unable to parse dimension!".to_string()))?;
+        let result = Some(Unit::Px(num));
 
         // TODO: Handle dimensions, px, em, etc.
         self.next();
@@ -244,10 +246,11 @@ mod tests {
 
     #[test]
     fn lex_dimension() {
+        use dimensions::Unit;
         macro_rules! assert_dim {
             ($input:expr, $result:expr) => (
                 let mut _l = Lexer::new($input);
-                assert_eq!(_l.dimension().unwrap(), Some($result));
+                assert_eq!(_l.dimension().unwrap(), Some(Unit::Px($result)));
             )
         }
 

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
-use constants::{ UNITS_TO_EM };
-use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
+use dimensions::Pixels;
+use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox, LayoutGlyph };
 
 /// Every object that will be rendered will be required to report their size.
 /// If the object is a list of other objects, such as typesetting on a horizontal
@@ -9,42 +9,34 @@ use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox };
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct BoundingBox {
-    width: f64,
-    height: f64,
-    depth: f64,
+    width:  Pixels,
+    height: Pixels,
+    depth:  Pixels,
 }
 
-pub trait HasBoundingBox {
+pub trait Bounded {
     fn bounding_box(&self) -> BoundingBox;
 
-    fn get_width(&self) -> f64 {
-        self.bounding_box().width
-    }
-
-    fn get_height(&self) -> f64 {
-        self.bounding_box().height
-    }
-
-    fn get_depth(&self) -> f64 {
-        self.bounding_box().depth
-    }
+    fn get_width(&self)  -> Pixels { self.bounding_box().width  }
+    fn get_height(&self) -> Pixels { self.bounding_box().height }
+    fn get_depth(&self)  -> Pixels { self.bounding_box().depth  }
 }
 
-impl  HasBoundingBox for Rule {
+impl Bounded for Rule {
     fn bounding_box(&self) -> BoundingBox {
         BoundingBox {
-            width: self.width,
+            width:  self.width,
             height: self.height,
-            depth: self.depth,
+            depth:  self.depth,
         }
     }
 }
 
-impl HasBoundingBox for HorizontalBox {
+impl Bounded for HorizontalBox {
     fn bounding_box(&self) -> BoundingBox  {
-        let mut width  = 0f64;
-        let mut height = 0f64;
-        let mut depth  = 0f64;
+        let mut width  = Pixels(0f64);
+        let mut height = Pixels(0f64);
+        let mut depth  = Pixels(0f64);
         for bx in &self.contents {
             width += bx.get_width();
             height = height.max(bx.get_height());
@@ -58,11 +50,11 @@ impl HasBoundingBox for HorizontalBox {
     }
 }
 
-impl HasBoundingBox for VerticalBox {
+impl Bounded for VerticalBox {
     fn bounding_box(&self) -> BoundingBox  {
-        let mut width  = 0f64;
-        let mut height = 0f64;
-        let mut depth  = 0f64;
+        let mut width  = Pixels(0f64);
+        let mut height = Pixels(0f64);
+        let mut depth  = Pixels(0f64);
         for bx in &self.contents {
             width   = width.max(bx.get_width());
             height += bx.get_height();
@@ -76,11 +68,11 @@ impl HasBoundingBox for VerticalBox {
     }    
 }
 
-impl<'a> HasBoundingBox for [LayoutNode] {
+impl<'a> Bounded for [LayoutNode] {
     fn bounding_box(&self) -> BoundingBox {
-        let mut width  = 0f64;
-        let mut height = 0f64;
-        let mut depth  = 0f64;
+        let mut width  = Pixels(0f64);
+        let mut height = Pixels(0f64);
+        let mut depth  = Pixels(0f64);
         for bx in self {
             width += bx.get_width();
             height = height.max(bx.get_height());
@@ -94,36 +86,35 @@ impl<'a> HasBoundingBox for [LayoutNode] {
     }
 }
 
-use font::Glyph;
-impl HasBoundingBox for Glyph {
+impl Bounded for LayoutGlyph {
     fn bounding_box(&self) -> BoundingBox {
         BoundingBox {
-            width:  self.advance as f64 * UNITS_TO_EM,
-            height: self.bbox.3 as f64  * UNITS_TO_EM,
-            depth:  self.bbox.1 as f64  * UNITS_TO_EM,
+            width:  self.advance,
+            height: self.height,
+            depth:  self.depth,
         }
     }
 }
 
 use spacing::Spacing;
-impl HasBoundingBox for Spacing {
+impl Bounded for Spacing {
     fn bounding_box(&self) -> BoundingBox {
         let width = match *self {
-            Spacing::None   => 0f64,
-            Spacing::Thin   => 1_f64/6_f64,
-            Spacing::Medium => 2_f64/9_f64,
-            Spacing::Thick  => 3_f64/9_f64,
+            Spacing::None   => Pixels(0f64),
+            Spacing::Thin   => Pixels(1_f64/6_f64),
+            Spacing::Medium => Pixels(2_f64/9_f64),
+            Spacing::Thick  => Pixels(3_f64/9_f64),
         };
 
         BoundingBox {
-            width: width,
-            height: 0f64,
-            depth: 0f64,
+            width:  width,
+            height: Pixels(0f64),
+            depth:  Pixels(0f64),
         }
     }
 }
 
-impl HasBoundingBox for LayoutNode {
+impl Bounded for LayoutNode {
     fn bounding_box(&self) -> BoundingBox {
         match *self {
             LayoutNode::HorizontalBox(ref hbox) => hbox.bounding_box(),
@@ -131,15 +122,8 @@ impl HasBoundingBox for LayoutNode {
             LayoutNode::Glyph(ref gly)          => gly.bounding_box(),
             LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),
-            LayoutNode::Kern(k)                 => BoundingBox { width: k, height: k, depth: 0f64 },
-            LayoutNode::Scale(scale, ref node)  => {
-                let bb = node.bounding_box();
-                BoundingBox {
-                    width: bb.width * scale,
-                    height: bb.height * scale,
-                    depth: bb.depth * scale,
-                }
-            },
+            LayoutNode::Kern(k)                 => 
+                BoundingBox { width: k, height: k, depth: Pixels(0f64) },
         }
     }
 }
