@@ -3,6 +3,7 @@ mod constants;
 mod symbols;
 mod offsets;
 pub mod variants;
+pub mod variant_tables;
 pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;

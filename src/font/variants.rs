@@ -4,8 +4,8 @@ use super::glyph_metrics;
 
 #[derive(Debug, Clone)]
 pub struct GlyphVariants {
-    replacements: Vec<ReplacementGlyph>,
-    constructable: Option<ConstructableGlyph>,
+    pub replacements: Vec<ReplacementGlyph>,
+    pub constructable: Option<ConstructableGlyph>,
 }
 
 // There are two types of variant glyphs:
@@ -19,24 +19,24 @@ pub enum VariantGlyph {
 }
 
 #[derive(Debug, Clone)]
-struct ReplacementGlyph {
-    unicode: u32,
-    advance: u16,
+pub struct ReplacementGlyph {
+    pub unicode: u32,
+    pub advance: u16,
 }
 
 #[derive(Debug, Clone)]
-struct ConstructableGlyph {
-    parts: Vec<GlyphPart>,
-    italics_correction: i16,
+pub struct ConstructableGlyph {
+    pub parts: Vec<GlyphPart>,
+    pub italics_correction: i16,
 }
 
 #[derive(Debug, Copy, Clone)]
-struct GlyphPart {
-    unicode: u32,
-    start_connector_length: u32,
-    end_connector_length: u32,
-    full_advance: u32,
-    required: bool,
+pub struct GlyphPart {
+    pub unicode: u32,
+    pub start_connector_length: u32,
+    pub end_connector_length: u32,
+    pub full_advance: u32,
+    pub required: bool,
 }
 
 use std::collections::HashMap;
