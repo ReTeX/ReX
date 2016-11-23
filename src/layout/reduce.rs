@@ -171,7 +171,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     ..Default::default()
                 }));
             },
-            ParseNode::GenFraction(ref frac) => {
+            ParseNode::GenFraction(_) => {
 
             }
             _ => (),

@@ -15,7 +15,7 @@ pub struct GlyphVariants {
 #[derive(Debug, Clone)]
 enum VariantGlyph {
     Replacement   (Glyph),
-    Constructable (GlyphConstruction)
+    Constructable (Vec<GlyphInstruction>)
 }
 
 #[derive(Debug, Clone)]
@@ -33,7 +33,7 @@ struct ConstructableGlyph {
 // The connectors define the regions for which you are allowed to overlap glyphs.  In essence, they
 // define the "max-overlap" for each given side.
 //
-// The advance of the entire constructed glyph can be calculated by looking at the full_advance of the 
+// The advance of the entire constructed glyph can be calculated by looking at the full_advance of the
 // _last_ glyph, plus the offset of the last glyph.
 
 #[derive(Debug, Copy, Clone)]
@@ -93,14 +93,11 @@ lazy_static! {
     };
 }
 
-// This provides instruction on construction the variant glyphs using the layout system.
-#[derive(Debug, Clone)]
-struct GlyphConstruction(Vec<GlyphInstruction>);
 
 #[derive(Debug, Clone, Copy)]
 struct GlyphInstruction {
     glyph:  Glyph,
-    offset: f64,
+    overlap: f64,
 }
 
 trait Variant {
@@ -127,11 +124,11 @@ impl Variant for Glyph {
         }
 
         // Next we check for a constructable glyph.
+        // In the scenario that none of the replacement glyphs match the desired
+        // advance, and there is no constructable glyph, we return the largest
+        // replacement glyph.
         let construction = match *&variants.constructable {
             None => {
-                // In the scenario that none of the replacement glyphs match the desired
-                // advance, and there is no constructable glyph, we return the largest
-                // replacement glyph.
                 let replacement = glyph_metrics(variants.replacements.last()
                     .expect("Unable to obtain last replacement glyph.  This shouldn't happen")
                     .unicode);
@@ -140,27 +137,99 @@ impl Variant for Glyph {
             Some(ref c) => c,
         };
 
-
-        // We start with the smallest collection of glyph instructions.
-        let mut parts: Vec<GlyphPart> = Vec::new();
-        for glyph in &construction.parts {
-            if glyph.required { parts.push(*glyph) }
-        }
-
-        // Next, we check if this construction meets are requirements.
-        // If not, we add an optional glyph, and repeat as necessary.
-        loop {
-            // Check if our construction meets are requirements
+        // This function will measure the maximum size of a glyph construction
+        // with a given number of repeatable glyphs.
+        fn advance_with_glyphs(parts: &[GlyphPart], repeats: u8) -> f64 {
+            use ::std::cmp::min;
             let mut advance = 0;
             let mut previous_connector = 0;
             for glyph in parts {
-                advance += std::cmp::min(previous_connector, glyph.start_connector_length);
-                previous_connector = glyph.end_connector_length;  
+                // If this is an optional glyph, we repeat `repeats` times
+                let count = if !glyph.required { repeats } else { 1 };
+                for _ in 0..count {
+                    let overlap =
+                        min(previous_connector, glyph.start_connector_length);
+                    advance += glyph.full_advance
+                        - min(MIN_CONNECTOR_OVERLAP as u32, overlap);
+                    previous_connector = glyph.end_connector_length;
+                }
             }
 
-            
+            advance as f64
         }
 
-        unimplemented!()
+        // We check for the smallest number of repeatable glyphs
+        // that are required to meet our requirements.
+        let mut count = 0;
+        while advance_with_glyphs(&construction.parts, count) < size {
+            count += 1;
+            if count > 10 { panic!("Unable to construct large glyph."); }
+        }
+
+        // We now know how mean repeatable glyphs are required for our
+        // construction, so we can create the glyph instructions.
+        // We start with the smallest possible glyph.
+        // While we are doing this, we will calculate the advance
+        // of the entire glyph.
+        let mut instructions: Vec<GlyphInstruction> = Vec::new();
+        let mut previous_connector = 0;
+        let mut glyph_advance: f64 = 0.0;
+        for glyph in &construction.parts {
+            use ::std::cmp::min;
+            let repeat = if !glyph.required { count } else { 1 };
+            let gly = glyph_metrics(glyph.unicode);
+            for _ in 0..repeat {
+                let overlap =
+                    min(previous_connector, glyph.start_connector_length)
+                    as f64;
+                glyph_advance += glyph.full_advance as f64 - overlap;
+                instructions.push(GlyphInstruction {
+                    glyph:   gly,
+                    overlap: overlap,
+                });
+            }
+            previous_connector = glyph.end_connector_length;
+        }
+
+        // Now we will calculate how much we need to reduce our overlap
+        // to construct a glyph of the desired size.
+        let size_difference = size - glyph_advance;
+        println!("size_difference: {:2}", size_difference);
+
+        // Provided that our constructed glyph is _still_ too large,
+        // return this, otherwise distribute the overlap equally
+        // amonst each part.
+        if size_difference < 0.0 {
+            return VariantGlyph::Constructable(instructions)
+        }
+
+        let overlap = size_difference / (instructions.len() - 1) as f64;
+        println!("Compensation Required: {:2}", overlap);
+        for glyph in instructions.iter_mut().skip(1) {
+            glyph.overlap -= overlap
+        }
+
+        VariantGlyph::Constructable(instructions)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Variant;
+    use font::glyph_metrics;
+
+    #[test]
+    fn can_extend_parenthesis() {
+        let paren = glyph_metrics(0x28); // Left parantheses
+        println!("800:  {:#?}", paren.variant(800 as f64));
+        println!("1200: {:#?}", paren.variant(1200 as f64));
+        println!("1800: {:#?}", paren.variant(1800 as f64));
+        println!("2400: {:#?}", paren.variant(2400 as f64));
+        println!("3000: {:#?}", paren.variant(3000 as f64));
+        println!("3100: {:#?}", paren.variant(3100 as f64));
+        println!("3600: {:#?}", paren.variant(3600 as f64));
+        println!("3700: {:#?}", paren.variant(3700 as f64));
+        println!("3800: {:#?}", paren.variant(3800 as f64));
+        println!("3900: {:#?}", paren.variant(3900 as f64));
     }
 }
