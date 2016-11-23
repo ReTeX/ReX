@@ -1,7 +1,7 @@
 //! This module is where we convert ParseNodes to Layout boxes which are ready to be rendered.
 //! The layout boxes follow a similar model as those found in HTML and TeX in that they both
 //! have horizontal and vertical boxes.  One difference will be how glue is handled.  HTML/CSS
-//! does not have anything similar to how glue is handled in TeX and so aboslute size will be 
+//! does not have anything similar to how glue is handled in TeX and so aboslute size will be
 //! necessary for these scnarios.  It's unclear if we will be able to induce alignments from
 //! glue, such as something being centered, aligned left/right, etc.  These questions may
 //! also be useful to answer in SVG.
@@ -119,17 +119,17 @@ impl Default for Style {
 impl Style {
     fn cramped_variant(self) -> Style {
         match self {
-            Style::ScriptScriptCramped | 
-            Style::ScriptScript 
+            Style::ScriptScriptCramped |
+            Style::ScriptScript
                 => Style::ScriptScriptCramped,
-            Style::ScriptCramped | 
-            Style::Script 
+            Style::ScriptCramped |
+            Style::Script
                 => Style::ScriptCramped,
-            Style::TextCramped | 
-            Style::Text 
+            Style::TextCramped |
+            Style::Text
                 => Style::TextCramped,
-            Style::DisplayCramped | 
-            Style::Display 
+            Style::DisplayCramped |
+            Style::Display
                 => Style::DisplayCramped,
         }
     }
@@ -172,13 +172,13 @@ impl Style {
             Style::Display |
             Style::DisplayCramped |
             Style::Text |
-            Style::TextCramped 
+            Style::TextCramped
                 => 1f64,
             Style::Script |
             Style::ScriptCramped
                 => CONSTANTS.script_percent_scale_down as f64 / 100f64,
             Style::ScriptScript |
-            Style::ScriptScriptCramped 
+            Style::ScriptScriptCramped
                 => CONSTANTS.script_script_percent_scale_down as f64 / 100f64,
         }
     }

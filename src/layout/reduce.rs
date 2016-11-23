@@ -1,19 +1,20 @@
 use super::{ LayoutNode, LayoutGlyph, Rule, HorizontalBox, VerticalBox, Style };
 
-use spacing::Spacing;
-use spacing::atom_spacing;
 use dimensions::{ Pixels, Unit };
 use font;
 use font::CONSTANTS;
+use font::glyph_metrics;
 use font::GLYPHS;
 use font::SYMBOLS;
+use font::variants::Variant;
+use font::variants::VariantGlyph;
 use layout::{ ToPixels, Scalable };
 use layout::boundingbox::Bounded;
 use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
-use font::glyph_metrics;
-use font::variants::Variant;
-use font::variants::VariantGlyph;
+use spacing::atom_spacing;
+use spacing::Spacing;
+
 
 macro_rules! hbox {
     ($contents:expr) => (
@@ -32,6 +33,7 @@ macro_rules! vbox {
         })
     )
 }
+
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
@@ -192,6 +194,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     },
                 }
             },
+
             _ => (),
        }
     }
