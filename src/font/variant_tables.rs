@@ -14,23 +14,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x239D, // uni239D
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           150, 
+                        start_connector_length: 0, 
+                        end_connector_length:   150, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x239C, // uni239C
-                        start_connector_length: 1010, 
+                        start_connector_length: 150, 
                         end_connector_length:   150, 
-                        full_advance:           150, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x239B, // uni239B
-                        start_connector_length: 1005, 
-                        end_connector_length:   150, 
-                        full_advance:           0, 
+                        start_connector_length: 150, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -49,23 +49,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A0, // uni23A0
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           150, 
+                        start_connector_length: 0, 
+                        end_connector_length:   150, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x239F, // uni239F
-                        start_connector_length: 1010, 
+                        start_connector_length: 150, 
                         end_connector_length:   150, 
-                        full_advance:           150, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x239E, // uni239E
-                        start_connector_length: 1005, 
-                        end_connector_length:   150, 
-                        full_advance:           0, 
+                        start_connector_length: 150, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -94,23 +94,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A3, // uni23A3
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           950, 
+                        start_connector_length: 0, 
+                        end_connector_length:   950, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 1010, 
+                        start_connector_length: 500, 
                         end_connector_length:   500, 
-                        full_advance:           500, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A1, // uni23A1
-                        start_connector_length: 1005, 
-                        end_connector_length:   950, 
-                        full_advance:           0, 
+                        start_connector_length: 950, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -139,23 +139,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A6, // uni23A6
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           950, 
+                        start_connector_length: 0, 
+                        end_connector_length:   950, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 1010, 
+                        start_connector_length: 500, 
                         end_connector_length:   500, 
-                        full_advance:           500, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A4, // uni23A4
-                        start_connector_length: 1005, 
-                        end_connector_length:   950, 
-                        full_advance:           0, 
+                        start_connector_length: 950, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -174,37 +174,37 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A9, // uni23A9
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
-                        end_connector_length:   600, 
-                        full_advance:           200, 
+                        start_connector_length: 600, 
+                        end_connector_length:   200, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A8, // uni23A8
-                        start_connector_length: 1010, 
+                        start_connector_length: 200, 
                         end_connector_length:   200, 
-                        full_advance:           200, 
+                        full_advance:           1010, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
-                        end_connector_length:   200, 
-                        full_advance:           600, 
+                        start_connector_length: 200, 
+                        end_connector_length:   600, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A7, // uni23A7
-                        start_connector_length: 1005, 
-                        end_connector_length:   600, 
-                        full_advance:           0, 
+                        start_connector_length: 600, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -223,16 +223,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x7C, // bar
-                        start_connector_length: 879, 
-                        end_connector_length:   0, 
-                        full_advance:           400, 
+                        start_connector_length: 0, 
+                        end_connector_length:   400, 
+                        full_advance:           879, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x7C, // bar
-                        start_connector_length: 879, 
-                        end_connector_length:   400, 
-                        full_advance:           0, 
+                        start_connector_length: 400, 
+                        end_connector_length:   0, 
+                        full_advance:           879, 
                         required:               false, 
                     },
                 ],
@@ -251,37 +251,37 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23AD, // uni23AD
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
-                        end_connector_length:   600, 
-                        full_advance:           200, 
+                        start_connector_length: 600, 
+                        end_connector_length:   200, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23AC, // uni23AC
-                        start_connector_length: 1010, 
+                        start_connector_length: 200, 
                         end_connector_length:   200, 
-                        full_advance:           200, 
+                        full_advance:           1010, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
-                        end_connector_length:   200, 
-                        full_advance:           600, 
+                        start_connector_length: 200, 
+                        end_connector_length:   600, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23AB, // uni23AB
-                        start_connector_length: 1005, 
-                        end_connector_length:   600, 
-                        full_advance:           0, 
+                        start_connector_length: 600, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -330,16 +330,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2016, // uni2016
-                        start_connector_length: 879, 
-                        end_connector_length:   0, 
-                        full_advance:           400, 
+                        start_connector_length: 0, 
+                        end_connector_length:   400, 
+                        full_advance:           879, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x2016, // uni2016
-                        start_connector_length: 879, 
-                        end_connector_length:   400, 
-                        full_advance:           0, 
+                        start_connector_length: 400, 
+                        end_connector_length:   0, 
+                        full_advance:           879, 
                         required:               false, 
                     },
                 ],
@@ -387,16 +387,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2191, // uni2191
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -410,16 +410,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2193, // uni2193
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -433,23 +433,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2193, // uni2193
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2191, // uni2191
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -463,16 +463,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21BE, // uni21BE
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -486,16 +486,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21BF, // uni21BF
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -509,16 +509,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21C2, // uni21C2
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -532,16 +532,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21C3, // uni21C3
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -555,16 +555,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21D1, // uni21D1
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -578,16 +578,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21D3, // uni21D3
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -601,23 +601,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21D3, // uni21D3
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21D1, // uni21D1
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -652,23 +652,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23B7, // uni23B7
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 300, 
                         end_connector_length:   300, 
-                        full_advance:           300, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 626, 
-                        end_connector_length:   500, 
-                        full_advance:           0, 
+                        start_connector_length: 500, 
+                        end_connector_length:   0, 
+                        full_advance:           626, 
                         required:               true, 
                     },
                 ],
@@ -686,23 +686,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE90D, // uni221B.base
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 300, 
                         end_connector_length:   300, 
-                        full_advance:           300, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 626, 
-                        end_connector_length:   500, 
-                        full_advance:           0, 
+                        start_connector_length: 500, 
+                        end_connector_length:   0, 
+                        full_advance:           626, 
                         required:               true, 
                     },
                 ],
@@ -720,23 +720,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE915, // uni221C.base
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 300, 
                         end_connector_length:   300, 
-                        full_advance:           300, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 626, 
-                        end_connector_length:   600, 
-                        full_advance:           0, 
+                        start_connector_length: 600, 
+                        end_connector_length:   0, 
+                        full_advance:           626, 
                         required:               true, 
                     },
                 ],
@@ -754,16 +754,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2223, // uni2223
-                        start_connector_length: 879, 
+                        start_connector_length: 293, 
                         end_connector_length:   293, 
-                        full_advance:           293, 
+                        full_advance:           879, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x2223, // uni2223
-                        start_connector_length: 879, 
+                        start_connector_length: 293, 
                         end_connector_length:   293, 
-                        full_advance:           293, 
+                        full_advance:           879, 
                         required:               false, 
                     },
                 ],
@@ -777,16 +777,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2225, // uni2225
-                        start_connector_length: 879, 
+                        start_connector_length: 293, 
                         end_connector_length:   293, 
-                        full_advance:           293, 
+                        full_advance:           879, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x2225, // uni2225
-                        start_connector_length: 879, 
+                        start_connector_length: 293, 
                         end_connector_length:   293, 
-                        full_advance:           293, 
+                        full_advance:           879, 
                         required:               false, 
                     },
                 ],
@@ -891,16 +891,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 1010, 
+                        start_connector_length: 337, 
                         end_connector_length:   337, 
-                        full_advance:           337, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A1, // uni23A1
-                        start_connector_length: 1005, 
+                        start_connector_length: 335, 
                         end_connector_length:   335, 
-                        full_advance:           335, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -919,16 +919,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 1010, 
+                        start_connector_length: 337, 
                         end_connector_length:   337, 
-                        full_advance:           337, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A4, // uni23A4
-                        start_connector_length: 1005, 
+                        start_connector_length: 335, 
                         end_connector_length:   335, 
-                        full_advance:           335, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -947,16 +947,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A3, // uni23A3
-                        start_connector_length: 1005, 
+                        start_connector_length: 335, 
                         end_connector_length:   335, 
-                        full_advance:           335, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 1010, 
+                        start_connector_length: 337, 
                         end_connector_length:   337, 
-                        full_advance:           337, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                 ],
@@ -975,16 +975,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A6, // uni23A6
-                        start_connector_length: 1005, 
+                        start_connector_length: 335, 
                         end_connector_length:   335, 
-                        full_advance:           335, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 1010, 
+                        start_connector_length: 337, 
                         end_connector_length:   337, 
-                        full_advance:           337, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                 ],
@@ -1003,23 +1003,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23AD, // uni23AD
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           90, 
+                        start_connector_length: 0, 
+                        end_connector_length:   90, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
+                        start_connector_length: 90, 
                         end_connector_length:   90, 
-                        full_advance:           90, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23A7, // uni23A7
-                        start_connector_length: 1005, 
-                        end_connector_length:   90, 
-                        full_advance:           0, 
+                        start_connector_length: 90, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -1034,23 +1034,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A9, // uni23A9
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           90, 
+                        start_connector_length: 0, 
+                        end_connector_length:   90, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 1010, 
+                        start_connector_length: 90, 
                         end_connector_length:   90, 
-                        full_advance:           90, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x23AB, // uni23AB
-                        start_connector_length: 1005, 
-                        end_connector_length:   90, 
-                        full_advance:           0, 
+                        start_connector_length: 90, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -1145,23 +1145,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x239D, // uni239D
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           90, 
+                        start_connector_length: 0, 
+                        end_connector_length:   90, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x239C, // uni239C
-                        start_connector_length: 1010, 
+                        start_connector_length: 90, 
                         end_connector_length:   90, 
-                        full_advance:           90, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x239B, // uni239B
-                        start_connector_length: 1005, 
-                        end_connector_length:   90, 
-                        full_advance:           0, 
+                        start_connector_length: 90, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -1176,23 +1176,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x23A0, // uni23A0
-                        start_connector_length: 1005, 
-                        end_connector_length:   0, 
-                        full_advance:           90, 
+                        start_connector_length: 0, 
+                        end_connector_length:   90, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x239F, // uni239F
-                        start_connector_length: 1010, 
+                        start_connector_length: 90, 
                         end_connector_length:   90, 
-                        full_advance:           90, 
+                        full_advance:           1010, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x239E, // uni239E
-                        start_connector_length: 1005, 
-                        end_connector_length:   90, 
-                        full_advance:           0, 
+                        start_connector_length: 90, 
+                        end_connector_length:   0, 
+                        full_advance:           1005, 
                         required:               true, 
                     },
                 ],
@@ -1207,16 +1207,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x27F0, // uni27F0
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -1230,16 +1230,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x27F1, // uni27F1
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -1253,16 +1253,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x290A, // uni290A
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
@@ -1276,16 +1276,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x290B, // uni290B
-                        start_connector_length: 818, 
+                        start_connector_length: 273, 
                         end_connector_length:   273, 
-                        full_advance:           273, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: 304, 
+                        start_connector_length: 101, 
                         end_connector_length:   101, 
-                        full_advance:           101, 
+                        full_advance:           304, 
                         required:               false, 
                     },
                 ],
@@ -1299,16 +1299,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2980, // uni2980
-                        start_connector_length: 879, 
-                        end_connector_length:   0, 
-                        full_advance:           400, 
+                        start_connector_length: 0, 
+                        end_connector_length:   400, 
+                        full_advance:           879, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x2980, // uni2980
-                        start_connector_length: 879, 
-                        end_connector_length:   400, 
-                        full_advance:           0, 
+                        start_connector_length: 400, 
+                        end_connector_length:   0, 
+                        full_advance:           879, 
                         required:               false, 
                     },
                 ],
@@ -1584,16 +1584,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: 884, 
+                        start_connector_length: 295, 
                         end_connector_length:   295, 
-                        full_advance:           295, 
+                        full_advance:           884, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: 884, 
+                        start_connector_length: 295, 
                         end_connector_length:   295, 
-                        full_advance:           295, 
+                        full_advance:           884, 
                         required:               false, 
                     },
                 ],
@@ -1972,23 +1972,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE903, // uni221A.rtlm.bot
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           600, 
+                        start_connector_length: 0, 
+                        end_connector_length:   600, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE904, // uni221A.rtlm.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 300, 
                         end_connector_length:   300, 
-                        full_advance:           300, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE908, // uni221A.rtlm.top
-                        start_connector_length: 626, 
-                        end_connector_length:   500, 
-                        full_advance:           0, 
+                        start_connector_length: 500, 
+                        end_connector_length:   0, 
+                        full_advance:           626, 
                         required:               true, 
                     },
                 ],
@@ -2070,16 +2070,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE855, // uni0305.size1
-                        start_connector_length: 1000, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   1000, 
                         full_advance:           1000, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE855, // uni0305.size1
                         start_connector_length: 1000, 
-                        end_connector_length:   1000, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           1000, 
                         required:               false, 
                     },
                 ],
@@ -2121,16 +2121,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE864, // uni0332.size1
-                        start_connector_length: 1000, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   1000, 
                         full_advance:           1000, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE864, // uni0332.size1
                         start_connector_length: 1000, 
-                        end_connector_length:   1000, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           1000, 
                         required:               false, 
                     },
                 ],
@@ -2150,9 +2150,9 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20EE, // uni20EE
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
@@ -2164,9 +2164,9 @@ lazy_static! {
                     },
                     GlyphPart { 
                         unicode:                0x20EF, // uni20EF
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2192,16 +2192,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20D0, // uni20D0
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8C9, // uni20D6.ex
                         start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           300, 
                         required:               false, 
                     },
                 ],
@@ -2216,16 +2216,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   300, 
                         full_advance:           300, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x20D1, // uni20D1
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2240,16 +2240,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20D6, // uni20D6
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8C9, // uni20D6.ex
                         start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           300, 
                         required:               false, 
                     },
                 ],
@@ -2264,16 +2264,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   300, 
                         full_advance:           300, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x20D7, // uni20D7
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2288,9 +2288,9 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20D6, // uni20D6
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
@@ -2302,9 +2302,9 @@ lazy_static! {
                     },
                     GlyphPart { 
                         unicode:                0x20D7, // uni20D7
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2319,23 +2319,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8CB, // uni20E9.lt
-                        start_connector_length: 154, 
-                        end_connector_length:   0, 
-                        full_advance:           50, 
+                        start_connector_length: 0, 
+                        end_connector_length:   50, 
+                        full_advance:           154, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8CA, // uni20E9.ex
-                        start_connector_length: 200, 
+                        start_connector_length: 50, 
                         end_connector_length:   50, 
-                        full_advance:           50, 
+                        full_advance:           200, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE8CC, // uni20E9.rt
-                        start_connector_length: 154, 
-                        end_connector_length:   50, 
-                        full_advance:           0, 
+                        start_connector_length: 50, 
+                        end_connector_length:   0, 
+                        full_advance:           154, 
                         required:               true, 
                     },
                 ],
@@ -2350,16 +2350,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   300, 
                         full_advance:           300, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x20EC, // uni20EC
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2374,16 +2374,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20ED, // uni20ED
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8CD, // uni20EE.ex
                         start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           300, 
                         required:               false, 
                     },
                 ],
@@ -2398,16 +2398,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x20EE, // uni20EE
-                        start_connector_length: 436, 
-                        end_connector_length:   0, 
-                        full_advance:           350, 
+                        start_connector_length: 0, 
+                        end_connector_length:   350, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8CD, // uni20EE.ex
                         start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           0, 
+                        end_connector_length:   0, 
+                        full_advance:           300, 
                         required:               false, 
                     },
                 ],
@@ -2422,16 +2422,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
+                        start_connector_length: 0, 
+                        end_connector_length:   300, 
                         full_advance:           300, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x20EF, // uni20EF
-                        start_connector_length: 436, 
-                        end_connector_length:   350, 
-                        full_advance:           0, 
+                        start_connector_length: 350, 
+                        end_connector_length:   0, 
+                        full_advance:           436, 
                         required:               true, 
                     },
                 ],
@@ -2446,16 +2446,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                 ],
@@ -2469,16 +2469,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                 ],
@@ -2492,23 +2492,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                 ],
@@ -2522,23 +2522,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x27DE, // uni27DE
-                        start_connector_length: 1464, 
+                        start_connector_length: 488, 
                         end_connector_length:   488, 
-                        full_advance:           488, 
+                        full_advance:           1464, 
                         required:               true, 
                     },
                 ],
@@ -2552,23 +2552,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x27DD, // uni27DD
-                        start_connector_length: 1464, 
+                        start_connector_length: 488, 
                         end_connector_length:   488, 
-                        full_advance:           488, 
+                        full_advance:           1464, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 786, 
+                        start_connector_length: 262, 
                         end_connector_length:   262, 
-                        full_advance:           262, 
+                        full_advance:           786, 
                         required:               true, 
                     },
                 ],
@@ -2582,16 +2582,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21BC, // uni21BC
-                        start_connector_length: 847, 
+                        start_connector_length: 282, 
                         end_connector_length:   282, 
-                        full_advance:           282, 
+                        full_advance:           847, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                 ],
@@ -2605,16 +2605,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21BD, // uni21BD
-                        start_connector_length: 847, 
+                        start_connector_length: 282, 
                         end_connector_length:   282, 
-                        full_advance:           282, 
+                        full_advance:           847, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                 ],
@@ -2628,16 +2628,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 315, 
+                        start_connector_length: 105, 
                         end_connector_length:   105, 
-                        full_advance:           105, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21C0, // uni21C0
-                        start_connector_length: 847, 
+                        start_connector_length: 282, 
                         end_connector_length:   282, 
-                        full_advance:           282, 
+                        full_advance:           847, 
                         required:               true, 
                     },
                 ],
@@ -2651,16 +2651,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21D0, // uni21D0
-                        start_connector_length: 806, 
+                        start_connector_length: 269, 
                         end_connector_length:   269, 
-                        full_advance:           269, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 435, 
+                        start_connector_length: 145, 
                         end_connector_length:   145, 
-                        full_advance:           145, 
+                        full_advance:           435, 
                         required:               false, 
                     },
                 ],
@@ -2674,16 +2674,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 435, 
+                        start_connector_length: 145, 
                         end_connector_length:   145, 
-                        full_advance:           145, 
+                        full_advance:           435, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21D2, // uni21D2
-                        start_connector_length: 806, 
+                        start_connector_length: 269, 
                         end_connector_length:   269, 
-                        full_advance:           269, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                 ],
@@ -2697,23 +2697,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21D0, // uni21D0
-                        start_connector_length: 806, 
+                        start_connector_length: 269, 
                         end_connector_length:   269, 
-                        full_advance:           269, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 435, 
+                        start_connector_length: 145, 
                         end_connector_length:   145, 
-                        full_advance:           145, 
+                        full_advance:           435, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21D2, // uni21D2
-                        start_connector_length: 806, 
+                        start_connector_length: 269, 
                         end_connector_length:   269, 
-                        full_advance:           269, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                 ],
@@ -2727,16 +2727,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x21DA, // uni21DA
-                        start_connector_length: 806, 
-                        end_connector_length:   0, 
-                        full_advance:           50, 
+                        start_connector_length: 0, 
+                        end_connector_length:   50, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: 315, 
-                        end_connector_length:   50, 
-                        full_advance:           0, 
+                        start_connector_length: 50, 
+                        end_connector_length:   0, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                 ],
@@ -2750,16 +2750,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: 315, 
-                        end_connector_length:   0, 
-                        full_advance:           50, 
+                        start_connector_length: 0, 
+                        end_connector_length:   50, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x21DB, // uni21DB
-                        start_connector_length: 806, 
-                        end_connector_length:   50, 
-                        full_advance:           0, 
+                        start_connector_length: 50, 
+                        end_connector_length:   0, 
+                        full_advance:           806, 
                         required:               true, 
                     },
                 ],
@@ -2773,23 +2773,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9A6, // uni23B4.lt
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           618, 
+                        start_connector_length: 0, 
+                        end_connector_length:   618, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9A5, // uni23B4.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 212, 
                         end_connector_length:   212, 
-                        full_advance:           212, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9A7, // uni23B4.rt
-                        start_connector_length: 1855, 
-                        end_connector_length:   618, 
-                        full_advance:           0, 
+                        start_connector_length: 618, 
+                        end_connector_length:   0, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                 ],
@@ -2809,23 +2809,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9AE, // uni23B5.lt
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           618, 
+                        start_connector_length: 0, 
+                        end_connector_length:   618, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9AD, // uni23B5.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 212, 
                         end_connector_length:   212, 
-                        full_advance:           212, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9AF, // uni23B5.rt
-                        start_connector_length: 1855, 
-                        end_connector_length:   618, 
-                        full_advance:           0, 
+                        start_connector_length: 618, 
+                        end_connector_length:   0, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                 ],
@@ -2845,23 +2845,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9B6, // uni23DC.lt
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           618, 
+                        start_connector_length: 0, 
+                        end_connector_length:   618, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9B5, // uni23DC.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 212, 
                         end_connector_length:   212, 
-                        full_advance:           212, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9B7, // uni23DC.rt
-                        start_connector_length: 1855, 
-                        end_connector_length:   618, 
-                        full_advance:           0, 
+                        start_connector_length: 618, 
+                        end_connector_length:   0, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                 ],
@@ -2881,23 +2881,23 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9BE, // uni23DD.lt
-                        start_connector_length: 1855, 
-                        end_connector_length:   0, 
-                        full_advance:           618, 
+                        start_connector_length: 0, 
+                        end_connector_length:   618, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9BD, // uni23DD.ex
-                        start_connector_length: 635, 
+                        start_connector_length: 212, 
                         end_connector_length:   212, 
-                        full_advance:           212, 
+                        full_advance:           635, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9BF, // uni23DD.rt
-                        start_connector_length: 1855, 
-                        end_connector_length:   618, 
-                        full_advance:           0, 
+                        start_connector_length: 618, 
+                        end_connector_length:   0, 
+                        full_advance:           1855, 
                         required:               true, 
                     },
                 ],
@@ -2917,37 +2917,37 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9C6, // uni23DE.lt
-                        start_connector_length: 933, 
-                        end_connector_length:   0, 
-                        full_advance:           311, 
+                        start_connector_length: 0, 
+                        end_connector_length:   311, 
+                        full_advance:           933, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: 327, 
+                        start_connector_length: 109, 
                         end_connector_length:   109, 
-                        full_advance:           109, 
+                        full_advance:           327, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9C7, // uni23DE.mid
-                        start_connector_length: 1864, 
+                        start_connector_length: 621, 
                         end_connector_length:   621, 
-                        full_advance:           621, 
+                        full_advance:           1864, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: 327, 
+                        start_connector_length: 109, 
                         end_connector_length:   109, 
-                        full_advance:           109, 
+                        full_advance:           327, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9C8, // uni23DE.rt
-                        start_connector_length: 933, 
-                        end_connector_length:   311, 
-                        full_advance:           0, 
+                        start_connector_length: 311, 
+                        end_connector_length:   0, 
+                        full_advance:           933, 
                         required:               true, 
                     },
                 ],
@@ -2967,37 +2967,37 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xE9CF, // uni23DF.lt
-                        start_connector_length: 933, 
-                        end_connector_length:   0, 
-                        full_advance:           311, 
+                        start_connector_length: 0, 
+                        end_connector_length:   311, 
+                        full_advance:           933, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: 327, 
+                        start_connector_length: 109, 
                         end_connector_length:   109, 
-                        full_advance:           109, 
+                        full_advance:           327, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9D0, // uni23DF.mid
-                        start_connector_length: 1864, 
+                        start_connector_length: 621, 
                         end_connector_length:   621, 
-                        full_advance:           621, 
+                        full_advance:           1864, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: 327, 
+                        start_connector_length: 109, 
                         end_connector_length:   109, 
-                        full_advance:           109, 
+                        full_advance:           327, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0xE9D1, // uni23DF.rt
-                        start_connector_length: 933, 
-                        end_connector_length:   311, 
-                        full_advance:           0, 
+                        start_connector_length: 311, 
+                        end_connector_length:   0, 
+                        full_advance:           933, 
                         required:               true, 
                     },
                 ],
@@ -3039,16 +3039,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0x2B45, // uni2B45
-                        start_connector_length: 818, 
-                        end_connector_length:   0, 
-                        full_advance:           50, 
+                        start_connector_length: 0, 
+                        end_connector_length:   50, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                     GlyphPart { 
                         unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: 315, 
-                        end_connector_length:   50, 
-                        full_advance:           0, 
+                        start_connector_length: 50, 
+                        end_connector_length:   0, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                 ],
@@ -3062,16 +3062,16 @@ lazy_static! {
                 parts: vec![
                     GlyphPart { 
                         unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: 315, 
-                        end_connector_length:   0, 
-                        full_advance:           50, 
+                        start_connector_length: 0, 
+                        end_connector_length:   50, 
+                        full_advance:           315, 
                         required:               false, 
                     },
                     GlyphPart { 
                         unicode:                0x2B46, // uni2B46
-                        start_connector_length: 818, 
-                        end_connector_length:   50, 
-                        full_advance:           0, 
+                        start_connector_length: 50, 
+                        end_connector_length:   0, 
+                        full_advance:           818, 
                         required:               true, 
                     },
                 ],
