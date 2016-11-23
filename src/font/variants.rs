@@ -39,55 +39,6 @@ pub struct GlyphPart {
     pub required: bool,
 }
 
-// use std::collections::HashMap;
-
-// #[allow(dead_code)]
-// lazy_static! {
-//     #[allow(dead_code)]
-//     pub static ref VARIANTS: HashMap<u32, GlyphVariants> = {
-//         let mut m = HashMap::new();
-
-//         m.insert(0x28, GlyphVariants {
-//             constructable: Some(ConstructableGlyph {
-//                 italics_correction: 0,
-//                 parts: vec![
-//                     GlyphPart {
-//                         unicode: 0x239D,
-//                         start_connector_length: 0,
-//                         end_connector_length:   150,
-//                         full_advance:           1005,
-//                         required:               true,
-//                     },
-//                     GlyphPart {
-//                         unicode: 0x239C,
-//                         start_connector_length: 150,
-//                         end_connector_length:   150,
-//                         full_advance:           1010,
-//                         required:               false,
-//                     },
-//                     GlyphPart {
-//                         unicode: 0x239B,
-//                         start_connector_length: 150,
-//                         end_connector_length:   0,
-//                         full_advance:           1005,
-//                         required:               true,
-//                     },
-//                 ]
-//             }),
-//             replacements: vec![
-//                 ReplacementGlyph { unicode: 0x28,   advance: 854  }, // parenleft
-//                 ReplacementGlyph { unicode: 0xE718, advance: 1231 }, // parenleft.size1
-//                 ReplacementGlyph { unicode: 0xE719, advance: 1846 }, // parenleft.size2
-//                 ReplacementGlyph { unicode: 0xE71A, advance: 2461 }, // parenleft.size3
-//                 ReplacementGlyph { unicode: 0xE71B, advance: 3076 }, // parenleft.size4
-//             ],
-//         });
-
-//         m
-//     };
-// }
-
-
 #[derive(Debug, Clone, Copy)]
 pub struct GlyphInstruction {
     pub glyph:  Glyph,
