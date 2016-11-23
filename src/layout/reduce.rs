@@ -86,9 +86,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
             if let Some(at) = node.atom_type() {
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
-                    layout.push(LayoutNode::Kern(sp.to_unit()
-                        .as_pixels(FONT_SIZE)
-                        .with_scale(style)));
+                    let kern = sp.to_unit().as_pixels(FONT_SIZE).with_scale(style);
+                    layout.push(LayoutNode::Kern(kern));
                 }
             }
         }
@@ -109,16 +108,16 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 layout.push(LayoutNode::Rule(Rule {
                     width:  rule.width .as_pixels(FONT_SIZE).with_scale(style),
                     height: rule.height.as_pixels(FONT_SIZE).with_scale(style),
-                    // TODO: Implement this (needs optional macro arguments parsing)
                     depth:  Pixels(0f64),
                 })),
 
             ParseNode::Kerning(kern) =>
                 layout.push(LayoutNode::Kern(kern.as_pixels(FONT_SIZE).with_scale(style))),
 
-            ParseNode::Spacing(sp) =>
-                layout.push(LayoutNode::Kern(sp.to_unit()
-                    .as_pixels(FONT_SIZE).with_scale(style))),
+            ParseNode::Spacing(sp) => {
+                let kern = sp.to_unit().as_pixels(FONT_SIZE).with_scale(style);
+                layout.push(LayoutNode::Kern(kern));
+            }
 
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
@@ -171,7 +170,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
             },
 
             ParseNode::Extend(u) => {
-                // TODO: Remove me, only used for testing.
                 let paren = glyph_metrics(0x28); // Left parantheses
 
                 match paren.variant(*u.as_pixels(FONT_SIZE)) {
@@ -184,10 +182,10 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         for instr in c.iter().rev() {
                             contents.push(instr.glyph.into_layout_node(style));
                             if instr.overlap != 0.0 {
-                                contents.push(LayoutNode::Kern(
-                                    Unit::Font(-instr.overlap)
-                                        .as_pixels(FONT_SIZE)
-                                        .with_scale(style) ));
+                                let unit = Unit::Font(-instr.overlap);
+                                let kern = unit
+                                    .as_pixels(FONT_SIZE).with_scale(style);
+                                contents.push(LayoutNode::Kern(kern));
                             }
                         }
                         layout.push(vbox!(contents));
