@@ -89,7 +89,7 @@ lazy_static! {
 
 
 #[derive(Debug, Clone, Copy)]
-struct GlyphInstruction {
+pub struct GlyphInstruction {
     pub glyph:  Glyph,
     pub overlap: f64,
 }

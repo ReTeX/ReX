@@ -1,5 +1,7 @@
-use super::{ LayoutNode, Rule, HorizontalBox, VerticalBox, Style };
+use super::{ LayoutNode, LayoutGlyph, Rule, HorizontalBox, VerticalBox, Style };
 
+use spacing::Spacing;
+use spacing::atom_spacing;
 use dimensions::{ Pixels, Unit };
 use font;
 use font::CONSTANTS;
@@ -9,6 +11,27 @@ use layout::{ ToPixels, Scalable };
 use layout::boundingbox::Bounded;
 use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
+use font::glyph_metrics;
+use font::variants::Variant;
+use font::variants::VariantGlyph;
+
+macro_rules! hbox {
+    ($contents:expr) => (
+        LayoutNode::HorizontalBox(HorizontalBox {
+            contents: $contents,
+            ..Default::default()
+        })
+    )
+}
+
+macro_rules! vbox {
+    ($contents:expr) => (
+        LayoutNode::VerticalBox(VerticalBox {
+            contents: $contents,
+            ..Default::default()
+        })
+    )
+}
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
@@ -61,12 +84,11 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
     for node in nodes {
         if let Some(p_at) = prev_at {
             if let Some(at) = node.atom_type() {
-                use spacing::Spacing;
-                use spacing::atom_spacing;
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
                     layout.push(LayoutNode::Kern(sp.to_unit()
-                        .as_pixels(FONT_SIZE).with_scale(style)));
+                        .as_pixels(FONT_SIZE)
+                        .with_scale(style)));
                 }
             }
         }
@@ -74,23 +96,15 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
         // TODO: May need to ignore this if transparent atom_type.
         prev_at = node.atom_type();
 
-        use layout::LayoutGlyph;
         match *node {
             ParseNode::Symbol(sym) => {
                 let glyph = font::glyph_metrics(sym.unicode);
-                layout.push(LayoutNode::Glyph(LayoutGlyph {
-                    scale:   style.font_scale(),
-                    height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
-                    depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
-                    advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
-                    unicode: glyph.unicode,
-                }))
+                layout.push(glyph.into_layout_node(style));
             },
+
             ParseNode::Group(ref mut gp) =>
-                layout.push(LayoutNode::HorizontalBox(HorizontalBox {
-                    contents: reduce(&mut gp.clone(), style),
-                    ..Default::default()
-                })),
+                layout.push(hbox!(reduce(&mut gp.clone(), style))),
+
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
                     width:  rule.width .as_pixels(FONT_SIZE).with_scale(style),
@@ -98,108 +112,77 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     // TODO: Implement this (needs optional macro arguments parsing)
                     depth:  Pixels(0f64),
                 })),
+
             ParseNode::Kerning(kern) =>
                 layout.push(LayoutNode::Kern(kern.as_pixels(FONT_SIZE).with_scale(style))),
-            ParseNode::Spacing(sp) => {
+
+            ParseNode::Spacing(sp) =>
                 layout.push(LayoutNode::Kern(sp.to_unit()
-                    .as_pixels(FONT_SIZE).with_scale(style)))
-            },
+                    .as_pixels(FONT_SIZE).with_scale(style))),
+
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
-                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
-                layout.push(LayoutNode::Glyph(LayoutGlyph {
-                    scale:   style.font_scale(),
-                    height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
-                    depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
-                    advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
-                    unicode: glyph.unicode,
-                }));
+                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode]; // TODO: variants?
+                layout.push(glyph.into_layout_node(style));
 
-                let contents = LayoutNode::HorizontalBox(HorizontalBox {
-                    contents: reduce(&mut rad.inner.clone(), style),
-                    ..Default::default()
-                });
+                let contents = hbox!(reduce(&mut rad.inner.clone(), style));
 
                 let rule_thickness = Unit::Font(CONSTANTS.radical_rule_thickness as f64)
                     .as_pixels(FONT_SIZE).with_scale(style);
                 let extra_ascender = Unit::Font(CONSTANTS.radical_extra_ascender as f64)
                     .as_pixels(FONT_SIZE).with_scale(style);
-                let height         = glyph.height().as_pixels(FONT_SIZE).with_scale(style);
-                let kerning        = height - contents.get_height() - rule_thickness - extra_ascender;
+                let height = glyph.height()
+                    .as_pixels(FONT_SIZE).with_scale(style);
+                let kerning = height
+                    - contents.get_height()
+                    - rule_thickness
+                    - extra_ascender;
 
-                layout.push(
-                    LayoutNode::VerticalBox(VerticalBox {
-                        contents: vec![
-                            LayoutNode::Kern(extra_ascender),
-                            LayoutNode::Rule(Rule {
-                                width:  contents.get_width(),
-                                height: rule_thickness,
-                                depth:  Pixels(0f64),
-                            }),
-                            LayoutNode::Kern(kerning),
-                            contents,
-                        ],
-                        ..Default::default()
-                    }));
+                layout.push(vbox!(vec![
+                        LayoutNode::Kern(extra_ascender),
+                        LayoutNode::Rule(Rule {
+                            width:  contents.get_width(),
+                            height: rule_thickness,
+                            depth:  Pixels(0f64),
+                        }),
+                        LayoutNode::Kern(kerning),
+                        contents,
+                    ]));
             },
+
             ParseNode::Scripts(ref scripts) => {
                 use std::boxed::Box;
 
                 let script_base = reduce(&mut [ *scripts.base.clone()
                     .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
-                layout.push(
-                    LayoutNode::HorizontalBox(HorizontalBox {
-                        contents: script_base,
-                        ..Default::default()
-                    })
-                );
+                layout.push(hbox!(script_base));
 
                 let style = style.superscript_variant();
-                let super_script = LayoutNode::HorizontalBox(HorizontalBox {
-                        contents: reduce(&mut [ *scripts.superscript.clone()
-                            .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style),
-                        ..Default::default()
-                    });
+                let super_script = hbox!(
+                    reduce(&mut [ *scripts.superscript.clone()
+                        .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style));
 
-                layout.push(LayoutNode::VerticalBox(VerticalBox {
-                    contents: vec![
+                layout.push(vbox!(vec![
                         super_script,
                         LayoutNode::Kern(style.sup_shift_up()
                             .as_pixels(FONT_SIZE).with_scale(style)),
-                    ],
-                    ..Default::default()
-                }));
+                    ]));
             },
+
             ParseNode::Extend(u) => {
                 // TODO: Remove me, only used for testing.
-                use font::glyph_metrics;
-                use font::variants::Variant;
-                use font::variants::VariantGlyph;
                 let paren = glyph_metrics(0x28); // Left parantheses
 
                 match paren.variant(*u.as_pixels(FONT_SIZE)) {
                     VariantGlyph::Replacement(g) => {
                         let glyph = font::glyph_metrics(g.unicode);
-                        layout.push(LayoutNode::Glyph(LayoutGlyph {
-                            scale:   style.font_scale(),
-                            height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
-                            depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
-                            advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
-                            unicode: glyph.unicode,
-                        }))
+                        layout.push(glyph.into_layout_node(style));
                     },
                     VariantGlyph::Constructable(c) => {
                         let mut contents: Vec<LayoutNode> = Vec::new();
                         for instr in c.iter().rev() {
-                            contents.push(LayoutNode::Glyph(LayoutGlyph {
-                                scale:   style.font_scale(),
-                                height:  instr.glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
-                                depth:   instr.glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
-                                advance: instr.glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
-                                unicode: instr.glyph.unicode,
-                            }));
-
+                            contents.push(instr.glyph.into_layout_node(style));
                             if instr.overlap != 0.0 {
                                 contents.push(LayoutNode::Kern(
                                     Unit::Font(-instr.overlap)
@@ -207,10 +190,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                                         .with_scale(style) ));
                             }
                         }
-                        layout.push(LayoutNode::VerticalBox(VerticalBox {
-                            contents: contents,
-                            ..Default::default()
-                        }));
+                        layout.push(vbox!(contents));
                     },
                 }
             },
@@ -219,4 +199,20 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
     }
 
     layout
+}
+
+trait IntoLayoutNode {
+    fn into_layout_node(&self, sty: Style) -> LayoutNode;
+}
+
+impl IntoLayoutNode for font::Glyph {
+    fn into_layout_node(&self, style: Style) -> LayoutNode {
+        LayoutNode::Glyph(LayoutGlyph {
+            scale:   style.font_scale(),
+            height:  self.height() .as_pixels(FONT_SIZE).with_scale(style),
+            depth:   self.depth()  .as_pixels(FONT_SIZE).with_scale(style),
+            advance: self.advance().as_pixels(FONT_SIZE).with_scale(style),
+            unicode: self.unicode,
+        })
+    }
 }
