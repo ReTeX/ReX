@@ -68,7 +68,7 @@ impl Renderer {
         let mut width = Pixels(0.0);
 
         use layout::boundingbox::Bounded;
-        result += &format!(BBOX_TEMPLATE!(), 0, 0, 
+        result += &format!(BBOX_TEMPLATE!(), 0, 0,
             nodes.get_width(), nodes.get_height());
 
         for node in nodes { match *node {
@@ -87,12 +87,12 @@ impl Renderer {
                 }
 
                 let gw = gly.advance;
-                width += gw;          
+                width += gw;
             },
             LayoutNode::Space(_) =>
                 width += node.get_width(),
             LayoutNode::Rule(rule) => {
-                result += &format!(RULE_TEMPLATE!(), 
+                result += &format!(RULE_TEMPLATE!(),
                     width, height - rule.height, rule.width, rule.height);
                 width += rule.width;
             },
@@ -117,14 +117,14 @@ impl Renderer {
 
     pub fn render_vbox(&self, nodes: &[LayoutNode]) -> String {
         let mut result = String::new();
-        
+
         let mut height = Pixels(0.0);
         let width      = Pixels(0.0);
 
         for node in nodes { match *node {
             LayoutNode::Rule(rule) => {
-                result += &format!(RULE_TEMPLATE!(), 
-                    width, height - rule.height, 
+                result += &format!(RULE_TEMPLATE!(),
+                    width, height - rule.height,
                     rule.width, rule.height);
                 height += rule.height;
             },
@@ -134,10 +134,27 @@ impl Renderer {
                 result += &format!(G_TEMPLATE!(), width, height);
                 result += &self.render_hbox(&hbox.contents);
                 result += "</g>";
-                height += hbox.get_height();      
+                height += hbox.get_height();
             },
             LayoutNode::Kern(k) =>
                 height += k,
+            LayoutNode::Glyph(ref gly) => {
+                result += &format!(G_TEMPLATE!(), width, height);
+
+                if gly.scale != 1f64 {
+                    result += &format!(SCALE_TEMPLATE!(), gly.scale, gly.scale);
+                }
+
+                result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
+                    .expect("Unable to decode unicode!"));
+
+                if gly.scale != 1f64 {
+                    result += "</g>";
+                }
+
+                let gw = gly.height;
+                height += gw;
+            },
             _ => (),
         }}
 

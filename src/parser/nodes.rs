@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use dimensions::Unit;
 
-// There are additional classes defined from unicode-math 
+// There are additional classes defined from unicode-math
 // in addition to those defined by TeX.
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -55,6 +55,7 @@ pub enum ParseNode {
     Spacing     (Spacing),
     Rule        (Rule),
     Kerning     (Unit),
+    Extend      (Unit),
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -77,8 +78,9 @@ impl IsAtom for ParseNode {
             ParseNode::Spacing(_)      => None,
             ParseNode::Rule(_)         => None,
             ParseNode::Kerning(_)      => None,
+            ParseNode::Extend(_)       => None,
         }
-    } 
+    }
 }
 
 impl ParseNode {

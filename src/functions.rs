@@ -22,6 +22,7 @@ pub enum MathStyle {
 pub enum TexCommand {
     Radical,
     Rule,
+    Extend,
     GenFraction {
         left_delimiter:  Option<Symbol>,
         right_delimiter: Option<Symbol>,
@@ -41,7 +42,7 @@ pub enum TexCommand {
 /// With this method you can pass a parser function which will
 /// first unwrap any group items if there are any.
 
-// fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>) 
+// fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>)
 //         -> Result<Option<T>, String> {
 //     unimplemented!()
 // }
@@ -54,11 +55,11 @@ impl TexCommand {
                 Some(ParseNode::Radical(Radical {
                     inner: parser::required_macro_argument(lex, local)?,
                 })),
-            TexCommand::GenFraction { 
-                left_delimiter:  ld, 
-                right_delimiter: rd, 
-                bar_thickness:   bt, 
-                math_style:      ms, 
+            TexCommand::GenFraction {
+                left_delimiter:  ld,
+                right_delimiter: rd,
+                bar_thickness:   bt,
+                math_style:      ms,
             } =>
                 Some(ParseNode::GenFraction(GenFraction{
                     left_delimiter:  ld,
@@ -89,6 +90,11 @@ impl TexCommand {
             },
             TexCommand::Kerning(k) =>
                 Some(ParseNode::Kerning(k)),
+            TexCommand::Extend => {              // Only used for testing, for now.
+                let h = lex.dimension()?
+                    .expect("Unable to parse dimension for Extend.");
+                Some(ParseNode::Extend(h))
+            }
         })
     }
 }
@@ -125,4 +131,5 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "quad" => TexCommand::Kerning(Unit::Em(1.0f64)),
     "qquad" => TexCommand::Kerning(Unit::Em(2.0f64)),
     "rule" => TexCommand::Rule,
+    "extend" => TexCommand::Extend,
 };

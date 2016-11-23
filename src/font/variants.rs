@@ -13,7 +13,7 @@ pub struct GlyphVariants {
 
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
-enum VariantGlyph {
+pub enum VariantGlyph {
     Replacement   (Glyph),
     Constructable (Vec<GlyphInstruction>)
 }
@@ -29,12 +29,6 @@ struct ConstructableGlyph {
     parts: Vec<GlyphPart>,
     italics_correction: i16,
 }
-
-// The connectors define the regions for which you are allowed to overlap glyphs.  In essence, they
-// define the "max-overlap" for each given side.
-//
-// The advance of the entire constructed glyph can be calculated by looking at the full_advance of the
-// _last_ glyph, plus the offset of the last glyph.
 
 #[derive(Debug, Copy, Clone)]
 struct GlyphPart {
@@ -96,11 +90,11 @@ lazy_static! {
 
 #[derive(Debug, Clone, Copy)]
 struct GlyphInstruction {
-    glyph:  Glyph,
-    overlap: f64,
+    pub glyph:  Glyph,
+    pub overlap: f64,
 }
 
-trait Variant {
+pub trait Variant {
     fn variant(&self, size: f64) -> VariantGlyph;
 }
 

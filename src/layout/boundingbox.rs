@@ -65,7 +65,7 @@ impl Bounded for VerticalBox {
             height: height,
             depth: depth,
         }
-    }    
+    }
 }
 
 impl<'a> Bounded for [LayoutNode] {
@@ -82,7 +82,7 @@ impl<'a> Bounded for [LayoutNode] {
             width: width,
             height: height,
             depth: depth,
-        }        
+        }
     }
 }
 
@@ -122,7 +122,7 @@ impl Bounded for LayoutNode {
             LayoutNode::Glyph(ref gly)          => gly.bounding_box(),
             LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),
-            LayoutNode::Kern(k)                 => 
+            LayoutNode::Kern(k)                 =>
                 BoundingBox { width: k, height: k, depth: Pixels(0f64) },
         }
     }

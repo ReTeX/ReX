@@ -171,9 +171,49 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     ..Default::default()
                 }));
             },
-            ParseNode::GenFraction(_) => {
+            ParseNode::Extend(u) => {
+                // TODO: Remove me, only used for testing.
+                use font::glyph_metrics;
+                use font::variants::Variant;
+                use font::variants::VariantGlyph;
+                let paren = glyph_metrics(0x28); // Left parantheses
 
-            }
+                match paren.variant(*u.as_pixels(FONT_SIZE)) {
+                    VariantGlyph::Replacement(g) => {
+                        let glyph = font::glyph_metrics(g.unicode);
+                        layout.push(LayoutNode::Glyph(LayoutGlyph {
+                            scale:   style.font_scale(),
+                            height:  glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
+                            depth:   glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
+                            advance: glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
+                            unicode: glyph.unicode,
+                        }))
+                    },
+                    VariantGlyph::Constructable(c) => {
+                        let mut contents: Vec<LayoutNode> = Vec::new();
+                        for instr in c.iter().rev() {
+                            contents.push(LayoutNode::Glyph(LayoutGlyph {
+                                scale:   style.font_scale(),
+                                height:  instr.glyph.height() .as_pixels(FONT_SIZE).with_scale(style),
+                                depth:   instr.glyph.depth()  .as_pixels(FONT_SIZE).with_scale(style),
+                                advance: instr.glyph.advance().as_pixels(FONT_SIZE).with_scale(style),
+                                unicode: instr.glyph.unicode,
+                            }));
+
+                            if instr.overlap != 0.0 {
+                                contents.push(LayoutNode::Kern(
+                                    Unit::Font(-instr.overlap)
+                                        .as_pixels(FONT_SIZE)
+                                        .with_scale(style) ));
+                            }
+                        }
+                        layout.push(LayoutNode::VerticalBox(VerticalBox {
+                            contents: contents,
+                            ..Default::default()
+                        }));
+                    },
+                }
+            },
             _ => (),
        }
     }

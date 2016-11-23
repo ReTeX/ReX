@@ -1,9 +1,12 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="126.816" height="44.848" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<rect x="0" y="0" width="102.816" height="33.647999999999996" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,33.647999999999996)">
-<text>𝕽</text></g>
-<g transform="translate(42.432,33.647999999999996)">
-<text>ε</text></g>
-<g transform="translate(63.504000000000005,33.647999999999996)">
-<text>𝖃</text></g>
-</g></g></svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="45.6" height="203.44" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="21.6" height="193.44" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,0)">
+<text>⎛</text></g>
+<g transform="translate(0,41.35999999999999)">
+<text>⎜</text></g>
+<g transform="translate(0,82.96000000000001)">
+<text>⎜</text></g>
+<g transform="translate(0,124.56)">
+<text>⎝</text></g>
+</g></g></g></svg>
