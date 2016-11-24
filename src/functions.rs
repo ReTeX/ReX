@@ -40,13 +40,21 @@ pub enum TexCommand {
     Kerning(Unit),
 }
 
-/// With this method you can pass a parser function which will
-/// first unwrap any group items if there are any.
-
-// fn unwrap_with<T: Sized>(f: &FnMut(&mut Lexer, Locals) -> Result<Option<T>, String>)
-//         -> Result<Option<T>, String> {
-//     unimplemented!()
-// }
+use lexer::Token;
+macro_rules! required {
+    ($lex:ident, $f:expr) => (
+        if $lex.current == Token::Symbol('{') {
+            $lex.next();
+            let result = $f;
+            $lex.consume_whitespace();
+            $lex.current.expect(Token::Symbol('}'))?;
+            $lex.next();
+            result
+        } else {
+            panic!("Missing required argument!".to_string())
+        }        
+    )    
+}
 
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
@@ -92,9 +100,22 @@ impl TexCommand {
             TexCommand::Kerning(k) =>
                 Some(ParseNode::Kerning(k)),
             TexCommand::VExtend => {              // Only used for testing, for now.
-                let h = lex.dimension()?
+                let sym = required!(lex, { 
+                    let c = lex.current;
+                    lex.next();
+                    c 
+                });
+
+                let code = if let Token::Symbol(ch) = sym {
+                    ch as u32
+                } else {
+                    panic!("Not a symbol!!");
+                };
+
+                let height = required!(lex, lex.dimension())?
                     .expect("Unable to parse dimension for Extend.");
-                Some(ParseNode::Extend(h))
+
+                Some(ParseNode::Extend(code, height))
             },
             TexCommand::HExtend => {
                 None

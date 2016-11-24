@@ -39,7 +39,7 @@ pub struct GlyphPart {
     pub required: bool,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 pub struct GlyphInstruction {
     pub glyph:  Glyph,
     pub overlap: f64,
@@ -133,8 +133,8 @@ impl Variant for Glyph {
                     glyph:   gly,
                     overlap: overlap,
                 });
+                previous_connector = glyph.end_connector_length;
             }
-            previous_connector = glyph.end_connector_length;
         }
 
         // Now we will calculate how much we need to reduce our overlap
@@ -159,6 +159,12 @@ impl Variant for Glyph {
     }
 }
 
+use std::fmt;
+impl fmt::Debug for GlyphInstruction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "GlyphInst {{ glyph: 0x{:X}, overlap: {} }}", self.glyph.unicode, self.overlap)
+    }
+}
 #[cfg(test)]
 mod tests {
     use super::Variant;

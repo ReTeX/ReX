@@ -171,8 +171,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     ]));
             },
 
-            ParseNode::Extend(u) => {
-                let paren = glyph_metrics(0x28); // Left parantheses
+            ParseNode::Extend(code, u) => {
+                let paren = glyph_metrics(code); // Left parantheses
 
                 match paren.variant(*u.as_pixels(FONT_SIZE)) {
                     VariantGlyph::Replacement(g) => {

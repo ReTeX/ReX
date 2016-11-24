@@ -1,12 +1,96 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="45.6" height="182.8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<rect x="0" y="0" width="21.6" height="172.8" fill="none" stroke="blue" stroke-width="0.2"/>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="386.40000000000003" height="514.4320000000001" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="362.40000000000003" height="480.00000000000017" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,0)">
 <g transform="translate(0,48.239999999999995)">
-<text>⎛</text></g>
-<g transform="translate(0,89.84)">
-<text>⎜</text></g>
-<g transform="translate(0,131.44)">
-<text>⎜</text></g>
-<g transform="translate(0,172.8)">
-<text>⎝</text></g>
-</g></g></g></svg>
+<text>⎧</text></g>
+<g transform="translate(0,76.08)">
+<text>⎪</text></g>
+<g transform="translate(0,123.12)">
+<text>⎪</text></g>
+<g transform="translate(0,170.16000000000003)">
+<text>⎪</text></g>
+<g transform="translate(0,217.20000000000005)">
+<text>⎪</text></g>
+<g transform="translate(0,264.24000000000007)">
+<text>⎨</text></g>
+<g transform="translate(0,311.2800000000001)">
+<text>⎪</text></g>
+<g transform="translate(0,358.3200000000001)">
+<text>⎪</text></g>
+<g transform="translate(0,405.3600000000001)">
+<text>⎪</text></g>
+<g transform="translate(0,452.40000000000015)">
+<text>⎪</text></g>
+<g transform="translate(0,480.00000000000017)">
+<text>⎩</text></g>
+</g><g transform="translate(30.72,96.00000000000011)">
+<g transform="translate(0,48.239999999999995)">
+<text>⎧</text></g>
+<g transform="translate(0,75.84)">
+<text>⎪</text></g>
+<g transform="translate(0,122.64)">
+<text>⎪</text></g>
+<g transform="translate(0,169.44)">
+<text>⎪</text></g>
+<g transform="translate(0,216.24)">
+<text>⎨</text></g>
+<g transform="translate(0,263.04)">
+<text>⎪</text></g>
+<g transform="translate(0,309.84000000000003)">
+<text>⎪</text></g>
+<g transform="translate(0,356.64000000000004)">
+<text>⎪</text></g>
+<g transform="translate(0,384.00000000000006)">
+<text>⎩</text></g>
+</g><g transform="translate(61.44,192.00000000000023)">
+<g transform="translate(0,48.239999999999995)">
+<text>⎧</text></g>
+<g transform="translate(0,75.44)">
+<text>⎪</text></g>
+<g transform="translate(0,121.84)">
+<text>⎪</text></g>
+<g transform="translate(0,168.24)">
+<text>⎨</text></g>
+<g transform="translate(0,214.64)">
+<text>⎪</text></g>
+<g transform="translate(0,261.03999999999996)">
+<text>⎪</text></g>
+<g transform="translate(0,287.99999999999994)">
+<text>⎩</text></g>
+</g><g transform="translate(92.16,237.12000000000018)">
+<g transform="translate(0,48.239999999999995)">
+<text>⎧</text></g>
+<g transform="translate(0,67.92)">
+<text>⎪</text></g>
+<g transform="translate(0,106.80000000000001)">
+<text>⎪</text></g>
+<g transform="translate(0,145.68)">
+<text>⎨</text></g>
+<g transform="translate(0,184.56)">
+<text>⎪</text></g>
+<g transform="translate(0,223.44)">
+<text>⎪</text></g>
+<g transform="translate(0,242.88)">
+<text>⎩</text></g>
+</g><g transform="translate(122.88,288.00000000000017)">
+<g transform="translate(0,48.239999999999995)">
+<text>⎧</text></g>
+<g transform="translate(0,74.64)">
+<text>⎪</text></g>
+<g transform="translate(0,120.24000000000001)">
+<text>⎨</text></g>
+<g transform="translate(0,165.84000000000003)">
+<text>⎪</text></g>
+<g transform="translate(0,192)">
+<text>⎩</text></g>
+</g><g transform="translate(153.6,480.00000000000017)">
+<text></text></g>
+<g transform="translate(205.248,480.00000000000017)">
+<text></text></g>
+<g transform="translate(256.896,480.00000000000017)">
+<text></text></g>
+<g transform="translate(300.384,480.00000000000017)">
+<text></text></g>
+<g transform="translate(334.8,480.00000000000017)">
+<text></text></g>
+</g></g></svg>
