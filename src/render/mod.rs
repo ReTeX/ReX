@@ -11,7 +11,7 @@ macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
-macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({} {})">"# } }
+macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
 
 struct Cursor {
     x: f64,
@@ -44,8 +44,6 @@ impl Renderer {
 
     pub fn render(&self) -> String {
         let nodes = &self.nodes;
-        println!("{:?}", nodes);
-
         let mut output = String::from(SVG_HEADER);
 
         let width  = nodes.get_width()  + 2.0 * self.cursor.x;   // Left and right padding
@@ -67,16 +65,14 @@ impl Renderer {
         let height = nodes.get_height();
         let mut width = Pixels(0.0);
 
-        use layout::boundingbox::Bounded;
-        result += &format!(BBOX_TEMPLATE!(), 0, 0,
-            nodes.get_width(), nodes.get_height());
+        result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes.get_width(), height);
 
         for node in nodes { match *node {
             LayoutNode::Glyph(ref gly) => {
                 result += &format!(G_TEMPLATE!(), width, height);
                 //result += &format!(BBOX_TEMPLATE!(), 0, -gh, gw, gh-gd);
                 if gly.scale != 1f64 {
-                    result += &format!(SCALE_TEMPLATE!(), gly.scale, gly.scale);
+                    result += &format!(SCALE_TEMPLATE!(), gly.scale);
                 }
 
                 result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
@@ -97,7 +93,7 @@ impl Renderer {
                 width += rule.width;
             },
             LayoutNode::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height() - vbox.offset);
+                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height() /*+ vbox.offset*/);
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
                 width += vbox.get_width();
@@ -142,7 +138,7 @@ impl Renderer {
                 result += &format!(G_TEMPLATE!(), width, height + gly.height);
 
                 if gly.scale != 1f64 {
-                    result += &format!(SCALE_TEMPLATE!(), gly.scale, gly.scale);
+                    result += &format!(SCALE_TEMPLATE!(), gly.scale);
                 }
 
                 result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)

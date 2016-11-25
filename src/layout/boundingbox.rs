@@ -63,7 +63,7 @@ impl Bounded for VerticalBox {
         BoundingBox {
             width: width,
             height: height - self.offset,
-            depth: depth + self.offset,
+            depth: depth   - self.offset,
         }
     }
 }

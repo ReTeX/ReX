@@ -53,7 +53,7 @@ macro_rules! required {
         } else {
             panic!("Missing required argument!".to_string())
         }        
-    )    
+    )
 }
 
 impl TexCommand {

@@ -115,8 +115,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     let l_glyph = glyph.successor().into_layout_node(style);
                     let axis_offset = Unit::Font(CONSTANTS.axis_height as f64)
                         .as_pixels(FONT_SIZE).with_scale(style);
-                    let shift_down = 0.5 * ( l_glyph.get_height() - l_glyph.get_depth() + axis_offset );
-                    layout.push(vbox!(vec![l_glyph], -1. * shift_down));
+                    let shift_down = 0.5 * ( l_glyph.get_height() + l_glyph.get_depth() ) - axis_offset;
+                    layout.push(vbox!(vec![l_glyph], shift_down));
                 } else {
                     let glyph = font::glyph_metrics(sym.unicode);
                     layout.push(glyph.into_layout_node(style));
@@ -179,10 +179,24 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
                 layout.push(hbox!(script_base));
 
+                let italics_correction =
+                    if let Some(ref bx) = scripts.base {
+                        if let ParseNode::Symbol(sym) = **bx {
+                            let glyph = font::glyph_metrics(sym.unicode);
+                            Unit::Font(glyph.italics as f64)
+                                .as_pixels(FONT_SIZE).with_scale(style)
+                        } else { Pixels(0.0) }
+                    } else { Pixels(0.0) };
+
                 let style = style.superscript_variant();
-                let super_script = hbox!(
-                    reduce(&mut [ *scripts.superscript.clone()
-                        .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style));
+                let mut contents = reduce(&mut [ *scripts.superscript.clone()
+                    .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
+
+                if italics_correction != Pixels(0.0) {
+                    contents.insert(0, LayoutNode::Kern(italics_correction));
+                }
+
+                let super_script = hbox!(contents);
 
                 layout.push(vbox!(vec![
                         super_script,

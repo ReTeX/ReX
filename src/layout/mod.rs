@@ -34,7 +34,7 @@ pub enum LayoutNode {
     Kern          (Pixels),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct LayoutGlyph {
     pub scale:   f64,
     pub height:  Pixels,
@@ -66,7 +66,7 @@ impl Default for Alignment {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Default)]
 pub struct HorizontalBox {
     pub contents: Vec<LayoutNode>,
     pub alignment: Alignment,
@@ -80,7 +80,7 @@ impl Deref for HorizontalBox {
     }
 }
 
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Default)]
 pub struct VerticalBox {
     pub contents:  Vec<LayoutNode>,
     pub alignment: Alignment,
@@ -91,6 +91,25 @@ impl Deref for VerticalBox {
     type Target = [LayoutNode];
     fn deref(&self) -> &Self::Target {
         &self.contents
+    }
+}
+
+use std::fmt;
+impl fmt::Debug for VerticalBox {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "contents: {:?}, offset: {:.1}", self.contents, *self.offset)
+    }
+}
+
+impl fmt::Debug for HorizontalBox {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "contents: {:?}", self.contents)
+    }
+}
+
+impl fmt::Debug for LayoutGlyph {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "unicode: 0x{:X}, height: {:.1}, depth: {:.1}", self.unicode, *self.height, *self.depth)
     }
 }
 
