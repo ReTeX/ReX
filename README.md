@@ -1,4 +1,4 @@
-![ReX, the friendly, tea drinking dinosaur](rex.png)
+![example formula, typeset](example.png)
 
 # ReX
 Typesetting mathematics.
