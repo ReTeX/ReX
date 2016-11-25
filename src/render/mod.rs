@@ -97,8 +97,7 @@ impl Renderer {
                 width += rule.width;
             },
             LayoutNode::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height());
-                println!("VBOX: {:?} {:?}", width, height - vbox.get_height());
+                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height() - vbox.offset);
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
                 width += vbox.get_width();
@@ -121,8 +120,6 @@ impl Renderer {
 
         let mut height = Pixels(0.0);
         let width      = Pixels(0.0);
-
-        println!("VBOX NODES: {:?}", nodes);
 
         for node in nodes { match *node {
             LayoutNode::Rule(rule) => {

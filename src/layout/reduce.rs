@@ -31,6 +31,13 @@ macro_rules! vbox {
             contents: $contents,
             ..Default::default()
         })
+    );
+    ($contents:expr, $offset:expr) => (
+        LayoutNode::VerticalBox(VerticalBox {
+            contents: $contents,
+            offset:   $offset,
+            ..Default::default()
+        })
     )
 }
 
@@ -99,8 +106,21 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
         match *node {
             ParseNode::Symbol(sym) => {
+                use parser::nodes::AtomType;
+
                 let glyph = font::glyph_metrics(sym.unicode);
-                layout.push(glyph.into_layout_node(style));
+                if let AtomType::Operator(_) = sym.atom_type {
+                    // TODO: Only display style for now.  Change this.
+                    // TODO: This should probably use `min op hieght` param.
+                    let l_glyph = glyph.successor().into_layout_node(style);
+                    let axis_offset = Unit::Font(CONSTANTS.axis_height as f64)
+                        .as_pixels(FONT_SIZE).with_scale(style);
+                    let shift_down = 0.5 * ( l_glyph.get_height() - l_glyph.get_depth() + axis_offset );
+                    layout.push(vbox!(vec![l_glyph], -1. * shift_down));
+                } else {
+                    let glyph = font::glyph_metrics(sym.unicode);
+                    layout.push(glyph.into_layout_node(style));
+                }
             },
 
             ParseNode::Group(ref mut gp) =>

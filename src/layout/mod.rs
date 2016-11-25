@@ -82,8 +82,9 @@ impl Deref for HorizontalBox {
 
 #[derive(Clone, Debug, Default)]
 pub struct VerticalBox {
-    pub contents: Vec<LayoutNode>,
+    pub contents:  Vec<LayoutNode>,
     pub alignment: Alignment,
+    pub offset:    Pixels,
 }
 
 impl Deref for VerticalBox {

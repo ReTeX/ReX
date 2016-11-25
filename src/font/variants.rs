@@ -1,6 +1,8 @@
 use super::constants::MIN_CONNECTOR_OVERLAP;
 use super::Glyph;
 use super::glyph_metrics;
+use super::variant_tables::VERT_VARIANTS;
+
 
 #[derive(Debug, Clone)]
 pub struct GlyphVariants {
@@ -47,13 +49,13 @@ pub struct GlyphInstruction {
 
 pub trait Variant {
     fn variant(&self, size: f64) -> VariantGlyph;
+    fn successor(&self) -> Glyph;
 }
 
 impl Variant for Glyph {
     fn variant(&self, size: f64) -> VariantGlyph {
         // The size variable describes the minimum advance requirement.  We will
         // take the glpyh with the minimum height that exceeds our requirment.
-        use super::variant_tables::VERT_VARIANTS;
 
         let variants = match VERT_VARIANTS.get(&self.unicode) {
             None => return VariantGlyph::Replacement(*self),
@@ -157,6 +159,25 @@ impl Variant for Glyph {
 
         VariantGlyph::Constructable(instructions)
     }
+
+    /// This method will look for a successor of a given glyph if there
+    /// exits one.  This is how operators like `\int` and `\sum` become
+    /// larger while in Display mode.
+
+    fn successor(&self) -> Glyph {
+        // If there are no variant glyphs, return itself.
+        let variants = match VERT_VARIANTS.get(&self.unicode) {
+            None => return *self,
+            Some(g) => g,
+        };
+
+        // First check to see if any of the replacement glyphs meet the requirement.
+        // It is assumed that the glyphs are in increasing advance.
+        match variants.replacements.get(1) {
+            Some(ref g) => glyph_metrics(g.unicode),
+            None        => *self,
+        }
+    }
 }
 
 use std::fmt;
@@ -183,5 +204,12 @@ mod tests {
         println!("3700: {:#?}", paren.variant(3700 as f64));
         println!("3800: {:#?}", paren.variant(3800 as f64));
         println!("3900: {:#?}", paren.variant(3900 as f64));
+    }
+
+    #[test]
+    fn can_find_successor() {
+        let int = glyph_metrics(0x222B); // Integral
+        println!("Int old: {:?}", int);
+        println!("Int new: {:?}", int.successor());
     }
 }
