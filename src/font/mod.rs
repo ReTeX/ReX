@@ -2,6 +2,7 @@ mod glyphs;
 mod constants;
 mod symbols;
 mod offsets;
+mod kerning;
 pub mod variants;
 pub mod variant_tables;
 pub mod fontselection;

@@ -9,29 +9,29 @@ lazy_static! {
     pub static ref VERT_VARIANTS: HashMap<u32, GlyphVariants> = {
         let mut m = HashMap::new();
         m.insert(0x28, GlyphVariants { // parenleft
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239D, // uni239D
-                        start_connector_length: 0, 
-                        end_connector_length:   150, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   150,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239C, // uni239C
-                        start_connector_length: 150, 
-                        end_connector_length:   150, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 150,
+                        end_connector_length:   150,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239B, // uni239B
-                        start_connector_length: 150, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 150,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -44,29 +44,29 @@ lazy_static! {
             ],
         });
         m.insert(0x29, GlyphVariants { // parenright
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A0, // uni23A0
-                        start_connector_length: 0, 
-                        end_connector_length:   150, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   150,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239F, // uni239F
-                        start_connector_length: 150, 
-                        end_connector_length:   150, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 150,
+                        end_connector_length:   150,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239E, // uni239E
-                        start_connector_length: 150, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 150,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -89,29 +89,29 @@ lazy_static! {
             ],
         });
         m.insert(0x5B, GlyphVariants { // bracketleft
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A3, // uni23A3
-                        start_connector_length: 0, 
-                        end_connector_length:   950, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   950,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 500, 
-                        end_connector_length:   500, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 500,
+                        end_connector_length:   500,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A1, // uni23A1
-                        start_connector_length: 950, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 950,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -134,29 +134,29 @@ lazy_static! {
             ],
         });
         m.insert(0x5D, GlyphVariants { // bracketright
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A6, // uni23A6
-                        start_connector_length: 0, 
-                        end_connector_length:   950, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   950,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 500, 
-                        end_connector_length:   500, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 500,
+                        end_connector_length:   500,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A4, // uni23A4
-                        start_connector_length: 950, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 950,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -169,43 +169,43 @@ lazy_static! {
             ],
         });
         m.insert(0x7B, GlyphVariants { // braceleft
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A9, // uni23A9
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 600, 
-                        end_connector_length:   200, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 600,
+                        end_connector_length:   200,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A8, // uni23A8
-                        start_connector_length: 200, 
-                        end_connector_length:   200, 
-                        full_advance:           1010, 
-                        required:               true, 
+                        start_connector_length: 200,
+                        end_connector_length:   200,
+                        full_advance:           1010,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 200, 
-                        end_connector_length:   600, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 200,
+                        end_connector_length:   600,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A7, // uni23A7
-                        start_connector_length: 600, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 600,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -218,22 +218,22 @@ lazy_static! {
             ],
         });
         m.insert(0x7C, GlyphVariants { // bar
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x7C, // bar
-                        start_connector_length: 0, 
-                        end_connector_length:   400, 
-                        full_advance:           879, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   400,
+                        full_advance:           879,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x7C, // bar
-                        start_connector_length: 400, 
-                        end_connector_length:   0, 
-                        full_advance:           879, 
-                        required:               false, 
+                        start_connector_length: 400,
+                        end_connector_length:   0,
+                        full_advance:           879,
+                        required:               false,
                     },
                 ],
             }),
@@ -246,43 +246,43 @@ lazy_static! {
             ],
         });
         m.insert(0x7D, GlyphVariants { // braceright
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AD, // uni23AD
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 600, 
-                        end_connector_length:   200, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 600,
+                        end_connector_length:   200,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AC, // uni23AC
-                        start_connector_length: 200, 
-                        end_connector_length:   200, 
-                        full_advance:           1010, 
-                        required:               true, 
+                        start_connector_length: 200,
+                        end_connector_length:   200,
+                        full_advance:           1010,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 200, 
-                        end_connector_length:   600, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 200,
+                        end_connector_length:   600,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AB, // uni23AB
-                        start_connector_length: 600, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 600,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -325,22 +325,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2016, GlyphVariants { // uni2016
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2016, // uni2016
-                        start_connector_length: 0, 
-                        end_connector_length:   400, 
-                        full_advance:           879, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   400,
+                        full_advance:           879,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2016, // uni2016
-                        start_connector_length: 400, 
-                        end_connector_length:   0, 
-                        full_advance:           879, 
-                        required:               false, 
+                        start_connector_length: 400,
+                        end_connector_length:   0,
+                        full_advance:           879,
+                        required:               false,
                     },
                 ],
             }),
@@ -382,22 +382,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2191, GlyphVariants { // uni2191
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2191, // uni2191
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -405,22 +405,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2193, GlyphVariants { // uni2193
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2193, // uni2193
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -428,29 +428,29 @@ lazy_static! {
             ],
         });
         m.insert(0x2195, GlyphVariants { // uni2195
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2193, // uni2193
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2191, // uni2191
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -458,22 +458,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21BE, GlyphVariants { // uni21BE
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21BE, // uni21BE
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -481,22 +481,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21BF, GlyphVariants { // uni21BF
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21BF, // uni21BF
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -504,22 +504,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21C2, GlyphVariants { // uni21C2
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21C2, // uni21C2
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -527,22 +527,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21C3, GlyphVariants { // uni21C3
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21C3, // uni21C3
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23D0, // uni23D0
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -550,22 +550,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21D1, GlyphVariants { // uni21D1
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D1, // uni21D1
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -573,22 +573,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21D3, GlyphVariants { // uni21D3
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D3, // uni21D3
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -596,29 +596,29 @@ lazy_static! {
             ],
         });
         m.insert(0x21D5, GlyphVariants { // uni21D5
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D3, // uni21D3
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D1, // uni21D1
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -647,29 +647,29 @@ lazy_static! {
             ],
         });
         m.insert(0x221A, GlyphVariants { // uni221A
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23B7, // uni23B7
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 500, 
-                        end_connector_length:   0, 
-                        full_advance:           626, 
-                        required:               true, 
+                        start_connector_length: 500,
+                        end_connector_length:   0,
+                        full_advance:           626,
+                        required:               true,
                     },
                 ],
             }),
@@ -681,29 +681,29 @@ lazy_static! {
             ],
         });
         m.insert(0x221B, GlyphVariants { // uni221B
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE90D, // uni221B.base
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 500, 
-                        end_connector_length:   0, 
-                        full_advance:           626, 
-                        required:               true, 
+                        start_connector_length: 500,
+                        end_connector_length:   0,
+                        full_advance:           626,
+                        required:               true,
                     },
                 ],
             }),
@@ -715,29 +715,29 @@ lazy_static! {
             ],
         });
         m.insert(0x221C, GlyphVariants { // uni221C
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE915, // uni221C.base
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE901, // uni221A.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE90C, // uni221A.top
-                        start_connector_length: 600, 
-                        end_connector_length:   0, 
-                        full_advance:           626, 
-                        required:               true, 
+                        start_connector_length: 600,
+                        end_connector_length:   0,
+                        full_advance:           626,
+                        required:               true,
                     },
                 ],
             }),
@@ -749,22 +749,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2223, GlyphVariants { // uni2223
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2223, // uni2223
-                        start_connector_length: 293, 
-                        end_connector_length:   293, 
-                        full_advance:           879, 
-                        required:               true, 
+                        start_connector_length: 293,
+                        end_connector_length:   293,
+                        full_advance:           879,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2223, // uni2223
-                        start_connector_length: 293, 
-                        end_connector_length:   293, 
-                        full_advance:           879, 
-                        required:               false, 
+                        start_connector_length: 293,
+                        end_connector_length:   293,
+                        full_advance:           879,
+                        required:               false,
                     },
                 ],
             }),
@@ -772,22 +772,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2225, GlyphVariants { // uni2225
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2225, // uni2225
-                        start_connector_length: 293, 
-                        end_connector_length:   293, 
-                        full_advance:           879, 
-                        required:               true, 
+                        start_connector_length: 293,
+                        end_connector_length:   293,
+                        full_advance:           879,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2225, // uni2225
-                        start_connector_length: 293, 
-                        end_connector_length:   293, 
-                        full_advance:           879, 
-                        required:               false, 
+                        start_connector_length: 293,
+                        end_connector_length:   293,
+                        full_advance:           879,
+                        required:               false,
                     },
                 ],
             }),
@@ -886,22 +886,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2308, GlyphVariants { // uni2308
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 337, 
-                        end_connector_length:   337, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 337,
+                        end_connector_length:   337,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A1, // uni23A1
-                        start_connector_length: 335, 
-                        end_connector_length:   335, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 335,
+                        end_connector_length:   335,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -914,22 +914,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2309, GlyphVariants { // uni2309
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 337, 
-                        end_connector_length:   337, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 337,
+                        end_connector_length:   337,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A4, // uni23A4
-                        start_connector_length: 335, 
-                        end_connector_length:   335, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 335,
+                        end_connector_length:   335,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -942,22 +942,22 @@ lazy_static! {
             ],
         });
         m.insert(0x230A, GlyphVariants { // uni230A
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A3, // uni23A3
-                        start_connector_length: 335, 
-                        end_connector_length:   335, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 335,
+                        end_connector_length:   335,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A2, // uni23A2
-                        start_connector_length: 337, 
-                        end_connector_length:   337, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 337,
+                        end_connector_length:   337,
+                        full_advance:           1010,
+                        required:               false,
                     },
                 ],
             }),
@@ -970,22 +970,22 @@ lazy_static! {
             ],
         });
         m.insert(0x230B, GlyphVariants { // uni230B
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A6, // uni23A6
-                        start_connector_length: 335, 
-                        end_connector_length:   335, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 335,
+                        end_connector_length:   335,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A5, // uni23A5
-                        start_connector_length: 337, 
-                        end_connector_length:   337, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 337,
+                        end_connector_length:   337,
+                        full_advance:           1010,
+                        required:               false,
                     },
                 ],
             }),
@@ -998,29 +998,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23B0, GlyphVariants { // uni23B0
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AD, // uni23AD
-                        start_connector_length: 0, 
-                        end_connector_length:   90, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   90,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 90, 
-                        end_connector_length:   90, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 90,
+                        end_connector_length:   90,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A7, // uni23A7
-                        start_connector_length: 90, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 90,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -1029,29 +1029,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23B1, GlyphVariants { // uni23B1
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A9, // uni23A9
-                        start_connector_length: 0, 
-                        end_connector_length:   90, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   90,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AA, // uni23AA
-                        start_connector_length: 90, 
-                        end_connector_length:   90, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 90,
+                        end_connector_length:   90,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23AB, // uni23AB
-                        start_connector_length: 90, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 90,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -1140,29 +1140,29 @@ lazy_static! {
             ],
         });
         m.insert(0x27EE, GlyphVariants { // uni27EE
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239D, // uni239D
-                        start_connector_length: 0, 
-                        end_connector_length:   90, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   90,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239C, // uni239C
-                        start_connector_length: 90, 
-                        end_connector_length:   90, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 90,
+                        end_connector_length:   90,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239B, // uni239B
-                        start_connector_length: 90, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 90,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -1171,29 +1171,29 @@ lazy_static! {
             ],
         });
         m.insert(0x27EF, GlyphVariants { // uni27EF
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x23A0, // uni23A0
-                        start_connector_length: 0, 
-                        end_connector_length:   90, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   90,
+                        full_advance:           1005,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239F, // uni239F
-                        start_connector_length: 90, 
-                        end_connector_length:   90, 
-                        full_advance:           1010, 
-                        required:               false, 
+                        start_connector_length: 90,
+                        end_connector_length:   90,
+                        full_advance:           1010,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x239E, // uni239E
-                        start_connector_length: 90, 
-                        end_connector_length:   0, 
-                        full_advance:           1005, 
-                        required:               true, 
+                        start_connector_length: 90,
+                        end_connector_length:   0,
+                        full_advance:           1005,
+                        required:               true,
                     },
                 ],
             }),
@@ -1202,22 +1202,22 @@ lazy_static! {
             ],
         });
         m.insert(0x27F0, GlyphVariants { // uni27F0
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x27F0, // uni27F0
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -1225,22 +1225,22 @@ lazy_static! {
             ],
         });
         m.insert(0x27F1, GlyphVariants { // uni27F1
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x27F1, // uni27F1
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -1248,22 +1248,22 @@ lazy_static! {
             ],
         });
         m.insert(0x290A, GlyphVariants { // uni290A
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x290A, // uni290A
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
@@ -1271,22 +1271,22 @@ lazy_static! {
             ],
         });
         m.insert(0x290B, GlyphVariants { // uni290B
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x290B, // uni290B
-                        start_connector_length: 273, 
-                        end_connector_length:   273, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 273,
+                        end_connector_length:   273,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: 101, 
-                        end_connector_length:   101, 
-                        full_advance:           304, 
-                        required:               false, 
+                        start_connector_length: 101,
+                        end_connector_length:   101,
+                        full_advance:           304,
+                        required:               false,
                     },
                 ],
             }),
@@ -1294,22 +1294,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2980, GlyphVariants { // uni2980
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2980, // uni2980
-                        start_connector_length: 0, 
-                        end_connector_length:   400, 
-                        full_advance:           879, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   400,
+                        full_advance:           879,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2980, // uni2980
-                        start_connector_length: 400, 
-                        end_connector_length:   0, 
-                        full_advance:           879, 
-                        required:               false, 
+                        start_connector_length: 400,
+                        end_connector_length:   0,
+                        full_advance:           879,
+                        required:               false,
                     },
                 ],
             }),
@@ -1579,22 +1579,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2AF4, GlyphVariants { // uni2AF4
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: 295, 
-                        end_connector_length:   295, 
-                        full_advance:           884, 
-                        required:               true, 
+                        start_connector_length: 295,
+                        end_connector_length:   295,
+                        full_advance:           884,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: 295, 
-                        end_connector_length:   295, 
-                        full_advance:           884, 
-                        required:               false, 
+                        start_connector_length: 295,
+                        end_connector_length:   295,
+                        full_advance:           884,
+                        required:               false,
                     },
                 ],
             }),
@@ -1967,29 +1967,29 @@ lazy_static! {
             ],
         });
         m.insert(0xE902, GlyphVariants { // uni221A.rtlm
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE903, // uni221A.rtlm.bot
-                        start_connector_length: 0, 
-                        end_connector_length:   600, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   600,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE904, // uni221A.rtlm.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE908, // uni221A.rtlm.top
-                        start_connector_length: 500, 
-                        end_connector_length:   0, 
-                        full_advance:           626, 
-                        required:               true, 
+                        start_connector_length: 500,
+                        end_connector_length:   0,
+                        full_advance:           626,
+                        required:               true,
                     },
                 ],
             }),
@@ -2065,22 +2065,22 @@ lazy_static! {
             ],
         });
         m.insert(0x305, GlyphVariants { // uni0305
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE855, // uni0305.size1
-                        start_connector_length: 0, 
-                        end_connector_length:   1000, 
-                        full_advance:           1000, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   1000,
+                        full_advance:           1000,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE855, // uni0305.size1
-                        start_connector_length: 1000, 
-                        end_connector_length:   0, 
-                        full_advance:           1000, 
-                        required:               false, 
+                        start_connector_length: 1000,
+                        end_connector_length:   0,
+                        full_advance:           1000,
+                        required:               false,
                     },
                 ],
             }),
@@ -2116,22 +2116,22 @@ lazy_static! {
             ],
         });
         m.insert(0x332, GlyphVariants { // uni0332
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE864, // uni0332.size1
-                        start_connector_length: 0, 
-                        end_connector_length:   1000, 
-                        full_advance:           1000, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   1000,
+                        full_advance:           1000,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE864, // uni0332.size1
-                        start_connector_length: 1000, 
-                        end_connector_length:   0, 
-                        full_advance:           1000, 
-                        required:               false, 
+                        start_connector_length: 1000,
+                        end_connector_length:   0,
+                        full_advance:           1000,
+                        required:               false,
                     },
                 ],
             }),
@@ -2145,29 +2145,29 @@ lazy_static! {
             ],
         });
         m.insert(0x34D, GlyphVariants { // uni034D
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20EE, // uni20EE
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20EF, // uni20EF
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2187,22 +2187,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20D0, GlyphVariants { // uni20D0
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D0, // uni20D0
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   0,
+                        full_advance:           300,
+                        required:               false,
                     },
                 ],
             }),
@@ -2211,22 +2211,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20D1, GlyphVariants { // uni20D1
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D1, // uni20D1
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2235,22 +2235,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20D6, GlyphVariants { // uni20D6
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D6, // uni20D6
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   0,
+                        full_advance:           300,
+                        required:               false,
                     },
                 ],
             }),
@@ -2259,22 +2259,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20D7, GlyphVariants { // uni20D7
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D7, // uni20D7
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2283,29 +2283,29 @@ lazy_static! {
             ],
         });
         m.insert(0x20E1, GlyphVariants { // uni20E1
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D6, // uni20D6
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20D7, // uni20D7
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2314,29 +2314,29 @@ lazy_static! {
             ],
         });
         m.insert(0x20E9, GlyphVariants { // uni20E9
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CB, // uni20E9.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   50, 
-                        full_advance:           154, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   50,
+                        full_advance:           154,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CA, // uni20E9.ex
-                        start_connector_length: 50, 
-                        end_connector_length:   50, 
-                        full_advance:           200, 
-                        required:               false, 
+                        start_connector_length: 50,
+                        end_connector_length:   50,
+                        full_advance:           200,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CC, // uni20E9.rt
-                        start_connector_length: 50, 
-                        end_connector_length:   0, 
-                        full_advance:           154, 
-                        required:               true, 
+                        start_connector_length: 50,
+                        end_connector_length:   0,
+                        full_advance:           154,
+                        required:               true,
                     },
                 ],
             }),
@@ -2345,22 +2345,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20EC, GlyphVariants { // uni20EC
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20EC, // uni20EC
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2369,22 +2369,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20ED, GlyphVariants { // uni20ED
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20ED, // uni20ED
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   0,
+                        full_advance:           300,
+                        required:               false,
                     },
                 ],
             }),
@@ -2393,22 +2393,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20EE, GlyphVariants { // uni20EE
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20EE, // uni20EE
-                        start_connector_length: 0, 
-                        end_connector_length:   350, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   350,
+                        full_advance:           436,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 300, 
-                        end_connector_length:   0, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 300,
+                        end_connector_length:   0,
+                        full_advance:           300,
+                        required:               false,
                     },
                 ],
             }),
@@ -2417,22 +2417,22 @@ lazy_static! {
             ],
         });
         m.insert(0x20EF, GlyphVariants { // uni20EF
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   300, 
-                        full_advance:           300, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   300,
+                        full_advance:           300,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x20EF, // uni20EF
-                        start_connector_length: 350, 
-                        end_connector_length:   0, 
-                        full_advance:           436, 
-                        required:               true, 
+                        start_connector_length: 350,
+                        end_connector_length:   0,
+                        full_advance:           436,
+                        required:               true,
                     },
                 ],
             }),
@@ -2441,22 +2441,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2190, GlyphVariants { // uni2190
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
                 ],
             }),
@@ -2464,22 +2464,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2192, GlyphVariants { // uni2192
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
                 ],
             }),
@@ -2487,29 +2487,29 @@ lazy_static! {
             ],
         });
         m.insert(0x2194, GlyphVariants { // uni2194
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
                 ],
             }),
@@ -2517,29 +2517,29 @@ lazy_static! {
             ],
         });
         m.insert(0x21A4, GlyphVariants { // uni21A4
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2190, // uni2190
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x27DE, // uni27DE
-                        start_connector_length: 488, 
-                        end_connector_length:   488, 
-                        full_advance:           1464, 
-                        required:               true, 
+                        start_connector_length: 488,
+                        end_connector_length:   488,
+                        full_advance:           1464,
+                        required:               true,
                     },
                 ],
             }),
@@ -2547,29 +2547,29 @@ lazy_static! {
             ],
         });
         m.insert(0x21A6, GlyphVariants { // uni21A6
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x27DD, // uni27DD
-                        start_connector_length: 488, 
-                        end_connector_length:   488, 
-                        full_advance:           1464, 
-                        required:               true, 
+                        start_connector_length: 488,
+                        end_connector_length:   488,
+                        full_advance:           1464,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2192, // uni2192
-                        start_connector_length: 262, 
-                        end_connector_length:   262, 
-                        full_advance:           786, 
-                        required:               true, 
+                        start_connector_length: 262,
+                        end_connector_length:   262,
+                        full_advance:           786,
+                        required:               true,
                     },
                 ],
             }),
@@ -2577,22 +2577,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21BC, GlyphVariants { // uni21BC
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21BC, // uni21BC
-                        start_connector_length: 282, 
-                        end_connector_length:   282, 
-                        full_advance:           847, 
-                        required:               true, 
+                        start_connector_length: 282,
+                        end_connector_length:   282,
+                        full_advance:           847,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
                 ],
             }),
@@ -2600,22 +2600,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21BD, GlyphVariants { // uni21BD
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21BD, // uni21BD
-                        start_connector_length: 282, 
-                        end_connector_length:   282, 
-                        full_advance:           847, 
-                        required:               true, 
+                        start_connector_length: 282,
+                        end_connector_length:   282,
+                        full_advance:           847,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
                 ],
             }),
@@ -2623,22 +2623,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21C0, GlyphVariants { // uni21C0
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: 105, 
-                        end_connector_length:   105, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 105,
+                        end_connector_length:   105,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21C0, // uni21C0
-                        start_connector_length: 282, 
-                        end_connector_length:   282, 
-                        full_advance:           847, 
-                        required:               true, 
+                        start_connector_length: 282,
+                        end_connector_length:   282,
+                        full_advance:           847,
+                        required:               true,
                     },
                 ],
             }),
@@ -2646,22 +2646,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21D0, GlyphVariants { // uni21D0
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D0, // uni21D0
-                        start_connector_length: 269, 
-                        end_connector_length:   269, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 269,
+                        end_connector_length:   269,
+                        full_advance:           806,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 145, 
-                        end_connector_length:   145, 
-                        full_advance:           435, 
-                        required:               false, 
+                        start_connector_length: 145,
+                        end_connector_length:   145,
+                        full_advance:           435,
+                        required:               false,
                     },
                 ],
             }),
@@ -2669,22 +2669,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21D2, GlyphVariants { // uni21D2
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 145, 
-                        end_connector_length:   145, 
-                        full_advance:           435, 
-                        required:               false, 
+                        start_connector_length: 145,
+                        end_connector_length:   145,
+                        full_advance:           435,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D2, // uni21D2
-                        start_connector_length: 269, 
-                        end_connector_length:   269, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 269,
+                        end_connector_length:   269,
+                        full_advance:           806,
+                        required:               true,
                     },
                 ],
             }),
@@ -2692,29 +2692,29 @@ lazy_static! {
             ],
         });
         m.insert(0x21D4, GlyphVariants { // uni21D4
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D0, // uni21D0
-                        start_connector_length: 269, 
-                        end_connector_length:   269, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 269,
+                        end_connector_length:   269,
+                        full_advance:           806,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: 145, 
-                        end_connector_length:   145, 
-                        full_advance:           435, 
-                        required:               false, 
+                        start_connector_length: 145,
+                        end_connector_length:   145,
+                        full_advance:           435,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21D2, // uni21D2
-                        start_connector_length: 269, 
-                        end_connector_length:   269, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 269,
+                        end_connector_length:   269,
+                        full_advance:           806,
+                        required:               true,
                     },
                 ],
             }),
@@ -2722,22 +2722,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21DA, GlyphVariants { // uni21DA
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21DA, // uni21DA
-                        start_connector_length: 0, 
-                        end_connector_length:   50, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   50,
+                        full_advance:           806,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: 50, 
-                        end_connector_length:   0, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 50,
+                        end_connector_length:   0,
+                        full_advance:           315,
+                        required:               false,
                     },
                 ],
             }),
@@ -2745,22 +2745,22 @@ lazy_static! {
             ],
         });
         m.insert(0x21DB, GlyphVariants { // uni21DB
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   50, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   50,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x21DB, // uni21DB
-                        start_connector_length: 50, 
-                        end_connector_length:   0, 
-                        full_advance:           806, 
-                        required:               true, 
+                        start_connector_length: 50,
+                        end_connector_length:   0,
+                        full_advance:           806,
+                        required:               true,
                     },
                 ],
             }),
@@ -2768,29 +2768,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23B4, GlyphVariants { // uni23B4
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9A6, // uni23B4.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   618, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   618,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9A5, // uni23B4.ex
-                        start_connector_length: 212, 
-                        end_connector_length:   212, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 212,
+                        end_connector_length:   212,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9A7, // uni23B4.rt
-                        start_connector_length: 618, 
-                        end_connector_length:   0, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 618,
+                        end_connector_length:   0,
+                        full_advance:           1855,
+                        required:               true,
                     },
                 ],
             }),
@@ -2804,29 +2804,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23B5, GlyphVariants { // uni23B5
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9AE, // uni23B5.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   618, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   618,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9AD, // uni23B5.ex
-                        start_connector_length: 212, 
-                        end_connector_length:   212, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 212,
+                        end_connector_length:   212,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9AF, // uni23B5.rt
-                        start_connector_length: 618, 
-                        end_connector_length:   0, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 618,
+                        end_connector_length:   0,
+                        full_advance:           1855,
+                        required:               true,
                     },
                 ],
             }),
@@ -2840,29 +2840,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23DC, GlyphVariants { // uni23DC
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9B6, // uni23DC.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   618, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   618,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9B5, // uni23DC.ex
-                        start_connector_length: 212, 
-                        end_connector_length:   212, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 212,
+                        end_connector_length:   212,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9B7, // uni23DC.rt
-                        start_connector_length: 618, 
-                        end_connector_length:   0, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 618,
+                        end_connector_length:   0,
+                        full_advance:           1855,
+                        required:               true,
                     },
                 ],
             }),
@@ -2876,29 +2876,29 @@ lazy_static! {
             ],
         });
         m.insert(0x23DD, GlyphVariants { // uni23DD
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9BE, // uni23DD.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   618, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   618,
+                        full_advance:           1855,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9BD, // uni23DD.ex
-                        start_connector_length: 212, 
-                        end_connector_length:   212, 
-                        full_advance:           635, 
-                        required:               false, 
+                        start_connector_length: 212,
+                        end_connector_length:   212,
+                        full_advance:           635,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9BF, // uni23DD.rt
-                        start_connector_length: 618, 
-                        end_connector_length:   0, 
-                        full_advance:           1855, 
-                        required:               true, 
+                        start_connector_length: 618,
+                        end_connector_length:   0,
+                        full_advance:           1855,
+                        required:               true,
                     },
                 ],
             }),
@@ -2912,43 +2912,43 @@ lazy_static! {
             ],
         });
         m.insert(0x23DE, GlyphVariants { // uni23DE
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9C6, // uni23DE.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   311, 
-                        full_advance:           933, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   311,
+                        full_advance:           933,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: 109, 
-                        end_connector_length:   109, 
-                        full_advance:           327, 
-                        required:               false, 
+                        start_connector_length: 109,
+                        end_connector_length:   109,
+                        full_advance:           327,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9C7, // uni23DE.mid
-                        start_connector_length: 621, 
-                        end_connector_length:   621, 
-                        full_advance:           1864, 
-                        required:               true, 
+                        start_connector_length: 621,
+                        end_connector_length:   621,
+                        full_advance:           1864,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: 109, 
-                        end_connector_length:   109, 
-                        full_advance:           327, 
-                        required:               false, 
+                        start_connector_length: 109,
+                        end_connector_length:   109,
+                        full_advance:           327,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9C8, // uni23DE.rt
-                        start_connector_length: 311, 
-                        end_connector_length:   0, 
-                        full_advance:           933, 
-                        required:               true, 
+                        start_connector_length: 311,
+                        end_connector_length:   0,
+                        full_advance:           933,
+                        required:               true,
                     },
                 ],
             }),
@@ -2962,43 +2962,43 @@ lazy_static! {
             ],
         });
         m.insert(0x23DF, GlyphVariants { // uni23DF
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9CF, // uni23DF.lt
-                        start_connector_length: 0, 
-                        end_connector_length:   311, 
-                        full_advance:           933, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   311,
+                        full_advance:           933,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: 109, 
-                        end_connector_length:   109, 
-                        full_advance:           327, 
-                        required:               false, 
+                        start_connector_length: 109,
+                        end_connector_length:   109,
+                        full_advance:           327,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9D0, // uni23DF.mid
-                        start_connector_length: 621, 
-                        end_connector_length:   621, 
-                        full_advance:           1864, 
-                        required:               true, 
+                        start_connector_length: 621,
+                        end_connector_length:   621,
+                        full_advance:           1864,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: 109, 
-                        end_connector_length:   109, 
-                        full_advance:           327, 
-                        required:               false, 
+                        start_connector_length: 109,
+                        end_connector_length:   109,
+                        full_advance:           327,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xE9D1, // uni23DF.rt
-                        start_connector_length: 311, 
-                        end_connector_length:   0, 
-                        full_advance:           933, 
-                        required:               true, 
+                        start_connector_length: 311,
+                        end_connector_length:   0,
+                        full_advance:           933,
+                        required:               true,
                     },
                 ],
             }),
@@ -3034,22 +3034,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2B45, GlyphVariants { // uni2B45
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2B45, // uni2B45
-                        start_connector_length: 0, 
-                        end_connector_length:   50, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 0,
+                        end_connector_length:   50,
+                        full_advance:           818,
+                        required:               true,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: 50, 
-                        end_connector_length:   0, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 50,
+                        end_connector_length:   0,
+                        full_advance:           315,
+                        required:               false,
                     },
                 ],
             }),
@@ -3057,22 +3057,22 @@ lazy_static! {
             ],
         });
         m.insert(0x2B46, GlyphVariants { // uni2B46
-            constructable: Some(ConstructableGlyph { 
-                italics_correction: 0, 
+            constructable: Some(ConstructableGlyph {
+                italics_correction: 0,
                 parts: vec![
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: 0, 
-                        end_connector_length:   50, 
-                        full_advance:           315, 
-                        required:               false, 
+                        start_connector_length: 0,
+                        end_connector_length:   50,
+                        full_advance:           315,
+                        required:               false,
                     },
-                    GlyphPart { 
+                    GlyphPart {
                         unicode:                0x2B46, // uni2B46
-                        start_connector_length: 50, 
-                        end_connector_length:   0, 
-                        full_advance:           818, 
-                        required:               true, 
+                        start_connector_length: 50,
+                        end_connector_length:   0,
+                        full_advance:           818,
+                        required:               true,
                     },
                 ],
             }),
