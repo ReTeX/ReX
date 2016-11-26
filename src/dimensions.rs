@@ -36,7 +36,7 @@ pub enum Unit {
 }
 
 // At some point in time, everything will be in Pixels for computer display renderings.
-#[derive(Copy, Clone, Debug, Default, PartialEq)]
+#[derive(Copy, Clone, Debug, Default, PartialOrd, PartialEq)]
 pub struct Pixels(pub f64);
 
 use std::ops::Deref;

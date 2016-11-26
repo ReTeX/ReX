@@ -214,6 +214,17 @@ impl Style {
             _   => Unit::Font(CONSTANTS.superscript_shift_up_cramped as f64),
         }
     }
+
+    fn cramped(&self) -> bool {
+        match *self {
+            Style::Display |
+            Style::Text |
+            Style::Script |
+            Style::ScriptScript
+                => false,
+            _   => true,
+        }
+    }
 }
 
 trait ToPixels {
