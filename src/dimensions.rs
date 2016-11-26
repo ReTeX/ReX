@@ -1,26 +1,8 @@
-// Units of measurements
-//
-// pt - point - physical unit: 1/72 inch.
-// sp - scaled point - 65536 sp -> 1pt  (1/2^16).
-// em - An em is a unit in the field of typography,
-//      equal to the currently specified point size.
-//      For example, one em in a 16-point typeface is 16 points.
-//
-// DesignUnits - Specifies the font metric to be converted to device units.
-//               This value can be any font metric, including the width of a
-//               character or the ascender value for an entire font.
-//
-// DeviceUnits - Specifies the DesignUnits font metric converted to device units.
-//               This value is in the same units as the value specified for DeviceResolution.
-//
-// DeviceResolution - Specifies number of device units (pixels) per inch.
-//                    Typical values might be 300 for a laser printer or 96 for a VGA screen.
-
-/// Font independent units of measurment
-
-// Recommended units for screen: em, px.
-// Recommended units for print: em, cm, mm, in, pt, pc
-// Not recommended for screen: Absolute (pt, cm, mm, in, pc)
+use std::convert::From;
+use std::cmp::{PartialOrd, PartialEq};
+use std::fmt;
+use std::fmt::{Display, Debug};
+use std::ops::{Add, AddAssign, Deref, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Unit {
@@ -35,17 +17,118 @@ pub enum Unit {
     Px(f64),
 }
 
+pub trait Unital: Copy + Clone + Default +
+    Display + Debug +
+    Add + AddAssign +
+    Mul + MulAssign +
+    PartialOrd + PartialEq +
+    Sub + SubAssign +
+    Into<f64> { }
+
+impl Unital for u32 {}
+impl Unital for i16 {}
+impl Unital for u16 {}
+
+#[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default)]
+pub struct FontUnit<U: Unital>(pub U);
+
+impl<U: Unital> Add for FontUnit<U>
+    where U: Add<Output = U>
+{
+    type Output = Self;
+    fn add(self, rhs: Self) -> Self {
+        FontUnit(self.0 + rhs.0)
+    }
+}
+
+impl<U: Unital> AddAssign for FontUnit<U>
+    where U: Add<Output = U>
+{
+    fn add_assign(&mut self, rhs: Self) {
+        self.0 = self.0 + rhs.0;
+    }
+}
+
+impl<U: Unital> Mul for FontUnit<U>
+    where U: Mul<Output = U>
+{
+    type Output = Self;
+    fn mul(self, rhs: Self) -> Self {
+        FontUnit(self.0 * rhs.0)
+    }
+}
+
+impl<U: Unital> MulAssign for FontUnit<U>
+    where U: Mul<Output = U>
+{
+    fn mul_assign(&mut self, rhs: Self) {
+        self.0 = self.0 * rhs.0;
+    }
+}
+
+impl<U: Unital> Sub for FontUnit<U>
+    where U: Sub<Output = U>
+{
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self {
+        FontUnit(self.0 - rhs.0)
+    }
+}
+
+impl<U: Unital> SubAssign for FontUnit<U>
+    where U: Sub<Output = U>
+{
+    fn sub_assign(&mut self, rhs: Self) {
+        self.0 = self.0 - rhs.0;
+    }
+}
+
+impl<U: Unital> Deref for FontUnit<U> {
+    type Target = U;
+    fn deref(&self) -> &U {
+        &self.0
+    }
+}
+
+impl<U: Unital> Display for FontUnit<U> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "FontUnit({})", self.0)
+    }
+}
+
+impl<U: Unital> From<FontUnit<U>> for Unit {
+    fn from(unit: FontUnit<U>) -> Unit {
+        Unit::Font(unit.0.into())
+    }
+}
+
+impl<U: Unital> From<FontUnit<U>> for f64 {
+    fn from(unit: FontUnit<U>) -> f64 {
+        unit.0.into()
+    }
+}
+
+macro_rules! implement_fontunit {
+    ( $($num:ty),* ) => {
+        $(
+            impl From<$num> for FontUnit<$num> {
+                fn from(u: $num) -> Self { FontUnit(u) }
+            }
+        )*
+    }
+}
+
+implement_fontunit!{ i16, u32 }
+
 // At some point in time, everything will be in Pixels for computer display renderings.
 #[derive(Copy, Clone, Debug, Default, PartialOrd, PartialEq)]
 pub struct Pixels(pub f64);
 
-use std::ops::Deref;
 impl Deref for Pixels {
     type Target = f64;
     fn deref(&self) -> &f64 { &self.0 }
 }
 
-use std::ops::{ Add, AddAssign, Mul, MulAssign, Sub };
 impl Add for Pixels {
     type Output = Pixels;
     fn add(self, rhs: Pixels) -> Pixels { Pixels(self.0 + rhs.0) }
@@ -94,8 +177,7 @@ impl Pixels {
     pub fn min(self, rhs: Pixels) -> Pixels { Pixels((*self).min(rhs.0)) }
 }
 
-use std::fmt;
-impl fmt::Display for Pixels {
+impl Display for Pixels {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", **self)
     }

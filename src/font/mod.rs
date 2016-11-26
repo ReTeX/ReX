@@ -1,14 +1,13 @@
 mod glyphs;
-mod constants;
 mod symbols;
 mod offsets;
 mod kerning;
+pub mod constants;
 pub mod variants;
 pub mod variant_tables;
 pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;
-pub use self::constants::{ CONSTANTS, UNITS_TO_EM };
 pub use self::symbols::SYMBOLS;
 pub use self::offsets::IsAtom;
 

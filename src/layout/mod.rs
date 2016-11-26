@@ -19,6 +19,10 @@ pub mod boundingbox;
 pub mod reduce;
 //pub mod builders;
 
+use dimensions::Unit;
+use dimensions::FontUnit;
+use dimensions::Unital;
+use font::constants;
 pub use self::boundingbox::BoundingBox;
 
 use spacing::Spacing;
@@ -187,7 +191,7 @@ impl Style {
     }
 
     fn font_scale(self) -> f64 {
-        use font::CONSTANTS;
+        use font::constants;
         match self {
             Style::Display |
             Style::DisplayCramped |
@@ -196,22 +200,21 @@ impl Style {
                 => 1f64,
             Style::Script |
             Style::ScriptCramped
-                => CONSTANTS.script_percent_scale_down as f64 / 100f64,
+                => f64::from(constants::SCRIPT_PERCENT_SCALE_DOWN) / 100f64,
             Style::ScriptScript |
             Style::ScriptScriptCramped
-                => CONSTANTS.script_script_percent_scale_down as f64 / 100f64,
+                => f64::from(constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN) / 100f64,
         }
     }
 
     fn sup_shift_up(self) -> Unit {
-        use font::CONSTANTS;
         match self {
             Style::Display |
             Style::Text |
             Style::Script |
             Style::ScriptScript
-                => Unit::Font(CONSTANTS.superscript_shift_up as f64),
-            _   => Unit::Font(CONSTANTS.superscript_shift_up_cramped as f64),
+                => constants::SUPERSCRIPT_SHIFT_UP.into(),
+            _   => constants::SUPERSCRIPT_SHIFT_UP_CRAMPED.into(),
         }
     }
 
@@ -227,18 +230,18 @@ impl Style {
     }
 }
 
-trait ToPixels {
+trait ToPixels: Sized {
     fn as_pixels(self, font_size: f64) -> Pixels;
+    fn scaled_pixels(self, font_size: f64, sty: Style) -> Pixels {
+        self.as_pixels(font_size) * sty.font_scale()
+    }
 }
-
-use font::UNITS_TO_EM;
-use dimensions::Unit;
 
 impl ToPixels for Unit {
     // TODO: You can't assign pt values to fonts with given `font_size: f64`
     fn as_pixels(self, font_size: f64) -> Pixels {
         Pixels(match self {
-            Unit::Font(u) => u / UNITS_TO_EM as f64 * font_size,
+            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * font_size,
             Unit::Em(u)   => u * font_size,
             Unit::Ex(u)   => u * font_size, // TODO: measure x width here
             Unit::Px(u)   => u
@@ -246,12 +249,8 @@ impl ToPixels for Unit {
     }
 }
 
-trait Scalable {
-     fn with_scale(self, sty: Style) -> Pixels;
-}
-
-impl Scalable for Pixels {
-    fn with_scale(self, sty: Style) -> Pixels {
-        self * sty.font_scale()
+impl<U: Unital> ToPixels for FontUnit<U> {
+    fn as_pixels(self, font_size: f64) -> Pixels {
+        Unit::from(self).as_pixels(font_size)
     }
 }

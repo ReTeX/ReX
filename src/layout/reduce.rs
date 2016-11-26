@@ -2,13 +2,13 @@ use super::{ LayoutNode, LayoutGlyph, Rule, HorizontalBox, VerticalBox, Style };
 
 use dimensions::{ Pixels, Unit };
 use font;
-use font::CONSTANTS;
+use font::constants::*;
 use font::glyph_metrics;
 use font::GLYPHS;
 use font::SYMBOLS;
 use font::variants::Variant;
 use font::variants::VariantGlyph;
-use layout::{ ToPixels, Scalable };
+use layout::ToPixels;
 use layout::boundingbox::Bounded;
 use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
@@ -95,7 +95,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
             if let Some(at) = node.atom_type() {
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
-                    let kern = sp.to_unit().as_pixels(FONT_SIZE).with_scale(style);
+                    let kern = sp.to_unit().scaled_pixels(FONT_SIZE, style);
                     layout.push(LayoutNode::Kern(kern));
                 }
             }
@@ -113,8 +113,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     // TODO: Only display style for now.  Change this.
                     // TODO: This should probably use `min op hieght` param.
                     let l_glyph = glyph.successor().into_layout_node(style);
-                    let axis_offset = Unit::Font(CONSTANTS.axis_height as f64)
-                        .as_pixels(FONT_SIZE).with_scale(style);
+                    let axis_offset = AXIS_HEIGHT
+                        .scaled_pixels(FONT_SIZE, style);
                     let shift_down = 0.5 * ( l_glyph.get_height() + l_glyph.get_depth() ) - axis_offset;
                     layout.push(vbox!(vec![l_glyph], offset: shift_down));
                 } else {
@@ -128,16 +128,16 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
             ParseNode::Rule(rule) =>
                 layout.push(LayoutNode::Rule(Rule {
-                    width:  rule.width .as_pixels(FONT_SIZE).with_scale(style),
-                    height: rule.height.as_pixels(FONT_SIZE).with_scale(style),
+                    width:  rule.width .scaled_pixels(FONT_SIZE, style),
+                    height: rule.height.scaled_pixels(FONT_SIZE, style),
                     depth:  Pixels(0f64),
                 })),
 
             ParseNode::Kerning(kern) =>
-                layout.push(LayoutNode::Kern(kern.as_pixels(FONT_SIZE).with_scale(style))),
+                layout.push(LayoutNode::Kern(kern.scaled_pixels(FONT_SIZE, style))),
 
             ParseNode::Spacing(sp) => {
-                let kern = sp.to_unit().as_pixels(FONT_SIZE).with_scale(style);
+                let kern = sp.to_unit().scaled_pixels(FONT_SIZE, style);
                 layout.push(LayoutNode::Kern(kern));
             }
 
@@ -149,12 +149,10 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
                 let contents = hbox!(reduce(&mut rad.inner.clone(), style));
 
-                let rule_thickness = Unit::Font(CONSTANTS.radical_rule_thickness as f64)
-                    .as_pixels(FONT_SIZE).with_scale(style);
-                let extra_ascender = Unit::Font(CONSTANTS.radical_extra_ascender as f64)
-                    .as_pixels(FONT_SIZE).with_scale(style);
+                let rule_thickness = RADICAL_RULE_THICKNESS.scaled_pixels(FONT_SIZE, style);
+                let extra_ascender = RADICAL_EXTRA_ASCENDER.scaled_pixels(FONT_SIZE, style);
                 let height = glyph.height()
-                    .as_pixels(FONT_SIZE).with_scale(style);
+                    .scaled_pixels(FONT_SIZE, style);
                 let kerning = height
                     - contents.get_height()
                     - rule_thickness
@@ -181,14 +179,12 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 // First we calculate the vertical positions of the scripts,
                 // by starting with the default positions (these are called)
                 // the standard positions in the OpenType specification.
-                let mut super_up = Unit::Font(match style.cramped() {
-                    true  => CONSTANTS.superscript_shift_up_cramped,
-                    false => CONSTANTS.superscript_shift_up,
-                } as f64).as_pixels(FONT_SIZE);
+                let mut super_up = match style.cramped() {
+                    true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
+                    false => SUPERSCRIPT_SHIFT_UP,
+                }.as_pixels(FONT_SIZE);
 
-                let mut sub_down = Unit::Font(
-                    CONSTANTS.subscript_shift_down as f64)
-                    .as_pixels(FONT_SIZE);
+                let mut sub_down = SUBSCRIPT_SHIFT_DOWN.as_pixels(FONT_SIZE);
 
                 println!("Initial ({}, {})", super_up, sub_down);
 
@@ -200,9 +196,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
 
                 let base_height = script_base.get_height();
-                let drop_max = Unit::Font(
-                    CONSTANTS.superscript_baseline_drop_max as f64)
-                    .as_pixels(FONT_SIZE);
+                let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX.as_pixels(FONT_SIZE);
                 if base_height - super_up > drop_max {
                     super_up = base_height - drop_max;
                 }
@@ -210,9 +204,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 println!("BH: {}, DMAX: {}", base_height, drop_max);
 
                 let base_depth = script_base.get_depth();
-                let drop_min = Unit::Font(
-                    CONSTANTS.subscript_baseline_drop_min as f64)
-                    .as_pixels(FONT_SIZE);
+                let drop_min = SUBSCRIPT_BASELINE_DROP_MIN.as_pixels(FONT_SIZE);
                 if base_depth + sub_down < drop_min {
                     sub_down = base_depth - drop_min;
                 }
@@ -230,11 +222,11 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 //         - superscript_bottom_min: 125,
 
                 // let bottom_min = Unit::Font(
-                //     CONSTANTS.superscript_bottom_max_with_subscript as f64)
+                //     superscript_bottom_max_with_subscript as f64)
                 //     .as_pixels(FONT_SIZE);
 
                 // let top_max = Unit::Font(
-                //     CONSTANTS.subscript_top_max as f64).as_pixels(FONT_SIZE);
+                //     subscript_top_max as f64).as_pixels(FONT_SIZE);
 
                 // if super_up < bottom_min { super_up = bottom_min }
                 // if sub_down >
@@ -246,7 +238,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         if let ParseNode::Symbol(sym) = **bx {
                             let glyph = font::glyph_metrics(sym.unicode);
                             Unit::Font(glyph.italics as f64)
-                                .as_pixels(FONT_SIZE).with_scale(style)
+                                .scaled_pixels(FONT_SIZE, style)
                         } else { Pixels(0.0) }
                     } else { Pixels(0.0) };
 
@@ -290,7 +282,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                             if instr.overlap != 0.0 {
                                 let unit = Unit::Font(-instr.overlap);
                                 let kern = unit
-                                    .as_pixels(FONT_SIZE).with_scale(style);
+                                    .scaled_pixels(FONT_SIZE, style);
                                 contents.push(LayoutNode::Kern(kern));
                             }
                         }
@@ -314,9 +306,9 @@ impl IntoLayoutNode for font::Glyph {
     fn into_layout_node(&self, style: Style) -> LayoutNode {
         LayoutNode::Glyph(LayoutGlyph {
             scale:   style.font_scale(),
-            height:  self.height() .as_pixels(FONT_SIZE).with_scale(style),
-            depth:   self.depth()  .as_pixels(FONT_SIZE).with_scale(style),
-            advance: self.advance().as_pixels(FONT_SIZE).with_scale(style),
+            height:  self.height() .scaled_pixels(FONT_SIZE, style),
+            depth:   self.depth()  .scaled_pixels(FONT_SIZE, style),
+            advance: self.advance().scaled_pixels(FONT_SIZE, style),
             unicode: self.unicode,
         })
     }
