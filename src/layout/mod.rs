@@ -24,16 +24,15 @@ use dimensions::FontUnit;
 use dimensions::Unital;
 use font::constants;
 pub use self::boundingbox::BoundingBox;
+use ::std::ops::Deref;
 
-use spacing::Spacing;
 use dimensions::Pixels;
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub enum LayoutNode {
     HorizontalBox (HorizontalBox),
     VerticalBox   (VerticalBox),
     Glyph         (LayoutGlyph),
-    Space         (Spacing),
     Rule          (Rule),
     Kern          (Pixels),
 }
@@ -76,7 +75,6 @@ pub struct HorizontalBox {
     pub alignment: Alignment,
 }
 
-use ::std::ops::Deref;
 impl Deref for HorizontalBox {
     type Target = [LayoutNode];
     fn deref(&self) -> &Self::Target {
@@ -101,19 +99,40 @@ impl Deref for VerticalBox {
 use std::fmt;
 impl fmt::Debug for VerticalBox {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "contents: {:?}, offset: {:.1}", self.contents, *self.offset)
+        if self.offset == Pixels(0.0) {
+            write!(f, "VerticalBox({:?})", self.contents)
+        } else {
+            write!(f, "VerticalBox({:?}, offset: {:.1})", self.contents, *self.offset)
+        }
     }
 }
 
 impl fmt::Debug for HorizontalBox {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "contents: {:?}", self.contents)
+        write!(f, "HorizontalBox({:?})", self.contents)
     }
 }
 
 impl fmt::Debug for LayoutGlyph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "unicode: 0x{:X}, height: {:.1}, depth: {:.1}", self.unicode, *self.height, *self.depth)
+        write!(f, "LayoutGlyph(0x{:X}, height: {:.1}, depth: {:.1})", self.unicode, *self.height, *self.depth)
+    }
+}
+
+impl fmt::Debug for LayoutNode {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            LayoutNode::HorizontalBox(ref hb) =>
+                write!(f, "{:?}", hb),
+            LayoutNode::VerticalBox(ref vb) =>
+                write!(f, "{:?}", vb),
+            LayoutNode::Glyph(ref gly) =>
+                write!(f, "{:?}", gly),
+            LayoutNode::Rule(r) =>
+                write!(f, "{:?}", r),
+            LayoutNode::Kern(p) =>
+                write!(f, "Kern({:.1})", p.0),
+        }
     }
 }
 

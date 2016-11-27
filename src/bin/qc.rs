@@ -19,7 +19,7 @@ fn main() {
     let mut p = parse(&input).unwrap();
     //println!("Parse: {:?}", p);
     let r = reduce(&mut p, Style::Display);
-    println!("Reduce: {:?}", r);
+    println!("Reduce: {:#?}", r);
 
     let output = Renderer::new(r).render();
     let mut f = File::create("test.svg").unwrap();

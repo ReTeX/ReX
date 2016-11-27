@@ -144,10 +144,11 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
-                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode]; // TODO: variants?
+                let contents = hbox!(reduce(&mut rad.inner.clone(), style));
+
+                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
                 layout.push(glyph.into_layout_node(style));
 
-                let contents = hbox!(reduce(&mut rad.inner.clone(), style));
 
                 let rule_thickness = RADICAL_RULE_THICKNESS.scaled_pixels(FONT_SIZE, style);
                 let extra_ascender = RADICAL_EXTRA_ASCENDER.scaled_pixels(FONT_SIZE, style);
@@ -174,45 +175,66 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 // Vertical position of the script is calculated.  This depends on the following
                 // information: (see page 26 of https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf)
 
-                use std::boxed::Box;
+                // Before we start calculating layout, we layout the contents
+                // of the base and scripts.  These dimensions will be needed.
+                let base = match scripts.base {
+                    Some(ref b) => reduce(&mut [ *b.clone() ], style),
+                    None    => vec![],
+                };
 
-                // First we calculate the vertical positions of the scripts,
-                // by starting with the default positions (these are called)
-                // the standard positions in the OpenType specification.
-                let mut super_up = match style.cramped() {
-                    true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
-                    false => SUPERSCRIPT_SHIFT_UP,
-                }.as_pixels(FONT_SIZE);
+                // We calculate the vertical positions of the scripts.  The `adjust_up`
+                // variable will describe how far we need to adjust the superscript up.
+                let mut italics_correction = Pixels(0.0);
+                let adjust_up = if let Some(_) = scripts.superscript {
+                    // We start with default values provided from the font.  These are called
+                    // the standard positions in the OpenType specification.
+                    let mut default = match style.cramped() {
+                        true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
+                        false => SUPERSCRIPT_SHIFT_UP,
+                    }.scaled_pixels(FONT_SIZE, style);
 
-                let mut sub_down = SUBSCRIPT_SHIFT_DOWN.as_pixels(FONT_SIZE);
+                    // Next we check to see if the vertical shift meets the minimum
+                    // clearance relative to the base.
+                    let height   = base.get_height();
+                    let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX
+                        .scaled_pixels(FONT_SIZE, style);
 
-                println!("Initial ({}, {})", super_up, sub_down);
+                    if height - default > drop_max {
+                        default = height - drop_max;
+                    }
 
-                // Next we check to see if the scripts meet the minimum
-                // clearance requirements relative to the base. If it
-                // doesn't, then adjust the baseline shifts for each script.
-                // TODO: There must be a beter way to handle the Scripts nodes.
-                let script_base = reduce(&mut [ *scripts.base.clone()
-                    .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
+                    // For superscripts we need to calculate the italics correction
+                    // if the base is simply a symbol.
+                    // TODO: This can probably be cleaned up a bit.
+                    if let Some(ref bx) = scripts.base {
+                        if let ParseNode::Symbol(sym) = **bx {
+                            let glyph = glyph_metrics(sym.unicode);
+                            italics_correction = Unit::Font(glyph.italics as f64)
+                                .scaled_pixels(FONT_SIZE, style)
+                        }
+                    }
 
-                let base_height = script_base.get_height();
-                let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX.as_pixels(FONT_SIZE);
-                if base_height - super_up > drop_max {
-                    super_up = base_height - drop_max;
-                }
+                    default
+                } else { Pixels(0.0) };
 
-                println!("BH: {}, DMAX: {}", base_height, drop_max);
+                // We calculate the vertical position of the subscripts.  The `adjust_down`
+                // variable will describe how far we need to adjust the subscript down.
+                let adjust_down = if let Some(_) = scripts.subscript {
+                    // We start with the default values provided from the font.
+                    let mut default = SUBSCRIPT_SHIFT_DOWN.scaled_pixels(FONT_SIZE, style);
 
-                let base_depth = script_base.get_depth();
-                let drop_min = SUBSCRIPT_BASELINE_DROP_MIN.as_pixels(FONT_SIZE);
-                if base_depth + sub_down < drop_min {
-                    sub_down = base_depth - drop_min;
-                }
+                    let depth = -1. * base.get_depth();
+                    let drop_min = SUBSCRIPT_BASELINE_DROP_MIN
+                        .scaled_pixels(FONT_SIZE, style);
 
-                println!("BD: {}, DMIN: {}", base_depth, drop_min);
+                    if default - depth < drop_min {
+                        default = drop_min + depth;
+                    }
 
-                println!("Min clearance ({}, {})", super_up, sub_down);
+                    default
+                } else { Pixels(0.0) };
 
+                // TODO: Also check for collisions.
                 // Next we check that the superscript isn't too far down
                 // and that the subscript isn't too far up.
                 //     - CONSTNATS:
@@ -221,50 +243,40 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 //         - superscript_bottom_max_with_subscript: 400,
                 //         - superscript_bottom_min: 125,
 
-                // let bottom_min = Unit::Font(
-                //     superscript_bottom_max_with_subscript as f64)
-                //     .as_pixels(FONT_SIZE);
+                // Now they we've calculated the drop down/up,
+                // we need to calculate the spacing between the
+                // subscript and superscript.
 
-                // let top_max = Unit::Font(
-                //     subscript_top_max as f64).as_pixels(FONT_SIZE);
+                let mut contents = vec![];
 
-                // if super_up < bottom_min { super_up = bottom_min }
-                // if sub_down >
+                if let Some(ref sub) = scripts.subscript {
+                    let style  = style.subscript_variant();
+                    let script = reduce(&mut [ *sub.clone() ], style);
 
-                layout.push(hbox!(script_base));
-
-                let italics_correction =
-                    if let Some(ref bx) = scripts.base {
-                        if let ParseNode::Symbol(sym) = **bx {
-                            let glyph = font::glyph_metrics(sym.unicode);
-                            Unit::Font(glyph.italics as f64)
-                                .scaled_pixels(FONT_SIZE, style)
-                        } else { Pixels(0.0) }
-                    } else { Pixels(0.0) };
-
-                let style = style.superscript_variant();
-                let mut super_script = reduce(&mut [ *scripts.superscript.clone()
-                    .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style);
-
-                if italics_correction != Pixels(0.0) {
-                    super_script.insert(0, LayoutNode::Kern(italics_correction));
+                    contents.push(hbox!(script));
                 }
 
-                let style = style.subscript_variant();
-                let sub_script = hbox!(reduce(&mut [ *scripts.subscript.clone()
-                    .unwrap_or(Box::new(ParseNode::Group(vec![]))) ], style));
+                if let Some(ref s) = scripts.superscript {
+                    let style = style.superscript_variant();
+                    let mut script = reduce(&mut [ *s.clone() ], style);
 
-                if scripts.subscript.is_none() {
-                    sub_down = Pixels(0.0);
+                    if italics_correction != Pixels(0.0) {
+                        script.insert(0, LayoutNode::Kern(italics_correction));
+                    }
+
+                    let corrected_adjust =
+                        adjust_up - contents.get_height() + adjust_down;
+
+                    contents.insert(0, LayoutNode::Kern(corrected_adjust));
+                    contents.insert(0,
+                        hbox!(vec![
+                            LayoutNode::Kern(italics_correction),
+                            hbox!(script)
+                        ]));
                 }
 
-                let super_script = hbox!(super_script);
-
-                layout.push(vbox!(vec![
-                        super_script,
-                        LayoutNode::Kern(super_up),
-                        sub_script,
-                    ], offset: sub_down));
+                layout.push(hbox!(base));
+                layout.push(vbox!(contents, offset: adjust_down));
             },
 
             ParseNode::Extend(code, u) => {
@@ -311,5 +323,31 @@ impl IntoLayoutNode for font::Glyph {
             advance: self.advance().scaled_pixels(FONT_SIZE, style),
             unicode: self.unicode,
         })
+    }
+}
+
+impl IntoLayoutNode for VariantGlyph {
+    fn into_layout_node(&self, style: Style) -> LayoutNode {
+        match *self {
+            VariantGlyph::Replacement(g) => {
+                let glyph = font::glyph_metrics(g.unicode);
+                glyph.into_layout_node(style)
+            },
+
+            VariantGlyph::Constructable(c) => {
+                let mut contents: Vec<LayoutNode> = Vec::new();
+                for instr in c.iter().rev() {
+                    contents.push(instr.glyph.into_layout_node(style));
+                    if instr.overlap != 0.0 {
+                        let unit = Unit::Font(-instr.overlap);
+                        let kern = unit
+                            .scaled_pixels(FONT_SIZE, style);
+                        contents.push(LayoutNode::Kern(kern));
+                    }
+                }
+
+                vbox!(contents)
+            },
+        }
     }
 }

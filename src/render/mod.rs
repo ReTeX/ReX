@@ -85,8 +85,6 @@ impl Renderer {
                 let gw = gly.advance;
                 width += gw;
             },
-            LayoutNode::Space(_) =>
-                width += node.get_width(),
             LayoutNode::Rule(rule) => {
                 result += &format!(RULE_TEMPLATE!(),
                     width, height - rule.height, rule.width, rule.height);
@@ -124,8 +122,6 @@ impl Renderer {
                     rule.width, rule.height);
                 height += rule.height;
             },
-            LayoutNode::Space(_) =>
-                height += node.get_width(),
             LayoutNode::HorizontalBox(ref hbox) => {
                 result += &format!(G_TEMPLATE!(), width, height);
                 result += &self.render_hbox(&hbox.contents);

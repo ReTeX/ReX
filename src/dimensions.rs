@@ -2,7 +2,7 @@ use std::convert::From;
 use std::cmp::{PartialOrd, PartialEq};
 use std::fmt;
 use std::fmt::{Display, Debug};
-use std::ops::{Add, AddAssign, Deref, Mul, MulAssign, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Deref, Div, Mul, MulAssign, Sub, SubAssign};
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Unit {
@@ -170,6 +170,11 @@ impl Mul<Pixels> for f64 {
 
 impl MulAssign for Pixels {
     fn mul_assign(&mut self, rhs: Pixels) { *self = *self * rhs; }
+}
+
+impl Div<f64> for Pixels {
+    type Output = Pixels;
+    fn div(self, rhs: f64) -> Pixels { Pixels(self.0 / rhs) }
 }
 
 impl Pixels {

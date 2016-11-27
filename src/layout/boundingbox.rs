@@ -120,7 +120,6 @@ impl Bounded for LayoutNode {
             LayoutNode::HorizontalBox(ref hbox) => hbox.bounding_box(),
             LayoutNode::VerticalBox(ref vbox)   => vbox.bounding_box(),
             LayoutNode::Glyph(ref gly)          => gly.bounding_box(),
-            LayoutNode::Space(ref sp)           => sp.bounding_box(),
             LayoutNode::Rule(ref rule)          => rule.bounding_box(),
             LayoutNode::Kern(k)                 =>
                 BoundingBox { width: k, height: k, depth: Pixels(0f64) },
