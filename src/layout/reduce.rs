@@ -136,11 +136,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
             ParseNode::Kerning(kern) =>
                 layout.push(LayoutNode::Kern(kern.scaled_pixels(FONT_SIZE, style))),
 
-            ParseNode::Spacing(sp) => {
-                let kern = sp.to_unit().scaled_pixels(FONT_SIZE, style);
-                layout.push(LayoutNode::Kern(kern));
-            }
-
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
@@ -171,7 +166,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     - ascender
                     - offset;
 
-                layout.push(vbox!(vec![hbox![vec![glyph]]], offset: offset));
+                layout.push(vbox!(vec![glyph], offset: offset));
                 layout.push(vbox!(vec![
                         LayoutNode::Kern(ascender),
                         LayoutNode::Rule(Rule {
@@ -195,10 +190,23 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     None    => vec![],
                 };
 
+                let mut sup = match scripts.superscript {
+                    Some(ref b) => reduce(&mut [ *b.clone() ], style.superscript_variant()),
+                    None        => vec![],
+                };
+
+                let sub = match scripts.subscript {
+                    Some(ref b) => reduce(&mut [ *b.clone() ], style.subscript_variant()),
+                    None        => vec![],
+                };
+
                 // We calculate the vertical positions of the scripts.  The `adjust_up`
                 // variable will describe how far we need to adjust the superscript up.
                 let mut italics_correction = Pixels(0.0);
-                let adjust_up = if let Some(_) = scripts.superscript {
+                let mut adjust_up          = Pixels(0.0);
+                let mut adjust_down        = Pixels(0.0);
+
+               if let Some(_) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
                     // the standard positions in the OpenType specification.
                     let mut default = match style.cramped() {
@@ -216,6 +224,12 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         default = height - drop_max;
                     }
 
+                    // Next we check that the bottom of the superscript is far enough
+                    // from the bottom of the base
+                    if sup.get_depth() + default < SUPERSCRIPT_BOTTOM_MIN.scaled_pixels(FONT_SIZE, style) {
+                        default = SUPERSCRIPT_BOTTOM_MIN.scaled_pixels(FONT_SIZE, style) - sup.get_depth();
+                    }
+
                     // For superscripts we need to calculate the italics correction
                     // if the base is simply a symbol.
                     // TODO: This can probably be cleaned up a bit.
@@ -227,12 +241,12 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         }
                     }
 
-                    default
-                } else { Pixels(0.0) };
+                    adjust_up = default
+                }
 
                 // We calculate the vertical position of the subscripts.  The `adjust_down`
                 // variable will describe how far we need to adjust the subscript down.
-                let adjust_down = if let Some(_) = scripts.subscript {
+                if let Some(_) = scripts.subscript {
                     // We start with the default values provided from the font.
                     let mut default = SUBSCRIPT_SHIFT_DOWN.scaled_pixels(FONT_SIZE, style);
 
@@ -244,44 +258,43 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         default = drop_min + depth;
                     }
 
-                    default
-                } else { Pixels(0.0) };
+                    if sub.get_height() - default > SUBSCRIPT_TOP_MAX.scaled_pixels(FONT_SIZE, style) {
+                        default = sub.get_height() - SUBSCRIPT_TOP_MAX.scaled_pixels(FONT_SIZE, style);
+                    }
 
-                // TODO: Also check for collisions.
-                // Next we check that the superscript isn't too far down
-                // and that the subscript isn't too far up.
-                //     - CONSTNATS:
-                //         - sub_superscript_gap_min: 264,
-                //         - subscript_top_max: 400,
-                //         - superscript_bottom_max_with_subscript: 400,
-                //         - superscript_bottom_min: 125,
-
-                // Now they we've calculated the drop down/up,
-                // we need to calculate the spacing between the
-                // subscript and superscript.
-
-                let mut contents = vec![];
-
-                if let Some(ref sub) = scripts.subscript {
-                    let style  = style.subscript_variant();
-                    let script = reduce(&mut [ *sub.clone() ], style);
-
-                    contents.push(hbox!(script));
+                    adjust_down = default;
                 }
 
-                if let Some(ref s) = scripts.superscript {
-                    let style = style.superscript_variant();
-                    let mut script = reduce(&mut [ *s.clone() ], style);
+                //     - CONSTNATS:
+                //         - superscript_bottom_max_with_subscript: 400,
+                //     The maximum level to which the (ink) bottom of superscript can be
+                //     pushed to increase the gap between superscript and subscript, before
+                //     subscript starts being moved down. Suggested: 4/5 x-height.
+                // TODO: FIX THIS LAZY GAP FIX
+                let sup_bot = adjust_up + sup.get_depth();
+                let sub_top = sub.get_height() - adjust_down;
+                let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled_pixels(FONT_SIZE, style);
+                if sup_bot - sub_top < gap_min {
+                    let adjust = (gap_min - sup_bot + sub_top) / 2.0;
+                    adjust_up   += adjust;
+                    adjust_down += adjust;
+                }
 
+                let mut contents = vec![];
+                if !sup.is_empty() {
                     if italics_correction != Pixels(0.0) {
-                        script.insert(0, LayoutNode::Kern(italics_correction));
+                        sup.insert(0, LayoutNode::Kern(italics_correction));
                     }
 
                     let corrected_adjust =
-                        adjust_up - contents.get_height() + adjust_down;
+                        adjust_up - sub.get_height() + adjust_down;
 
-                    contents.insert(0, LayoutNode::Kern(corrected_adjust));
-                    contents.insert(0, hbox!(script));
+                    contents.push(hbox!(sup));
+                    contents.push(LayoutNode::Kern(corrected_adjust));
+                }
+
+                if !sub.is_empty() {
+                    contents.push(hbox!(sub));
                 }
 
                 layout.push(hbox!(base));

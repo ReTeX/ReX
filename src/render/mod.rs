@@ -128,6 +128,12 @@ impl Renderer {
                 result += "</g>";
                 height += hbox.get_height();
             },
+            LayoutNode::VerticalBox(ref vbox) => {
+                result += &format!(G_TEMPLATE!(), width, height /*+ vbox.offset*/);
+                result += &self.render_vbox(&vbox.contents);
+                result += "</g>";
+                height += vbox.get_height();
+            },
             LayoutNode::Kern(k) =>
                 height += k,
             LayoutNode::Glyph(ref gly) => {
@@ -147,7 +153,7 @@ impl Renderer {
                 let gw = gly.height;
                 height += gw;
             },
-            _ => (),
+            //_ => (),
         }}
 
         result
