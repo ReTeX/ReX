@@ -1,99 +1,50 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="482.77200000000005" height="128.152" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<rect x="0" y="0" width="458.77200000000005" height="72.792" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,51.624)">
-<rect x="0" y="0" width="26.400000000000002" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,21.168)">
-<text>𝑥</text></g>
-</g><g transform="translate(26.400000000000002,29.256)">
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75)"><text>2</text></g>
-</g></g></g></g><g transform="translate(45.60000000000001,51.624)">
-<rect x="0" y="0" width="26.400000000000002" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,21.168)">
-<text>𝑥</text></g>
-</g><g transform="translate(72.00000000000001,29.256)">
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="470.784" height="157.60000000000002" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="446.784" height="80.66400000000002" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,80.66400000000002)">
+<text>‖</text></g>
+<g transform="translate(25.104,80.66400000000002)">
+<text>𝑓</text></g>
+<g transform="translate(51.744,47.54400000000002)">
+<rect x="0" y="0" width="25.104" height="33.12" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,33.12)">
+<text>‖</text></g>
+</g><g transform="translate(76.848,68.32800000000002)">
 <g transform="translate(0,0)">
 <rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,24.336)">
 <g transform="scale(0.75)"><text>2</text></g>
-</g></g></g><g transform="translate(0,31.200000000000003)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75)"><text>2</text></g>
-</g></g></g><g transform="translate(90.00000000000001,40.007999999999996)">
-<rect x="0" y="0" width="21.168" height="32.784000000000006" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,32.784000000000006)">
-<text>ξ</text></g>
-</g><g transform="translate(111.168,29.256)">
+</g></g></g><g transform="translate(110.848,80.66400000000002)">
+<text>=</text></g>
+<g transform="translate(159.728,0)">
 <g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
+<rect x="0" y="0" width="51.648" height="123.12" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,123.12)">
+<text></text></g>
+</g></g><g transform="translate(211.376,0)">
+<rect x="0" y="0" width="235.40800000000002" height="3.168" fill="\#000"/><g transform="translate(0,14.208000000000007)">
+<rect x="0" y="0" width="235.40800000000002" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,0)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75)"><text>2</text></g>
-</g></g></g><g transform="translate(0,40.524)">
-<rect x="0" y="0" width="19.8" height="15.876" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,15.876)">
-<g transform="scale(0.75)"><text>𝑥</text></g>
-</g></g></g><g transform="translate(130.96800000000002,40.728)">
+<g transform="translate(0,96)">
+<text></text></g>
+</g><g transform="translate(62.480000000000004,34.392)">
 <rect x="0" y="0" width="26.64" height="32.064" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,32.064)">
 <text>𝑓</text></g>
-</g><g transform="translate(157.608,29.256)">
+</g><g transform="translate(89.12,28.056000000000004)">
 <g transform="translate(0,0)">
 <rect x="0" y="0" width="29.519999999999996" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(5.76,0)">
 <rect x="0" y="0" width="23.759999999999998" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(5.76,24.336)">
 <g transform="scale(0.75)"><text>2</text></g>
-</g></g></g><g transform="translate(0,31.488)">
-<rect x="0" y="0" width="19.512" height="24.048000000000002" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.048000000000002)">
-<g transform="scale(0.75)"><text>𝑘</text></g>
-</g></g></g><g transform="translate(187.128,6.3359999999999985)">
-<rect x="0" y="0" width="54.480000000000004" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<g transform="translate(0,96)">
-<text></text></g>
-</g></g><g transform="translate(241.608,0)">
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="35.28" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(8.64,0)">
-<rect x="0" y="0" width="26.64" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(8.64,24.336)">
-<g transform="scale(0.75)"><text>1</text></g>
-</g></g></g><g transform="translate(0,93.312)">
-<rect x="0" y="0" width="18" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75)"><text>0</text></g>
-</g></g></g><g transform="translate(310.584,25.992000000000004)">
-<rect x="0" y="0" width="62.016000000000005" height="46.8" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<g transform="translate(0,71.952)">
-<text></text></g>
-</g></g><g transform="translate(372.6,28.512000000000008)">
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="33.336" height="15.48" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="33.336" height="15.48" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="33.336" height="15.48" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,15.48)">
-<g transform="scale(0.75)"><text>∞</text></g>
-</g></g></g></g><g transform="translate(0,47.495999999999995)">
-<rect x="0" y="0" width="86.172" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,0)">
-<rect x="0" y="0" width="86.172" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(0,24.336)">
-<g transform="scale(0.75)"><text>𝑘</text></g>
-</g><g transform="translate(31.512,24.336)">
-<g transform="scale(0.75)"><text>=</text></g>
-</g><g transform="translate(68.172,24.336)">
-<g transform="scale(0.75)"><text>0</text></g>
-</g></g></g></g></g></g></svg>
+</g></g></g></g><g transform="translate(118.64,66.456)">
+<text>(</text></g>
+<g transform="translate(134.624,66.456)">
+<text>𝑥</text></g>
+<g transform="translate(161.024,66.456)">
+<text>)</text></g>
+<g transform="translate(185.008,66.456)">
+<text>d</text></g>
+<g transform="translate(209.008,66.456)">
+<text>𝑥</text></g>
+</g></g></g></g></svg>

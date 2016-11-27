@@ -5,3 +5,4 @@ Cargo.lock
 *.log
 *.aux
 *.svg
+test.svg

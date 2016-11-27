@@ -146,24 +146,37 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 let style = style.cramped_variant();
                 let contents = hbox!(reduce(&mut rad.inner.clone(), style));
 
-                let glyph = &GLYPHS[&SYMBOLS["sqrt"].unicode];
-                layout.push(glyph.into_layout_node(style));
+                let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
+                let gap = match style.cramped() {
+                    true  => RADICAL_VERTICAL_GAP,
+                    false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
+                };
 
-                let rule_thickness = RADICAL_RULE_THICKNESS.scaled_pixels(FONT_SIZE, style);
-                let extra_ascender = RADICAL_EXTRA_ASCENDER.scaled_pixels(FONT_SIZE, style);
-                let height = glyph.height()
-                    .scaled_pixels(FONT_SIZE, style);
-                let kerning = height
+                let clearance = (*contents.get_height() - *contents.get_depth())
+                    / FONT_SIZE * 1000.0     // Convert to font units
+                    + f64::from(gap)
+                    + f64::from(RADICAL_RULE_THICKNESS)
+                    + f64::from(RADICAL_EXTRA_ASCENDER); // Minimum gap
+
+                println!("Clearance: {}", clearance);
+
+                let glyph = sqrt.variant(clearance).into_layout_node(style);
+                let offset = -1.0 * contents.get_depth();
+                let ascender = RADICAL_EXTRA_ASCENDER.scaled_pixels(FONT_SIZE, style);
+                let rule = RADICAL_RULE_THICKNESS.scaled_pixels(FONT_SIZE, style);
+                let kerning = glyph.get_height()
                     - contents.get_height()
-                    - rule_thickness
-                    - extra_ascender;
+                    - rule
+                    - ascender
+                    - offset;
 
+                layout.push(vbox!(vec![hbox![vec![glyph]]], offset: offset));
                 layout.push(vbox!(vec![
-                        LayoutNode::Kern(extra_ascender),
+                        LayoutNode::Kern(ascender),
                         LayoutNode::Rule(Rule {
                             width:  contents.get_width(),
-                            height: rule_thickness,
+                            height: rule,
                             depth:  Pixels(0f64),
                         }),
                         LayoutNode::Kern(kerning),
@@ -334,7 +347,7 @@ impl IntoLayoutNode for VariantGlyph {
                 glyph.into_layout_node(style)
             },
 
-            VariantGlyph::Constructable(c) => {
+            VariantGlyph::Constructable(ref c) => {
                 let mut contents: Vec<LayoutNode> = Vec::new();
                 for instr in c.iter().rev() {
                     contents.push(instr.glyph.into_layout_node(style));
