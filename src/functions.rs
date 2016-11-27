@@ -52,7 +52,7 @@ macro_rules! required {
             result
         } else {
             panic!("Missing required argument!".to_string())
-        }        
+        }
     )
 }
 
@@ -100,10 +100,10 @@ impl TexCommand {
             TexCommand::Kerning(k) =>
                 Some(ParseNode::Kerning(k)),
             TexCommand::VExtend => {              // Only used for testing, for now.
-                let sym = required!(lex, { 
+                let sym = required!(lex, {
                     let c = lex.current;
                     lex.next();
-                    c 
+                    c
                 });
 
                 let code = if let Token::Symbol(ch) = sym {

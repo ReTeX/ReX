@@ -1,5 +1,5 @@
-<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="470.784" height="157.60000000000002" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
-<rect x="0" y="0" width="446.784" height="80.66400000000002" fill="none" stroke="blue" stroke-width="0.2"/>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="465.024" height="157.60000000000002" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="441.024" height="80.66400000000002" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,80.66400000000002)">
 <text>‖</text></g>
 <g transform="translate(25.104,80.66400000000002)">
@@ -21,8 +21,8 @@
 <g transform="translate(0,123.12)">
 <text></text></g>
 </g></g><g transform="translate(211.376,0)">
-<rect x="0" y="0" width="235.40800000000002" height="3.168" fill="\#000"/><g transform="translate(0,14.208000000000007)">
-<rect x="0" y="0" width="235.40800000000002" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
+<rect x="0" y="0" width="229.64800000000002" height="3.168" fill="\#000"/><g transform="translate(0,14.208000000000007)">
+<rect x="0" y="0" width="229.64800000000002" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,0)">
 <g transform="translate(0,96)">
 <text></text></g>
@@ -32,19 +32,17 @@
 <text>𝑓</text></g>
 </g><g transform="translate(89.12,28.056000000000004)">
 <g transform="translate(0,0)">
-<rect x="0" y="0" width="29.519999999999996" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
-<g transform="translate(5.76,0)">
 <rect x="0" y="0" width="23.759999999999998" height="24.336" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(5.76,24.336)">
 <g transform="scale(0.75)"><text>2</text></g>
-</g></g></g></g><g transform="translate(118.64,66.456)">
+</g></g></g><g transform="translate(112.88,66.456)">
 <text>(</text></g>
-<g transform="translate(134.624,66.456)">
+<g transform="translate(128.864,66.456)">
 <text>𝑥</text></g>
-<g transform="translate(161.024,66.456)">
+<g transform="translate(155.264,66.456)">
 <text>)</text></g>
-<g transform="translate(185.008,66.456)">
+<g transform="translate(179.24800000000002,66.456)">
 <text>d</text></g>
-<g transform="translate(209.008,66.456)">
+<g transform="translate(203.24800000000002,66.456)">
 <text>𝑥</text></g>
 </g></g></g></g></svg>

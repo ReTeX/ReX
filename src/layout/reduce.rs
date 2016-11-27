@@ -281,11 +281,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         adjust_up - contents.get_height() + adjust_down;
 
                     contents.insert(0, LayoutNode::Kern(corrected_adjust));
-                    contents.insert(0,
-                        hbox!(vec![
-                            LayoutNode::Kern(italics_correction),
-                            hbox!(script)
-                        ]));
+                    contents.insert(0, hbox!(script));
                 }
 
                 layout.push(hbox!(base));
