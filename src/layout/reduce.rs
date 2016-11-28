@@ -70,7 +70,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 Some(AtomType::Open) |
                 Some(AtomType::Punctuation) => {
                     nodes[idx].set_atom_type(AtomType::Alpha);
-                    println!("Chaing binary to ordinal {:?}", nodes[idx]);
                 },
                 _ => (),
             }
@@ -90,6 +89,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
     let mut prev_at: Option<AtomType> = None;
     let mut layout: Vec<LayoutNode> = Vec::with_capacity(nodes.len());
+    let mut skip = false;
     for node in nodes {
         if let Some(p_at) = prev_at {
             if let Some(at) = node.atom_type() {
@@ -109,17 +109,20 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 use parser::nodes::AtomType;
 
                 let glyph = font::glyph_metrics(sym.unicode);
-                if let AtomType::Operator(_) = sym.atom_type {
-                    // TODO: Only display style for now.  Change this.
-                    // TODO: This should probably use `min op hieght` param.
-                    let l_glyph = glyph.successor().into_layout_node(style);
-                    let axis_offset = AXIS_HEIGHT
-                        .scaled_pixels(FONT_SIZE, style);
-                    let shift_down = 0.5 * ( l_glyph.get_height() + l_glyph.get_depth() ) - axis_offset;
-                    layout.push(vbox!(vec![l_glyph], offset: shift_down));
-                } else {
-                    let glyph = font::glyph_metrics(sym.unicode);
-                    layout.push(glyph.into_layout_node(style));
+                match sym.atom_type {
+                    AtomType::Operator(_) => {
+                        // TODO: Only display style for now.  Change this.
+                        // TODO: This should probably use `min op hieght` param.
+                        let l_glyph = glyph.successor().into_layout_node(style);
+                        let axis_offset = AXIS_HEIGHT
+                            .scaled_pixels(FONT_SIZE, style);
+                        let shift_down = 0.5 * ( l_glyph.get_height() + l_glyph.get_depth() ) - axis_offset;
+                        layout.push(vbox!(vec![l_glyph], offset: shift_down));
+                    },
+                    _ => {
+                        let glyph = font::glyph_metrics(sym.unicode);
+                        layout.push(glyph.into_layout_node(style));
+                    },
                 }
             },
 
@@ -153,8 +156,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     + f64::from(gap)
                     + f64::from(RADICAL_RULE_THICKNESS)
                     + f64::from(RADICAL_EXTRA_ASCENDER); // Minimum gap
-
-                println!("Clearance: {}", clearance);
 
                 let glyph = sqrt.variant(clearance).into_layout_node(style);
                 let offset = -1.0 * contents.get_depth();
@@ -265,19 +266,16 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     adjust_down = default;
                 }
 
-                //     - CONSTNATS:
-                //         - superscript_bottom_max_with_subscript: 400,
-                //     The maximum level to which the (ink) bottom of superscript can be
-                //     pushed to increase the gap between superscript and subscript, before
-                //     subscript starts being moved down. Suggested: 4/5 x-height.
-                // TODO: FIX THIS LAZY GAP FIX
-                let sup_bot = adjust_up + sup.get_depth();
-                let sub_top = sub.get_height() - adjust_down;
-                let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled_pixels(FONT_SIZE, style);
-                if sup_bot - sub_top < gap_min {
-                    let adjust = (gap_min - sup_bot + sub_top) / 2.0;
-                    adjust_up   += adjust;
-                    adjust_down += adjust;
+                // TODO: FIX THIS LAZY GAP FIX, see (BottomMaxWithSubscript?)
+                if !sub.is_empty() && !sup.is_empty() {
+                    let sup_bot = adjust_up + sup.get_depth();
+                    let sub_top = sub.get_height() - adjust_down;
+                    let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled_pixels(FONT_SIZE, style);
+                    if sup_bot - sub_top < gap_min {
+                        let adjust = (gap_min - sup_bot + sub_top) / 2.0;
+                        adjust_up   += adjust;
+                        adjust_down += adjust;
+                    }
                 }
 
                 let mut contents = vec![];
@@ -325,11 +323,70 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 }
             },
 
+            ParseNode::Accent(ref acc) => {
+                // TODO: Account for bottom accents (accent flag?)
+                //   (LuaTeX) BottomAccent: The vertical placement of a bottom accent is
+                //               straight below the accentee, no correction takes place.
+
+                let nucleus = reduce(&mut [ *acc.nucleus.clone() ], style.cramped_variant());
+                let delta = nucleus.get_height().min(ACCENT_BASE_HEIGHT
+                    .scaled_pixels(FONT_SIZE, style));
+
+                let skew = if let Some(ref sym) = nucleus.is_symbol() {
+                    sym.attachment
+                } else { Pixels(0.0) };
+
+                // If the accent has an attachment correction point, we will
+                // align the attachment correction points of both the accent
+                // and accentee.  Otherwise, we will align the center of the
+                // accent with the attachment correction of the accentee.
+                let symbol  = glyph_metrics(acc.symbol.unicode);
+                let offset = if symbol.attachment != 0 {
+                    let accent_offset = symbol.attachment_offset()
+                        .scaled_pixels(FONT_SIZE, style);
+                    skew - accent_offset
+                } else {
+                    let offset_x = Unit::Font(symbol.bbox.0 as f64)
+                        .scaled_pixels(FONT_SIZE, style);
+                    let sym_width = Unit::Font((symbol.bbox.2 - symbol.bbox.0) as f64)
+                        .scaled_pixels(FONT_SIZE, style);
+
+                    -1.0 * offset_x         // correct for combining characters
+                        - 0.5 * ( nucleus.get_width() - sym_width)  // align centers
+                        + skew              // add skew for accentee
+                };
+
+                let symbol = symbol.into_layout_node(style);
+                println!("Nucleus: {}, Symbol: {}, Skew: {}", nucleus.get_width(), symbol.get_width(), skew);
+
+                layout.push(vbox!(vec![
+                    hbox!(vec![
+                        LayoutNode::Kern(offset),
+                        symbol,
+                    ]),
+                    LayoutNode::Kern(-1.0 * delta),
+                    hbox!(nucleus),
+                ]));
+            },
+
             _ => (),
        }
     }
 
     layout
+}
+
+trait IsSymbol {
+    fn is_symbol(&self) -> Option<LayoutGlyph>;
+}
+
+impl IsSymbol for [ LayoutNode ] {
+    fn is_symbol(&self) -> Option<LayoutGlyph> {
+        if self.len() != 1 { return None }
+        if let LayoutNode::Glyph(ref lg) = self[0] {
+            return Some(lg.clone())
+        } else { None }
+    }
 }
 
 trait IntoLayoutNode {
@@ -344,6 +401,8 @@ impl IntoLayoutNode for font::Glyph {
             depth:   self.depth()  .scaled_pixels(FONT_SIZE, style),
             advance: self.advance().scaled_pixels(FONT_SIZE, style),
             unicode: self.unicode,
+            attachment: self.attachment_offset().scaled_pixels(FONT_SIZE, style),
+            italics: self.italic_correction().scaled_pixels(FONT_SIZE, style),
         })
     }
 }

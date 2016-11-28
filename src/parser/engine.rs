@@ -235,7 +235,22 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
         Token::ControlSequence(cs) => {
             match SYMBOLS.get(cs).cloned() {
                 None => Ok(None),
-                Some(sym) => { lex.next(); Ok(Some(ParseNode::Symbol(sym))) },
+                Some(sym) => {
+                    lex.next();
+                    use parser::nodes::Accent;
+                    // If this symbol is an accent, we need to consume the next math field.
+                    if sym.atom_type == AtomType::Accent {
+//pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
+                        let nucleus = math_field(lex, local)
+                            .expect("No symbol following an accent!");
+                        Ok(Some(ParseNode::Accent(Accent {
+                            symbol:  sym,
+                            nucleus: Box::new(nucleus),
+                        })))
+                    } else {
+                        Ok(Some(ParseNode::Symbol(sym)))
+                    }
+                },
             }
         },
         Token::Symbol(c) => {

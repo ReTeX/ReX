@@ -17,27 +17,31 @@ pub struct BoundingBox {
 pub trait Bounded {
     fn bounding_box(&self) -> BoundingBox;
 
-    fn get_width(&self)  -> Pixels { self.bounding_box().width  }
+    fn get_width(&self)  -> Pixels { self.bounding_box().width }
     fn get_height(&self) -> Pixels { self.bounding_box().height }
-    fn get_depth(&self)  -> Pixels { self.bounding_box().depth  }
+    fn get_depth(&self)  -> Pixels { self.bounding_box().depth }
 }
 
 impl Bounded for Rule {
     fn bounding_box(&self) -> BoundingBox {
         BoundingBox {
-            width:  self.width,
+            width: self.width,
             height: self.height,
-            depth:  self.depth,
+            depth: self.depth,
         }
     }
+    fn get_width(&self)  -> Pixels { self.width  }
+    fn get_height(&self) -> Pixels { self.height }
+    fn get_depth(&self)  -> Pixels { self.depth  }
 }
 
-impl Bounded for HorizontalBox {
-    fn bounding_box(&self) -> BoundingBox  {
+// By default a [LayoutNode] is treated like a HorizontalBox
+impl<'a> Bounded for [LayoutNode] {
+    fn bounding_box(&self) -> BoundingBox {
         let mut width  = Pixels(0f64);
         let mut height = Pixels(0f64);
         let mut depth  = Pixels(0f64);
-        for bx in &self.contents {
+        for bx in self {
             width += bx.get_width();
             height = height.max(bx.get_height());
             depth  = depth.min(bx.get_depth());
@@ -48,6 +52,17 @@ impl Bounded for HorizontalBox {
             depth: depth,
         }
     }
+
+    fn get_width(&self)  -> Pixels { self.bounding_box().width  }
+    fn get_height(&self) -> Pixels { self.bounding_box().height }
+    fn get_depth(&self)  -> Pixels { self.bounding_box().depth  }
+}
+
+impl Bounded for HorizontalBox {
+    fn get_width(&self)  -> Pixels { self.contents.get_width() }
+    fn get_height(&self) -> Pixels { self.contents.get_height() }
+    fn get_depth(&self)  -> Pixels { self.contents.get_depth() }
+    fn bounding_box(&self) -> BoundingBox { self.contents.bounding_box() }
 }
 
 impl Bounded for VerticalBox {
@@ -66,24 +81,10 @@ impl Bounded for VerticalBox {
             depth: depth   - self.offset,
         }
     }
-}
 
-impl<'a> Bounded for [LayoutNode] {
-    fn bounding_box(&self) -> BoundingBox {
-        let mut width  = Pixels(0f64);
-        let mut height = Pixels(0f64);
-        let mut depth  = Pixels(0f64);
-        for bx in self {
-            width += bx.get_width();
-            height = height.max(bx.get_height());
-            depth  = depth.min(bx.get_depth());
-        }
-        BoundingBox {
-            width: width,
-            height: height,
-            depth: depth,
-        }
-    }
+    fn get_width(&self)  -> Pixels { self.bounding_box().width  }
+    fn get_height(&self) -> Pixels { self.bounding_box().height }
+    fn get_depth(&self)  -> Pixels { self.bounding_box().depth  }
 }
 
 impl Bounded for LayoutGlyph {

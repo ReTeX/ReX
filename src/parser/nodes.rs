@@ -56,6 +56,13 @@ pub enum ParseNode {
     Rule        (Rule),
     Kerning     (Unit),
     Extend      (u32, Unit),
+    Accent      (Accent),
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct Accent {
+    pub symbol:  Symbol,
+    pub nucleus: Box<ParseNode>,
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -74,11 +81,14 @@ impl IsAtom for ParseNode {
             ParseNode::Delimited(_)    => Some(AtomType::Fence),
             ParseNode::Radical(_)      => Some(AtomType::Alpha),
             ParseNode::GenFraction(_)  => Some(AtomType::Inner),
-            ParseNode::Scripts(_)      => Some(AtomType::Alpha), //TODO: Change to recursion
+            ParseNode::Scripts(Scripts { base: ref b, .. })
+                => if let Some(ref c) = *b { c.atom_type() } else { Some(AtomType::Alpha) },
+            ParseNode::Accent(Accent { nucleus: ref n, .. })
+                                       => n.atom_type(),
             ParseNode::Spacing(_)      => None,
             ParseNode::Rule(_)         => None,
             ParseNode::Kerning(_)      => None,
-            ParseNode::Extend(_, _)       => None,
+            ParseNode::Extend(_, _)    => None,
         }
     }
 }

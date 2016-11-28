@@ -54,3 +54,7 @@ lazy_static! {
 //         - Add the values together together
 //     - Horintal kern is applied to smallest of two results
 //       from previous step.
+
+// This algorithm doesn't make much sense, we will need to clarify some things here.
+// ie: We are applying the same amount of horizontal kern for _both_ the superscript
+//     and subscript?

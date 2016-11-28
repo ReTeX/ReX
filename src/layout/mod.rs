@@ -44,6 +44,8 @@ pub struct LayoutGlyph {
     pub depth:   Pixels,
     pub advance: Pixels,
     pub unicode: u32,
+    pub attachment: Pixels,
+    pub italics: Pixels,
 }
 
 #[derive(Copy, Clone, Debug)]
