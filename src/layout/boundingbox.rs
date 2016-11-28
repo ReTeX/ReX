@@ -97,24 +97,6 @@ impl Bounded for LayoutGlyph {
     }
 }
 
-use spacing::Spacing;
-impl Bounded for Spacing {
-    fn bounding_box(&self) -> BoundingBox {
-        let width = match *self {
-            Spacing::None   => Pixels(0f64),
-            Spacing::Thin   => Pixels(1_f64/6_f64),
-            Spacing::Medium => Pixels(2_f64/9_f64),
-            Spacing::Thick  => Pixels(3_f64/9_f64),
-        };
-
-        BoundingBox {
-            width:  width,
-            height: Pixels(0f64),
-            depth:  Pixels(0f64),
-        }
-    }
-}
-
 impl Bounded for LayoutNode {
     fn bounding_box(&self) -> BoundingBox {
         match *self {

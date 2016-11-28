@@ -12,9 +12,7 @@ use layout::ToPixels;
 use layout::boundingbox::Bounded;
 use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
-use spacing::atom_spacing;
-use spacing::Spacing;
-
+use layout::spacing::{atom_spacing, Spacing};
 
 macro_rules! hbox {
     ($contents:expr) => (
@@ -89,7 +87,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
     let mut prev_at: Option<AtomType> = None;
     let mut layout: Vec<LayoutNode> = Vec::with_capacity(nodes.len());
-    let mut skip = false;
     for node in nodes {
         if let Some(p_at) = prev_at {
             if let Some(at) = node.atom_type() {

@@ -1,7 +1,6 @@
 use phf;
 use font::Symbol;
 use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness };
-use spacing::Spacing;
 use lexer::Lexer;
 use parser;
 use parser::Locals;
@@ -33,9 +32,6 @@ pub enum TexCommand {
     DelimiterSize {
         atom_type: AtomType,
         size:      u8,
-    },
-    Spacing {
-        size: Spacing,
     },
     Kerning(Unit),
 }
@@ -82,8 +78,6 @@ impl TexCommand {
                 atom_type: at,
             } =>
                 Some(ParseNode::Symbol(parser::expect_type(lex, local, at)?)),
-            TexCommand::Spacing { size: sp } =>
-                Some(ParseNode::Spacing(sp)),
             TexCommand::Rule => {
                 lex.consume_whitespace();
                 let w = lex.dimension()?

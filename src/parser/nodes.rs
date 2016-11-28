@@ -42,8 +42,6 @@ pub struct Delimited {
 // TODO: It might be worth letting the `Group` variant
 //   to have an atomtype associated with it.  By default,
 //   it will be a `Ordinal`.
-
-use spacing::Spacing;
 #[derive(Debug, PartialEq, Clone)]
 pub enum ParseNode {
     Symbol      (Symbol),
@@ -52,7 +50,6 @@ pub enum ParseNode {
     Radical     (Radical),
     GenFraction (GenFraction),
     Scripts     (Scripts),
-    Spacing     (Spacing),
     Rule        (Rule),
     Kerning     (Unit),
     Extend      (u32, Unit),
@@ -85,7 +82,6 @@ impl IsAtom for ParseNode {
                 => if let Some(ref c) = *b { c.atom_type() } else { Some(AtomType::Alpha) },
             ParseNode::Accent(Accent { nucleus: ref n, .. })
                                        => n.atom_type(),
-            ParseNode::Spacing(_)      => None,
             ParseNode::Rule(_)         => None,
             ParseNode::Kerning(_)      => None,
             ParseNode::Extend(_, _)    => None,

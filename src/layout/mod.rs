@@ -17,16 +17,14 @@
 
 pub mod boundingbox;
 pub mod reduce;
-//pub mod builders;
+pub mod spacing;
 
-use dimensions::Unit;
-use dimensions::FontUnit;
-use dimensions::Unital;
-use font::constants;
 pub use self::boundingbox::BoundingBox;
-use ::std::ops::Deref;
 
-use dimensions::Pixels;
+use dimensions::{ FontUnit, Pixels, Unit, Unital };
+use font::constants;
+use std::ops::Deref;
+
 
 #[derive(Clone)]
 pub enum LayoutNode {
