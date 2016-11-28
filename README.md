@@ -19,4 +19,4 @@ Accents: '\hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave 
 
 Todo: Extendable horizontal accents.  Compensate for overshot from accents (see kerning)?
 
-![accents](accents.png)
+![accents](sample/accents.png)
