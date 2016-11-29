@@ -2,8 +2,8 @@
 // use parser::nodes::{ ParseNode };
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
-use layout::LayoutNode;
-use layout::boundingbox::Bounded;
+use layout::{ LayoutNode, Layout, LayoutVariant };
+//use layout::boundingbox::Bounded;
 use dimensions::Pixels;
 
 macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
@@ -20,7 +20,7 @@ struct Cursor {
 
 pub struct Renderer {
     cursor: Cursor,
-    nodes: Vec<LayoutNode>
+    layout: Layout,
 }
 
 pub const FONT_SIZE: f64 = 48.0;
@@ -30,7 +30,7 @@ const SVG_HEADER: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\
     <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
 
 impl Renderer {
-    pub fn new(nodes: Vec<LayoutNode>) -> Renderer {
+    pub fn new(layout: Layout) -> Renderer {
         let cursor = Cursor {
             x: LEFT_PADDING, // Left padding
             y: TOP_PADDING,  // Top  padding
@@ -38,37 +38,34 @@ impl Renderer {
 
         Renderer {
             cursor: cursor,
-            nodes: nodes,
+            layout: layout,
         }
     }
 
     pub fn render(&self) -> String {
-        let nodes = &self.nodes;
         let mut output = String::from(SVG_HEADER);
 
-        let width  = nodes.get_width()  + 2.0 * self.cursor.x;   // Left and right padding
-        let height = nodes.get_height() + 2.0 * self.cursor.y;   // Top and bot padding
-        let depth  = nodes.get_depth();
+        let width  = self.layout.width  + 2.0 * self.cursor.x;   // Left and right padding
+        let height = self.layout.height + 2.0 * self.cursor.y;   // Top and bot padding
+        let depth  = self.layout.depth;
 
         output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", FONT_SIZE);
 
         output += &format!(G_TEMPLATE!(), LEFT_PADDING, TOP_PADDING);
-        output += &self.render_hbox(&nodes);
+        output += &self.render_hbox(&self.layout.contents, self.layout.height, self.layout.width);
         output += "</g>";
         output += "</g></svg>";
         output
     }
 
-    pub fn render_hbox(&self, nodes: &[LayoutNode]) -> String {
+    pub fn render_hbox(&self, nodes: &[LayoutNode], height: Pixels, nodes_width: Pixels) -> String {
         let mut result = String::new();
-
-        let height = nodes.get_height();
         let mut width = Pixels(0.0);
 
-        result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes.get_width(), height);
+        result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes_width, height);
 
-        for node in nodes { match *node {
-            LayoutNode::Glyph(ref gly) => {
+        for node in nodes { match node.node {
+            LayoutVariant::Glyph(ref gly) => {
                 result += &format!(G_TEMPLATE!(), width, height);
                 //result += &format!(BBOX_TEMPLATE!(), 0, -gh, gw, gh-gd);
                 if gly.scale != 1f64 {
@@ -81,29 +78,27 @@ impl Renderer {
                 if gly.scale != 1f64 {
                     result += "</g>";
                 }
-
-                let gw = gly.advance;
-                width += gw;
+                width += node.width;
             },
-            LayoutNode::Rule(rule) => {
+            LayoutVariant::Rule => {
                 result += &format!(RULE_TEMPLATE!(),
-                    width, height - rule.height, rule.width, rule.height);
-                width += rule.width;
+                    width, height - node.height, node.width, node.height);
+                width += node.width;
             },
-            LayoutNode::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - vbox.get_height() /*+ vbox.offset*/);
+            LayoutVariant::VerticalBox(ref vbox) => {
+                result += &format!(G_TEMPLATE!(), width, height - node.height /*+ vbox.offset*/);
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
-                width += vbox.get_width();
+                width += node.width;
             },
-            LayoutNode::HorizontalBox(ref hbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - hbox.get_height());
-                result += &self.render_hbox(&hbox.contents);
+            LayoutVariant::HorizontalBox(ref hbox) => {
+                result += &format!(G_TEMPLATE!(), width, height - node.height);
+                result += &self.render_hbox(&hbox.contents, node.height, node.width);
                 result += "</g>";
-                width += hbox.get_width();
+                width += node.width;
             },
-            LayoutNode::Kern(k) =>
-                width += k,
+            LayoutVariant::Kern =>
+                width += node.width,
         }}
 
         result
@@ -115,29 +110,29 @@ impl Renderer {
         let mut height = Pixels(0.0);
         let width      = Pixels(0.0);
 
-        for node in nodes { match *node {
-            LayoutNode::Rule(rule) => {
+        for node in nodes { match node.node {
+            LayoutVariant::Rule => {
                 result += &format!(RULE_TEMPLATE!(),
-                    width, height - rule.height,
-                    rule.width, rule.height);
-                height += rule.height;
+                    width, height - node.height,
+                    node.width, node.height);
+                height += node.height;
             },
-            LayoutNode::HorizontalBox(ref hbox) => {
+            LayoutVariant::HorizontalBox(ref hbox) => {
                 result += &format!(G_TEMPLATE!(), width, height);
-                result += &self.render_hbox(&hbox.contents);
+                result += &self.render_hbox(&hbox.contents, node.height, node.width);
                 result += "</g>";
-                height += hbox.get_height();
+                height += node.height;
             },
-            LayoutNode::VerticalBox(ref vbox) => {
+            LayoutVariant::VerticalBox(ref vbox) => {
                 result += &format!(G_TEMPLATE!(), width, height /*+ vbox.offset*/);
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
-                height += vbox.get_height();
+                height += node.height;
             },
-            LayoutNode::Kern(k) =>
-                height += k,
-            LayoutNode::Glyph(ref gly) => {
-                result += &format!(G_TEMPLATE!(), width, height + gly.height);
+            LayoutVariant::Kern =>
+                height += node.height,
+            LayoutVariant::Glyph(ref gly) => {
+                result += &format!(G_TEMPLATE!(), width, height + node.height);
 
                 if gly.scale != 1f64 {
                     result += &format!(SCALE_TEMPLATE!(), gly.scale);
@@ -150,12 +145,11 @@ impl Renderer {
                     result += "</g>";
                 }
 
-                let gw = gly.height;
-                height += gw;
+                height += node.height;
             },
             //_ => (),
         }}
 
         result
-    }
+   }
 }

@@ -15,42 +15,110 @@
 //!
 //! The units used in layout boxes must be in pixels (as defined in CSS).
 
-pub mod boundingbox;
+#[macro_use]
+mod builders;
+
 pub mod reduce;
 pub mod spacing;
 
-pub use self::boundingbox::BoundingBox;
 
 use dimensions::{ FontUnit, Pixels, Unit, Unital };
 use font::constants;
 use std::ops::Deref;
+use std::fmt;
 
+// By default this will act as a horizontal box
+#[derive(Clone, Debug)]
+pub struct Layout {
+    pub contents:  Vec<LayoutNode>,
+    pub width:     Pixels,
+    pub height:    Pixels,
+    pub depth:     Pixels,
+    pub offset:    Pixels,
+    pub alignment: Alignment,
+}
+
+impl Layout {
+    pub fn as_node(self) -> LayoutNode {
+        LayoutNode {
+            width:  self.width,
+            height: self.height,
+            depth:  self.depth,
+            node: LayoutVariant::HorizontalBox(HorizontalBox {
+                contents:  self.contents,
+                offset:    self.offset,
+                alignment: self.alignment,
+            })
+        }
+    }
+
+    pub fn new() -> Layout {
+        Layout {
+            contents:  vec![],
+            width:     Pixels(0.0),
+            height:    Pixels(0.0),
+            depth:     Pixels(0.0),
+            offset:    Pixels(0.0),
+            alignment: Alignment::default(),
+        }
+    }
+
+    pub fn add_node(&mut self, node: LayoutNode) {
+        self.width += node.width;
+        self.height = self.height.max(node.height);
+        self.depth  = self.depth.min(node.depth);
+        self.contents.push(node);
+    }
+
+    pub fn set_offset(&mut self, offset: Pixels) {
+        self.offset = offset;
+    }
+
+    pub fn finalize(mut self) -> Layout {
+        self.depth  -= self.offset;
+        self.height -= self.offset;
+        self
+    }
+}
 
 #[derive(Clone)]
-pub enum LayoutNode {
+pub struct LayoutNode {
+    pub node:   LayoutVariant,
+    pub width:  Pixels,
+    pub height: Pixels,
+    pub depth:  Pixels,
+}
+
+#[derive(Clone)]
+pub enum LayoutVariant {
     HorizontalBox (HorizontalBox),
     VerticalBox   (VerticalBox),
     Glyph         (LayoutGlyph),
-    Rule          (Rule),
-    Kern          (Pixels),
+    Rule,
+    Kern,
+}
+
+#[derive(Clone, Default)]
+pub struct HorizontalBox {
+    pub contents:  Vec<LayoutNode>,
+    pub offset:    Pixels,
+    pub alignment: Alignment,
+}
+
+#[derive(Clone, Default)]
+pub struct VerticalBox {
+    pub contents:  Vec<LayoutNode>,
+    pub offset:    Pixels,
+    pub alignment: Alignment,
 }
 
 #[derive(Clone)]
 pub struct LayoutGlyph {
-    pub scale:   f64,
-    pub height:  Pixels,
-    pub depth:   Pixels,
-    pub advance: Pixels,
-    pub unicode: u32,
+    pub unicode:    u32,
+    pub scale:      f64,
+    pub offset:     Pixels,
     pub attachment: Pixels,
-    pub italics: Pixels,
-}
-
-#[derive(Copy, Clone, Debug)]
-pub struct Rule {
-    pub width:  Pixels,
-    pub height: Pixels,
-    pub depth:  Pixels,
+    pub italics:    Pixels,
 }
 
 #[allow(dead_code)]
@@ -69,24 +137,18 @@ impl Default for Alignment {
     }
 }
 
-#[derive(Clone, Default)]
-pub struct HorizontalBox {
-    pub contents: Vec<LayoutNode>,
-    pub alignment: Alignment,
-}
+//impl Deref for LayoutNode {
+//    type Target = LayoutNode;
+//    fn deref(&self) -> &Self::Target {
+//        &self.node
+//    }
+//}
 
 impl Deref for HorizontalBox {
     type Target = [LayoutNode];
     fn deref(&self) -> &Self::Target {
         &self.contents
     }
-}
-
-#[derive(Clone, Default)]
-pub struct VerticalBox {
-    pub contents:  Vec<LayoutNode>,
-    pub alignment: Alignment,
-    pub offset:    Pixels,
 }
 
 impl Deref for VerticalBox {
@@ -96,7 +158,6 @@ impl Deref for VerticalBox {
     }
 }
 
-use std::fmt;
 impl fmt::Debug for VerticalBox {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         if self.offset == Pixels(0.0) {
@@ -115,23 +176,28 @@ impl fmt::Debug for HorizontalBox {
 
 impl fmt::Debug for LayoutGlyph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "LayoutGlyph(0x{:X}, height: {:.1}, depth: {:.1})", self.unicode, *self.height, *self.depth)
+        write!(f, "LayoutGlyph(0x{:X})", self.unicode)
     }
 }
 
 impl fmt::Debug for LayoutNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            LayoutNode::HorizontalBox(ref hb) =>
-                write!(f, "{:?}", hb),
-            LayoutNode::VerticalBox(ref vb) =>
-                write!(f, "{:?}", vb),
-            LayoutNode::Glyph(ref gly) =>
-                write!(f, "{:?}", gly),
-            LayoutNode::Rule(r) =>
-                write!(f, "{:?}", r),
-            LayoutNode::Kern(p) =>
-                write!(f, "Kern({:.1})", p.0),
+        match self.node {
+            LayoutVariant::HorizontalBox(ref hb) =>
+                write!(f, "HBox({:?})", hb.contents),
+            LayoutVariant::VerticalBox(ref vb) =>
+                write!(f, "VBox({:?})", vb.contents),
+            LayoutVariant::Glyph(ref gly) =>
+                write!(f, "Glyph({:?})", gly),
+            LayoutVariant::Rule =>
+                write!(f, "Rule()"),
+            LayoutVariant::Kern => {
+                let kern = if self.width == Pixels(0.0) {
+                    self.height
+                } else { self.width };
+
+                write!(f, "Kern({:.1})", kern)
+            }
         }
     }
 }
@@ -249,27 +315,28 @@ impl Style {
     }
 }
 
+use render::FONT_SIZE;
 trait ToPixels: Sized {
-    fn as_pixels(self, font_size: f64) -> Pixels;
-    fn scaled_pixels(self, font_size: f64, sty: Style) -> Pixels {
-        self.as_pixels(font_size) * sty.font_scale()
+    fn as_pixels(self) -> Pixels;
+    fn scaled(self, sty: Style) -> Pixels {
+        self.as_pixels() * sty.font_scale()
     }
 }
 
 impl ToPixels for Unit {
     // TODO: You can't assign pt values to fonts with given `font_size: f64`
-    fn as_pixels(self, font_size: f64) -> Pixels {
+    fn as_pixels(self) -> Pixels {
         Pixels(match self {
-            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * font_size,
-            Unit::Em(u)   => u * font_size,
-            Unit::Ex(u)   => u * font_size, // TODO: measure x width here
+            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * FONT_SIZE,
+            Unit::Em(u)   => u * FONT_SIZE,
+            Unit::Ex(u)   => u * FONT_SIZE, // TODO: measure x width here
             Unit::Px(u)   => u
         })
     }
 }
 
 impl<U: Unital> ToPixels for FontUnit<U> {
-    fn as_pixels(self, font_size: f64) -> Pixels {
-        Unit::from(self).as_pixels(font_size)
+    fn as_pixels(self) -> Pixels {
+        Unit::from(self).as_pixels()
     }
 }

@@ -1,4 +1,5 @@
-use super::{ LayoutNode, LayoutGlyph, Rule, HorizontalBox, VerticalBox, Style };
+use super::builders;
+use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, HorizontalBox, VerticalBox, Style };
 
 use dimensions::{ Pixels, Unit };
 use font;
@@ -8,92 +9,30 @@ use font::GLYPHS;
 use font::SYMBOLS;
 use font::variants::Variant;
 use font::variants::VariantGlyph;
+use font::IsAtom;
 use layout::ToPixels;
-use layout::boundingbox::Bounded;
-use parser::nodes::{ ParseNode, AtomType };
+use parser::nodes::{ ParseNode, AtomType, Rule };
 use render::FONT_SIZE;
 use layout::spacing::{atom_spacing, Spacing};
-
-macro_rules! hbox {
-    ($contents:expr) => (
-        LayoutNode::HorizontalBox(HorizontalBox {
-            contents: $contents,
-            ..Default::default()
-        })
-    )
-}
-
-macro_rules! vbox {
-    ($contents:expr) => (
-        LayoutNode::VerticalBox(VerticalBox {
-            contents: $contents,
-            ..Default::default()
-        })
-    );
-    ($contents:expr, offset: $offset:expr) => (
-        LayoutNode::VerticalBox(VerticalBox {
-            contents: $contents,
-            offset:   $offset,
-            ..Default::default()
-        })
-    )
-}
 
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
-    // Rule (5), pg 442.  If first item is a Bin atom, change it
-    // to an Ordinal item.
-    use font::IsAtom;
-    if let Some(mut node) = nodes.get_mut(0) {
-        if node.atom_type() == Some(AtomType::Binary) {
-            node.set_atom_type(AtomType::Ordinal)
-        }
-    }
-
-    // Atom Changing Rules:
-    //   Rule 5:
-    //   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
-    //   Rule 6:
-    //   - Current in {Rel,Close,Punct} && Prev == Bin => Prev -> Ord.
-    for idx in 0..nodes.len() {
-        if nodes[idx].atom_type() == Some(AtomType::Binary)
-            && idx > 1 {
-            match nodes[idx - 1].atom_type() {
-                Some(AtomType::Binary) |
-                Some(AtomType::Operator(_)) |
-                Some(AtomType::Relation) |
-                Some(AtomType::Open) |
-                Some(AtomType::Punctuation) => {
-                    nodes[idx].set_atom_type(AtomType::Alpha);
-                },
-                _ => (),
-            }
-        }
-
-        if idx > 1
-            && nodes[idx - 1].atom_type() == Some(AtomType::Binary) {
-            match nodes[idx].atom_type() {
-                Some(AtomType::Relation) |
-                Some(AtomType::Close) |
-                Some(AtomType::Punctuation) =>
-                    nodes[idx - 1].set_atom_type(AtomType::Alpha),
-                _ => (),
-            }
-        }
-    }
+pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
+    use super::spacing::normalize_types;
+    normalize_types(nodes);
 
     let mut prev_at: Option<AtomType> = None;
-    let mut layout: Vec<LayoutNode> = Vec::with_capacity(nodes.len());
+    let mut layout = Layout::new();
+
     for node in nodes {
         if let Some(p_at) = prev_at {
             if let Some(at) = node.atom_type() {
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
-                    let kern = sp.to_unit().scaled_pixels(FONT_SIZE, style);
-                    layout.push(LayoutNode::Kern(kern));
+                    let kern = sp.to_unit().scaled(style);
+                    layout.add_node(kern!(horz: kern));
                 }
             }
         }
@@ -103,43 +42,35 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
         match *node {
             ParseNode::Symbol(sym) => {
-                use parser::nodes::AtomType;
-
                 let glyph = font::glyph_metrics(sym.unicode);
                 match sym.atom_type {
                     AtomType::Operator(_) => {
                         // TODO: Only display style for now.  Change this.
-                        // TODO: This should probably use `min op hieght` param.
-                        let l_glyph = glyph.successor().into_layout_node(style);
-                        let axis_offset = AXIS_HEIGHT
-                            .scaled_pixels(FONT_SIZE, style);
-                        let shift_down = 0.5 * ( l_glyph.get_height() + l_glyph.get_depth() ) - axis_offset;
-                        layout.push(vbox!(vec![l_glyph], offset: shift_down));
+                        // TODO: This should probably use `min op height` param.
+                        let mut largeop = glyph.successor().as_layout(style);
+                        let axis_offset = AXIS_HEIGHT.scaled(style);
+
+                        // Vertically center
+                        let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
+                        layout.add_node(vbox!(offset: shift; largeop));
                     },
-                    _ => {
-                        let glyph = font::glyph_metrics(sym.unicode);
-                        layout.push(glyph.into_layout_node(style));
-                    },
+                    _ => layout.add_node(glyph.as_layout(style)),
                 }
             },
 
             ParseNode::Group(ref mut gp) =>
-                layout.push(hbox!(reduce(&mut gp.clone(), style))),
+                layout.add_node(reduce(&mut gp.clone(), style).as_node()),
 
             ParseNode::Rule(rule) =>
-                layout.push(LayoutNode::Rule(Rule {
-                    width:  rule.width .scaled_pixels(FONT_SIZE, style),
-                    height: rule.height.scaled_pixels(FONT_SIZE, style),
-                    depth:  Pixels(0f64),
-                })),
+                layout.add_node(rule.as_layout(style)),
 
             ParseNode::Kerning(kern) =>
-                layout.push(LayoutNode::Kern(kern.scaled_pixels(FONT_SIZE, style))),
+                layout.add_node(kern!(horz: kern.scaled(style))),
 
             ParseNode::Radical(ref rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
-                let contents = hbox!(reduce(&mut rad.inner.clone(), style));
+                let contents = reduce(&mut rad.inner.clone(), style).as_node();
 
                 let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
@@ -148,33 +79,28 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
                 };
 
-                let clearance = (*contents.get_height() - *contents.get_depth())
+                let clearance = (*contents.height - *contents.depth)
                     / FONT_SIZE * 1000.0     // Convert to font units
                     + f64::from(gap)
                     + f64::from(RADICAL_RULE_THICKNESS)
                     + f64::from(RADICAL_EXTRA_ASCENDER); // Minimum gap
 
-                let glyph = sqrt.variant(clearance).into_layout_node(style);
-                let offset = -1.0 * contents.get_depth();
-                let ascender = RADICAL_EXTRA_ASCENDER.scaled_pixels(FONT_SIZE, style);
-                let rule = RADICAL_RULE_THICKNESS.scaled_pixels(FONT_SIZE, style);
-                let kerning = glyph.get_height()
-                    - contents.get_height()
-                    - rule
-                    - ascender
-                    - offset;
+                let glyph = sqrt.variant(clearance).as_layout(style);
+                let kerning = glyph.height
+                    - contents.height
+                    - RADICAL_RULE_THICKNESS.scaled(style)
+                    - RADICAL_EXTRA_ASCENDER.scaled(style)
+                    + contents.depth;
 
-                layout.push(vbox!(vec![glyph], offset: offset));
-                layout.push(vbox!(vec![
-                        LayoutNode::Kern(ascender),
-                        LayoutNode::Rule(Rule {
-                            width:  contents.get_width(),
-                            height: rule,
-                            depth:  Pixels(0f64),
-                        }),
-                        LayoutNode::Kern(kerning),
-                        contents,
-                    ]));
+                layout.add_node(vbox!(offset: -1.0 * contents.depth; glyph));
+                layout.add_node(vbox!(
+                        kern!(vert: RADICAL_EXTRA_ASCENDER.scaled(style)),
+                        rule!(
+                            width:  contents.width,
+                            height: RADICAL_RULE_THICKNESS.scaled(style)),
+                        kern!(vert: kerning),
+                        contents
+                    ));
             },
 
             ParseNode::Scripts(ref scripts) => {
@@ -185,17 +111,17 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 // of the base and scripts.  These dimensions will be needed.
                 let base = match scripts.base {
                     Some(ref b) => reduce(&mut [ *b.clone() ], style),
-                    None    => vec![],
+                    None        => Layout::new(),
                 };
 
                 let mut sup = match scripts.superscript {
                     Some(ref b) => reduce(&mut [ *b.clone() ], style.superscript_variant()),
-                    None        => vec![],
+                    None        => Layout::new(),
                 };
 
                 let sub = match scripts.subscript {
                     Some(ref b) => reduce(&mut [ *b.clone() ], style.subscript_variant()),
-                    None        => vec![],
+                    None        => Layout::new(),
                 };
 
                 // We calculate the vertical positions of the scripts.  The `adjust_up`
@@ -210,13 +136,13 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     let mut default = match style.cramped() {
                         true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
                         false => SUPERSCRIPT_SHIFT_UP,
-                    }.scaled_pixels(FONT_SIZE, style);
+                    }.scaled(style);
 
                     // Next we check to see if the vertical shift meets the minimum
                     // clearance relative to the base.
-                    let height   = base.get_height();
+                    let height   = base.height;
                     let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX
-                        .scaled_pixels(FONT_SIZE, style);
+                        .scaled(style);
 
                     if height - default > drop_max {
                         default = height - drop_max;
@@ -224,8 +150,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
 
                     // Next we check that the bottom of the superscript is far enough
                     // from the bottom of the base
-                    if sup.get_depth() + default < SUPERSCRIPT_BOTTOM_MIN.scaled_pixels(FONT_SIZE, style) {
-                        default = SUPERSCRIPT_BOTTOM_MIN.scaled_pixels(FONT_SIZE, style) - sup.get_depth();
+                    if sup.depth + default < SUPERSCRIPT_BOTTOM_MIN.scaled(style) {
+                        default = SUPERSCRIPT_BOTTOM_MIN.scaled(style) - sup.depth;
                     }
 
                     // For superscripts we need to calculate the italics correction
@@ -235,7 +161,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                         if let ParseNode::Symbol(sym) = **bx {
                             let glyph = glyph_metrics(sym.unicode);
                             italics_correction = Unit::Font(glyph.italics as f64)
-                                .scaled_pixels(FONT_SIZE, style)
+                                .scaled(style)
                         }
                     }
 
@@ -246,28 +172,28 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 // variable will describe how far we need to adjust the subscript down.
                 if let Some(_) = scripts.subscript {
                     // We start with the default values provided from the font.
-                    let mut default = SUBSCRIPT_SHIFT_DOWN.scaled_pixels(FONT_SIZE, style);
+                    let mut default = SUBSCRIPT_SHIFT_DOWN.scaled(style);
 
-                    let depth = -1. * base.get_depth();
+                    let depth = -1. * base.depth;
                     let drop_min = SUBSCRIPT_BASELINE_DROP_MIN
-                        .scaled_pixels(FONT_SIZE, style);
+                        .scaled(style);
 
                     if default - depth < drop_min {
                         default = drop_min + depth;
                     }
 
-                    if sub.get_height() - default > SUBSCRIPT_TOP_MAX.scaled_pixels(FONT_SIZE, style) {
-                        default = sub.get_height() - SUBSCRIPT_TOP_MAX.scaled_pixels(FONT_SIZE, style);
+                    if sub.height - default > SUBSCRIPT_TOP_MAX.scaled(style) {
+                        default = sub.height - SUBSCRIPT_TOP_MAX.scaled(style);
                     }
 
                     adjust_down = default;
                 }
 
                 // TODO: FIX THIS LAZY GAP FIX, see (BottomMaxWithSubscript?)
-                if !sub.is_empty() && !sup.is_empty() {
-                    let sup_bot = adjust_up + sup.get_depth();
-                    let sub_top = sub.get_height() - adjust_down;
-                    let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled_pixels(FONT_SIZE, style);
+                if !sub.contents.is_empty() && !sup.contents.is_empty() {
+                    let sup_bot = adjust_up + sup.depth;
+                    let sub_top = sub.height - adjust_down;
+                    let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled(style);
                     if sup_bot - sub_top < gap_min {
                         let adjust = (gap_min - sup_bot + sub_top) / 2.0;
                         adjust_up   += adjust;
@@ -275,50 +201,30 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                     }
                 }
 
-                let mut contents = vec![];
-                if !sup.is_empty() {
+                let mut contents = builders::VBox::new();
+                if !sup.contents.is_empty() {
                     if italics_correction != Pixels(0.0) {
-                        sup.insert(0, LayoutNode::Kern(italics_correction));
+                        sup.contents.insert(0, kern!(horz: italics_correction));
                     }
 
                     let corrected_adjust =
-                        adjust_up - sub.get_height() + adjust_down;
+                        adjust_up - sub.height + adjust_down;
 
-                    contents.push(hbox!(sup));
-                    contents.push(LayoutNode::Kern(corrected_adjust));
+                    contents.add_node(hbox!(sup.as_node()));
+                    contents.add_node(kern!(vert: corrected_adjust));
                 }
 
-                if !sub.is_empty() {
-                    contents.push(hbox!(sub));
+                contents.set_offset(adjust_down);
+                if !sub.contents.is_empty() {
+                    contents.add_node(hbox!(sub.as_node()));
                 }
 
-                layout.push(hbox!(base));
-                layout.push(vbox!(contents, offset: adjust_down));
+                layout.add_node(hbox!(base.as_node()));
+                layout.add_node(contents.build());
             },
 
-            ParseNode::Extend(code, u) => {
-                let paren = glyph_metrics(code); // Left parantheses
-
-                match paren.variant(*u.as_pixels(FONT_SIZE)) {
-                    VariantGlyph::Replacement(g) => {
-                        let glyph = font::glyph_metrics(g.unicode);
-                        layout.push(glyph.into_layout_node(style));
-                    },
-                    VariantGlyph::Constructable(c) => {
-                        let mut contents: Vec<LayoutNode> = Vec::new();
-                        for instr in c.iter().rev() {
-                            contents.push(instr.glyph.into_layout_node(style));
-                            if instr.overlap != 0.0 {
-                                let unit = Unit::Font(-instr.overlap);
-                                let kern = unit
-                                    .scaled_pixels(FONT_SIZE, style);
-                                contents.push(LayoutNode::Kern(kern));
-                            }
-                        }
-                        layout.push(vbox!(contents));
-                    },
-                }
-            },
+            ParseNode::Extend(code, u) =>
+                unimplemented!(),
 
             ParseNode::Accent(ref acc) => {
                 // TODO: Account for bottom accents (accent flag?)
@@ -326,8 +232,8 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 //               straight below the accentee, no correction takes place.
 
                 let nucleus = reduce(&mut [ *acc.nucleus.clone() ], style.cramped_variant());
-                let delta = nucleus.get_height().min(ACCENT_BASE_HEIGHT
-                    .scaled_pixels(FONT_SIZE, style));
+                let delta = nucleus.height.min(ACCENT_BASE_HEIGHT
+                    .scaled(style));
 
                 let skew = if let Some(ref sym) = nucleus.is_symbol() {
                     sym.attachment
@@ -340,91 +246,102 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Vec<LayoutNode> {
                 let symbol  = glyph_metrics(acc.symbol.unicode);
                 let offset = if symbol.attachment != 0 {
                     let accent_offset = symbol.attachment_offset()
-                        .scaled_pixels(FONT_SIZE, style);
+                        .scaled(style);
                     skew - accent_offset
                 } else {
                     let offset_x = Unit::Font(symbol.bbox.0 as f64)
-                        .scaled_pixels(FONT_SIZE, style);
+                        .scaled(style);
                     let sym_width = Unit::Font((symbol.bbox.2 - symbol.bbox.0) as f64)
-                        .scaled_pixels(FONT_SIZE, style);
+                        .scaled(style);
 
                     -1.0 * offset_x         // correct for combining characters
-                        - 0.5 * ( nucleus.get_width() - sym_width)  // align centers
+                        - 0.5 * (nucleus.width - sym_width)  // align centers
                         + skew              // add skew for accentee
                 };
 
-                let symbol = symbol.into_layout_node(style);
-                println!("Nucleus: {}, Symbol: {}, Skew: {}", nucleus.get_width(), symbol.get_width(), skew);
+                let symbol = symbol.as_layout(style);
+                println!("Nucleus: {}, Symbol: {}, Skew: {}", nucleus.width, symbol.width, skew);
 
-                layout.push(vbox!(vec![
-                    hbox!(vec![
-                        LayoutNode::Kern(offset),
-                        symbol,
-                    ]),
-                    LayoutNode::Kern(-1.0 * delta),
-                    hbox!(nucleus),
-                ]));
+                layout.add_node(vbox!(
+                    hbox!(kern!(horz: offset), symbol),
+                    kern!(vert: -1.0 * delta),
+                    hbox!(nucleus.as_node())
+                ));
             },
 
             _ => (),
        }
     }
 
-    layout
+    layout.finalize()
 }
 
 trait IsSymbol {
     fn is_symbol(&self) -> Option<LayoutGlyph>;
 }
 
-impl IsSymbol for [ LayoutNode ] {
+impl IsSymbol for Layout {
     fn is_symbol(&self) -> Option<LayoutGlyph> {
-        if self.len() != 1 { return None }
-        if let LayoutNode::Glyph(ref lg) = self[0] {
+        if self.contents.len() != 1 { return None }
+        let node = &self.contents[0];
+        if let LayoutVariant::Glyph(ref lg) = node.node {
             return Some(lg.clone())
         } else { None }
     }
 }
 
-trait IntoLayoutNode {
-    fn into_layout_node(&self, sty: Style) -> LayoutNode;
+trait AsLayoutNode {
+    fn as_layout(&self, sty: Style) -> LayoutNode;
 }
 
-impl IntoLayoutNode for font::Glyph {
-    fn into_layout_node(&self, style: Style) -> LayoutNode {
-        LayoutNode::Glyph(LayoutGlyph {
-            scale:   style.font_scale(),
-            height:  self.height() .scaled_pixels(FONT_SIZE, style),
-            depth:   self.depth()  .scaled_pixels(FONT_SIZE, style),
-            advance: self.advance().scaled_pixels(FONT_SIZE, style),
-            unicode: self.unicode,
-            attachment: self.attachment_offset().scaled_pixels(FONT_SIZE, style),
-            italics: self.italic_correction().scaled_pixels(FONT_SIZE, style),
-        })
+impl AsLayoutNode for font::Glyph {
+    fn as_layout(&self, style: Style) -> LayoutNode {
+        LayoutNode {
+            height: self.height() .scaled(style),
+            width:  self.advance().scaled(style),
+            depth:  self.depth()  .scaled(style),
+            node:   LayoutVariant::Glyph(LayoutGlyph {
+                unicode: self.unicode,
+                scale: style.font_scale(),
+                attachment: self.attachment_offset().scaled(style),
+                italics: self.italic_correction().scaled(style),
+                offset:  Pixels(0.0),
+            })
+        }
     }
 }
 
-impl IntoLayoutNode for VariantGlyph {
-    fn into_layout_node(&self, style: Style) -> LayoutNode {
+impl AsLayoutNode for Rule {
+    fn as_layout(&self, style: Style) -> LayoutNode {
+        LayoutNode {
+            node:   LayoutVariant::Rule,
+            width:  self.width.scaled(style),
+            height: self.height.scaled(style),
+            depth:  Pixels(0f64),
+        }
+    }
+}
+
+impl AsLayoutNode for VariantGlyph {
+    fn as_layout(&self, style: Style) -> LayoutNode {
         match *self {
             VariantGlyph::Replacement(g) => {
                 let glyph = font::glyph_metrics(g.unicode);
-                glyph.into_layout_node(style)
+                glyph.as_layout(style)
             },
 
             VariantGlyph::Constructable(ref c) => {
-                let mut contents: Vec<LayoutNode> = Vec::new();
+                let mut contents = builders::VBox::new();
                 for instr in c.iter().rev() {
-                    contents.push(instr.glyph.into_layout_node(style));
+                    contents.add_node(instr.glyph.as_layout(style));
                     if instr.overlap != 0.0 {
                         let unit = Unit::Font(-instr.overlap);
-                        let kern = unit
-                            .scaled_pixels(FONT_SIZE, style);
-                        contents.push(LayoutNode::Kern(kern));
+                        let kern = unit.scaled(style);
+                        contents.add_node(kern!(vert: kern));
                     }
                 }
 
-                vbox!(contents)
+                contents.build()
             },
         }
     }

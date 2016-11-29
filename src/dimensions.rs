@@ -121,7 +121,7 @@ macro_rules! implement_fontunit {
 implement_fontunit!{ i16, u32 }
 
 // At some point in time, everything will be in Pixels for computer display renderings.
-#[derive(Copy, Clone, Debug, Default, PartialOrd, PartialEq)]
+#[derive(Copy, Debug, Clone, Default, PartialOrd, PartialEq)]
 pub struct Pixels(pub f64);
 
 impl Deref for Pixels {
@@ -147,6 +147,10 @@ impl Add<Pixels> for f64 {
 impl Sub for Pixels {
     type Output = Pixels;
     fn sub(self, rhs: Pixels) -> Pixels { Pixels(self.0 - rhs.0) }
+}
+
+impl SubAssign for Pixels {
+    fn sub_assign(&mut self, rhs: Pixels) { *self = *self - rhs; }
 }
 
 impl AddAssign for Pixels {

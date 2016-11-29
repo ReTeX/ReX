@@ -1,4 +1,4 @@
-use parser::nodes::AtomType;
+use parser::nodes::{ AtomType, ParseNode };
 use dimensions::Unit;
 
 #[allow(unused)]
@@ -51,6 +51,49 @@ impl Spacing {
             Spacing::Thin   => Unit::Em(1_f64/6_f64),
             Spacing::Medium => Unit::Em(2_f64/9_f64),
             Spacing::Thick  => Unit::Em(3_f64/9_f64),
+        }
+    }
+}
+
+pub fn normalize_types(nodes: &mut [ParseNode]) {
+    // Rule (5), pg 442.  If first item is a Bin atom, change it
+    // to an Ordinal item.
+    use font::IsAtom;
+    if let Some(mut node) = nodes.get_mut(0) {
+        if node.atom_type() == Some(AtomType::Binary) {
+            node.set_atom_type(AtomType::Ordinal)
+        }
+    }
+
+    // Atom Changing Rules:
+    //   Rule 5:
+    //   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
+    //   Rule 6:
+    //   - Current in {Rel,Close,Punct} && Prev == Bin => Prev -> Ord.
+    for idx in 0..nodes.len() {
+        if nodes[idx].atom_type() == Some(AtomType::Binary)
+            && idx > 1 {
+            match nodes[idx - 1].atom_type() {
+                Some(AtomType::Binary) |
+                Some(AtomType::Operator(_)) |
+                Some(AtomType::Relation) |
+                Some(AtomType::Open) |
+                Some(AtomType::Punctuation) => {
+                    nodes[idx].set_atom_type(AtomType::Alpha);
+                },
+                _ => (),
+            }
+        }
+
+        if idx > 1
+            && nodes[idx - 1].atom_type() == Some(AtomType::Binary) {
+            match nodes[idx].atom_type() {
+                Some(AtomType::Relation) |
+                Some(AtomType::Close) |
+                Some(AtomType::Punctuation) =>
+                    nodes[idx - 1].set_atom_type(AtomType::Alpha),
+                _ => (),
+            }
         }
     }
 }
