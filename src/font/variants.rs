@@ -142,7 +142,6 @@ impl Variant for Glyph {
         // Now we will calculate how much we need to reduce our overlap
         // to construct a glyph of the desired size.
         let size_difference = size - glyph_advance;
-        println!("size_difference: {:2}", size_difference);
 
         // Provided that our constructed glyph is _still_ too large,
         // return this, otherwise distribute the overlap equally
@@ -152,7 +151,6 @@ impl Variant for Glyph {
         }
 
         let overlap = size_difference / (instructions.len() - 1) as f64;
-        println!("Compensation Required: {:2}", overlap);
         for glyph in instructions.iter_mut().skip(1) {
             glyph.overlap -= overlap
         }
