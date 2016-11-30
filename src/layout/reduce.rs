@@ -19,7 +19,7 @@ use render::FONT_SIZE;
 /// This method takes the parsing nodes and reduces them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
+pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
     use super::spacing::normalize_types;
     normalize_types(nodes);
 
@@ -45,14 +45,18 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 let glyph = font::glyph_metrics(sym.unicode);
                 match sym.atom_type {
                     AtomType::Operator(_) => {
-                        // TODO: Only display style for now.  Change this.
-                        // TODO: This should probably use `min op height` param.
-                        let largeop = glyph.successor().as_layout(style);
-                        let axis_offset = AXIS_HEIGHT.scaled(style);
+                        if style == Style::Display {
+                            let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
+                            let axis_offset = AXIS_HEIGHT.scaled(style);
+                            let largeop = glyph.variant(size).as_layout(style);
 
-                        // Vertically center
-                        let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
-                        layout.add_node(vbox!(offset: shift; largeop));
+                            // Vertically center
+                            let shift = 0.5 *
+                                (largeop.height + largeop.depth) - axis_offset;
+                            layout.add_node(vbox!(offset: shift; largeop));
+                        } else {
+                            layout.add_node(glyph.as_layout(style));
+                        }
                     },
                     _ => layout.add_node(glyph.as_layout(style)),
                 }
@@ -71,7 +75,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
                 let contents = reduce(&mut rad.inner, style).as_node();
-
                 let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
                 let gap = match style.cramped() {
@@ -172,24 +175,17 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 // variable will describe how far we need to adjust the subscript down.
                 if let Some(_) = scripts.subscript {
                     // We start with the default values provided from the font.
-                    let mut default = SUBSCRIPT_SHIFT_DOWN.scaled(style);
+                    adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(style);
 
                     let depth = -1. * base.depth;
-                    let drop_min = SUBSCRIPT_BASELINE_DROP_MIN
-                        .scaled(style);
+                    let drop_min = SUBSCRIPT_BASELINE_DROP_MIN.scaled(style);
 
-                    if default - depth < drop_min {
-                        default = drop_min + depth;
-                    }
-
-                    if sub.height - default > SUBSCRIPT_TOP_MAX.scaled(style) {
-                        default = sub.height - SUBSCRIPT_TOP_MAX.scaled(style);
-                    }
-
-                    adjust_down = default;
+                    adjust_down = adjust_down
+                        .max(sub.height - SUBSCRIPT_TOP_MAX.scaled(style))
+                        .max(drop_min + depth);
                 }
 
-                // TODO: FIX THIS LAZY GAP FIX, see (BottomMaxWithSubscript?)
+                // TODO: lazy gap fix; see BottomMaxWithSubscript
                 if !sub.contents.is_empty() && !sup.contents.is_empty() {
                     let sup_bot = adjust_up + sup.depth;
                     let sub_top = sub.height - adjust_down;
@@ -205,21 +201,22 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 if !sup.contents.is_empty() {
                     if italics_correction != Pixels(0.0) {
                         sup.contents.insert(0, kern!(horz: italics_correction));
+                        sup.width += italics_correction;
                     }
 
                     let corrected_adjust =
                         adjust_up - sub.height + adjust_down;
 
-                    contents.add_node(hbox!(sup.as_node()));
+                    contents.add_node(sup.as_node());
                     contents.add_node(kern!(vert: corrected_adjust));
                 }
 
                 contents.set_offset(adjust_down);
                 if !sub.contents.is_empty() {
-                    contents.add_node(hbox!(sub.as_node()));
+                    contents.add_node(sub.as_node());
                 }
 
-                layout.add_node(hbox!(base.as_node()));
+                layout.add_node(base.as_node());
                 layout.add_node(contents.build());
             },
 
@@ -242,27 +239,28 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 // accent with the attachment correction of the accentee.
                 let symbol  = glyph_metrics(acc.symbol.unicode);
                 let offset = if symbol.attachment != 0 {
-                    let accent_offset = symbol.attachment_offset()
-                        .scaled(style);
-                    skew - accent_offset
+                    skew - symbol.attachment_offset().scaled(style)
                 } else {
                     let offset_x = Unit::Font(symbol.bbox.0 as f64)
                         .scaled(style);
                     let sym_width = Unit::Font((symbol.bbox.2 - symbol.bbox.0) as f64)
                         .scaled(style);
 
-                    -1.0 * offset_x         // correct for combining characters
+                    skew +
+                        -1.0 * offset_x   // correct for combining characters
                         - 0.5 * (nucleus.width - sym_width)  // align centers
-                        + skew              // add skew for accentee
                 };
 
                 let symbol = symbol.as_layout(style);
                 layout.add_node(vbox!(
                     hbox!(kern!(horz: offset), symbol),
                     kern!(vert: -1.0 * delta),
-                    hbox!(nucleus.as_node())
+                    nucleus.as_node()
                 ));
             },
+
+            ParseNode::Style(sty) =>
+                style = sty,
 
             _ => (),
        }
