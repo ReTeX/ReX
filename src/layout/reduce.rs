@@ -1,19 +1,19 @@
 use super::builders;
-use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, HorizontalBox, VerticalBox, Style };
+use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style };
 
 use dimensions::{ Pixels, Unit };
-use font;
+use font::GLYPHS;
+use font::IsAtom;
+use font::SYMBOLS;
 use font::constants::*;
 use font::glyph_metrics;
-use font::GLYPHS;
-use font::SYMBOLS;
 use font::variants::Variant;
 use font::variants::VariantGlyph;
-use font::IsAtom;
+use font;
 use layout::ToPixels;
+use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::{ ParseNode, AtomType, Rule };
 use render::FONT_SIZE;
-use layout::spacing::{atom_spacing, Spacing};
 
 
 /// This method takes the parsing nodes and reduces them to layout nodes.
@@ -47,7 +47,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                     AtomType::Operator(_) => {
                         // TODO: Only display style for now.  Change this.
                         // TODO: This should probably use `min op height` param.
-                        let mut largeop = glyph.successor().as_layout(style);
+                        let largeop = glyph.successor().as_layout(style);
                         let axis_offset = AXIS_HEIGHT.scaled(style);
 
                         // Vertically center
@@ -59,7 +59,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
             },
 
             ParseNode::Group(ref mut gp) =>
-                layout.add_node(reduce(&mut gp.clone(), style).as_node()),
+                layout.add_node(reduce(gp, style).as_node()),
 
             ParseNode::Rule(rule) =>
                 layout.add_node(rule.as_layout(style)),
@@ -67,10 +67,10 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
             ParseNode::Kerning(kern) =>
                 layout.add_node(kern!(horz: kern.scaled(style))),
 
-            ParseNode::Radical(ref rad) => {
+            ParseNode::Radical(ref mut rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
-                let contents = reduce(&mut rad.inner.clone(), style).as_node();
+                let contents = reduce(&mut rad.inner, style).as_node();
 
                 let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
@@ -103,7 +103,7 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                     ));
             },
 
-            ParseNode::Scripts(ref scripts) => {
+            ParseNode::Scripts(ref mut scripts) => {
                 // Vertical position of the script is calculated.  This depends on the following
                 // information: (see page 26 of https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf)
 
@@ -223,9 +223,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 layout.add_node(contents.build());
             },
 
-            ParseNode::Extend(code, u) =>
-                unimplemented!(),
-
             ParseNode::Accent(ref acc) => {
                 // TODO: Account for bottom accents (accent flag?)
                 //   (LuaTeX) BottomAccent: The vertical placement of a bottom accent is
@@ -260,8 +257,6 @@ pub fn reduce(nodes: &mut [ParseNode], style: Style) -> Layout {
                 };
 
                 let symbol = symbol.as_layout(style);
-                println!("Nucleus: {}, Symbol: {}, Skew: {}", nucleus.width, symbol.width, skew);
-
                 layout.add_node(vbox!(
                     hbox!(kern!(horz: offset), symbol),
                     kern!(vert: -1.0 * delta),
