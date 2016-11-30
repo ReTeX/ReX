@@ -136,7 +136,7 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                if let Some(_) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
                     // the standard positions in the OpenType specification.
-                    let mut default = match style.cramped() {
+                    adjust_up = match style.cramped() {
                         true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
                         false => SUPERSCRIPT_SHIFT_UP,
                     }.scaled(style);
@@ -147,15 +147,9 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX
                         .scaled(style);
 
-                    if height - default > drop_max {
-                        default = height - drop_max;
-                    }
-
-                    // Next we check that the bottom of the superscript is far enough
-                    // from the bottom of the base
-                    if sup.depth + default < SUPERSCRIPT_BOTTOM_MIN.scaled(style) {
-                        default = SUPERSCRIPT_BOTTOM_MIN.scaled(style) - sup.depth;
-                    }
+                    adjust_up = adjust_up
+                        .max(height - drop_max)
+                        .max(SUPERSCRIPT_BOTTOM_MIN.scaled(style) - sup.depth);
 
                     // For superscripts we need to calculate the italics correction
                     // if the base is simply a symbol.
@@ -167,8 +161,6 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                                 .scaled(style)
                         }
                     }
-
-                    adjust_up = default
                 }
 
                 // We calculate the vertical position of the subscripts.  The `adjust_down`
