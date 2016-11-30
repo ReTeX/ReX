@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 use dimensions::Unit;
+use layout::Style;
 
 // There are additional classes defined from unicode-math
 // in addition to those defined by TeX.
@@ -54,6 +55,7 @@ pub enum ParseNode {
     Kerning     (Unit),
     Extend      (u32, Unit),
     Accent      (Accent),
+    Style       (Style),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -85,6 +87,7 @@ impl IsAtom for ParseNode {
             ParseNode::Rule(_)         => None,
             ParseNode::Kerning(_)      => None,
             ParseNode::Extend(_, _)    => None,
+            ParseNode::Style(_)        => None,
         }
     }
 }

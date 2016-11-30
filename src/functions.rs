@@ -5,6 +5,7 @@ use lexer::Lexer;
 use parser;
 use parser::Locals;
 use dimensions::Unit;
+use layout::Style;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -34,6 +35,7 @@ pub enum TexCommand {
         size:      u8,
     },
     Kerning(Unit),
+    Style(Style),
 }
 
 use lexer::Token;
@@ -113,6 +115,9 @@ impl TexCommand {
             },
             TexCommand::HExtend => {
                 None
+            },
+            TexCommand::Style(sty) => {
+                Some(ParseNode::Style(sty))
             }
         })
     }
@@ -152,4 +157,8 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "rule" => TexCommand::Rule,
     "vextend" => TexCommand::VExtend,
     "hextend" => TexCommand::HExtend,
+    "textstyle" => TexCommand::Style(Style::Text),
+    "displaystyle" => TexCommand::Style(Style::Display),
+    "scriptstyle" => TexCommand::Style(Style::Script),
+    "scriptscriptstyle" => TexCommand::Style(Style::ScriptScript),
 };
