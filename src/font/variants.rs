@@ -98,7 +98,7 @@ impl Variant for Glyph {
                     let overlap =
                         min(previous_connector, glyph.start_connector_length);
                     advance += glyph.full_advance
-                        - min(*MIN_CONNECTOR_OVERLAP as u32, overlap);
+                        - min(*MIN_CONNECTOR_OVERLAP, overlap);
                     previous_connector = glyph.end_connector_length;
                 }
             }

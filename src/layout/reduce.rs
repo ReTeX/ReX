@@ -84,9 +84,9 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 let clearance = (*contents.height - *contents.depth)
                     / FONT_SIZE * 1000.0     // Convert to font units
-                    + f64::from(gap)
-                    + f64::from(RADICAL_RULE_THICKNESS)
-                    + f64::from(RADICAL_EXTRA_ASCENDER); // Minimum gap
+                    + *gap
+                    + *RADICAL_RULE_THICKNESS
+                    + *RADICAL_EXTRA_ASCENDER; // Minimum gap
 
                 let glyph = sqrt.variant(clearance).as_layout(style);
                 let kerning = glyph.height

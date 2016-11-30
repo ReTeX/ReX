@@ -28,6 +28,7 @@ pub trait Unital: Copy + Clone + Default +
 impl Unital for u32 {}
 impl Unital for i16 {}
 impl Unital for u16 {}
+impl Unital for f64 {}
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default)]
 pub struct FontUnit<U: Unital>(pub U);
