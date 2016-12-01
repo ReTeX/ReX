@@ -20,3 +20,9 @@ Accents: '\hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave 
 Todo: Extendable horizontal accents.  Compensate for overshot from accents (see kerning)?
 
 ![accents](samples/accents.png)
+
+`\left` and `\right`: `\sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}`
+
+TODO: `AtomType` normalization.  See spacing between `=` and `(`.
+
+![leftright](samples/leftright.png)
