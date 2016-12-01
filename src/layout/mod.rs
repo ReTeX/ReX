@@ -18,7 +18,7 @@
 #[macro_use]
 mod builders;
 
-pub mod reduce;
+pub mod engine;
 pub mod spacing;
 
 
@@ -200,7 +200,7 @@ impl LayoutNode {
     // For now this ignores offsets if already applied,
     // and will break if there already are offsets.
     fn centered(mut self, axis: Pixels) -> LayoutNode {
-        let shift = 0.5 * (self.height - self.depth) - axis;
+        let shift = 0.5 * (self.height + self.depth) - axis;
 
         match self.node {
             LayoutVariant::VerticalBox(ref mut vb) => {

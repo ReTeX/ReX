@@ -6,7 +6,7 @@ extern crate rex;
 
 use rex::parser::parse;
 use rex::render::Renderer;
-use rex::layout::reduce::reduce;
+use rex::layout::engine::layout;
 use rex::layout::Style;
 
 fn main() {
@@ -18,8 +18,8 @@ fn main() {
 
     let mut p = parse(&input).unwrap();
     //println!("Parse: {:?}", p);
-    let r = reduce(&mut p, Style::Display);
-    println!("Reduce: {:#?}", r);
+    let r = layout(&mut p, Style::Display);
+    println!("layout: {:#?}", r);
 
     let output = Renderer::new(r).render();
     let mut f = File::create("test.svg").unwrap();

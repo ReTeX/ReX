@@ -16,15 +16,15 @@ use parser::nodes::{ ParseNode, AtomType, Rule };
 use render::FONT_SIZE;
 
 
-/// This method takes the parsing nodes and reduces them to layout nodes.
+/// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
+pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
     use super::spacing::normalize_types;
     normalize_types(nodes);
 
     let mut prev_at: Option<AtomType> = None;
-    let mut layout = Layout::new();
+    let mut result = Layout::new();
 
     for node in nodes {
         if let Some(p_at) = prev_at {
@@ -32,7 +32,7 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let sp = atom_spacing(p_at, at);
                 if sp != Spacing::None {
                     let kern = sp.to_unit().scaled(style);
-                    layout.add_node(kern!(horz: kern));
+                    result.add_node(kern!(horz: kern));
                 }
             }
         }
@@ -53,28 +53,28 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                             // Vertically center
                             let shift = 0.5 *
                                 (largeop.height + largeop.depth) - axis_offset;
-                            layout.add_node(vbox!(offset: shift; largeop));
+                            result.add_node(vbox!(offset: shift; largeop));
                         } else {
-                            layout.add_node(glyph.as_layout(style));
+                            result.add_node(glyph.as_layout(style));
                         }
                     },
-                    _ => layout.add_node(glyph.as_layout(style)),
+                    _ => result.add_node(glyph.as_layout(style)),
                 }
             },
 
             ParseNode::Group(ref mut gp) =>
-                layout.add_node(reduce(gp, style).as_node()),
+                result.add_node(layout(gp, style).as_node()),
 
             ParseNode::Rule(rule) =>
-                layout.add_node(rule.as_layout(style)),
+                result.add_node(rule.as_layout(style)),
 
             ParseNode::Kerning(kern) =>
-                layout.add_node(kern!(horz: kern.scaled(style))),
+                result.add_node(kern!(horz: kern.scaled(style))),
 
             ParseNode::Radical(ref mut rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
                 let style = style.cramped_variant();
-                let contents = reduce(&mut rad.inner, style).as_node();
+                let contents = layout(&mut rad.inner, style).as_node();
                 let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
                 let gap = match style.cramped() {
@@ -95,8 +95,8 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     - RADICAL_EXTRA_ASCENDER.scaled(style)
                     + contents.depth;
 
-                layout.add_node(vbox!(offset: -1.0 * contents.depth; glyph));
-                layout.add_node(vbox!(
+                result.add_node(vbox!(offset: -1.0 * contents.depth; glyph));
+                result.add_node(vbox!(
                         kern!(vert: RADICAL_EXTRA_ASCENDER.scaled(style)),
                         rule!(
                             width:  contents.width,
@@ -113,17 +113,17 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 // Before we start calculating layout, we layout the contents
                 // of the base and scripts.  These dimensions will be needed.
                 let base = match scripts.base {
-                    Some(ref b) => reduce(&mut [ *b.clone() ], style),
+                    Some(ref b) => layout(&mut [ *b.clone() ], style),
                     None        => Layout::new(),
                 };
 
                 let mut sup = match scripts.superscript {
-                    Some(ref b) => reduce(&mut [ *b.clone() ], style.superscript_variant()),
+                    Some(ref b) => layout(&mut [ *b.clone() ], style.superscript_variant()),
                     None        => Layout::new(),
                 };
 
                 let sub = match scripts.subscript {
-                    Some(ref b) => reduce(&mut [ *b.clone() ], style.subscript_variant()),
+                    Some(ref b) => layout(&mut [ *b.clone() ], style.subscript_variant()),
                     None        => Layout::new(),
                 };
 
@@ -208,8 +208,8 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     contents.add_node(sub.as_node());
                 }
 
-                layout.add_node(base.as_node());
-                layout.add_node(contents.build());
+                result.add_node(base.as_node());
+                result.add_node(contents.build());
             },
 
             ParseNode::Accent(ref acc) => {
@@ -217,7 +217,7 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 //   (LuaTeX) BottomAccent: The vertical placement of a bottom accent is
                 //               straight below the accentee, no correction takes place.
 
-                let nucleus = reduce(&mut [ *acc.nucleus.clone() ], style.cramped_variant());
+                let nucleus = layout(&mut [ *acc.nucleus.clone() ], style.cramped_variant());
                 let delta = nucleus.height.min(ACCENT_BASE_HEIGHT
                     .scaled(style));
 
@@ -244,7 +244,7 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 };
 
                 let symbol = symbol.as_layout(style);
-                layout.add_node(vbox!(
+                result.add_node(vbox!(
                     hbox!(kern!(horz: offset), symbol),
                     kern!(vert: -1.0 * delta),
                     nucleus.as_node()
@@ -255,13 +255,15 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 style = sty,
 
             ParseNode::Delimited(ref mut d) => {
-                let inner = reduce(&mut d.inner, style).as_node();
+                let inner = layout(&mut d.inner, style).as_node();
 
                 // Convert inner group dimensions to font unit
                 let height = *inner.height / FONT_SIZE * *UNITS_PER_EM as f64;
                 let depth  = *inner.depth  / FONT_SIZE * *UNITS_PER_EM as f64;
 
                 // Only extend if we meet a certain size
+                // TODO: This quick height check doesn't seem to be strong enough,
+                // reference: http://tug.org/pipermail/luatex/2010-July/001745.html
                 if height - depth > *DELIMITED_SUB_FORMULA_MIN_HEIGHT as f64 {
                     let axis = *AXIS_HEIGHT as f64;
 
@@ -289,9 +291,9 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                                 .centered(axis),
                     };
 
-                    layout.add_node(left);
-                    layout.add_node(inner);
-                    layout.add_node(right);
+                    result.add_node(left);
+                    result.add_node(inner);
+                    result.add_node(right);
                 } else {
                     let left  = match d.left.unicode {
                         46 => kern!(horz: NULL_DELIMITER_SPACE),
@@ -303,9 +305,9 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         _  => glyph_metrics(d.right.unicode).as_layout(style),
                     };
 
-                    layout.add_node(left);
-                    layout.add_node(inner);
-                    layout.add_node(right);
+                    result.add_node(left);
+                    result.add_node(inner);
+                    result.add_node(right);
                 }
             },
 
@@ -313,7 +315,7 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
        }
     }
 
-    layout.finalize()
+    result.finalize()
 }
 
 trait IsSymbol {
