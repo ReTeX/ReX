@@ -1,18 +1,18 @@
 use super::builders;
 use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style };
+use super::convert::AsLayoutNode;
+use super::convert::ToPixels;
 
 use dimensions::{ Pixels, Unit };
+use font;
 use font::GLYPHS;
 use font::IsAtom;
 use font::SYMBOLS;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
-use font::variants::VariantGlyph;
-use font;
-use layout::ToPixels;
 use layout::spacing::{atom_spacing, Spacing};
-use parser::nodes::{ ParseNode, AtomType, Rule };
+use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
 
 
@@ -329,62 +329,5 @@ impl IsSymbol for Layout {
         if let LayoutVariant::Glyph(ref lg) = node.node {
             return Some(lg.clone())
         } else { None }
-    }
-}
-
-trait AsLayoutNode {
-    fn as_layout(&self, sty: Style) -> LayoutNode;
-}
-
-impl AsLayoutNode for font::Glyph {
-    fn as_layout(&self, style: Style) -> LayoutNode {
-        LayoutNode {
-            height: self.height() .scaled(style),
-            width:  self.advance().scaled(style),
-            depth:  self.depth()  .scaled(style),
-            node:   LayoutVariant::Glyph(LayoutGlyph {
-                unicode: self.unicode,
-                scale: style.font_scale(),
-                attachment: self.attachment_offset().scaled(style),
-                italics: self.italic_correction().scaled(style),
-                offset:  Pixels(0.0),
-            })
-        }
-    }
-}
-
-impl AsLayoutNode for Rule {
-    fn as_layout(&self, style: Style) -> LayoutNode {
-        LayoutNode {
-            node:   LayoutVariant::Rule,
-            width:  self.width.scaled(style),
-            height: self.height.scaled(style),
-            depth:  Pixels(0f64),
-        }
-    }
-}
-
-impl AsLayoutNode for VariantGlyph {
-    fn as_layout(&self, style: Style) -> LayoutNode {
-        match *self {
-            VariantGlyph::Replacement(g) => {
-                let glyph = font::glyph_metrics(g.unicode);
-                glyph.as_layout(style)
-            },
-
-            VariantGlyph::Constructable(ref c) => {
-                let mut contents = builders::VBox::new();
-                for instr in c.iter().rev() {
-                    contents.add_node(instr.glyph.as_layout(style));
-                    if instr.overlap != 0.0 {
-                        let unit = Unit::Font(-instr.overlap);
-                        let kern = unit.scaled(style);
-                        contents.add_node(kern!(vert: kern));
-                    }
-                }
-
-                contents.build()
-            },
-        }
     }
 }

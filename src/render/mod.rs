@@ -23,10 +23,10 @@ pub struct Renderer {
     layout: Layout,
 }
 
-pub const FONT_SIZE: f64 = 48.0;
-const LEFT_PADDING: f64  = 12.0;
-const TOP_PADDING: f64   = 5.0;
-const SVG_HEADER: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\
+pub const FONT_SIZE:    f64 = 48.0;
+const     LEFT_PADDING: f64 = 12.0;
+const     TOP_PADDING:  f64 = 5.0;
+const     SVG_HEADER: &'static str = "<?xml version=\"1.0\" standalone=\"no\"?>\
     <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
 
 impl Renderer {

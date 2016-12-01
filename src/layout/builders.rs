@@ -125,19 +125,19 @@ macro_rules! rule {
 macro_rules! kern {
     (vert: $height:expr) => (
         LayoutNode {
-            width: ::dimensions::Pixels::default(),
+            width:  ::dimensions::Pixels::default(),
             height: $height,
-            depth: ::dimensions::Pixels::default(),
-            node: LayoutVariant::Kern,
+            depth:  ::dimensions::Pixels::default(),
+            node:   LayoutVariant::Kern,
         }
     );
 
     (horz: $width:expr) => (
         LayoutNode {
-            width: $width,
+            width:   $width,
             height: ::dimensions::Pixels::default(),
-            depth: ::dimensions::Pixels::default(),
-            node: LayoutVariant::Kern,
+            depth:  ::dimensions::Pixels::default(),
+            node:   LayoutVariant::Kern,
         }
     );
 }

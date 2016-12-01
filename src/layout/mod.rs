@@ -17,12 +17,11 @@
 
 #[macro_use]
 mod builders;
-
+mod convert;
 pub mod engine;
 pub mod spacing;
 
-
-use dimensions::{ FontUnit, Pixels, Unit, Unital };
+use dimensions::{ Pixels, Unit };
 use font::constants;
 use std::ops::Deref;
 use std::fmt;
@@ -196,9 +195,9 @@ impl fmt::Debug for LayoutNode {
 }
 
 impl LayoutNode {
-    // Center the vertical about the axis.
-    // For now this ignores offsets if already applied,
-    // and will break if there already are offsets.
+    /// Center the vertical about the axis.
+    /// For now this ignores offsets if already applied,
+    /// and will break if there already are offsets.
     fn centered(mut self, axis: Pixels) -> LayoutNode {
         let shift = 0.5 * (self.height + self.depth) - axis;
 
@@ -329,31 +328,5 @@ impl Style {
                 => false,
             _   => true,
         }
-    }
-}
-
-use render::FONT_SIZE;
-trait ToPixels: Sized {
-    fn as_pixels(self) -> Pixels;
-    fn scaled(self, sty: Style) -> Pixels {
-        self.as_pixels() * sty.font_scale()
-    }
-}
-
-impl ToPixels for Unit {
-    // TODO: You can't assign pt values to fonts with given `font_size: f64`
-    fn as_pixels(self) -> Pixels {
-        Pixels(match self {
-            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * FONT_SIZE,
-            Unit::Em(u)   => u * FONT_SIZE,
-            Unit::Ex(u)   => u * FONT_SIZE, // TODO: measure x width here
-            Unit::Px(u)   => u
-        })
-    }
-}
-
-impl<U: Unital> ToPixels for FontUnit<U> {
-    fn as_pixels(self) -> Pixels {
-        Unit::from(self).as_pixels()
     }
 }
