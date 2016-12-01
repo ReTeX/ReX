@@ -82,13 +82,13 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
                 };
 
-                let clearance = (*contents.height - *contents.depth)
+                let size = (*contents.height - *contents.depth)
                     / FONT_SIZE * 1000.0     // Convert to font units
                     + f64::from(gap)
                     + f64::from(RADICAL_RULE_THICKNESS)
                     + f64::from(RADICAL_EXTRA_ASCENDER); // Minimum gap
 
-                let glyph = sqrt.variant(clearance).as_layout(style);
+                let glyph = sqrt.variant(size).as_layout(style);
                 let kerning = glyph.height
                     - contents.height
                     - RADICAL_RULE_THICKNESS.scaled(style)
@@ -253,6 +253,61 @@ pub fn reduce(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
             ParseNode::Style(sty) =>
                 style = sty,
+
+            ParseNode::Delimited(ref mut d) => {
+                let inner = reduce(&mut d.inner, style).as_node();
+
+                // Convert inner group dimensions to font unit
+                let height = *inner.height / FONT_SIZE * *UNITS_PER_EM as f64;
+                let depth  = *inner.depth  / FONT_SIZE * *UNITS_PER_EM as f64;
+
+                // Only extend if we meet a certain size
+                if height - depth > *DELIMITED_SUB_FORMULA_MIN_HEIGHT as f64 {
+                    let axis = *AXIS_HEIGHT as f64;
+
+                    let mut clearance = 2. * (height - axis).max(axis - depth);
+                    clearance = clearance
+                        .max(DELIMITER_FACTOR * (height - depth))
+                        .max(height - depth - *DELIMITER_SHORT_FALL as f64);
+
+                    let axis = AXIS_HEIGHT.scaled(style);
+                    let left = match d.left.unicode {
+                        46  => kern!(horz: NULL_DELIMITER_SPACE),
+                        _   =>
+                            glyph_metrics(d.left.unicode)
+                                .variant(clearance)
+                                .as_layout(style)
+                                .centered(axis),
+                    };
+
+                    let right = match d.right.unicode {
+                        46  => kern!(horz: NULL_DELIMITER_SPACE),
+                        _   =>
+                            glyph_metrics(d.right.unicode)
+                                .variant(clearance)
+                                .as_layout(style)
+                                .centered(axis),
+                    };
+
+                    layout.add_node(left);
+                    layout.add_node(inner);
+                    layout.add_node(right);
+                } else {
+                    let left  = match d.left.unicode {
+                        46 => kern!(horz: NULL_DELIMITER_SPACE),
+                        _  => glyph_metrics(d.left.unicode).as_layout(style),
+                    };
+
+                    let right = match d.right.unicode {
+                        46 => kern!(horz: NULL_DELIMITER_SPACE),
+                        _  => glyph_metrics(d.right.unicode).as_layout(style),
+                    };
+
+                    layout.add_node(left);
+                    layout.add_node(inner);
+                    layout.add_node(right);
+                }
+            },
 
             _ => (),
        }

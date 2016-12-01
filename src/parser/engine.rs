@@ -185,11 +185,16 @@ pub fn implicit_group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode
 
     if token == Token::ControlSequence("left") {
         lex.next(); // consume the `\left` token`
-        let left  = expect_type(lex, local, AtomType::Open)?;
+        let left = symbol(lex, local)?
+            .ok_or(String::from(r#"No symbol found after `\left`"#))?
+            .expect_left()?;
+
         let inner = expression(lex, local)?;
         lex.current.expect(Token::ControlSequence("right"))?;
         lex.next();
-        let right = expect_type(lex, local, AtomType::Close)?;
+        let right = symbol(lex, local)?
+            .ok_or(String::from(r#"No symbol found after '\right'"#))?
+            .expect_right()?;
 
         Ok(Some(ParseNode::Delimited(Delimited{
             left: left,
@@ -240,7 +245,6 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
                     use parser::nodes::Accent;
                     // If this symbol is an accent, we need to consume the next math field.
                     if sym.atom_type == AtomType::Accent {
-//pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
                         let nucleus = math_field(lex, local)
                             .expect("No symbol following an accent!");
                         Ok(Some(ParseNode::Accent(Accent {
@@ -450,6 +454,18 @@ mod tests {
         should_equate!(errs, parse,
           [ (r"x_\alpha^\beta", r"x^\beta_\alpha"),
             (r"_2^3", r"^3_2") ]);
+        display_errors!(errs);
+    }
+
+    #[test]
+    fn delimited() {
+        let mut errs: Vec<String> = Vec::new();
+        should_pass!(errs, parse,
+          [ r"\left(\right)", r"\left.\right)", r"\left(\right.",
+            r"\left\vert\right)", r"\left(\right\vert" ]);
+        should_fail!(errs, parse,
+          [ r"\left1\right)", r"\left.\right1", r"\left",
+            r"\left.{1 \right." ]);
         display_errors!(errs);
     }
 }

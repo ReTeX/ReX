@@ -4,9 +4,14 @@
 // Font Nmae: b'XITS Math'
 #![allow(dead_code)]
 use dimensions::FontUnit;
+use dimensions::Pixels;
 
 pub static MIN_CONNECTOR_OVERLAP: FontUnit<u16> = FontUnit(50);
 pub static UNITS_PER_EM: FontUnit<u16> = FontUnit(1000);
+
+pub static NULL_DELIMITER_SPACE                          : Pixels        = Pixels(1.6);  // This should probably depend on font size.
+pub static DELIMITER_SHORT_FALL                          : FontUnit<u16> = FontUnit(100);
+pub static DELIMITER_FACTOR                              : f64           = 901.0/1000.0;
 
 pub static ACCENT_BASE_HEIGHT                            : FontUnit<i16> = FontUnit(450);
 pub static AXIS_HEIGHT                                   : FontUnit<i16> = FontUnit(250);
