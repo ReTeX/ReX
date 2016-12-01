@@ -137,13 +137,6 @@ impl Default for Alignment {
     }
 }
 
-//impl Deref for LayoutNode {
-//    type Target = LayoutNode;
-//    fn deref(&self) -> &Self::Target {
-//        &self.node
-//    }
-//}
-
 impl Deref for HorizontalBox {
     type Target = [LayoutNode];
     fn deref(&self) -> &Self::Target {
@@ -199,6 +192,30 @@ impl fmt::Debug for LayoutNode {
                 write!(f, "Kern({:.1})", kern)
             }
         }
+    }
+}
+
+impl LayoutNode {
+    // Center the vertical about the axis.
+    // For now this ignores offsets if already applied,
+    // and will break if there already are offsets.
+    fn centered(mut self, axis: Pixels) -> LayoutNode {
+        let shift = 0.5 * (self.height - self.depth) - axis;
+
+        match self.node {
+            LayoutVariant::VerticalBox(ref mut vb) => {
+                vb.offset    = shift;
+                self.height -= shift;
+                self.depth  -= shift;
+            },
+
+            LayoutVariant::Glyph(_) =>
+                return vbox!(offset: shift; self),
+
+            _ => (),
+        }
+
+        self
     }
 }
 

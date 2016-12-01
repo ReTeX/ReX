@@ -71,6 +71,38 @@ pub struct Rule {
     //pub depth:  Unit,
 }
 
+impl ParseNode {
+    pub fn expect_left(self) -> Result<Symbol, String> {
+        if let ParseNode::Symbol(sym) = self {
+            if sym.atom_type == AtomType::Open
+                || sym.atom_type == AtomType::Fence
+                || sym.unicode == 46 {
+                    return Ok(sym)
+            } else {
+                return Err(
+                    format!(r#"Expected Open, Fence, or period after `\left`, found {:?}"#, sym))
+            }
+        } else {
+            unreachable!()
+        }
+    }
+
+    pub fn expect_right(self) -> Result<Symbol, String> {
+        if let ParseNode::Symbol(sym) = self {
+            if sym.atom_type == AtomType::Close
+                || sym.atom_type == AtomType::Fence
+                || sym.unicode == 46 {
+                    return Ok(sym)
+            } else {
+                return Err(
+                    format!(r#"Expected Open, Fence, or period after `\right`, found {:?}"#, sym))
+            }
+        } else {
+            unreachable!()
+        }
+    }
+}
+
 use font::IsAtom;
 impl IsAtom for ParseNode {
     fn atom_type(&self) -> Option<AtomType> {
