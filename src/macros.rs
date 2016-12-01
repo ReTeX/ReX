@@ -1,3 +1,7 @@
+// ----------------------
+// Parsing related Macros
+// ----------------------
+
 macro_rules! first_some {
     ($lex:ident, $locals:ident, $first:ident, $($expr:ident,)* )  => (
         {
@@ -7,7 +11,7 @@ macro_rules! first_some {
 
             $(
                 else if let Some(res) = $expr($lex, $locals)? {
-                    Some(res) 
+                    Some(res)
                 }
             )*
 
@@ -26,7 +30,7 @@ macro_rules! should_fail {
             if let Ok(_) = $func(item) {
                 $errs.push(format!("{:?} - should have errored.\n", item));
             }
-        } 
+        }
     })
 }
 
@@ -46,11 +50,11 @@ macro_rules! should_equate {
             let l_res = $func(l);
             let r_res = $func(r);
             if l_res != r_res {
-                $errs.push(format!("{:?} and {:?} - should have yielded the same results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}", 
+                $errs.push(format!("{:?} and {:?} - should have yielded the same results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}",
                     l, r, l_res, r_res));
             }
         }
-    })    
+    })
 }
 
 macro_rules! should_differ {
@@ -59,11 +63,11 @@ macro_rules! should_differ {
             let l_res = $func(l);
             let r_res = $func(r);
             if l_res == r_res {
-                $errs.push(format!("{:?} and {:?} - should have yielded different results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}", 
+                $errs.push(format!("{:?} and {:?} - should have yielded different results.\n\n\tLeft:  {:?}\n\n\tRight: {:?}",
                     l, r, l_res, r_res));
             }
         }
-    })    
+    })
 }
 
 macro_rules! display_errors {
@@ -73,6 +77,6 @@ macro_rules! display_errors {
                 println!("\n{}", err);
             }
             panic!();
-        }            
+        }
     )
 }

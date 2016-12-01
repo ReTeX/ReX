@@ -2,7 +2,6 @@
 #![feature(plugin)]
 #![plugin(phf_macros)]
 extern crate phf;
-//extern crate svg;
 
 #[macro_use]
 mod macros;

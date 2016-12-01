@@ -62,6 +62,7 @@ impl TexCommand {
                 Some(ParseNode::Radical(Radical {
                     inner: parser::required_macro_argument(lex, local)?,
                 })),
+
             TexCommand::GenFraction {
                 left_delimiter:  ld,
                 right_delimiter: rd,
@@ -75,6 +76,7 @@ impl TexCommand {
                     numerator: parser::required_macro_argument(lex, local)?,
                     denominator: parser::required_macro_argument(lex, local)?,
                 })),
+
             TexCommand::DelimiterSize {
                 size: s,
                 atom_type: at,
@@ -93,9 +95,11 @@ impl TexCommand {
                     height: h,
                 }))
             },
+
             TexCommand::Kerning(k) =>
                 Some(ParseNode::Kerning(k)),
-            TexCommand::VExtend => {              // Only used for testing, for now.
+
+            TexCommand::VExtend => {
                 let sym = required!(lex, {
                     let c = lex.current;
                     lex.next();
@@ -113,9 +117,10 @@ impl TexCommand {
 
                 Some(ParseNode::Extend(code, height))
             },
-            TexCommand::HExtend => {
-                None
-            },
+
+            TexCommand::HExtend =>
+                None,
+
             TexCommand::Style(sty) => {
                 Some(ParseNode::Style(sty))
             }
