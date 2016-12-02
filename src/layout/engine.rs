@@ -311,6 +311,83 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 }
             },
 
+            ParseNode::GenFraction(ref mut frac) => {
+                use parser::nodes::BarThickness;
+                use super::Alignment;
+
+                let bar = match frac.bar_thickness {
+                    BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(style),
+                    BarThickness::None    => Pixels(0.0),
+                    BarThickness::Unit(u) => u.scaled(style),
+                } ;
+
+                let mut n = layout(&mut frac.numerator,   style.numerator());
+                let mut d = layout(&mut frac.denominator, style.denominator());
+
+                if n.width > d.width {
+                    d.alignment = Alignment::Centered(d.width);
+                    d.width     = n.width;
+                } else {
+                    n.alignment = Alignment::Centered(n.width);
+                    n.width     = d.width;
+                }
+
+                let numer = n.as_node();
+                let denom = d.as_node();
+
+                let mut shift_up   = Pixels(0.0);
+                let mut shift_down = Pixels(0.0);
+                let mut gap_num    = Pixels(0.0);
+                let mut gap_denom  = Pixels(0.0);
+                if style > Style::Text {
+                    shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP
+                        .scaled(style.numerator());
+                    shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN
+                        .scaled(style.denominator());
+                    gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN
+                        .scaled(style.numerator());
+                    gap_denom = FRACTION_DENOM_DISPLAY_STYLE_GAP_MIN
+                        .scaled(style.denominator());
+                } else {
+                    shift_up = FRACTION_NUMERATOR_SHIFT_UP
+                        .scaled(style.numerator());
+                    shift_down = FRACTION_DENOMINATOR_SHIFT_DOWN
+                        .scaled(style.denominator());
+                    gap_num = FRACTION_NUMERATOR_GAP_MIN
+                        .scaled(style.numerator());
+                    gap_denom = FRACTION_DENOMINATOR_GAP_MIN
+                        .scaled(style.denominator());
+                }
+
+                let axis = AXIS_HEIGHT.scaled(style);
+
+                // I think this has to do with an inconsistency with the font parameters hack
+                if style > Style::Text {
+                    shift_up   -= axis;
+                } else {
+                    shift_up   += -1.0*bar;
+                }
+
+                shift_up = shift_up.max(gap_num - numer.depth);
+                shift_down = shift_down.max(gap_denom + denom.height);
+
+                // Another font inconsistency??
+                if style > Style::Text {
+                    shift_down -= 0.5*bar;
+                }
+
+                let width = numer.width.max(numer.width);
+                let offset = shift_down + 1.5 * bar - axis;
+                result.add_node(vbox!(
+                    offset: offset;
+                    numer,
+                    kern!(vert: shift_up),
+                    rule!(width: width, height: bar),
+                    kern!(vert: shift_down - denom.height),
+                    denom
+                ));
+            },
+
             _ => (),
        }
     }

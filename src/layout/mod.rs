@@ -121,10 +121,10 @@ pub struct LayoutGlyph {
 }
 
 #[allow(dead_code)]
-#[derive(Copy, Clone, Debug, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Alignment {
-    Centered,
-    Right,
+    Centered(Pixels),
+    Right(Pixels),
     Left,
     Inherit,
     Default,
@@ -327,6 +327,22 @@ impl Style {
             Style::ScriptScript
                 => false,
             _   => true,
+        }
+    }
+
+    fn numerator(self) -> Style {
+        match self {
+            Style::Display        => Style::Text,
+            Style::DisplayCramped => Style::TextCramped,
+            _ => self.superscript_variant(),
+        }
+    }
+
+    fn denominator(self) -> Style {
+        match self {
+            Style::Display |
+            Style::DisplayCramped => Style::TextCramped,
+            _ => self.subscript_variant(),
         }
     }
 }

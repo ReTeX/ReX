@@ -2,7 +2,7 @@
 // use parser::nodes::{ ParseNode };
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
-use layout::{ LayoutNode, Layout, LayoutVariant };
+use layout::{ LayoutNode, Layout, LayoutVariant, Alignment };
 //use layout::boundingbox::Bounded;
 use dimensions::Pixels;
 
@@ -52,15 +52,21 @@ impl Renderer {
         output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", FONT_SIZE);
 
         output += &format!(G_TEMPLATE!(), LEFT_PADDING, TOP_PADDING);
-        output += &self.render_hbox(&self.layout.contents, self.layout.height, self.layout.width);
+        output += &self.render_hbox(&self.layout.contents,
+            self.layout.height, self.layout.width, Alignment::Default);
         output += "</g>";
         output += "</g></svg>";
         output
     }
 
-    pub fn render_hbox(&self, nodes: &[LayoutNode], height: Pixels, nodes_width: Pixels) -> String {
+    pub fn render_hbox(&self, nodes: &[LayoutNode],
+            height: Pixels, nodes_width: Pixels, alignment: Alignment) -> String {
         let mut result = String::new();
         let mut width = Pixels(0.0);
+
+        if let Alignment::Centered(w) = alignment {
+            width += (nodes_width - w)/2.0;
+        }
 
         result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes_width, height);
 
@@ -93,7 +99,7 @@ impl Renderer {
             },
             LayoutVariant::HorizontalBox(ref hbox) => {
                 result += &format!(G_TEMPLATE!(), width, height - node.height);
-                result += &self.render_hbox(&hbox.contents, node.height, node.width);
+                result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
                 result += "</g>";
                 width += node.width;
             },
@@ -119,7 +125,7 @@ impl Renderer {
             },
             LayoutVariant::HorizontalBox(ref hbox) => {
                 result += &format!(G_TEMPLATE!(), width, height);
-                result += &self.render_hbox(&hbox.contents, node.height, node.width);
+                result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
                 result += "</g>";
                 height += node.height;
             },
