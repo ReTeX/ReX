@@ -268,8 +268,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     let axis = *AXIS_HEIGHT as f64;
 
                     let mut clearance = 2. * (height - axis).max(axis - depth);
-                    clearance = clearance
-                        .max(DELIMITER_FACTOR * (height - depth))
+                    clearance = (DELIMITER_FACTOR * clearance)
                         .max(height - depth - *DELIMITER_SHORT_FALL as f64);
 
                     let axis = AXIS_HEIGHT.scaled(style);
@@ -376,16 +375,43 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     shift_down -= 0.5*bar;
                 }
 
-                let width = numer.width.max(numer.width);
+                let width  = numer.width.max(numer.width);
                 let offset = shift_down + 1.5 * bar - axis;
-                result.add_node(vbox!(
+                let inner = vbox!(
                     offset: offset;
                     numer,
                     kern!(vert: shift_up),
                     rule!(width: width, height: bar),
                     kern!(vert: shift_down - denom.height),
                     denom
-                ));
+                );
+
+                let height = *inner.height / FONT_SIZE * *UNITS_PER_EM as f64;
+                let depth  = *inner.depth  / FONT_SIZE * *UNITS_PER_EM as f64;
+                let mut clearance = 2. * (height - *axis).max(*axis - depth);
+                clearance = (DELIMITER_FACTOR * clearance);
+                    //.max(height - depth - *DELIMITER_SHORT_FALL as f64);
+                if let Some(delim) = frac.left_delimiter {
+                    let glyph = glyph_metrics(delim.unicode)
+                        .variant(clearance)
+                        .as_layout(style)
+                        .centered(axis);
+                    result.add_node(glyph);
+                } else {
+                    result.add_node(kern!(horz: NULL_DELIMITER_SPACE))
+                }
+
+                result.add_node(inner);
+
+                if let Some(delim) = frac.right_delimiter {
+                    let glyph = glyph_metrics(delim.unicode)
+                        .variant(clearance)
+                        .as_layout(style)
+                        .centered(axis);
+                    result.add_node(glyph);
+                } else {
+                    result.add_node(kern!(horz: NULL_DELIMITER_SPACE))
+                }
             },
 
             _ => (),
