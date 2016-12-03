@@ -32,3 +32,7 @@ Fractions: `f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\
 TODO: There seems to be a few inconsistencies with some fonts and the standard...
 
 ![cauchy](samples/cauchy.png)
+
+`\frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}} = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \unicodecdots}}}}`
+
+![nested fractions](samples/nested_fractions.png)
