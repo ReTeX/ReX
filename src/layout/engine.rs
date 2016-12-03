@@ -389,8 +389,8 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let height = *inner.height / FONT_SIZE * *UNITS_PER_EM as f64;
                 let depth  = *inner.depth  / FONT_SIZE * *UNITS_PER_EM as f64;
                 let mut clearance = 2. * (height - *axis).max(*axis - depth);
-                clearance = (DELIMITER_FACTOR * clearance);
-                    //.max(height - depth - *DELIMITER_SHORT_FALL as f64);
+                clearance = (DELIMITER_FACTOR * clearance)
+                    .max(height - depth - *DELIMITER_SHORT_FALL as f64);
                 if let Some(delim) = frac.left_delimiter {
                     let glyph = glyph_metrics(delim.unicode)
                         .variant(clearance)
