@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use super::{ VerticalBox, HorizontalBox, LayoutNode, LayoutVariant };
+use super::{ VerticalBox, HorizontalBox, LayoutNode, LayoutVariant, Alignment };
 use dimensions::Pixels;
 
 #[derive(Default)]
@@ -63,6 +63,7 @@ pub struct HBox {
     height: Pixels,
     depth:  Pixels,
     node:   HorizontalBox,
+    alignment: Alignment,
 }
 
 impl HBox {
@@ -77,6 +78,14 @@ impl HBox {
 
     pub fn set_offset(&mut self, offset: Pixels) {
         self.node.offset = offset;
+    }
+
+    pub fn set_alignment(&mut self, align: Alignment) {
+        self.node.alignment = align;
+    }
+
+    pub fn set_width(&mut self, width: Pixels) {
+        self.width = width;
     }
 
     pub fn build(mut self) -> LayoutNode {
@@ -103,6 +112,14 @@ macro_rules! hbox {
     ( $($node:expr),* ) => ({
         let mut _hbox = builders::HBox::new();
         $( _hbox.add_node($node); )*
+        _hbox.build()
+    });
+
+    (align: $align:expr; width: $width:expr; $($node:expr),*) => ({
+        let mut _hbox = builders::HBox::new();
+        $( _hbox.add_node($node); )*
+        _hbox.set_alignment($align);
+        _hbox.set_width($width);
         _hbox.build()
     });
 }

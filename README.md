@@ -27,6 +27,8 @@ TODO: `AtomType` normalization.  See spacing between `=` and `(`.
 
 ![leftright](samples/leftright.png)
 
+![holder](samples/holder.png)
+
 Fractions: `f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\,\mathrm{d}\xi`
 
 TODO: There seems to be a few inconsistencies with some fonts and the standard...

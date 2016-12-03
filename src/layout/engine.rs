@@ -1,3 +1,6 @@
+#![allow(unused_assignments)]
+#![allow(unused_variables)]
+
 use super::builders;
 use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style };
 use super::convert::AsLayoutNode;
@@ -14,7 +17,6 @@ use font::variants::Variant;
 use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::{ ParseNode, AtomType };
 use render::FONT_SIZE;
-
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
@@ -127,9 +129,63 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     None        => Layout::new(),
                 };
 
+                println!("{:?}", scripts.base);
+
+                let mut italics_correction = Pixels(0.0);
+                if let Some(ref b) = scripts.base {
+                    if let Some(AtomType::Operator(limits)) = b.atom_type() {
+                        if let ParseNode::Symbol(gly) = **b {
+                            if limits {
+                                let glyph = glyph_metrics(gly.unicode);
+                                italics_correction = Unit::Font(glyph.italics as f64)
+                                    .scaled(style);
+
+                                let width = base.width
+                                    .max(sub.width)
+                                    .max(sup.width);
+
+                                let height = base.height - base.depth;
+                                let kern1 = UPPER_LIMIT_BASELINE_RISE_MIN
+                                    .scaled(style.superscript_variant())
+                                    .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
+                                let kern2 = LOWER_LIMIT_BASELINE_DROP_MIN
+                                    .scaled(style.subscript_variant())
+                                    .max(LOWER_LIMIT_GAP_MIN.scaled(style) + sub.height);
+
+                                // TODO: This doesn't account for variant glyphs
+                                let offset = (base.height + base.depth) / 2.0
+                                    - AXIS_HEIGHT.scaled(style)
+                                    + sub.height + kern2;
+
+                                let w1 = sup.width;
+                                let w2 = sub.width;
+
+                                use super::Alignment;
+                                result.add_node(vbox!(
+                                    offset: offset;
+                                    hbox![align: Alignment::Centered(w1);
+                                        width: width;
+                                        kern![horz: italics_correction / 2.0],
+                                        sup.as_node()
+                                    ],
+                                    kern!(vert: kern1),
+                                    base.as_node(),
+                                    kern!(vert: kern2),
+                                    hbox![align: Alignment::Centered(w2);
+                                        width: width;
+                                        sub.as_node(),
+                                        kern![horz: italics_correction / 2.0]
+                                    ]
+                                ));
+
+                                continue
+                            }
+                        }
+                    }
+                }
+
                 // We calculate the vertical positions of the scripts.  The `adjust_up`
                 // variable will describe how far we need to adjust the superscript up.
-                let mut italics_correction = Pixels(0.0);
                 let mut adjust_up          = Pixels(0.0);
                 let mut adjust_down        = Pixels(0.0);
 
