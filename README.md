@@ -38,3 +38,7 @@ TODO: There seems to be a few inconsistencies with some fonts and the standard..
 `\frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}} = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \unicodecdots}}}}`
 
 ![nested fractions](samples/nested_fractions.png)
+
+Atom commands [`\mathop`, `\mathrel`, `\mathord`]: `\mathop{\mathrm{lim\,sup}}\limits_{x\rightarrow\infty}\ \mathop{\mathrm{sin}}(x)\mathrel{\mathop{=}\limits^?}1`
+
+![atom commands](samples/atoms.png)

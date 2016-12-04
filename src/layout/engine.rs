@@ -133,53 +133,55 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 let mut italics_correction = Pixels(0.0);
                 if let Some(ref b) = scripts.base {
+                    println!("Script Base: {:?}", b);
                     if let Some(AtomType::Operator(limits)) = b.atom_type() {
-                        if let Some(gly) = b.is_symbol() {
-                            if limits {
+                        println!("OP with Limits!");
+                        if limits {
+                            if let Some(gly) = b.is_symbol() {
                                 let glyph = glyph_metrics(gly.unicode);
                                 italics_correction = Unit::Font(glyph.italics as f64)
                                     .scaled(style);
-
-                                let width = base.width
-                                    .max(sub.width)
-                                    .max(sup.width);
-
-                                let height = base.height - base.depth;
-                                let kern1 = UPPER_LIMIT_BASELINE_RISE_MIN
-                                    .scaled(style.superscript_variant())
-                                    .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
-                                let kern2 = LOWER_LIMIT_BASELINE_DROP_MIN
-                                    .scaled(style.subscript_variant())
-                                    .max(LOWER_LIMIT_GAP_MIN.scaled(style) + sub.height);
-
-                                // TODO: This doesn't account for variant glyphs
-                                let offset = (base.height + base.depth) / 2.0
-                                    - AXIS_HEIGHT.scaled(style)
-                                    + sub.height + kern2;
-
-                                let w1 = sup.width;
-                                let w2 = sub.width;
-
-                                use super::Alignment;
-                                result.add_node(vbox!(
-                                    offset: offset;
-                                    hbox![align: Alignment::Centered(w1);
-                                        width: width;
-                                        kern![horz: italics_correction / 2.0],
-                                        sup.as_node()
-                                    ],
-                                    kern!(vert: kern1),
-                                    base.as_node(),
-                                    kern!(vert: kern2),
-                                    hbox![align: Alignment::Centered(w2);
-                                        width: width;
-                                        sub.as_node(),
-                                        kern![horz: italics_correction / 2.0]
-                                    ]
-                                ));
-
-                                continue
                             }
+
+                            let width = base.width
+                                .max(sub.width)
+                                .max(sup.width);
+
+                            let height = base.height - base.depth;
+                            let kern1 = UPPER_LIMIT_BASELINE_RISE_MIN
+                                .scaled(style.superscript_variant())
+                                .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
+                            let kern2 = LOWER_LIMIT_BASELINE_DROP_MIN
+                                .scaled(style.subscript_variant())
+                                .max(LOWER_LIMIT_GAP_MIN.scaled(style) + sub.height);
+
+                            // TODO: This doesn't account for variant glyphs
+                            let offset = (base.height + base.depth) / 2.0
+                                - AXIS_HEIGHT.scaled(style)
+                                + sub.height + kern2;
+
+                            let w1 = sup.width;
+                            let w2 = sub.width;
+
+                            use super::Alignment;
+                            result.add_node(vbox!(
+                                offset: offset;
+                                hbox![align: Alignment::Centered(w1);
+                                    width: width;
+                                    kern![horz: italics_correction / 2.0],
+                                    sup.as_node()
+                                ],
+                                kern!(vert: kern1),
+                                base.as_node(),
+                                kern!(vert: kern2),
+                                hbox![align: Alignment::Centered(w2);
+                                    width: width;
+                                    sub.as_node(),
+                                    kern![horz: italics_correction / 2.0]
+                                ]
+                            ));
+
+                            continue
                         }
                     }
                 }
@@ -479,13 +481,16 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 if inner.len() != 1 {
                     result.add_node(layout(inner, style).as_node());
                     continue;
-                } else if let AtomType::Operator(_) = at {
-                    result.add_node(layout(inner, style).as_node());
-                    continue;
                 }
 
-                if let Some(sym) = inner[0].is_symbol() {
-                    inner[0].set_atom_type(at);
+                match at {
+                    AtomType::Operator(_) => {
+                        if let Some(sym) = inner[0].is_symbol() {
+                            println!("Chaning Atom Type: {:?} -> {:?}", at, inner[0]);
+                            inner[0].set_atom_type(at);
+                        }
+                    }
+                    _ => (),
                 }
 
                 result.add_node(layout(inner, style).as_node());
