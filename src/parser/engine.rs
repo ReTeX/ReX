@@ -36,6 +36,17 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
         loop {
             lex.consume_whitespace();
             match lex.current {
+                Token::ControlSequence("limits") => {
+                    lex.next();
+
+                    if let Some(ref mut n) = node {
+                        if let Some(AtomType::Operator(_)) = n.atom_type() {
+                            n.set_atom_type(AtomType::Operator(true));
+                        } else {
+                            return Err("limit must follow an operator.".to_string());
+                        }
+                    } else { continue }
+                }
                 Token::Symbol('_') => {
                     lex.next();
                     let script = math_field(lex, local)?;

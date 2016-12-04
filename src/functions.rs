@@ -1,6 +1,6 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange };
 use lexer::Lexer;
 use parser;
 use parser::Locals;
@@ -36,6 +36,7 @@ pub enum TexCommand {
     },
     Kerning(Unit),
     Style(Style),
+    AtomChange(AtomType),
 }
 
 use lexer::Token;
@@ -121,8 +122,14 @@ impl TexCommand {
             TexCommand::HExtend =>
                 None,
 
-            TexCommand::Style(sty) => {
-                Some(ParseNode::Style(sty))
+            TexCommand::Style(sty) =>
+                Some(ParseNode::Style(sty)),
+
+            TexCommand::AtomChange(sty) => {
+                Some(ParseNode::AtomChange(AtomChange {
+                    at: sty,
+                    inner: parser::required_macro_argument(lex, local)?
+                }))
             }
         })
     }
@@ -166,4 +173,7 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "displaystyle" => TexCommand::Style(Style::Display),
     "scriptstyle" => TexCommand::Style(Style::Script),
     "scriptscriptstyle" => TexCommand::Style(Style::ScriptScript),
+    "mathop"  => TexCommand::AtomChange(AtomType::Operator(false)),
+    "mathrel" => TexCommand::AtomChange(AtomType::Relation),
+    "mathord" => TexCommand::AtomChange(AtomType::Alpha),
 };

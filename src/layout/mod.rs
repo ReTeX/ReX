@@ -235,9 +235,7 @@ pub enum Style {
 }
 
 impl Default for Style {
-    fn default() -> Style {
-        Style::Display
-    }
+    fn default() -> Style { Style::Display }
 }
 
 #[allow(dead_code)]

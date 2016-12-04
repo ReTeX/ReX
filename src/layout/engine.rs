@@ -15,7 +15,7 @@ use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
 use layout::spacing::{atom_spacing, Spacing};
-use parser::nodes::{ ParseNode, AtomType };
+use parser::nodes::{ ParseNode, AtomType, AtomChange };
 use render::FONT_SIZE;
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
@@ -134,7 +134,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut italics_correction = Pixels(0.0);
                 if let Some(ref b) = scripts.base {
                     if let Some(AtomType::Operator(limits)) = b.atom_type() {
-                        if let ParseNode::Symbol(gly) = **b {
+                        if let Some(gly) = b.is_symbol() {
                             if limits {
                                 let glyph = glyph_metrics(gly.unicode);
                                 italics_correction = Unit::Font(glyph.italics as f64)
@@ -470,6 +470,26 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 }
             },
 
+            ParseNode::AtomChange(AtomChange { at, ref mut inner }) => {
+                // Atom Types can change control flow for operators.
+                // We handle this change in control flow here,
+                // otherwise we do nothing.
+
+                // TODO: This adds an unnecessary hbox.  Remove them.
+                if inner.len() != 1 {
+                    result.add_node(layout(inner, style).as_node());
+                    continue;
+                } else if let AtomType::Operator(_) = at {
+                    result.add_node(layout(inner, style).as_node());
+                    continue;
+                }
+
+                if let Some(sym) = inner[0].is_symbol() {
+                    inner[0].set_atom_type(at);
+                }
+
+                result.add_node(layout(inner, style).as_node());
+            }
             _ => (),
        }
     }

@@ -56,6 +56,13 @@ pub enum ParseNode {
     Extend      (u32, Unit),
     Accent      (Accent),
     Style       (Style),
+    AtomChange  (AtomChange),
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct AtomChange {
+    pub at: AtomType,
+    pub inner: Vec<ParseNode>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -120,6 +127,7 @@ impl IsAtom for ParseNode {
             ParseNode::Kerning(_)      => None,
             ParseNode::Extend(_, _)    => None,
             ParseNode::Style(_)        => None,
+            ParseNode::AtomChange(AtomChange { at, .. }) => Some(at),
         }
     }
 }
@@ -128,7 +136,30 @@ impl ParseNode {
     pub fn set_atom_type(&mut self, at: AtomType) {
         match *self {
             ParseNode::Symbol(ref mut sym) => sym.atom_type = at,
+            ParseNode::Scripts(Scripts { ref mut base, ..}) =>
+                if let Some(ref mut b) = *base {
+                    b.set_atom_type(at);
+                },
+            ParseNode::AtomChange(ref mut node) =>
+                node.at = at,
             _ => (),
+        }
+    }
+
+    pub fn is_symbol(&self) -> Option<Symbol> {
+        match *self {
+            ParseNode::Symbol(sym) => Some(sym),
+            ParseNode::Accent(ref acc) => acc.nucleus.is_symbol(),
+            ParseNode::AtomChange(AtomChange { ref inner, .. }) => {
+                if inner.len() != 1 { return None }
+                inner[0].is_symbol()
+            },
+            ParseNode::Scripts(Scripts { ref base, ..}) => {
+                if let Some(ref b) = *base {
+                    b.is_symbol()
+                } else { None }
+            },
+            _ => None,
         }
     }
 }
