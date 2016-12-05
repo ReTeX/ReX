@@ -42,6 +42,7 @@ impl AsLayoutNode for Rule {
     }
 }
 
+use font::variants::Direction;
 impl AsLayoutNode for VariantGlyph {
     fn as_layout(&self, style: Style) -> LayoutNode {
         match *self {
@@ -50,18 +51,36 @@ impl AsLayoutNode for VariantGlyph {
                 glyph.as_layout(style)
             },
 
-            VariantGlyph::Constructable(ref c) => {
-                let mut contents = builders::VBox::new();
-                for instr in c.iter().rev() {
-                    contents.add_node(instr.glyph.as_layout(style));
-                    if instr.overlap != 0.0 {
-                        let unit = Unit::Font(-instr.overlap);
-                        let kern = unit.scaled(style);
-                        contents.add_node(kern!(vert: kern));
+            VariantGlyph::Constructable(dir, ref c) => {
+                match dir {
+                    Direction::Vertical => {
+                        let mut contents = builders::VBox::new();
+                        for instr in c.iter().rev() {
+                            contents.add_node(instr.glyph.as_layout(style));
+                            if instr.overlap != 0.0 {
+                                let unit = Unit::Font(-instr.overlap);
+                                let kern = unit.scaled(style);
+                                contents.add_node(kern!(vert: kern));
+                            }
+                        }
+
+                        contents.build()
+                    },
+
+                    Direction::Horizontal => {
+                        let mut contents = builders::HBox::new();
+                        for instr in c.iter() {
+                            contents.add_node(instr.glyph.as_layout(style));
+                            if instr.overlap != 0.0 {
+                                let unit = Unit::Font(-instr.overlap);
+                                let kern = unit.scaled(style);
+                                contents.add_node(kern!(horz: kern));
+                            }
+                        }
+
+                        contents.build()
                     }
                 }
-
-                contents.build()
             },
         }
     }

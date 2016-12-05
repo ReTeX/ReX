@@ -50,7 +50,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         if style == Style::Display {
                             let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
                             let axis_offset = AXIS_HEIGHT.scaled(style);
-                            let largeop = glyph.variant(size).as_layout(style);
+                            let largeop = glyph.vert_variant(size).as_layout(style);
 
                             // Vertically center
                             let shift = 0.5 *
@@ -90,7 +90,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     + *RADICAL_RULE_THICKNESS
                     + *RADICAL_EXTRA_ASCENDER; // Minimum gap
 
-                let glyph = sqrt.variant(size).as_layout(style);
+                let glyph = sqrt.vert_variant(size).as_layout(style);
                 let kerning = glyph.height
                     - contents.height
                     - RADICAL_RULE_THICKNESS.scaled(style)
@@ -129,13 +129,9 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     None        => Layout::new(),
                 };
 
-                println!("{:?}", scripts.base);
-
                 let mut italics_correction = Pixels(0.0);
                 if let Some(ref b) = scripts.base {
-                    println!("Script Base: {:?}", b);
                     if let Some(AtomType::Operator(limits)) = b.atom_type() {
-                        println!("OP with Limits!");
                         if limits {
                             if let Some(gly) = b.is_symbol() {
                                 let glyph = glyph_metrics(gly.unicode);
@@ -287,23 +283,43 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 // align the attachment correction points of both the accent
                 // and accentee.  Otherwise, we will align the center of the
                 // accent with the attachment correction of the accentee.
-                let symbol  = glyph_metrics(acc.symbol.unicode);
-                let offset = if symbol.attachment != 0 {
-                    skew - symbol.attachment_offset().scaled(style)
-                } else {
-                    let offset_x = Unit::Font(symbol.bbox.0 as f64)
-                        .scaled(style);
-                    let sym_width = Unit::Font((symbol.bbox.2 - symbol.bbox.0) as f64)
-                        .scaled(style);
+                let width   = *nucleus.width / FONT_SIZE * *UNITS_PER_EM;
+                let symbol  = glyph_metrics(acc.symbol.unicode)
+                    .horz_variant(width);
+                let mut symbol_layout = symbol.as_layout(style);
 
-                    skew +
-                        -1.0 * offset_x   // correct for combining characters
-                        - 0.5 * (nucleus.width - sym_width)  // align centers
+                use font::variants::VariantGlyph;
+                use font::Glyph;
+                use layout::Alignment;
+                let offset = match symbol {
+                    VariantGlyph::Constructable(_, _) => {
+                        if let LayoutVariant::HorizontalBox(ref mut hb) = symbol_layout.node {
+                            hb.alignment =
+                                Alignment::Centered(nucleus.width);
+                            println!("-> H B O X = {:?}", hb);
+                        }
+
+                        Pixels(0.0)
+                    },
+                    VariantGlyph::Replacement(Glyph { unicode, .. }) => {
+                        let sym = glyph_metrics(unicode);
+                        if sym.attachment != 0 {
+                            skew - sym.attachment_offset().scaled(style)
+                        } else {
+                            let offset_x = Unit::Font(sym.bbox.0 as f64)
+                                .scaled(style);
+                            let sym_width = Unit::Font((sym.bbox.2 - sym.bbox.0) as f64)
+                                .scaled(style);
+
+                            skew +
+                                -1.0 * offset_x   // correct for combining characters
+                                - 0.5 * (nucleus.width - sym_width)  // align centers
+                        }
+                    }
                 };
 
-                let symbol = symbol.as_layout(style);
                 result.add_node(vbox!(
-                    hbox!(kern!(horz: offset), symbol),
+                    hbox!(kern!(horz: offset), symbol_layout),
                     kern!(vert: -1.0 * delta),
                     nucleus.as_node()
                 ));
@@ -322,7 +338,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 // Only extend if we meet a certain size
                 // TODO: This quick height check doesn't seem to be strong enough,
                 // reference: http://tug.org/pipermail/luatex/2010-July/001745.html
-                if height - depth > *DELIMITED_SUB_FORMULA_MIN_HEIGHT as f64 {
+                if height.max(-1. * depth) > 0.5 * *DELIMITED_SUB_FORMULA_MIN_HEIGHT as f64 {
                     let axis = *AXIS_HEIGHT as f64;
 
                     let mut clearance = 2. * (height - axis).max(axis - depth);
@@ -334,7 +350,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         46  => kern!(horz: NULL_DELIMITER_SPACE),
                         _   =>
                             glyph_metrics(d.left.unicode)
-                                .variant(clearance)
+                                .vert_variant(clearance)
                                 .as_layout(style)
                                 .centered(axis),
                     };
@@ -343,7 +359,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         46  => kern!(horz: NULL_DELIMITER_SPACE),
                         _   =>
                             glyph_metrics(d.right.unicode)
-                                .variant(clearance)
+                                .vert_variant(clearance)
                                 .as_layout(style)
                                 .centered(axis),
                     };
@@ -451,7 +467,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     .max(height - depth - *DELIMITER_SHORT_FALL as f64);
                 if let Some(delim) = frac.left_delimiter {
                     let glyph = glyph_metrics(delim.unicode)
-                        .variant(clearance)
+                        .vert_variant(clearance)
                         .as_layout(style)
                         .centered(axis);
                     result.add_node(glyph);
@@ -463,7 +479,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 if let Some(delim) = frac.right_delimiter {
                     let glyph = glyph_metrics(delim.unicode)
-                        .variant(clearance)
+                        .vert_variant(clearance)
                         .as_layout(style)
                         .centered(axis);
                     result.add_node(glyph);
@@ -486,7 +502,6 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 match at {
                     AtomType::Operator(_) => {
                         if let Some(sym) = inner[0].is_symbol() {
-                            println!("Chaning Atom Type: {:?} -> {:?}", at, inner[0]);
                             inner[0].set_atom_type(at);
                         }
                     }

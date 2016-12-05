@@ -1,7 +1,7 @@
 use super::constants::MIN_CONNECTOR_OVERLAP;
 use super::Glyph;
 use super::glyph_metrics;
-use super::variant_tables::VERT_VARIANTS;
+use super::variant_tables::{ VERT_VARIANTS, HORZ_VARIANTS };
 
 
 #[derive(Debug, Clone)]
@@ -17,7 +17,7 @@ pub struct GlyphVariants {
 #[derive(Debug, Clone)]
 pub enum VariantGlyph {
     Replacement   (Glyph),
-    Constructable (Vec<GlyphInstruction>)
+    Constructable (Direction, Vec<GlyphInstruction>)
 }
 
 #[derive(Debug, Clone)]
@@ -48,20 +48,40 @@ pub struct GlyphInstruction {
 }
 
 pub trait Variant {
-    fn variant(&self, size: f64) -> VariantGlyph;
+    fn variant(&self, f64, Direction) -> VariantGlyph;
     fn successor(&self) -> Glyph;
+
+    fn vert_variant(&self, size: f64) -> VariantGlyph {
+        self.variant(size, Direction::Vertical)
+    }
+
+    fn horz_variant(&self, size: f64) -> VariantGlyph {
+        self.variant(size, Direction::Horizontal)
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
+pub enum Direction {
+    Vertical,
+    Horizontal,
 }
 
 impl Variant for Glyph {
-    fn variant(&self, size: f64) -> VariantGlyph {
+    fn variant(&self, size: f64, direction: Direction) -> VariantGlyph {
         // The size variable describes the minimum advance requirement.  We will
         // take the glpyh with the minimum height that exceeds our requirment.
 
-        let variants = match VERT_VARIANTS.get(&self.unicode) {
-            None => return VariantGlyph::Replacement(*self),
-            Some(g) => g,
-        };
+        println!("PreVariants!");
+        let variants = if let Some(variant) = match direction {
+                Direction::Vertical   => VERT_VARIANTS.get(&self.unicode),
+                Direction::Horizontal => HORZ_VARIANTS.get(&self.unicode), }
+            {
+                variant
+            } else {
+                return VariantGlyph::Replacement(*self)
+            };
 
+        println!("Variants!");
         // First check to see if any of the replacement glyphs meet the requirement.
         // It is assumed that the glyphs are in increasing advance.
         for glyph in &variants.replacements {
@@ -147,7 +167,7 @@ impl Variant for Glyph {
         // return this, otherwise distribute the overlap equally
         // amonst each part.
         if size_difference < 0.0 {
-            return VariantGlyph::Constructable(instructions)
+            return VariantGlyph::Constructable(direction, instructions)
         }
 
         let overlap = size_difference / (instructions.len() - 1) as f64;
@@ -155,7 +175,7 @@ impl Variant for Glyph {
             glyph.overlap -= overlap
         }
 
-        VariantGlyph::Constructable(instructions)
+        VariantGlyph::Constructable(direction, instructions)
     }
 
     /// This method will look for a successor of a given glyph if there
