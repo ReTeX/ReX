@@ -17,6 +17,22 @@ pub enum MathStyle {
     NoChange,
 }
 
+use lexer::Token;
+macro_rules! required {
+    ($lex:ident, $f:expr) => (
+        if $lex.current == Token::Symbol('{') {
+            $lex.next();
+            let result = $f;
+            $lex.consume_whitespace();
+            $lex.current.expect(Token::Symbol('}'))?;
+            $lex.next();
+            result
+        } else {
+            panic!("Missing required argument!".to_string())
+        }
+    )
+}
+
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum TexCommand {
@@ -39,21 +55,7 @@ pub enum TexCommand {
     AtomChange(AtomType),
 }
 
-use lexer::Token;
-macro_rules! required {
-    ($lex:ident, $f:expr) => (
-        if $lex.current == Token::Symbol('{') {
-            $lex.next();
-            let result = $f;
-            $lex.consume_whitespace();
-            $lex.current.expect(Token::Symbol('}'))?;
-            $lex.next();
-            result
-        } else {
-            panic!("Missing required argument!".to_string())
-        }
-    )
-}
+
 
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
