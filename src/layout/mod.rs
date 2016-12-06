@@ -240,7 +240,7 @@ impl Default for Style {
 
 #[allow(dead_code)]
 impl Style {
-    fn cramped_variant(self) -> Style {
+    fn cramped(self) -> Style {
         match self {
             Style::ScriptScriptCramped |
             Style::ScriptScript
@@ -317,7 +317,7 @@ impl Style {
         }
     }
 
-    fn cramped(&self) -> bool {
+    fn is_cramped(&self) -> bool {
         match *self {
             Style::Display |
             Style::Text |

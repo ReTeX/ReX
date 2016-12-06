@@ -75,11 +75,11 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
             ParseNode::Radical(ref mut rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
-                let style = style.cramped_variant();
+                let style = style.cramped();
                 let contents = layout(&mut rad.inner, style).as_node();
                 let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
 
-                let gap = match style.cramped() {
+                let gap = match style.is_cramped() {
                     true  => RADICAL_VERTICAL_GAP,
                     false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
                 };
@@ -192,7 +192,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                if let Some(_) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
                     // the standard positions in the OpenType specification.
-                    adjust_up = match style.cramped() {
+                    adjust_up = match style.is_cramped() {
                         true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
                         false => SUPERSCRIPT_SHIFT_UP,
                     }.scaled(style);
@@ -273,7 +273,31 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 //   (LuaTeX) BottomAccent: The vertical placement of a bottom accent is
                 //               straight below the accentee, no correction takes place.
 
-                let nucleus = layout(&mut [ *acc.nucleus.clone() ], style.cramped_variant());
+                // [x] If there is no accent, typeset like normal.
+                // [-] Take largest accent _smaller_ than nucleus.
+
+                // [x] Determine offset of accent:
+                //   (a) Accent has attachment correction:
+                //     [x] If accentee has attachment correction,
+                //         then align attachment corrections of both.
+                //     [x] Otherwise, align attachment correction of
+                //         accentee with center of nucleus, plus
+                //         italics correction of nucleus is a symbol.
+                //
+                //   (b) Accent has no attachment correction:
+                //     [x] If accentee has attachment correction,
+                //         center of accent with accent correction of base.
+                //     [x] Align accent center with base center (plus)
+                //         italics correction if it's a symbol.
+                //
+                //  Notes:
+                // [-] For superscripts, if character is simple symbol,
+                //     scripts should not take accent into account for height.
+                // [+] Layout nucleus with style cramped.
+                // [x] Baseline of result == baseline of base.
+                // [ ] The width of the resulting box is the width of the base.
+
+                let nucleus = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
                 let delta = nucleus.height.min(ACCENT_BASE_HEIGHT
                     .scaled(style));
 
@@ -510,3 +534,93 @@ impl IsSymbol for Layout {
         } else { None }
     }
 }
+
+impl IsSymbol for LayoutNode {
+    fn is_symbol(&self) -> Option<LayoutGlyph> {
+        match self.node {
+            LayoutVariant::Glyph(gly) => Some(gly),
+            _ => None,
+        }
+    }
+}
+
+// use parser::nodes::Accent;
+// use std::borrow::BorrowMut;
+// fn render_accent(acc: &mut Accent, result: &mut Layout, style: Style) {
+//     // First determine if we have the glyph in question.
+//     // If there isn't, we will typeset the base as normal.
+//     let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
+//     let base_layout = base.as_node();
+
+//     //         = match glyph_metrics[acc.symbol.unicode] {
+//     //     Some(acc) => acc,
+//     //     None      => {
+//     //         //warn!("Unable to find glyph for {:?}", CMD);
+//     //         let node = layout(&mut [ acc.nucleus.borrow_mut() ], style.cramped_variant());
+//     //         result.add_node(&mut [ acc.nucleus.borrow_mut() ], style);
+//     //         return
+//     //     }
+//     // };
+
+//     let accent_glyph = glyph_metrics(acc.symbol.unicode);
+//     let accent_variant = accent_glyph
+//         .variant(*base.width / FONT_SIZE * *UNITS_PER_EM);
+//     let accent = accent_variant.as_layout(style);
+
+//     // The attachement point of the base will be
+//     // determined by
+//     //   (a) None symbol:  width / 2.0,
+//     //   (b) Symbol:
+//     //      1. Attachment point (if there is one)
+//     //      2. Otherwise: (width + ic) / 2.0
+
+//     let base_offset = if base.contents.len() != 1 {
+//             base_layout.width / 2.0
+//         } else if let Some(ref sym) = base.contents[0].is_symbol() {
+//             let glyph = glyph_metrics(sym.unicode);
+//             if glyph.attachment != 0 {
+//                 glyph.attachment
+//             } else {
+//                 (glyph.advance + sym.italics) / 2.0
+//             }
+//         } else {
+//             base_layout.width / 2.0
+//         };
+
+//     // The attachment point of the accent will be
+//     //   (a) None symbol: width / 2.0 [ from constructed glyphs ]
+//     //   (b) Symbol:
+//     //      1. Attachment point (if there is one)
+//     //      2. Otherwise width / 2.0
+
+//     use font::variants::VariantGlyph;
+//     let acc_offset = match accent_variant {
+//             VariantGlyph::Replacement(ref sym)  => {
+//                 let glyph = glyph_metrics(sym.unicode);
+//                 if glyph.attachment != 0 {
+//                     Unit::Font(glyph.attachment as f64)
+//                         .as_pixels()
+//                 } else {
+//                     // For glyphs without attachmens, we must
+//                     // also account for combining glyphs
+//                     Pixels(((sym.bbox.3 as f64 - sym.bbox.1 as f64)
+//                         + sym.italics as f64) / 2.0)
+//                 }
+//             },
+
+//             VariantGlyph::Constructable(_) =>
+//                 accent.width / 2.0,
+//         };
+
+//     // Do not place the accent any _further_ than you would if given
+//     // an `x` character in the current style.
+//     let delta = -1. * base.height
+//         .min(ACCENT_BASE_HEIGHT.scaled(style));
+
+//     // By not placing an offset on this vbox, we are assured that the
+//     // baseline will match the baseline of `base.as_node()`
+//     result.add_node(vbox![
+//         hbox!(kern!(horz: acc_offset), accent),
+//         kern!(vert: delta),
+//         base.as_node()]);
+// }
