@@ -17,7 +17,7 @@ fn main() {
     }
 
     let mut p = parse(&input).unwrap();
-    //println!("Parse: {:?}", p);
+    println!("Parse: {:?}", p);
     let r = layout(&mut p, Style::Display);
     println!("layout: {:#?}", r);
 
