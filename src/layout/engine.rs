@@ -310,10 +310,10 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     } else if let Some(ref sym) = base.contents[0].is_symbol() {
                         let glyph = glyph_metrics(sym.unicode);
                         if glyph.attachment != 0 {
-                            Unit::Font(glyph.attachment as f64).as_pixels()
+                            Unit::Font(glyph.attachment as f64).scaled(style)
                         } else {
-                            Pixels((glyph.advance as i16 + glyph.italics)
-                                    as f64 / 2.0)
+                            Unit::Font((glyph.advance as i16 + glyph.italics)
+                                as f64 / 2.0).scaled(style)
                         }
                     } else {
                         base.width / 2.0
@@ -563,6 +563,20 @@ impl IsSymbol for LayoutNode {
     fn is_symbol(&self) -> Option<LayoutGlyph> {
         match self.node {
             LayoutVariant::Glyph(gly) => Some(gly),
+            LayoutVariant::HorizontalBox(ref hb) => {
+                if hb.contents.len() != 1 {
+                    None
+                } else {
+                    hb.contents[0].is_symbol()
+                }
+            },
+            LayoutVariant::VerticalBox(ref vb) => {
+                if vb.contents.len() != 1 {
+                    None
+                } else {
+                    vb.contents[0].is_symbol()
+                }
+            }
             _ => None,
         }
     }
