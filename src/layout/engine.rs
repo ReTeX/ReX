@@ -291,61 +291,65 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 //  Notes:
                 // [-] For superscripts, if character is simple symbol,
                 //     scripts should not take accent into account for height.
-                // [+] Layout nucleus with style cramped.
+                // [x] Layout nucleus with style cramped.
                 // [x] Baseline of result == baseline of base.
                 // [ ] The width of the resulting box is the width of the base.
 
-                let nucleus = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
-                let delta = nucleus.height.min(ACCENT_BASE_HEIGHT
-                    .scaled(style));
+                let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
+                let accent_variant = glyph_metrics(acc.symbol.unicode)
+                    .horz_variant(*base.width);
+                let accent = accent_variant.as_layout(style);
 
-                let skew = if let Some(ref sym) = nucleus.is_symbol() {
-                    sym.attachment
-                } else { Pixels(0.0) };
-
-                // If the accent has an attachment correction point, we will
-                // align the attachment correction points of both the accent
-                // and accentee.  Otherwise, we will align the center of the
-                // accent with the attachment correction of the accentee.
-                let width   = *nucleus.width / FONT_SIZE * *UNITS_PER_EM;
-                let symbol  = glyph_metrics(acc.symbol.unicode)
-                    .horz_variant(width);
-                let mut symbol_layout = symbol.as_layout(style);
+                // Attachment points for accent & base are calculated by
+                //   (a) None symbol:  width / 2.0,
+                //   (b) Symbol:
+                //      1. Attachment point (if there is one)
+                //      2. Otherwise: (width + ic) / 2.0
+                let base_offset = if base.contents.len() != 1 {
+                        base.width / 2.0
+                    } else if let Some(ref sym) = base.contents[0].is_symbol() {
+                        let glyph = glyph_metrics(sym.unicode);
+                        if glyph.attachment != 0 {
+                            Unit::Font(glyph.attachment as f64).as_pixels()
+                        } else {
+                            Pixels((glyph.advance as i16 + glyph.italics)
+                                    as f64 / 2.0)
+                        }
+                    } else {
+                        base.width / 2.0
+                    };
 
                 use font::variants::VariantGlyph;
-                use font::Glyph;
-                use layout::Alignment;
-                let offset = match symbol {
-                    VariantGlyph::Constructable(_, _) => {
-                        if let LayoutVariant::HorizontalBox(ref mut hb) = symbol_layout.node {
-                            hb.alignment =
-                                Alignment::Centered(nucleus.width);
-                            println!("-> H B O X = {:?}", hb);
-                        }
+                let acc_offset = match accent_variant {
+                        VariantGlyph::Replacement(sym) => {
+                            let glyph = glyph_metrics(sym.unicode);
+                            if glyph.attachment != 0 {
+                                Unit::Font(
+                                    glyph.attachment as f64
+                                ).as_pixels()
+                            } else {
+                                // For glyphs without attachmens, we must
+                                // also account for combining glyphs
+                                let off = 0.5*(sym.bbox.2 + sym.bbox.0) as f64;
+                                Unit::Font(off).scaled(style)
+                            }
+                        },
 
-                        Pixels(0.0)
-                    },
-                    VariantGlyph::Replacement(Glyph { unicode, .. }) => {
-                        let sym = glyph_metrics(unicode);
-                        if sym.attachment != 0 {
-                            skew - sym.attachment_offset().scaled(style)
-                        } else {
-                            let offset_x = Unit::Font(sym.bbox.0 as f64)
-                                .scaled(style);
-                            let sym_width = Unit::Font((sym.bbox.2 - sym.bbox.0) as f64)
-                                .scaled(style);
+                        VariantGlyph::Constructable(_, _) =>
+                            accent.width / 2.0
+                    };
 
-                            skew +
-                                -1.0 * offset_x   // correct for combining characters
-                                - 0.5 * (nucleus.width - sym_width)  // align centers
-                        }
-                    }
-                };
+                // Do not place the accent any _further_ than you would if given
+                // an `x` character in the current style.
+                let delta = -1. * base.height
+                    .min(ACCENT_BASE_HEIGHT.scaled(style));
 
+                // By not placing an offset on this vbox, we are assured that the
+                // baseline will match the baseline of `base.as_node()`
                 result.add_node(vbox!(
-                    hbox!(kern!(horz: offset), symbol_layout),
-                    kern!(vert: -1.0 * delta),
-                    nucleus.as_node()
+                    hbox!(kern!(horz: base_offset - acc_offset), accent),
+                    kern!(vert: delta),
+                    base.as_node()
                 ));
             },
 

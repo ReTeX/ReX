@@ -110,3 +110,11 @@ impl<U: Unital> ToPixels for FontUnit<U> {
         Unit::from(self).as_pixels()
     }
 }
+
+pub trait ToFont {
+    fn in_font(self) -> f64;
+}
+
+impl ToFont for Pixels {
+    fn in_font(self) -> f64 { *self / FONT_SIZE * *constants::UNITS_PER_EM }
+}

@@ -111,7 +111,7 @@ pub struct VerticalBox {
     pub alignment: Alignment,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct LayoutGlyph {
     pub unicode:    u32,
     pub scale:      f64,
