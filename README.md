@@ -17,13 +17,13 @@ Todo: Add horizontal kerning to scripts (test `P_n`).
 
 Accents: '\hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave y\bar y\tilde y'
 
-Todo: Extendable horizontal accents.  Compensate for overshot from accents (see kerning)?
+Todo: Compensate for overshot from accents (see kerning)?
 
 ![accents](samples/accents.png)
 
-`\left` and `\right`: `\sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}`
+![quadratic equation](samples/quadratic_accent.png)
 
-TODO: `AtomType` normalization.  See spacing between `=` and `(`.
+`\left` and `\right`: `\sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}`
 
 ![leftright](samples/leftright.png)
 

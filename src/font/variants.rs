@@ -73,7 +73,6 @@ impl Variant for Glyph {
         // The size variable describes the minimum advance requirement.  We will
         // take the glpyh with the minimum height that exceeds our requirment.
 
-        println!("PreVariants!");
         let variants = if let Some(variant) = match direction {
                 Direction::Vertical   => VERT_VARIANTS.get(&self.unicode),
                 Direction::Horizontal => HORZ_VARIANTS.get(&self.unicode), }
@@ -83,16 +82,17 @@ impl Variant for Glyph {
                 return VariantGlyph::Replacement(*self)
             };
 
-        println!("Variants!");
         // First check to see if any of the replacement glyphs meet the requirement.
         // It is assumed that the glyphs are in increasing advance.
         if find_min {
             for idx in 0..variants.replacements.len() {
                 if variants.replacements[idx].advance as f64 >= size {
-                    let replacement =
-                        glyph_metrics(variants.replacements[max(0, idx - 1)].unicode);
-                    return VariantGlyph::Replacement(replacement);
-
+                    if idx == 0 {
+                        return VariantGlyph::Replacement(*self)
+                    } else {
+                        return VariantGlyph::Replacement(
+                            glyph_metrics(variants.replacements[idx - 1].unicode));
+                    }
                 }
             }
         } else {
@@ -171,8 +171,6 @@ impl Variant for Glyph {
             }
         }
 
-        println!("Variants count: {:?}", count);
-
         // We now know how mean repeatable glyphs are required for our
         // construction, so we can create the glyph instructions.
         // We start with the smallest possible glyph.
@@ -210,12 +208,9 @@ impl Variant for Glyph {
             }
         }
 
-        println!("Accent advance: {:?} vs Size: {:?}", glyph_advance, size);
-
         // Now we will calculate how much we need to reduce our overlap
         // to construct a glyph of the desired size.
         let size_difference = size - glyph_advance;
-        println!("size diff: {:?}", size_difference);
 
         // Provided that our constructed glyph is _still_ too large,
         // return this, otherwise distribute the overlap equally
@@ -225,12 +220,10 @@ impl Variant for Glyph {
         }
 
         let overlap = size_difference / (instructions.len() - 1) as f64;
-        println!("overlap: {:?}", overlap);
         for glyph in instructions.iter_mut().skip(1) {
             glyph.overlap -= overlap
         }
 
-        println!("{:?}", instructions);
         VariantGlyph::Constructable(direction, instructions)
     }
 
