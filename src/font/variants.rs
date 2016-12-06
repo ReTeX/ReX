@@ -1,3 +1,5 @@
+use std::cmp::{ min, max };
+
 use super::constants::MIN_CONNECTOR_OVERLAP;
 use super::Glyph;
 use super::glyph_metrics;
@@ -48,15 +50,15 @@ pub struct GlyphInstruction {
 }
 
 pub trait Variant {
-    fn variant(&self, f64, Direction) -> VariantGlyph;
+    fn variant(&self, f64, Direction, bool) -> VariantGlyph;
     fn successor(&self) -> Glyph;
 
     fn vert_variant(&self, size: f64) -> VariantGlyph {
-        self.variant(size, Direction::Vertical)
+        self.variant(size, Direction::Vertical, false)
     }
 
     fn horz_variant(&self, size: f64) -> VariantGlyph {
-        self.variant(size, Direction::Horizontal)
+        self.variant(size, Direction::Horizontal, true)
     }
 }
 
@@ -67,7 +69,7 @@ pub enum Direction {
 }
 
 impl Variant for Glyph {
-    fn variant(&self, size: f64, direction: Direction) -> VariantGlyph {
+    fn variant(&self, size: f64, direction: Direction, find_min: bool) -> VariantGlyph {
         // The size variable describes the minimum advance requirement.  We will
         // take the glpyh with the minimum height that exceeds our requirment.
 
@@ -84,10 +86,21 @@ impl Variant for Glyph {
         println!("Variants!");
         // First check to see if any of the replacement glyphs meet the requirement.
         // It is assumed that the glyphs are in increasing advance.
-        for glyph in &variants.replacements {
-            if glyph.advance as f64 >= size {
-                let replacement = glyph_metrics(glyph.unicode);
-                return VariantGlyph::Replacement(replacement);
+        if find_min {
+            for idx in 0..variants.replacements.len() {
+                if variants.replacements[idx].advance as f64 >= size {
+                    let replacement =
+                        glyph_metrics(variants.replacements[max(0, idx - 1)].unicode);
+                    return VariantGlyph::Replacement(replacement);
+
+                }
+            }
+        } else {
+            for glyph in &variants.replacements {
+                if glyph.advance as f64 >= size {
+                    let replacement = glyph_metrics(glyph.unicode);
+                    return VariantGlyph::Replacement(replacement);
+                }
             }
         }
 
@@ -105,34 +118,60 @@ impl Variant for Glyph {
             Some(ref c) => c,
         };
 
-        // This function will measure the maximum size of a glyph construction
+        // This function will measure the /maximum/ size of a glyph construction
         // with a given number of repeatable glyphs.
-        fn advance_with_glyphs(parts: &[GlyphPart], repeats: u8) -> f64 {
-            use ::std::cmp::min;
+        fn max_size(parts: &[GlyphPart], repeats: u8) -> f64 {
             let mut advance = 0;
-            let mut previous_connector = 0;
+            let overlap = *MIN_CONNECTOR_OVERLAP;
+
             for glyph in parts {
                 // If this is an optional glyph, we repeat `repeats` times
+                let count = if !glyph.required { repeats } else { 1 } as u32;
+                advance += count*(glyph.full_advance - overlap);
+            }
+
+            advance as f64 + overlap as f64
+        }
+
+        // This function will measure the /smallest/ size of a glyph construction
+        // with a given number of repeatable glyphs.
+        fn min_size(parts: &[GlyphPart], repeats: u8) -> f64 {
+            let mut advance = 0;
+            let mut prev_connector = 0;
+
+            for glyph in parts {
                 let count = if !glyph.required { repeats } else { 1 };
                 for _ in 0..count {
                     let overlap =
-                        min(previous_connector, glyph.start_connector_length);
+                        min(prev_connector, glyph.start_connector_length);
                     advance += glyph.full_advance
-                        - min(*MIN_CONNECTOR_OVERLAP, overlap);
-                    previous_connector = glyph.end_connector_length;
+                        - max(overlap, *MIN_CONNECTOR_OVERLAP);
+                    prev_connector = glyph.end_connector_length;
                 }
             }
 
-            advance as f64
+            // We subtracted overlap on the first glyph when we shouldn't
+            advance as f64 + *MIN_CONNECTOR_OVERLAP as f64
         }
 
         // We check for the smallest number of repeatable glyphs
         // that are required to meet our requirements.
         let mut count = 0;
-        while advance_with_glyphs(&construction.parts, count) < size {
-            count += 1;
-            if count > 10 { panic!("Unable to construct large glyph."); }
+        if find_min {
+            while min_size(&construction.parts, count) < size {
+                count +=1 ;
+                if count > 20 { panic!("Unable to construct large glyph! Max iteration hit."); }
+            }
+            // Current glyph is too large, go back one.
+            count = ::std::cmp::max(0, count - 1);
+        } else {
+            while max_size(&construction.parts, count) < size {
+                count += 1;
+                if count > 20 { panic!("Unable to construct large glyph."); }
+            }
         }
+
+        println!("Variants count: {:?}", count);
 
         // We now know how mean repeatable glyphs are required for our
         // construction, so we can create the glyph instructions.
@@ -140,28 +179,43 @@ impl Variant for Glyph {
         // While we are doing this, we will calculate the advance
         // of the entire glyph.
         let mut instructions: Vec<GlyphInstruction> = Vec::new();
-        let mut previous_connector = 0;
+        let mut prev_connector = 0;
         let mut glyph_advance: f64 = 0.0;
+        let mut first = true;
+
         for glyph in &construction.parts {
-            use ::std::cmp::min;
             let repeat = if !glyph.required { count } else { 1 };
             let gly = glyph_metrics(glyph.unicode);
             for _ in 0..repeat {
                 let overlap =
-                    min(previous_connector, glyph.start_connector_length)
-                    as f64;
-                glyph_advance += glyph.full_advance as f64 - overlap;
-                instructions.push(GlyphInstruction {
-                    glyph:   gly,
-                    overlap: overlap,
-                });
-                previous_connector = glyph.end_connector_length;
+                    (min(prev_connector, glyph.start_connector_length) as f64)
+                    .max(*MIN_CONNECTOR_OVERLAP as f64);
+
+                if first {
+                    glyph_advance += glyph.full_advance as f64;
+                    instructions.push(GlyphInstruction {
+                        glyph:   gly,
+                        overlap: 0.0,
+                    });
+                    first = false;
+                } else {
+                    glyph_advance += glyph.full_advance as f64 - overlap;
+                    instructions.push(GlyphInstruction {
+                        glyph:   gly,
+                        overlap: overlap,
+                    });
+                }
+
+                prev_connector = glyph.end_connector_length;
             }
         }
+
+        println!("Accent advance: {:?} vs Size: {:?}", glyph_advance, size);
 
         // Now we will calculate how much we need to reduce our overlap
         // to construct a glyph of the desired size.
         let size_difference = size - glyph_advance;
+        println!("size diff: {:?}", size_difference);
 
         // Provided that our constructed glyph is _still_ too large,
         // return this, otherwise distribute the overlap equally
@@ -171,10 +225,12 @@ impl Variant for Glyph {
         }
 
         let overlap = size_difference / (instructions.len() - 1) as f64;
+        println!("overlap: {:?}", overlap);
         for glyph in instructions.iter_mut().skip(1) {
             glyph.overlap -= overlap
         }
 
+        println!("{:?}", instructions);
         VariantGlyph::Constructable(direction, instructions)
     }
 

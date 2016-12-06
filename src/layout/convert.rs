@@ -69,13 +69,17 @@ impl AsLayoutNode for VariantGlyph {
 
                     Direction::Horizontal => {
                         let mut contents = builders::HBox::new();
-                        for instr in c.iter() {
-                            contents.add_node(instr.glyph.as_layout(style));
+                        if let Some(first) = c.first() {
+                            contents.add_node(first.glyph.as_layout(style));
+                        }
+
+                        for instr in c.iter().skip(1) {
                             if instr.overlap != 0.0 {
                                 let unit = Unit::Font(-instr.overlap);
                                 let kern = unit.scaled(style);
                                 contents.add_node(kern!(horz: kern));
                             }
+                            contents.add_node(instr.glyph.as_layout(style));
                         }
 
                         contents.build()

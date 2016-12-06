@@ -297,8 +297,11 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
                 let accent_variant = glyph_metrics(acc.symbol.unicode)
-                    .horz_variant(*base.width);
+                    .horz_variant(*base.width / FONT_SIZE * *UNITS_PER_EM);
                 let accent = accent_variant.as_layout(style);
+                println!("base: {:?}, accent: {:?}",
+                    *base.width / FONT_SIZE * *UNITS_PER_EM,
+                    *accent.width / FONT_SIZE * *UNITS_PER_EM);
 
                 // Attachment points for accent & base are calculated by
                 //   (a) None symbol:  width / 2.0,
@@ -338,6 +341,9 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         VariantGlyph::Constructable(_, _) =>
                             accent.width / 2.0
                     };
+
+                println!("Base off: {:?}, Accent Off: {:?}",
+                    base_offset, acc_offset);
 
                 // Do not place the accent any _further_ than you would if given
                 // an `x` character in the current style.
