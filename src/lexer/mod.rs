@@ -1,5 +1,5 @@
 mod lexer;
-mod nom;
+//mod nom;
 pub use self::lexer::*;
 
 #[derive(Clone, Copy, Debug)]
@@ -28,7 +28,7 @@ impl<'a> Token<'a> {
     #[allow(dead_code)]
     pub fn ends_expression(&self) -> bool {
         match *self {
-            Token::EOF |
+            Token::EOF         |
             Token::Symbol('}') |
             Token::ControlSequence("right") => true,
             _ => false,

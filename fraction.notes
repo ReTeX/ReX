@@ -1,0 +1,76 @@
+# Fraction with bar:
+
+ParseNode::GenFraction(ref mut frac) =>
+
+let bar = match frac.bar_thickness {
+    BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(style),
+    BarThickness::Unit(u) => u.scaled(style),
+};
+
+let mut n = layout(&mut frac.numerator, style.numerator());
+let mut d = layout(&mut frac.denominator, style.denominator());
+
+// Determine whether the top or bottom need to be aligned.
+if n.width > d.width {
+    d.centered(n.width);
+} else {
+    n.centered(d.width);
+}
+
+let numer = n.as_node();
+let denom = d.as_node();
+let axis  = AXIS_HEIGHT.scaled(style);
+
+// Depending on if we are in display mode or not, we will use
+// different parameters for laying out the fraction.
+let mut shift_up   = Pixels(0.0);
+let mut shift_down = Pixels(0.0);
+let mut gap_num    = Pixels(0.0);
+let mut gap_denom  = Pixels(0.0);
+if style > Style::Text {
+    shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP
+        .scaled(style.numerator());
+    shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN
+        .scaled(style.denominator());
+    gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN
+        .scaled(style.numerator());
+    gap_denom = FRACTION_DENOM_DISPLAY_STYLE_GAP_MIN
+        .scaled(style.denominator());
+} else {
+    shift_up = FRACTION_NUMERATOR_SHIFT_UP
+        .scaled(style.numerator());
+    shift_down = FRACTION_DENOMINATOR_SHIFT_DOWN
+        .scaled(style.denominator());
+    gap_num = FRACTION_NUMERATOR_GAP_MIN
+        .scaled(style.numerator());
+    gap_denom = FRACTION_DENOMINATOR_GAP_MIN
+        .scaled(style.denominator());
+}
+
+// We start with:
+//   [ num ]
+//   [ shift up - 0.5*bar ]
+//   [ bar ]
+//   [ shift down - 0.5*bar - denominator.height ]
+//   [ denom ]
+
+// Avoiding collisions.  Calculate vertical kerning.
+// For now these calculations are done assuming bar is centered.
+let kern_up   = (shift_up - bar/2.0)
+    .max(gap_num + numer.depth);
+let kern_down = (shift_down - denom.height - bar/2.0)
+    .max(gap_denom);
+
+let offset = denom.height + kern_down + bar/2.0 - axis;
+    
+Collision Avoidance:
+  - Numerator & Denominator are shifted independently
+    in order to provide a minimal gap (see constants) between
+    the bar.
+  - The position of the bar remains intact (on the AxisHeight)
+  
+Scaling Observations:
+  - The scaling of the layout parameters for fractions are all based on
+    the style for which the fraction will be laid out.  The numerator
+    shift up, for instance, does not depend on `style.numerator()`, but 
+    instead on `style`.

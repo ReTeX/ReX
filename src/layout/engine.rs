@@ -14,6 +14,7 @@ use font::SYMBOLS;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
+use font::variants::VariantGlyph;
 use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::{ ParseNode, AtomType, AtomChange };
 use render::FONT_SIZE;
@@ -129,6 +130,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     None        => Layout::new(),
                 };
 
+                // Script processing is handled differently for Operators with limits.
                 let mut italics_correction = Pixels(0.0);
                 if let Some(ref b) = scripts.base {
                     if let Some(AtomType::Operator(limits)) = b.atom_type() {
@@ -186,6 +188,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 // variable will describe how far we need to adjust the superscript up.
                 let mut adjust_up          = Pixels(0.0);
                 let mut adjust_down        = Pixels(0.0);
+                let mut accent_correction  = Pixels(0.0);
 
                if let Some(_) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
@@ -197,7 +200,25 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                     // Next we check to see if the vertical shift meets the minimum
                     // clearance relative to the base.
-                    let height   = base.height;
+
+                    // For accents, whose base is a simple symbol, we do not take
+                    // the accent into account while positioning the superscript.
+                    // TODO: This should probably be recursive.
+                    let height = if let Some(ref b) = scripts.base {
+                            if let ParseNode::Accent(ref acc) = **b {
+                                if let Some(ref sym) = acc.nucleus.is_symbol() {
+                                    let bh = glyph_metrics(sym.unicode)
+                                        .height()
+                                        .scaled(style);
+                                    accent_correction = base.height - bh;
+                                    println!("Scripts with accent. {:?}",
+                                        accent_correction);
+                                    println!("Accent base: {:?}", b);
+                                    bh
+                                } else { base.height }
+                            } else { base.height }
+                        } else { base.height };
+
                     let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX
                         .scaled(style);
 
@@ -267,12 +288,8 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
             },
 
             ParseNode::Accent(ref acc) => {
-                // TODO: Account for bottom accents (accent flag?)
-                //   (LuaTeX) BottomAccent: The vertical placement of a bottom accent is
-                //               straight below the accentee, no correction takes place.
-
                 // [x] If there is no accent, typeset like normal.
-                // [-] Take largest accent _smaller_ than nucleus.
+                // [x] Take largest accent _smaller_ than nucleus.
 
                 // [x] Determine offset of accent:
                 //   (a) Accent has attachment correction:
@@ -288,23 +305,22 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 //     [x] Align accent center with base center (plus)
                 //         italics correction if it's a symbol.
                 //
-                //  Notes:
                 // [-] For superscripts, if character is simple symbol,
                 //     scripts should not take accent into account for height.
                 // [x] Layout nucleus with style cramped.
                 // [x] Baseline of result == baseline of base.
                 // [ ] The width of the resulting box is the width of the base.
+                // [ ] Bottom accents: vertical placement is directly below nucleus,
+                //       no correction takes place.
+                // [ ] WideAccent vs Accent: Don't expand Accent types.
 
                 let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
                 let accent_variant = glyph_metrics(acc.symbol.unicode)
                     .horz_variant(*base.width / FONT_SIZE * *UNITS_PER_EM);
                 let accent = accent_variant.as_layout(style);
-                println!("base: {:?}, accent: {:?}",
-                    *base.width / FONT_SIZE * *UNITS_PER_EM,
-                    *accent.width / FONT_SIZE * *UNITS_PER_EM);
 
                 // Attachment points for accent & base are calculated by
-                //   (a) None symbol:  width / 2.0,
+                //   (a) Non-symbol: width / 2.0,
                 //   (b) Symbol:
                 //      1. Attachment point (if there is one)
                 //      2. Otherwise: (width + ic) / 2.0
@@ -322,7 +338,6 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         base.width / 2.0
                     };
 
-                use font::variants::VariantGlyph;
                 let acc_offset = match accent_variant {
                         VariantGlyph::Replacement(sym) => {
                             let glyph = glyph_metrics(sym.unicode);
@@ -341,9 +356,6 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         VariantGlyph::Constructable(_, _) =>
                             accent.width / 2.0
                     };
-
-                println!("Base off: {:?}, Accent Off: {:?}",
-                    base_offset, acc_offset);
 
                 // Do not place the accent any _further_ than you would if given
                 // an `x` character in the current style.
@@ -441,6 +453,8 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 let numer = n.as_node();
                 let denom = d.as_node();
+                let axis = AXIS_HEIGHT.scaled(style);
+
 
                 let mut shift_up   = Pixels(0.0);
                 let mut shift_down = Pixels(0.0);
@@ -448,78 +462,47 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut gap_denom  = Pixels(0.0);
                 if style > Style::Text {
                     shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP
-                        .scaled(style.numerator());
+                        .scaled(style);
                     shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN
-                        .scaled(style.denominator());
+                        .scaled(style);
                     gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN
-                        .scaled(style.numerator());
+                        .scaled(style);
                     gap_denom = FRACTION_DENOM_DISPLAY_STYLE_GAP_MIN
-                        .scaled(style.denominator());
+                        .scaled(style);
                 } else {
                     shift_up = FRACTION_NUMERATOR_SHIFT_UP
-                        .scaled(style.numerator());
+                        .scaled(style);
                     shift_down = FRACTION_DENOMINATOR_SHIFT_DOWN
-                        .scaled(style.denominator());
+                        .scaled(style);
                     gap_num = FRACTION_NUMERATOR_GAP_MIN
-                        .scaled(style.numerator());
+                        .scaled(style);
                     gap_denom = FRACTION_DENOMINATOR_GAP_MIN
-                        .scaled(style.denominator());
+                        .scaled(style);
                 }
 
-                let axis = AXIS_HEIGHT.scaled(style);
+                // TODO: Investigate.
+                // It appears that the vertical layout system handles
+                // Rules differentally than expect.  This result with me
+                // being off by 1 Rule width in a few places.
 
-                // I think this has to do with an inconsistency with the font parameters hack
-                if style > Style::Text {
-                    shift_up   -= axis;
-                } else {
-                    shift_up   += -1.0*bar;
-                }
-
-                shift_up = shift_up.max(gap_num - numer.depth);
-                shift_down = shift_down.max(gap_denom + denom.height);
-
-                // Another font inconsistency??
-                if style > Style::Text {
-                    shift_down -= 0.5*bar;
-                }
+                let kern_up = (shift_up - axis + bar/2.0).max(gap_num + numer.depth);
+                let kern_down = (shift_down + axis - denom.height - 1.5*bar)
+                    .max(gap_denom);
+                let offset = denom.height + kern_down + 1.5*bar - axis;
 
                 let width  = numer.width.max(numer.width);
-                let offset = shift_down + 1.5 * bar - axis;
                 let inner = vbox!(
                     offset: offset;
                     numer,
-                    kern!(vert: shift_up),
+                    kern!(vert: kern_up),
                     rule!(width: width, height: bar),
-                    kern!(vert: shift_down - denom.height),
+                    kern!(vert: kern_down),
                     denom
                 );
 
-                let height = *inner.height / FONT_SIZE * *UNITS_PER_EM as f64;
-                let depth  = *inner.depth  / FONT_SIZE * *UNITS_PER_EM as f64;
-                let mut clearance = 2. * (height - *axis).max(*axis - depth);
-                clearance = (DELIMITER_FACTOR * clearance)
-                    .max(height - depth - *DELIMITER_SHORT_FALL as f64);
-                if let Some(delim) = frac.left_delimiter {
-                    let glyph = glyph_metrics(delim.unicode)
-                        .vert_variant(clearance)
-                        .as_layout(style)
-                        .centered(axis);
-                    result.add_node(glyph);
-                } else {
-                    result.add_node(kern!(horz: NULL_DELIMITER_SPACE))
-                }
-
+                result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
                 result.add_node(inner);
-
-                if let Some(delim) = frac.right_delimiter {
-                    let glyph = glyph_metrics(delim.unicode)
-                        .vert_variant(clearance)
-                        .as_layout(style)
-                        .centered(axis);
-                    result.add_node(glyph);
-                } else {
-                    result.add_node(kern!(horz: NULL_DELIMITER_SPACE))
-                }
+                result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
             },
 
             ParseNode::AtomChange(AtomChange { at, ref mut inner }) => {
@@ -587,84 +570,3 @@ impl IsSymbol for LayoutNode {
         }
     }
 }
-
-// use parser::nodes::Accent;
-// use std::borrow::BorrowMut;
-// fn render_accent(acc: &mut Accent, result: &mut Layout, style: Style) {
-//     // First determine if we have the glyph in question.
-//     // If there isn't, we will typeset the base as normal.
-//     let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
-//     let base_layout = base.as_node();
-
-//     //         = match glyph_metrics[acc.symbol.unicode] {
-//     //     Some(acc) => acc,
-//     //     None      => {
-//     //         //warn!("Unable to find glyph for {:?}", CMD);
-//     //         let node = layout(&mut [ acc.nucleus.borrow_mut() ], style.cramped_variant());
-//     //         result.add_node(&mut [ acc.nucleus.borrow_mut() ], style);
-//     //         return
-//     //     }
-//     // };
-
-//     let accent_glyph = glyph_metrics(acc.symbol.unicode);
-//     let accent_variant = accent_glyph
-//         .variant(*base.width / FONT_SIZE * *UNITS_PER_EM);
-//     let accent = accent_variant.as_layout(style);
-
-//     // The attachement point of the base will be
-//     // determined by
-//     //   (a) None symbol:  width / 2.0,
-//     //   (b) Symbol:
-//     //      1. Attachment point (if there is one)
-//     //      2. Otherwise: (width + ic) / 2.0
-
-//     let base_offset = if base.contents.len() != 1 {
-//             base_layout.width / 2.0
-//         } else if let Some(ref sym) = base.contents[0].is_symbol() {
-//             let glyph = glyph_metrics(sym.unicode);
-//             if glyph.attachment != 0 {
-//                 glyph.attachment
-//             } else {
-//                 (glyph.advance + sym.italics) / 2.0
-//             }
-//         } else {
-//             base_layout.width / 2.0
-//         };
-
-//     // The attachment point of the accent will be
-//     //   (a) None symbol: width / 2.0 [ from constructed glyphs ]
-//     //   (b) Symbol:
-//     //      1. Attachment point (if there is one)
-//     //      2. Otherwise width / 2.0
-
-//     use font::variants::VariantGlyph;
-//     let acc_offset = match accent_variant {
-//             VariantGlyph::Replacement(ref sym)  => {
-//                 let glyph = glyph_metrics(sym.unicode);
-//                 if glyph.attachment != 0 {
-//                     Unit::Font(glyph.attachment as f64)
-//                         .as_pixels()
-//                 } else {
-//                     // For glyphs without attachmens, we must
-//                     // also account for combining glyphs
-//                     Pixels(((sym.bbox.3 as f64 - sym.bbox.1 as f64)
-//                         + sym.italics as f64) / 2.0)
-//                 }
-//             },
-
-//             VariantGlyph::Constructable(_) =>
-//                 accent.width / 2.0,
-//         };
-
-//     // Do not place the accent any _further_ than you would if given
-//     // an `x` character in the current style.
-//     let delta = -1. * base.height
-//         .min(ACCENT_BASE_HEIGHT.scaled(style));
-
-//     // By not placing an offset on this vbox, we are assured that the
-//     // baseline will match the baseline of `base.as_node()`
-//     result.add_node(vbox![
-//         hbox!(kern!(horz: acc_offset), accent),
-//         kern!(vert: delta),
-//         base.as_node()]);
-// }
