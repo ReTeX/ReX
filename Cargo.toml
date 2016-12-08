@@ -7,3 +7,7 @@ authors = ["Christopher Breeden <github@u.breeden.cc>"]
 phf="*"
 phf_macros="*"
 lazy_static="*"
+nom="*"
+regex="*"
+quickcheck="*"
+quickcheck_macros="*"

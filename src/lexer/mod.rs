@@ -1,13 +1,14 @@
 mod lexer;
-pub use self::lexer::*; 
+mod nom;
+pub use self::lexer::*;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Lexer<'a> {    
+pub struct Lexer<'a> {
     pub input: &'a str,
 
     /// The position of the _next_ token to be lexed.  So it
     /// is a true statement that `self.input[0..self.pos]` displays
-    /// all characters that have and is currently being processed. 
+    /// all characters that have and is currently being processed.
     pub pos: usize,
 
     /// The token currently being processed.
@@ -41,6 +42,6 @@ impl<'a> Token<'a> {
         } else {
             Err(format!("Expected token '{:?}', found the token '{:?}'",
                 expected, self))
-        }        
+        }
     }
 }
