@@ -74,3 +74,40 @@ Scaling Observations:
     the style for which the fraction will be laid out.  The numerator
     shift up, for instance, does not depend on `style.numerator()`, but 
     instead on `style`.
+    
+ # Radicals
+
+[x] The radicand is typeset in cramped style.
+[ ] Radical symbol is vertical centered with respect to radicand.
+    1/2(d_y - (h_x + d_x + phi).  Phi the Vertical Gap.
+[ ] Baseline of resulting fomula is same as baseline of radical.
+
+_x <- radicand
+_y <- radical symbol
+
+RadicalExtraAscender = Baseline of radical bar rule.
+RadicalRuleThickness = self-expl.
+RadicalDisplayStyleVerticalGap = Minimum gap between radicand and radical bar rule.
+RadicalVerticalGap             = ***
+
+```
+let contents = layout(&mut rad.inner, style.cramped()).as_node();
+let sqrt     = glyph_metrics(0x221A);
+
+// The gap is taken in internal font units.
+let gap = match style.is_cramped() {
+    true  => RADICAL_VERTICAL_GAP,
+    false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
+};
+
+// The required symbol size in font units
+let symbol_size = (*contents.height - *contents.depth)
+    / FONT_SIZE * UNITS_PER_EM
+    + *gap
+    + *RADICAL_RULE_THICKNESS
+    + *RADICAL_EXTRA_ASCENDER;
+
+let glyph = sqrt.vert_variant(symbol_size).as_layout(style);
+
+// Determine the gap between the radicand and the rule.
+let 
