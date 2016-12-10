@@ -119,7 +119,7 @@ impl Renderer {
         for node in nodes { match node.node {
             LayoutVariant::Rule => {
                 result += &format!(RULE_TEMPLATE!(),
-                    width, height - node.height,
+                    width, height,
                     node.width, node.height);
                 height += node.height;
             },

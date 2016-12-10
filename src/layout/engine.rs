@@ -8,9 +8,7 @@ use super::convert::ToPixels;
 
 use dimensions::{ Pixels, Unit };
 use font;
-use font::GLYPHS;
 use font::IsAtom;
-use font::SYMBOLS;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
@@ -76,34 +74,42 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
             ParseNode::Radical(ref mut rad) => {
                 //Reference rule 11 from pg 443 of TeXBook
-                let style = style.cramped();
-                let contents = layout(&mut rad.inner, style).as_node();
-                let sqrt  = &GLYPHS[&SYMBOLS["sqrt"].unicode];
+                let contents = layout(&mut rad.inner, style.cramped()).as_node();
+                let sqrt  = glyph_metrics(0x221A); // The sqrt symbol.
 
-                let gap = match style.is_cramped() {
-                    true  => RADICAL_VERTICAL_GAP,
-                    false => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
+                // There seems to be an inconsistency here with the displaystyle variation.
+                let gap = match style >= Style::Display {
+                    true  => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
+                    false => RADICAL_VERTICAL_GAP,
                 };
 
                 let size = (*contents.height - *contents.depth)
                     / FONT_SIZE * 1000.0     // Convert to font units
                     + *gap
-                    + *RADICAL_RULE_THICKNESS
                     + *RADICAL_EXTRA_ASCENDER; // Minimum gap
 
-                let glyph = sqrt.vert_variant(size).as_layout(style);
-                let kerning = glyph.height
-                    - contents.height
-                    - RADICAL_RULE_THICKNESS.scaled(style)
-                    - RADICAL_EXTRA_ASCENDER.scaled(style)
-                    + contents.depth;
+                let gap = gap.scaled(style);
 
-                result.add_node(vbox!(offset: -1.0 * contents.depth; glyph));
+                let rule_thickness = RADICAL_RULE_THICKNESS.scaled(style);
+                let glyph        = sqrt.vert_variant(size).as_layout(style);
+                let inner_center = 0.5 * (gap + contents.height + contents.depth + rule_thickness);
+                let sym_center   = 0.5 * (glyph.height + glyph.depth);
+
+                let offset = sym_center - inner_center;
+
+                let top_padding = RADICAL_EXTRA_ASCENDER.scaled(style)
+                    - RADICAL_RULE_THICKNESS.scaled(style);
+
+                let kerning = (glyph.height - offset)
+                    - RADICAL_EXTRA_ASCENDER.scaled(style)
+                    - contents.height;
+
+                result.add_node(vbox!(offset: offset; glyph));
                 result.add_node(vbox!(
-                        kern!(vert: RADICAL_EXTRA_ASCENDER.scaled(style)),
+                        kern!(vert: top_padding),
                         rule!(
                             width:  contents.width,
-                            height: RADICAL_RULE_THICKNESS.scaled(style)),
+                            height: rule_thickness),
                         kern!(vert: kerning),
                         contents
                     ));
