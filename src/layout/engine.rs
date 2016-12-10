@@ -1,6 +1,7 @@
 #![allow(unused_assignments)]
 #![allow(unused_variables)]
 
+use super::Alignment;
 use super::builders;
 use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style };
 use super::convert::AsLayoutNode;
@@ -14,6 +15,7 @@ use font::glyph_metrics;
 use font::variants::Variant;
 use font::variants::VariantGlyph;
 use layout::spacing::{atom_spacing, Spacing};
+use parser::nodes::BarThickness;
 use parser::nodes::{ ParseNode, AtomType, AtomChange };
 use render::FONT_SIZE;
 
@@ -437,9 +439,6 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
             },
 
             ParseNode::GenFraction(ref mut frac) => {
-                use parser::nodes::BarThickness;
-                use super::Alignment;
-
                 let bar = match frac.bar_thickness {
                     BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(style),
                     BarThickness::None    => Pixels(0.0),
@@ -466,35 +465,21 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut shift_down = Pixels(0.0);
                 let mut gap_num    = Pixels(0.0);
                 let mut gap_denom  = Pixels(0.0);
-                if style > Style::Text {
-                    shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP
-                        .scaled(style);
-                    shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN
-                        .scaled(style);
-                    gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN
-                        .scaled(style);
-                    gap_denom = FRACTION_DENOM_DISPLAY_STYLE_GAP_MIN
-                        .scaled(style);
+                if style >= Style::Display {
+                    shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP.scaled(style);
+                    shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN.scaled(style);
+                    gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN.scaled(style);
+                    gap_denom = FRACTION_DENOM_DISPLAY_STYLE_GAP_MIN.scaled(style);
                 } else {
-                    shift_up = FRACTION_NUMERATOR_SHIFT_UP
-                        .scaled(style);
-                    shift_down = FRACTION_DENOMINATOR_SHIFT_DOWN
-                        .scaled(style);
-                    gap_num = FRACTION_NUMERATOR_GAP_MIN
-                        .scaled(style);
-                    gap_denom = FRACTION_DENOMINATOR_GAP_MIN
-                        .scaled(style);
+                    shift_up = FRACTION_NUMERATOR_SHIFT_UP.scaled(style);
+                    shift_down = FRACTION_DENOMINATOR_SHIFT_DOWN.scaled(style);
+                    gap_num = FRACTION_NUMERATOR_GAP_MIN.scaled(style);
+                    gap_denom = FRACTION_DENOMINATOR_GAP_MIN.scaled(style);
                 }
 
-                // TODO: Investigate.
-                // It appears that the vertical layout system handles
-                // Rules differentally than expect.  This result with me
-                // being off by 1 Rule width in a few places.
-
-                let kern_up = (shift_up - axis + bar/2.0).max(gap_num + numer.depth);
-                let kern_down = (shift_down + axis - denom.height - 1.5*bar)
-                    .max(gap_denom);
-                let offset = denom.height + kern_down + 1.5*bar - axis;
+                let kern_up = (shift_up - axis - bar/2.0).max(gap_num - numer.depth);
+                let kern_down = (shift_down + axis - denom.height - 0.5*bar).max(-1. * gap_denom);
+                let offset = denom.height + kern_down + 0.5*bar - axis;
 
                 let width  = numer.width.max(numer.width);
                 let inner = vbox!(
