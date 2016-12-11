@@ -48,7 +48,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let glyph = font::glyph_metrics(sym.unicode);
                 match sym.atom_type {
                     AtomType::Operator(_) => {
-                        if style == Style::Display {
+                        if style > Style::Text {
                             let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
                             let axis_offset = AXIS_HEIGHT.scaled(style);
                             let largeop = glyph.vert_variant(size).as_layout(style);
@@ -465,7 +465,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut shift_down = Pixels(0.0);
                 let mut gap_num    = Pixels(0.0);
                 let mut gap_denom  = Pixels(0.0);
-                if style >= Style::Display {
+                if style > Style::Text {
                     shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP.scaled(style);
                     shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN.scaled(style);
                     gap_num = FRACTION_NUM_DISPLAY_STYLE_GAP_MIN.scaled(style);
