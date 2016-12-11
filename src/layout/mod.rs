@@ -78,6 +78,12 @@ impl Layout {
         self.height -= self.offset;
         self
     }
+
+    pub fn centered(mut self, new_width: Pixels) -> Layout {
+        self.alignment = Alignment::Centered(self.width);
+        self.width = new_width;
+        self
+    }
 }
 
 #[derive(Clone)]

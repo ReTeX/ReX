@@ -118,11 +118,10 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
             },
 
             ParseNode::Scripts(ref mut scripts) => {
-                // Vertical position of the script is calculated.  This depends on the following
-                // information: (see page 26 of https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf)
+                // First we calculate the vertical placement of the scripts.
+                // See: https://tug.org/TUGboat/tb27-1/tb86jackowski.pdf
+                //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
 
-                // Before we start calculating layout, we layout the contents
-                // of the base and scripts.  These dimensions will be needed.
                 let base = match scripts.base {
                     Some(ref b) => layout(&mut [ *b.clone() ], style),
                     None        => Layout::new(),
@@ -138,57 +137,64 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     None        => Layout::new(),
                 };
 
-                // Script processing is handled differently for Operators with limits.
-                let mut italics_correction = Pixels(0.0);
+                // We use a different algoirthm for handling scripts for operators with limits.
+                // This is where he handle Operators with limits.
                 if let Some(ref b) = scripts.base {
-                    if let Some(AtomType::Operator(limits)) = b.atom_type() {
-                        if limits {
-                            if let Some(gly) = b.is_symbol() {
-                                let glyph = glyph_metrics(gly.unicode);
-                                italics_correction = Unit::Font(glyph.italics as f64)
-                                    .scaled(style);
-                            }
+                    if Some(AtomType::Operator(true)) == b.atom_type() {
+                        // Provided that the operator is a simple symbol, we need to account
+                        // for the italics correction of the symbol.  This how we "center"
+                        // the superscript and subscript of the limits.
+                        let delta = if let Some(gly) = base.is_symbol() {
+                            gly.italics
+                        } else {
+                            Pixels(0.0)
+                        };
 
-                            let width = base.width
-                                .max(sub.width)
-                                .max(sup.width);
+                        // Next we calculate the kerning required to separate the superscript
+                        // and subscript (respectively) from the base.
+                        let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(style)
+                            .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
+                        let sub_kern =
+                            (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(style) - sub.height - base.depth)
+                            .max(LOWER_LIMIT_GAP_MIN.scaled(style) - base.depth);
 
-                            let height = base.height - base.depth;
-                            let kern1 = UPPER_LIMIT_BASELINE_RISE_MIN
-                                .scaled(style.superscript_variant())
-                                .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
-                            let kern2 = LOWER_LIMIT_BASELINE_DROP_MIN
-                                .scaled(style.subscript_variant())
-                                .max(LOWER_LIMIT_GAP_MIN.scaled(style) + sub.height);
+                        // We need to preserve the baseline of the operator when
+                        // attaching the scripts.  Since the base should already
+                        // be aligned, we only need to offset by the addition of
+                        // subscripts.
+                        let offset = sub.height + sub_kern;
 
-                            // TODO: This doesn't account for variant glyphs
-                            let offset = (base.height + base.depth) / 2.0
-                                - AXIS_HEIGHT.scaled(style)
-                                + sub.height + kern2;
+                        // We will construct a vbox containing the superscript/base/subscript.
+                        // We will all of these nodes, so we widen each to the largest.
+                        let width = base.width
+                            .max(sub.width + delta / 2.0)
+                            .max(sup.width + delta / 2.0);
 
-                            let w1 = sup.width;
-                            let w2 = sub.width;
+                        // My macro won't take `sup.width` in the alignment for some reason.
+                        // TODO: Fix that.
+                        let sup_width = sup.width;
+                        let sub_width = sub.width;
 
-                            use super::Alignment;
-                            result.add_node(vbox!(
-                                offset: offset;
-                                hbox![align: Alignment::Centered(w1);
-                                    width: width;
-                                    kern![horz: italics_correction / 2.0],
-                                    sup.as_node()
-                                ],
-                                kern!(vert: kern1),
-                                base.as_node(),
-                                kern!(vert: kern2),
-                                hbox![align: Alignment::Centered(w2);
-                                    width: width;
-                                    sub.as_node(),
-                                    kern![horz: italics_correction / 2.0]
-                                ]
-                            ));
+                        result.add_node(vbox!(
+                            offset: offset;
+                            hbox![align: Alignment::Centered(sup_width);
+                                width: width;
+                                kern![horz: delta / 2.0],
+                                sup.as_node()
+                            ],
 
-                            continue
-                        }
+                            kern!(vert: sup_kern),
+                            base.centered(width).as_node(),
+                            kern!(vert: sub_kern),
+
+                            hbox![align: Alignment::Centered(sub_width);
+                                width: width;
+                                kern![horz: -1. * delta / 2.0],
+                                sub.as_node()
+                            ]
+                        ));
+
+                        continue /* We are done processing scripts */
                     }
                 }
 
@@ -197,6 +203,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut adjust_up          = Pixels(0.0);
                 let mut adjust_down        = Pixels(0.0);
                 let mut accent_correction  = Pixels(0.0);
+                let mut italics_correction = Pixels(0.0);
 
                if let Some(_) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
@@ -533,9 +540,24 @@ impl IsSymbol for Layout {
     fn is_symbol(&self) -> Option<LayoutGlyph> {
         if self.contents.len() != 1 { return None }
         let node = &self.contents[0];
-        if let LayoutVariant::Glyph(ref lg) = node.node {
-            return Some(lg.clone())
-        } else { None }
+        match node.node {
+            LayoutVariant::Glyph(lg) => Some(lg),
+            LayoutVariant::HorizontalBox(ref hb) => {
+                if hb.contents.len() != 1 {
+                    None
+                } else {
+                    hb.contents[0].is_symbol()
+                }
+            },
+            LayoutVariant::VerticalBox(ref vb) => {
+                if vb.contents.len() != 1 {
+                    None
+                } else {
+                    vb.contents[0].is_symbol()
+                }
+            },
+            _ => None,
+        }
     }
 }
 
