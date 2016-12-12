@@ -46,22 +46,23 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
         match *node {
             ParseNode::Symbol(sym) => {
                 let glyph = font::glyph_metrics(sym.unicode);
-                match sym.atom_type {
-                    AtomType::Operator(_) => {
-                        if style > Style::Text {
-                            let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
-                            let axis_offset = AXIS_HEIGHT.scaled(style);
-                            let largeop = glyph.vert_variant(size).as_layout(style);
 
-                            // Vertically center
-                            let shift = 0.5 *
-                                (largeop.height + largeop.depth) - axis_offset;
-                            result.add_node(vbox!(offset: shift; largeop));
-                        } else {
-                            result.add_node(glyph.as_layout(style));
-                        }
-                    },
-                    _ => result.add_node(glyph.as_layout(style)),
+                // Operators are handled specially.  We may need to find a larger
+                // symbol and vertical center it.
+                if let AtomType::Operator(_) = sym.atom_type {
+                    if style > Style::Text {
+                        let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
+                        let axis_offset = AXIS_HEIGHT.scaled(style);
+
+                        let largeop = glyph.vert_variant(size).as_layout(style);
+                        let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
+
+                        result.add_node(vbox!(offset: shift; largeop));
+                    } else {
+                        result.add_node(glyph.as_layout(style));
+                    }
+                } else {
+                    result.add_node(glyph.as_layout(style));
                 }
             },
 
@@ -94,9 +95,9 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 let rule_thickness = RADICAL_RULE_THICKNESS.scaled(style);
                 let glyph        = sqrt.vert_variant(size).as_layout(style);
+
                 let inner_center = 0.5 * (gap + contents.height + contents.depth + rule_thickness);
                 let sym_center   = 0.5 * (glyph.height + glyph.depth);
-
                 let offset = sym_center - inner_center;
 
                 let top_padding = RADICAL_EXTRA_ASCENDER.scaled(style)
@@ -467,11 +468,11 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let denom = d.as_node();
                 let axis = AXIS_HEIGHT.scaled(style);
 
-
                 let mut shift_up   = Pixels(0.0);
                 let mut shift_down = Pixels(0.0);
                 let mut gap_num    = Pixels(0.0);
                 let mut gap_denom  = Pixels(0.0);
+
                 if style > Style::Text {
                     shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP.scaled(style);
                     shift_down = FRACTION_DENOMINATOR_DISPLAY_STYLE_SHIFT_DOWN.scaled(style);
@@ -489,8 +490,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let offset = denom.height + kern_down + 0.5*bar - axis;
 
                 let width  = numer.width.max(numer.width);
-                let inner = vbox!(
-                    offset: offset;
+                let inner = vbox!(offset: offset;
                     numer,
                     kern!(vert: kern_up),
                     rule!(width: width, height: bar),
