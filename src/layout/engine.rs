@@ -32,7 +32,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
     for node in nodes {
         if let Some(p_at) = prev_at {
             if let Some(at) = node.atom_type() {
-                let sp = atom_spacing(p_at, at);
+                let sp = atom_spacing(p_at, at, style);
                 if sp != Spacing::None {
                     let kern = sp.to_unit().scaled(style);
                     result.add_node(kern!(horz: kern));
