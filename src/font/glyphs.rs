@@ -4534,7 +4534,7 @@ lazy_static! {
     m.insert(65533, Glyph { unicode: 65533, bbox: BBox(55,-217,817,662), advance: 872, lsb: 55, italics: 0, attachment: 0 });
     // Replacement UNICODE values from unicode.toml exceptions
     m.insert(119965, Glyph { unicode: 8492, bbox: BBox(34,-15,902,687), advance: 950, lsb: 34, italics: 45, attachment: 808 });
-    m.insert(119980, Glyph { unicode: 8475, bbox: BBox(34,-15,876,687), advance: 944, lsb: 34, italics: 45, attachment: 770 });
+    m.insert(119981, Glyph { unicode: 8475, bbox: BBox(34,-15,876,687), advance: 944, lsb: 34, italics: 45, attachment: 770 });
     m.insert(120085, Glyph { unicode: 8476, bbox: BBox(50,-22,829,704), advance: 874, lsb: 50, italics: 0, attachment: 0 });
     m.insert(120136, Glyph { unicode: 8474, bbox: BBox(45,-65,715,676), advance: 765, lsb: 45, italics: 0, attachment: 0 });
     m.insert(120093, Glyph { unicode: 8488, bbox: BBox(50,-204,676,695), advance: 726, lsb: 50, italics: 0, attachment: 0 });

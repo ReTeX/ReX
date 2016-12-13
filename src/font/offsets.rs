@@ -8,7 +8,7 @@ pub trait IsAtom {
 impl IsAtom for char {
     fn atom_type(&self) -> Option<AtomType> {
         Some(match *self {
-            'a'...'z' | 'A'...'Z' | 
+            'a'...'z' | 'A'...'Z' |
             '0'...'9' | 'Α'...'Ω' | 'α'...'ω'  => AtomType::Alpha,
 
             '*' | '+' | '-' => AtomType::Binary,
@@ -16,7 +16,7 @@ impl IsAtom for char {
             ']' | ')' | '?' | '!' => AtomType::Close,
             '=' | '<' | '>' | ':' => AtomType::Relation,
             ',' | ';' => AtomType::Punctuation,
-            '|' |  '/' | '@' | '.' | '"' => AtomType::Ordinal,
+            '|' |  '/' | '@' | '.' | '"' => AtomType::Alpha,
             _ => return None,
         })
     }
