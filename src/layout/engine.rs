@@ -132,7 +132,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     None        => Layout::new(),
                 };
 
-                let sub = match scripts.subscript {
+                let mut sub = match scripts.subscript {
                     Some(ref b) => layout(&mut [ *b.clone() ], style.subscript_variant()),
                     None        => Layout::new(),
                 };
@@ -205,7 +205,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let mut accent_correction  = Pixels(0.0);
                 let mut italics_correction = Pixels(0.0);
 
-               if let Some(_) = scripts.superscript {
+               if let Some(ref s) = scripts.superscript {
                     // We start with default values provided from the font.  These are called
                     // the standard positions in the OpenType specification.
                     adjust_up = match style.is_cramped() {
@@ -248,14 +248,30 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                         if let ParseNode::Symbol(sym) = **bx {
                             let glyph = glyph_metrics(sym.unicode);
                             italics_correction = Unit::Font(glyph.italics as f64)
-                                .scaled(style)
+                                .scaled(style);
+                        }
+                    }
+
+                    if let Some(ref bx) = scripts.base {
+                        if let Some(ref sx) = s.is_symbol() {
+                            if let Some(ref b) = bx.is_symbol() {
+                                use font::kerning::superscript_kern;
+                                let bg = glyph_metrics(b.unicode);
+                                let sg = glyph_metrics(sx.unicode);
+
+                                italics_correction += Unit::Font(
+                                    superscript_kern(bg, sg, *adjust_up / FONT_SIZE ** UNITS_PER_EM)
+                                ).scaled(style);
+                                println!("New kern: {:?}", italics_correction);
+                            }
                         }
                     }
                 }
 
                 // We calculate the vertical position of the subscripts.  The `adjust_down`
                 // variable will describe how far we need to adjust the subscript down.
-                if let Some(_) = scripts.subscript {
+                let mut sub_kern = Pixels(0.0);
+                if let Some(ref s) = scripts.subscript {
                     // We start with the default values provided from the font.
                     adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(style);
 
@@ -265,6 +281,21 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                     adjust_down = adjust_down
                         .max(sub.height - SUBSCRIPT_TOP_MAX.scaled(style))
                         .max(drop_min + depth);
+
+                    if let Some(ref bx) = scripts.base {
+                        if let Some(ref sx) = s.is_symbol() {
+                            if let Some(ref b) = bx.is_symbol() {
+                                use font::kerning::subscript_kern;
+                                let bg = glyph_metrics(b.unicode);
+                                let sg = glyph_metrics(sx.unicode);
+
+                                sub_kern = Unit::Font(
+                                    subscript_kern(bg, sg, *adjust_down / FONT_SIZE ** UNITS_PER_EM)
+                                ).scaled(style);
+                                println!("New kern: {:?}", sub_kern);
+                            }
+                        }
+                    }
                 }
 
                 // TODO: lazy gap fix; see BottomMaxWithSubscript
@@ -295,6 +326,11 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 
                 contents.set_offset(adjust_down);
                 if !sub.contents.is_empty() {
+                    if sub_kern != Pixels(0.0) {
+                        sub.contents.insert(0, kern!(horz: sub_kern));
+                        sub.width += sub_kern;
+                    }
+
                     contents.add_node(sub.as_node());
                 }
 

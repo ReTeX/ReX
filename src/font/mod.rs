@@ -1,7 +1,7 @@
 mod glyphs;
 mod symbols;
 mod offsets;
-mod kerning;
+pub mod kerning;
 pub mod constants;
 pub mod variants;
 pub mod variant_tables;

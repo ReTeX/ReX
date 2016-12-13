@@ -171,7 +171,7 @@ impl Variant for Glyph {
             }
         }
 
-        // We now know how mean repeatable glyphs are required for our
+        // We now know how many repeatable glyphs are required for our
         // construction, so we can create the glyph instructions.
         // We start with the smallest possible glyph.
         // While we are doing this, we will calculate the advance
