@@ -1,67 +1,12 @@
-#![allow(dead_code)]
 use font::Glyph;
+use super::kerning_table::KERNINGS;
 
-#[derive(Debug, Clone)]
-pub struct KernRecord {
-    top_right:     Option<KernTable>,
-    top_left:      Option<KernTable>,
-    bottom_right:  Option<KernTable>,
-    bottom_left:   Option<KernTable>,
-}
-
-#[derive(Debug, Clone)]
-struct KernTable {
-    correction_heights: Vec<i16>,   // unit::Font::<i16>()
-    kern_values:        Vec<i16>,   // unit::Font::<i16>()
-}
-
-use std::collections::HashMap;
-
-lazy_static! {
-    pub static ref KERNINGS: HashMap<u32, KernRecord> = {
-        let mut k = HashMap::new();
-
-        k.insert(0x41, KernRecord { // A
-            top_right: Some(KernTable {
-                correction_heights: vec![ 275 ],
-                kern_values: vec![ -100, -150 ],
-            }),
-            top_left: None,
-            bottom_right: Some(KernTable {
-                correction_heights: vec![],
-                kern_values: vec![ 50 ],
-            }),
-            bottom_left: None,
-        });
-
-        k.insert(0x54, KernRecord { // T
-            top_right: Some(KernTable {
-                correction_heights: vec![],
-                kern_values: vec![ 50 ],
-            }),
-            top_left: None,
-            bottom_right: Some(KernTable {
-                correction_heights: vec![],
-                kern_values: vec![ -100 ],
-            }),
-            bottom_left: None,
-        });
-
-        k.insert(0x1D447, KernRecord { // T
-            top_right: Some(KernTable {
-                correction_heights: vec![],
-                kern_values: vec![ 50 ],
-            }),
-            top_left: None,
-            bottom_right: Some(KernTable {
-                correction_heights: vec![],
-                kern_values: vec![ -100 ],
-            }),
-            bottom_left: None,
-        });
-
-        k
-    };
+#[derive(Debug)]
+enum Corner {
+    TopRight,
+    TopLeft,
+    BottomRight,
+    BottomLeft,
 }
 
 // Horizontal Position:
@@ -86,14 +31,6 @@ lazy_static! {
 // the relavent values should represent with respect to the "cut-ins" for the kerning.
 // for now, I'm just going to port the algorithm I found in LuaTeX and XeTeX.
 // If nothing else, it will at least be consistent.
-
-#[derive(Debug)]
-enum Corner {
-    TopRight,
-    TopLeft,
-    BottomRight,
-    BottomLeft,
-}
 
 pub fn superscript_kern(base: Glyph, script: Glyph, shift: f64) -> f64 {
     let base_height  = base.bbox.3 as f64;
