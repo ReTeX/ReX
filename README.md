@@ -42,3 +42,12 @@ TODO: There seems to be a few inconsistencies with some fonts and the standard..
 Atom commands [`\mathop`, `\mathrel`, `\mathord`]: `\mathop{\mathrm{lim\,sup}}\limits_{x\rightarrow\infty}\ \mathop{\mathrm{sin}}(x)\mathrel{\mathop{=}\limits^?}1`
 
 ![atom commands](samples/atoms.png)
+
+
+# License
+
+ReX is primarily distributed under the terms of both the MIT license and
+the Apache License (Version 2.0), with portions covered by various BSD-like
+licenses.
+
+See LICENSE-APACHE, and LICENSE-MIT for details.
