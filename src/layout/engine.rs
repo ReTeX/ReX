@@ -80,7 +80,6 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let contents = layout(&mut rad.inner, style.cramped()).as_node();
                 let sqrt  = glyph_metrics(0x221A); // The sqrt symbol.
 
-                // There seems to be an inconsistency here with the displaystyle variation.
                 let gap = match style >= Style::Display {
                     true  => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
                     false => RADICAL_VERTICAL_GAP,
@@ -94,7 +93,7 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
                 let gap = gap.scaled(style);
 
                 let rule_thickness = RADICAL_RULE_THICKNESS.scaled(style);
-                let glyph        = sqrt.vert_variant(size).as_layout(style);
+                let glyph = sqrt.vert_variant(size).as_layout(style);
 
                 let inner_center = 0.5 * (gap + contents.height + contents.depth + rule_thickness);
                 let sym_center   = 0.5 * (glyph.height + glyph.depth);
