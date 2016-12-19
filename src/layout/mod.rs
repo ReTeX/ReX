@@ -22,6 +22,7 @@ pub mod engine;
 pub mod spacing;
 
 use dimensions::{ Pixels, Unit };
+
 use font::constants;
 use std::ops::Deref;
 use std::fmt;
@@ -47,7 +48,7 @@ impl Layout {
                 contents:  self.contents,
                 offset:    self.offset,
                 alignment: self.alignment,
-            })
+            }),
         }
     }
 
