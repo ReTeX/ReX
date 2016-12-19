@@ -66,22 +66,27 @@ pub fn layout(nodes: &mut [ParseNode], mut style: Style) -> Layout {
 }
 
 fn add_symbol(result: &mut Layout, sym: Symbol, style: Style) {
-    let glyph = font::glyph_metrics(sym.unicode);
-
     // Operators are handled specially.  We may need to find a larger
     // symbol and vertical center it.
     if let AtomType::Operator(_) = sym.atom_type {
-        if style > Style::Text {
-            let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
-            let axis_offset = AXIS_HEIGHT.scaled(style);
+        add_largeop(result, sym, style);
+    } else {
+        let glyph = font::glyph_metrics(sym.unicode);
+        result.add_node(glyph.as_layout(style));
+    }
+}
 
-            let largeop = glyph.vert_variant(size).as_layout(style);
-            let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
+fn add_largeop(result: &mut Layout, sym: Symbol, style: Style) {
+    let glyph = font::glyph_metrics(sym.unicode);
 
-            result.add_node(vbox!(offset: shift; largeop));
-        } else {
-            result.add_node(glyph.as_layout(style));
-        }
+    if style > Style::Text {
+        let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
+        let axis_offset = AXIS_HEIGHT.scaled(style);
+
+        let largeop = glyph.vert_variant(size).as_layout(style);
+        let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
+
+        result.add_node(vbox!(offset: shift; largeop));
     } else {
         result.add_node(glyph.as_layout(style));
     }
@@ -228,7 +233,6 @@ fn add_delimited(result: &mut Layout, delim: &mut Delimited, style: Style) {
 }
 
 fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
-    // First we calculate the vertical placement of the scripts.
     // See: https://tug.org/TUGboat/tb27-1/tb86jackowski.pdf
     //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
 
@@ -250,61 +254,9 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
     // We use a different algoirthm for handling scripts for operators with limits.
     // This is where he handle Operators with limits.
     if let Some(ref b) = scripts.base {
-        if Some(AtomType::Operator(true)) == b.atom_type() {
-            // Provided that the operator is a simple symbol, we need to account
-            // for the italics correction of the symbol.  This how we "center"
-            // the superscript and subscript of the limits.
-            let delta = if let Some(gly) = base.is_symbol() {
-                gly.italics
-            } else {
-                Pixels(0.0)
-            };
-
-            // Next we calculate the kerning required to separate the superscript
-            // and subscript (respectively) from the base.
-            let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(style)
-                .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
-            let sub_kern =
-                (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(style) - sub.height - base.depth)
-                .max(LOWER_LIMIT_GAP_MIN.scaled(style) - base.depth);
-
-            // We need to preserve the baseline of the operator when
-            // attaching the scripts.  Since the base should already
-            // be aligned, we only need to offset by the addition of
-            // subscripts.
-            let offset = sub.height + sub_kern;
-
-            // We will construct a vbox containing the superscript/base/subscript.
-            // We will all of these nodes, so we widen each to the largest.
-            let width = base.width
-                .max(sub.width + delta / 2.0)
-                .max(sup.width + delta / 2.0);
-
-            // My macro won't take `sup.width` in the alignment for some reason.
-            // TODO: Fix that.
-            let sup_width = sup.width;
-            let sub_width = sub.width;
-
-            result.add_node(vbox!(
-                offset: offset;
-                hbox![align: Alignment::Centered(sup_width);
-                    width: width;
-                    kern![horz: delta / 2.0],
-                    sup.as_node()
-                ],
-
-                kern!(vert: sup_kern),
-                base.centered(width).as_node(),
-                kern!(vert: sub_kern),
-
-                hbox![align: Alignment::Centered(sub_width);
-                    width: width;
-                    kern![horz: -1. * delta / 2.0],
-                    sub.as_node()
-                ]
-            ));
-
-            return /* We are done processing scripts */
+        if let Some(AtomType::Operator(limits)) = b.atom_type() {
+            add_operator_limits(result, base, sup, sub, limits, style);
+            return;
         }
     }
 
@@ -314,75 +266,59 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
     let mut adjust_down        = Pixels(0.0);
     let mut accent_correction  = Pixels(0.0);
     let mut italics_correction = Pixels(0.0);
+    let mut sub_kern           = Pixels(0.0);
 
     if let Some(ref s) = scripts.superscript {
-        // We start with default values provided from the font.  These are called
-        // the standard positions in the OpenType specification.
+        // Use default font values for first iteration of vertical height.
         adjust_up = match style.is_cramped() {
             true  => SUPERSCRIPT_SHIFT_UP_CRAMPED,
             false => SUPERSCRIPT_SHIFT_UP,
         }.scaled(style);
 
-        // Next we check to see if the vertical shift meets the minimum
-        // clearance relative to the base.
+        let mut height = base.height;
 
-        // For accents, whose base is a simple symbol, we do not take
-        // the accent into account while positioning the superscript.
-        // TODO: This should probably be recursive.
-        let height = if let Some(ref b) = scripts.base {
-                if let ParseNode::Accent(ref acc) = **b {
-                    if let Some(ref sym) = acc.nucleus.is_symbol() {
-                        let bh = glyph_metrics(sym.unicode)
-                            .height()
-                            .scaled(style);
-                        accent_correction = base.height - bh;
-                        println!("Scripts with accent. {:?}",
-                            accent_correction);
-                        println!("Accent base: {:?}", b);
-                        bh
-                    } else { base.height }
-                } else { base.height }
-            } else { base.height };
-
-        let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX
-            .scaled(style);
-
-        adjust_up = adjust_up
-            .max(height - drop_max)
-            .max(SUPERSCRIPT_BOTTOM_MIN.scaled(style) - sup.depth);
-
-        // For superscripts we need to calculate the italics correction
-        // if the base is simply a symbol.
-        // TODO: This can probably be cleaned up a bit.
-        if let Some(ref bx) = scripts.base {
-            if let ParseNode::Symbol(sym) = **bx {
-                let glyph = glyph_metrics(sym.unicode);
-                italics_correction = Unit::Font(glyph.italics as f64)
-                    .scaled(style);
+        // TODO: These checks should be recursive?
+        if let Some(ref b) = scripts.base {
+            // For accents, whose base is a simple symbol, we do not take
+            // the accent into account while positioning the superscript.
+            if let ParseNode::Accent(ref acc) = **b {
+                if let Some(sym) = acc.nucleus.is_symbol() {
+                    height = glyph_metrics(sym.unicode)
+                        .height()
+                        .scaled(style);
+                    accent_correction = base.height - height;
+                }
             }
-        }
 
-        if let Some(ref bx) = scripts.base {
-            if let Some(ref sx) = s.is_symbol() {
-                if let Some(ref b) = bx.is_symbol() {
+            // Apply italics correction is base is a symbol
+            if let Some(base_sym) = b.is_symbol() {
+                let bg = glyph_metrics(base_sym.unicode);
+
+                // Lookup font kerning of superscript is also a symbol
+                if let Some(sup_sym) = s.is_symbol() {
                     use font::kerning::superscript_kern;
-                    let bg = glyph_metrics(b.unicode);
-                    let sg = glyph_metrics(sx.unicode);
+                    let sg = glyph_metrics(sup_sym.unicode);
+                    let kern = Unit::Font(superscript_kern(bg, sg,
+                        *adjust_up / FONT_SIZE * *UNITS_PER_EM)).scaled(style);
 
-                    italics_correction += Unit::Font(
-                        superscript_kern(bg, sg, *adjust_up / FONT_SIZE ** UNITS_PER_EM)
-                    ).scaled(style);
-                    println!("New kern: {:?}", italics_correction);
+                    italics_correction =
+                        bg.italic_correction().scaled(style) + kern;
+                } else {
+                    italics_correction = bg.italic_correction().scaled(style);
                 }
             }
         }
+
+        let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX.scaled(style);
+        adjust_up = adjust_up
+            .max(height - drop_max)
+            .max(SUPERSCRIPT_BOTTOM_MIN.scaled(style) - sup.depth);
     }
 
     // We calculate the vertical position of the subscripts.  The `adjust_down`
     // variable will describe how far we need to adjust the subscript down.
-    let mut sub_kern = Pixels(0.0);
     if let Some(ref s) = scripts.subscript {
-        // We start with the default values provided from the font.
+        // Use default font values for first iteration of vertical height.
         adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(style);
 
         let depth = -1. * base.depth;
@@ -392,18 +328,16 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
             .max(sub.height - SUBSCRIPT_TOP_MAX.scaled(style))
             .max(drop_min + depth);
 
-        if let Some(ref bx) = scripts.base {
-            if let Some(ref sx) = s.is_symbol() {
-                if let Some(ref b) = bx.is_symbol() {
-                    use font::kerning::subscript_kern;
-                    let bg = glyph_metrics(b.unicode);
-                    let sg = glyph_metrics(sx.unicode);
+        // Provided that the base and subscript are symbols, we apply
+        // kerning values found in the kerning font table
+        if let Some(ref b) = scripts.base {
+            if let (Some(ssym), Some(bsym)) = (s.is_symbol(), b.is_symbol()) {
+                use font::kerning::subscript_kern;
+                let bg = glyph_metrics(bsym.unicode);
+                let sg = glyph_metrics(ssym.unicode);
 
-                    sub_kern = Unit::Font(
-                        subscript_kern(bg, sg, *adjust_down / FONT_SIZE ** UNITS_PER_EM)
-                    ).scaled(style);
-                    println!("New kern: {:?}", sub_kern);
-                }
+                sub_kern = Unit::Font(subscript_kern(bg, sg,
+                    *adjust_down / FONT_SIZE * *UNITS_PER_EM)).scaled(style);
             }
         }
     }
@@ -446,6 +380,66 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
 
     result.add_node(base.as_node());
     result.add_node(contents.build());
+}
+
+fn add_operator_limits(result: &mut Layout, base: Layout,
+        sup: Layout, sub: Layout, limits: bool, style: Style) {
+    if limits {
+        // Provided that the operator is a simple symbol, we need to account
+        // for the italics correction of the symbol.  This how we "center"
+        // the superscript and subscript of the limits.
+        let delta = if let Some(gly) = base.is_symbol() {
+            gly.italics
+        } else {
+            Pixels(0.0)
+        };
+
+        // Next we calculate the kerning required to separate the superscript
+        // and subscript (respectively) from the base.
+        let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(style)
+            .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
+        let sub_kern =
+            (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(style) - sub.height - base.depth)
+            .max(LOWER_LIMIT_GAP_MIN.scaled(style) - base.depth);
+
+        // We need to preserve the baseline of the operator when
+        // attaching the scripts.  Since the base should already
+        // be aligned, we only need to offset by the addition of
+        // subscripts.
+        let offset = sub.height + sub_kern;
+
+        // We will construct a vbox containing the superscript/base/subscript.
+        // We will all of these nodes, so we widen each to the largest.
+        let width = base.width
+            .max(sub.width + delta / 2.0)
+            .max(sup.width + delta / 2.0);
+
+        // My macro won't take `sup.width` in the alignment for some reason.
+        // TODO: Fix that.
+        let sup_width = sup.width;
+        let sub_width = sub.width;
+
+        result.add_node(vbox!(
+            offset: offset;
+            hbox![align: Alignment::Centered(sup_width);
+                width: width;
+                kern![horz: delta / 2.0],
+                sup.as_node()
+            ],
+
+            kern!(vert: sup_kern),
+            base.centered(width).as_node(),
+            kern!(vert: sub_kern),
+
+            hbox![align: Alignment::Centered(sub_width);
+                width: width;
+                kern![horz: -1. * delta / 2.0],
+                sub.as_node()
+            ]
+        ));
+    } else {
+        println!("Operator without limits.  Still working on it!");
+    }
 }
 
 fn add_frac(result: &mut Layout, frac: &mut GenFraction, style: Style) {
