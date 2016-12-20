@@ -15,6 +15,7 @@ use font::glyph_metrics;
 use font::variants::Variant;
 use font::variants::VariantGlyph;
 use font::Symbol;
+use font::kerning::{superscript_kern, subscript_kern};
 use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::BarThickness;
 use parser::nodes::{ ParseNode, AtomType, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts };
@@ -289,28 +290,26 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
             }
 
             // Apply italics correction is base is a symbol
-            else if let Some(base_sym) = b.is_symbol() {
-                let bg = glyph_metrics(base_sym.unicode);
-
+            else if let Some(base_sym) = base.is_symbol() {
                 // Provided that the base is a operator, we only use
                 // italics correction infomration.
                 if let Some(AtomType::Operator(_)) = b.atom_type() {
                     // This recently changed in LuaTeX.  See `nolimitsmode`.
                     // This needs to be the glyph information _after_ layout for base.
-                    //sup_kern =  0.5 * bg.italic_correction().scaled(style);
-                    sub_kern =-1. * bg.italic_correction().scaled(style);
+                    sub_kern = -1. * base_sym.italics;
                 }
 
                 // Lookup font kerning of superscript is also a symbol
-                else if let Some(sup_sym) = s.is_symbol() {
-                    use font::kerning::superscript_kern;
+                else if let Some(sup_sym) = sup.is_symbol() {
+                    let bg = glyph_metrics(base_sym.unicode);
                     let sg = glyph_metrics(sup_sym.unicode);
+
                     let kern = Unit::Font(superscript_kern(bg, sg,
                         *adjust_up / FONT_SIZE * *UNITS_PER_EM)).scaled(style);
 
-                    sup_kern = bg.italic_correction().scaled(style) + kern;
+                    sup_kern = base_sym.italics + kern;
                 } else {
-                    sup_kern = bg.italic_correction().scaled(style);
+                    sup_kern = base_sym.italics;
                 }
             }
         }
@@ -337,8 +336,7 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
         // Provided that the base and subscript are symbols, we apply
         // kerning values found in the kerning font table
         if let Some(ref b) = scripts.base {
-            if let (Some(ssym), Some(bsym)) = (s.is_symbol(), b.is_symbol()) {
-                use font::kerning::subscript_kern;
+            if let (Some(ssym), Some(bsym)) = (sub.is_symbol(), base.is_symbol()) {
                 let bg = glyph_metrics(bsym.unicode);
                 let sg = glyph_metrics(ssym.unicode);
 

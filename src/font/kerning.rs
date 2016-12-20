@@ -49,15 +49,12 @@ pub fn subscript_kern(base: Glyph, script: Glyph, shift: f64) -> f64 {
     let base_depth = base.bbox.1 as f64;
     let script_height = script.bbox.3 as f64 - shift;
 
-    println!("{}, {}", base_depth, script_height);
-
     let value1 = kern_from(base, base_depth, Corner::BottomRight)
         + kern_from(script, base_depth, Corner::TopLeft);
 
     let value2 = kern_from(base, script_height, Corner::BottomRight)
         + kern_from(script, script_height, Corner::TopLeft);
 
-    println!("{}, {}", value1, value2);
     value1.min(value2)
 }
 
@@ -76,8 +73,6 @@ fn kern_from(gly: Glyph, height: f64, side: Corner) -> f64 {
         None => return 0.0,
     };
 
-    println!("Got kerning: {:?}", record);
-    println!("Corner: {:?}", side);
     let table = match side {
         Corner::TopRight    => otry!(record.top_right),
         Corner::TopLeft     => otry!(record.top_left),
@@ -85,7 +80,6 @@ fn kern_from(gly: Glyph, height: f64, side: Corner) -> f64 {
         Corner::BottomLeft  => otry!(record.bottom_left),
     };
 
-    println!("Getting val");
     if table.correction_heights.is_empty() || height < (table.correction_heights[0] as f64) {
         let v = table.kern_values[0] as f64;
         println!("{}", v);
