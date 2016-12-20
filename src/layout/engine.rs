@@ -254,19 +254,18 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
     // We use a different algoirthm for handling scripts for operators with limits.
     // This is where he handle Operators with limits.
     if let Some(ref b) = scripts.base {
-        if let Some(AtomType::Operator(limits)) = b.atom_type() {
-            add_operator_limits(result, base, sup, sub, limits, style);
+        if Some(AtomType::Operator(true)) == b.atom_type() {
+            add_operator_limits(result, base, sup, sub, style);
             return;
         }
     }
 
     // We calculate the vertical positions of the scripts.  The `adjust_up`
     // variable will describe how far we need to adjust the superscript up.
-    let mut adjust_up          = Pixels(0.0);
-    let mut adjust_down        = Pixels(0.0);
-    let mut accent_correction  = Pixels(0.0);
-    let mut italics_correction = Pixels(0.0);
-    let mut sub_kern           = Pixels(0.0);
+    let mut adjust_up   = Pixels(0.0);
+    let mut adjust_down = Pixels(0.0);
+    let mut sup_kern    = Pixels(0.0);
+    let mut sub_kern    = Pixels(0.0);
 
     if let Some(ref s) = scripts.superscript {
         // Use default font values for first iteration of vertical height.
@@ -286,25 +285,30 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
                     height = glyph_metrics(sym.unicode)
                         .height()
                         .scaled(style);
-                    accent_correction = base.height - height;
                 }
             }
 
             // Apply italics correction is base is a symbol
-            if let Some(base_sym) = b.is_symbol() {
+            else if let Some(base_sym) = b.is_symbol() {
                 let bg = glyph_metrics(base_sym.unicode);
 
+                // Provided that the base is a operator, we only use
+                // italics correction infomration.
+                if let Some(AtomType::Operator(_)) = b.atom_type() {
+                    sup_kern =  0.5 * bg.italic_correction().scaled(style);
+                    sub_kern = -0.5 * bg.italic_correction().scaled(style);
+                }
+
                 // Lookup font kerning of superscript is also a symbol
-                if let Some(sup_sym) = s.is_symbol() {
+                else if let Some(sup_sym) = s.is_symbol() {
                     use font::kerning::superscript_kern;
                     let sg = glyph_metrics(sup_sym.unicode);
                     let kern = Unit::Font(superscript_kern(bg, sg,
                         *adjust_up / FONT_SIZE * *UNITS_PER_EM)).scaled(style);
 
-                    italics_correction =
-                        bg.italic_correction().scaled(style) + kern;
+                    sup_kern = bg.italic_correction().scaled(style) + kern;
                 } else {
-                    italics_correction = bg.italic_correction().scaled(style);
+                    sup_kern = bg.italic_correction().scaled(style);
                 }
             }
         }
@@ -336,7 +340,7 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
                 let bg = glyph_metrics(bsym.unicode);
                 let sg = glyph_metrics(ssym.unicode);
 
-                sub_kern = Unit::Font(subscript_kern(bg, sg,
+                sub_kern += Unit::Font(subscript_kern(bg, sg,
                     *adjust_down / FONT_SIZE * *UNITS_PER_EM)).scaled(style);
             }
         }
@@ -356,9 +360,9 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
 
     let mut contents = builders::VBox::new();
     if !sup.contents.is_empty() {
-        if italics_correction != Pixels(0.0) {
-            sup.contents.insert(0, kern!(horz: italics_correction));
-            sup.width += italics_correction;
+        if sup_kern != Pixels(0.0) {
+            sup.contents.insert(0, kern!(horz: sup_kern));
+            sup.width += sup_kern;
         }
 
         let corrected_adjust =
@@ -383,63 +387,59 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
 }
 
 fn add_operator_limits(result: &mut Layout, base: Layout,
-        sup: Layout, sub: Layout, limits: bool, style: Style) {
-    if limits {
-        // Provided that the operator is a simple symbol, we need to account
-        // for the italics correction of the symbol.  This how we "center"
-        // the superscript and subscript of the limits.
-        let delta = if let Some(gly) = base.is_symbol() {
-            gly.italics
-        } else {
-            Pixels(0.0)
-        };
-
-        // Next we calculate the kerning required to separate the superscript
-        // and subscript (respectively) from the base.
-        let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(style)
-            .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
-        let sub_kern =
-            (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(style) - sub.height - base.depth)
-            .max(LOWER_LIMIT_GAP_MIN.scaled(style) - base.depth);
-
-        // We need to preserve the baseline of the operator when
-        // attaching the scripts.  Since the base should already
-        // be aligned, we only need to offset by the addition of
-        // subscripts.
-        let offset = sub.height + sub_kern;
-
-        // We will construct a vbox containing the superscript/base/subscript.
-        // We will all of these nodes, so we widen each to the largest.
-        let width = base.width
-            .max(sub.width + delta / 2.0)
-            .max(sup.width + delta / 2.0);
-
-        // My macro won't take `sup.width` in the alignment for some reason.
-        // TODO: Fix that.
-        let sup_width = sup.width;
-        let sub_width = sub.width;
-
-        result.add_node(vbox!(
-            offset: offset;
-            hbox![align: Alignment::Centered(sup_width);
-                width: width;
-                kern![horz: delta / 2.0],
-                sup.as_node()
-            ],
-
-            kern!(vert: sup_kern),
-            base.centered(width).as_node(),
-            kern!(vert: sub_kern),
-
-            hbox![align: Alignment::Centered(sub_width);
-                width: width;
-                kern![horz: -1. * delta / 2.0],
-                sub.as_node()
-            ]
-        ));
+        sup: Layout, sub: Layout, style: Style) {
+    // Provided that the operator is a simple symbol, we need to account
+    // for the italics correction of the symbol.  This how we "center"
+    // the superscript and subscript of the limits.
+    let delta = if let Some(gly) = base.is_symbol() {
+        gly.italics
     } else {
-        println!("Operator without limits.  Still working on it!");
-    }
+        Pixels(0.0)
+    };
+
+    // Next we calculate the kerning required to separate the superscript
+    // and subscript (respectively) from the base.
+    let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(style)
+        .max(UPPER_LIMIT_GAP_MIN.scaled(style) - sup.depth);
+    let sub_kern =
+        (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(style) - sub.height - base.depth)
+        .max(LOWER_LIMIT_GAP_MIN.scaled(style) - base.depth);
+
+    // We need to preserve the baseline of the operator when
+    // attaching the scripts.  Since the base should already
+    // be aligned, we only need to offset by the addition of
+    // subscripts.
+    let offset = sub.height + sub_kern;
+
+    // We will construct a vbox containing the superscript/base/subscript.
+    // We will all of these nodes, so we widen each to the largest.
+    let width = base.width
+        .max(sub.width + delta / 2.0)
+        .max(sup.width + delta / 2.0);
+
+    // My macro won't take `sup.width` in the alignment for some reason.
+    // TODO: Fix that.
+    let sup_width = sup.width;
+    let sub_width = sub.width;
+
+    result.add_node(vbox!(
+        offset: offset;
+        hbox![align: Alignment::Centered(sup_width);
+            width: width;
+            kern![horz: delta / 2.0],
+            sup.as_node()
+        ],
+
+        kern!(vert: sup_kern),
+        base.centered(width).as_node(),
+        kern!(vert: sub_kern),
+
+        hbox![align: Alignment::Centered(sub_width);
+            width: width;
+            kern![horz: -1. * delta / 2.0],
+            sub.as_node()
+        ]
+    ));
 }
 
 fn add_frac(result: &mut Layout, frac: &mut GenFraction, style: Style) {
