@@ -295,8 +295,10 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, style: Style) {
                 // Provided that the base is a operator, we only use
                 // italics correction infomration.
                 if let Some(AtomType::Operator(_)) = b.atom_type() {
-                    sup_kern =  0.5 * bg.italic_correction().scaled(style);
-                    sub_kern = -0.5 * bg.italic_correction().scaled(style);
+                    // This recently changed in LuaTeX.  See `nolimitsmode`.
+                    // This needs to be the glyph information _after_ layout for base.
+                    //sup_kern =  0.5 * bg.italic_correction().scaled(style);
+                    sub_kern =-1. * bg.italic_correction().scaled(style);
                 }
 
                 // Lookup font kerning of superscript is also a symbol
