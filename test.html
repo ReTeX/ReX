@@ -4,18 +4,145 @@
     <meta charset="UTF-8">
     <title>Testing Things</title>
     <style>
-        @font-face {
-            font-family: rex;
-            src: url('out/rex-xits.otf');
-        }
-    </style>
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}</style>
+<script src="prism.js"></script>
 </head>
 
 <body>
 <h1>Tests</h1>
 <h2>Scripts</h2>
 <h3>Properly scale with standard algorithm</h3>
-<p class="tex">a^2\textstyle a^2\scriptstyle a^2 \scriptscriptstyle a^2</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="51.74464" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">a^2\textstyle a^2\scriptstyle a^2 \scriptscriptstyle a^2</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="51.74464" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="133.26528" height="41.26464" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,20.09664)">
 <rect x="0" y="0" width="24.096" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -54,7 +181,7 @@
 <g transform="translate(0,16.224)">
 <g transform="scale(0.5)"><text>2</text></g>
 </g></g></g></g></g></svg></p>
-<p class="tex">a_2\textstyle a_2\scriptstyle a_2 \scriptscriptstyle a_2</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="43.168" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">a_2\textstyle a_2\scriptstyle a_2 \scriptscriptstyle a_2</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="43.168" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="133.26528" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,0)">
 <rect x="0" y="0" width="24.096" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -93,7 +220,7 @@
 <g transform="translate(0,16.224)">
 <g transform="scale(0.5)"><text>2</text></g>
 </g></g></g></g></g></svg></p>
-<p class="tex">a_2^2\textstyle a_2^2\scriptstyle a_2^2 \scriptscriptstyle a_2^2</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="66.80128" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">a_2^2\textstyle a_2^2\scriptstyle a_2^2 \scriptscriptstyle a_2^2</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="66.80128" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="133.26528" height="43.03296" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,21.864960000000004)">
 <rect x="0" y="0" width="24.096" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -149,7 +276,7 @@
 <g transform="scale(0.5)"><text>2</text></g>
 </g></g></g></g></g></svg></p>
 <h3>Properly scale with nolimits</h3>
-<p class="tex">\int_0^1\textstyle\int_0^1\scriptstyle\int_0^1\scriptscriptstyle\int_0^1</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="207.53088000000002" height="125.83359999999999" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\int_0^1\textstyle\int_0^1\scriptstyle\int_0^1\scriptscriptstyle\int_0^1</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="207.53088000000002" height="125.83359999999999" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="183.53088000000002" height="70.52064" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,4.064639999999997)">
 <rect x="0" y="0" width="54.480000000000004" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -206,7 +333,7 @@
 <g transform="scale(0.5)"><text>0</text></g>
 </g></g></g></g></g></svg></p>
 <h3>Properly scale operator with limits</h3>
-<p class="tex">\sum_0^k\textstyle\sum_0^k\scriptstyle\sum_0^k\scriptscriptstyle\sum_0^k</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="181.65696000000003" height="145.52512000000002" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\sum_0^k\textstyle\sum_0^k\scriptstyle\sum_0^k\scriptscriptstyle\sum_0^k</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="181.65696000000003" height="145.52512000000002" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="157.65696000000003" height="83.00352000000001" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(0,0)">
 <g transform="translate(0,0)">
@@ -280,7 +407,7 @@
 </g></g></g></g></g></g></svg></p>
 <h2>Fractions</h2>
 <h3>Should properly scale</h3>
-<p class="tex">\frac12\textstyle\frac12\scriptstyle\frac12\scriptscriptstyle\frac12</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="101.12" height="103.88799999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac12\textstyle\frac12\scriptstyle\frac12\scriptscriptstyle\frac12</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="101.12" height="103.88799999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="77.12" height="60.28799999999998" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -320,7 +447,7 @@
 <g transform="scale(0.5)"><text>2</text></g>
 </g></g></g></g></g></svg></p>
 <h3>Should center</h3>
-<p class="tex">\frac{1}{x+y}\frac{x+y}{1}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="247.24266666666665" height="112.672" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{1}{x+y}\frac{x+y}{1}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="247.24266666666665" height="112.672" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="223.24266666666665" height="60.288" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -349,7 +476,7 @@
 <g transform="translate(40.21066666666667,32.448)">
 <text>1</text></g>
 </g></g></g></g></svg></p>
-<p class="tex">\textstyle\frac{1}{x+y}\frac{x+y}{1}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="151.39968" height="84.11776" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\textstyle\frac{1}{x+y}\frac{x+y}{1}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="151.39968" height="84.11776" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="127.39968" height="45.10463999999999" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -378,7 +505,7 @@
 <g transform="translate(20.089920000000003,22.06464)">
 <g transform="scale(0.68)"><text>1</text></g>
 </g></g></g></g></g></svg></p>
-<p class="tex">\scriptstyle\frac{1}{x+y}\frac{x+y}{1}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="113.488" height="61.9504" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\scriptstyle\frac{1}{x+y}\frac{x+y}{1}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="113.488" height="61.9504" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="89.488" height="31.891200000000005" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -407,7 +534,7 @@
 <g transform="translate(14.771999999999998,16.224)">
 <g transform="scale(0.5)"><text>1</text></g>
 </g></g></g></g></g></svg></p>
-<p class="tex">\scriptscriptstyle\frac{1}{x+y}\frac{x+y}{1}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="113.488" height="53.65599999999999" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\scriptscriptstyle\frac{1}{x+y}\frac{x+y}{1}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="113.488" height="53.65599999999999" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="89.488" height="27.743999999999993" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -437,7 +564,7 @@
 <g transform="scale(0.5)"><text>1</text></g>
 </g></g></g></g></g></svg></p>
 <h3>Should handle tall symbols</h3>
-<p class="tex">\frac{x}{\int x}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="107.96799999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{x}{\int x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="107.96799999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="70.81599999999999" height="49.00799999999998" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -451,7 +578,7 @@
 <g transform="translate(41.215999999999994,39.552)">
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
-<p class="tex">\frac{\int x}{x}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="122.032" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{\int x}{x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="122.032" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="70.81599999999999" height="78" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -465,7 +592,7 @@
 <g transform="translate(20.607999999999997,21.168)">
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
-<p class="tex">\frac{\int x}{\int x}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="136.95999999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{\int x}{\int x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.81599999999999" height="136.95999999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="70.81599999999999" height="78" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -482,7 +609,7 @@
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
 <h3>Should handle depth</h3>
-<p class="tex">\frac{g}{x}\frac{x}{x}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="91.2" height="97.264" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{g}{x}\frac{x}{x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="91.2" height="97.264" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="67.2" height="53.232" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -503,7 +630,7 @@
 <g transform="translate(0,21.168)">
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
-<p class="tex">\frac{x}{g}\frac{x}{x}</p><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="91.2" height="101.58399999999997" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<code class="language-latex">\frac{x}{g}\frac{x}{x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="91.2" height="101.58399999999997" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="67.2" height="49.00799999999998" fill="none" stroke="blue" stroke-width="0.2"/>
 <g transform="translate(1.6,0)">
 <g transform="translate(0,0)">
@@ -524,5 +651,109 @@
 <g transform="translate(0,21.168)">
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
+<h2>Accents</h2>
+<h3>Should properly scale</h3>
+<code class="language-latex">\hat A\textstyle\hat A\scriptstyle\hat A\scriptscriptstyle\hat A</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="150.8064" height="57.232000000000006" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="126.8064" height="47.232000000000006" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="37.92" height="36.816" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(11.04,36.816)">
+<text></text></g>
+</g><g transform="translate(0,15.216000000000001)">
+<rect x="0" y="0" width="34.416" height="32.016000000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,32.016000000000005)">
+<text>𝐴</text></g>
+</g></g><g transform="translate(37.92,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="37.92" height="36.816" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(11.04,36.816)">
+<text></text></g>
+</g><g transform="translate(0,15.216000000000001)">
+<rect x="0" y="0" width="34.416" height="32.016000000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,32.016000000000005)">
+<text>𝐴</text></g>
+</g></g><g transform="translate(75.84,18.14976)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="27.6864" height="21.999360000000003" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(27.6864,21.999360000000003)">
+<g transform="scale(0.68)"><text>̂</text></g>
+</g></g><g transform="translate(0,7.3113600000000005)">
+<rect x="0" y="0" width="23.40288" height="21.770880000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,21.770880000000005)">
+<g transform="scale(0.68)"><text>𝐴</text></g>
+</g></g></g><g transform="translate(103.5264,25.848000000000003)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="23.28" height="16.176000000000002" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(23.28,16.176000000000002)">
+<g transform="scale(0.5)"><text>̂</text></g>
+</g></g><g transform="translate(0,5.376000000000001)">
+<rect x="0" y="0" width="17.208" height="16.008000000000003" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,16.008000000000003)">
+<g transform="scale(0.5)"><text>𝐴</text></g>
+</g></g></g></g></g></svg></p>
+<code class="language-latex">\hat{x+y}\textstyle\hat{x+y}\scriptstyle\hat{x+y}\scriptscriptstyle\hat{x+y}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="330.88650666666666" height="61.647999999999996" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="306.88650666666666" height="42.864" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="97.47466666666666" height="38.208" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(6.9466666666666725,38.208)">
+<text></text></g>
+</g><g transform="translate(0,16.607999999999997)">
+<rect x="0" y="0" width="104.42133333333334" height="26.256" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="104.42133333333334" height="26.256" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,26.256)">
+<text>𝑥</text></g>
+<g transform="translate(37.06666666666667,26.256)">
+<text>+</text></g>
+<g transform="translate(80.61333333333334,26.256)">
+<text>𝑦</text></g>
+</g></g></g><g transform="translate(104.42133333333334,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="97.47466666666666" height="38.208" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(6.9466666666666725,38.208)">
+<text></text></g>
+</g><g transform="translate(0,16.607999999999997)">
+<rect x="0" y="0" width="104.42133333333334" height="26.256" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="104.42133333333334" height="26.256" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,26.256)">
+<text>𝑥</text></g>
+<g transform="translate(37.06666666666667,26.256)">
+<text>+</text></g>
+<g transform="translate(80.61333333333334,26.256)">
+<text>𝑦</text></g>
+</g></g></g><g transform="translate(208.84266666666667,14.33664)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="36.73248" height="25.36128" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(4.777920000000002,25.36128)">
+<g transform="scale(0.68)"><text></text></g>
+</g></g><g transform="translate(0,10.673279999999998)">
+<rect x="0" y="0" width="56.499840000000006" height="17.85408" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="56.499840000000006" height="17.85408" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,17.85408)">
+<g transform="scale(0.68)"><text>𝑥</text></g>
+</g><g transform="translate(17.952,17.85408)">
+<g transform="scale(0.68)"><text>+</text></g>
+</g><g transform="translate(40.3104,17.85408)">
+<g transform="scale(0.68)"><text>𝑦</text></g>
+</g></g></g></g><g transform="translate(265.3425066666667,22.127999999999997)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="20.772" height="18.408" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(7.331999999999997,18.408)">
+<g transform="scale(0.5)"><text></text></g>
+</g></g><g transform="translate(0,7.6080000000000005)">
+<rect x="0" y="0" width="41.544" height="13.128" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="41.544" height="13.128" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,13.128)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g><g transform="translate(13.200000000000001,13.128)">
+<g transform="scale(0.5)"><text>+</text></g>
+</g><g transform="translate(29.64,13.128)">
+<g transform="scale(0.5)"><text>𝑦</text></g>
+</g></g></g></g></g></g></svg></p>
 
 </body></html>
