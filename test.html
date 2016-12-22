@@ -3,144 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Testing Things</title>
-    <style>
-code[class*="language-"],
-pre[class*="language-"] {
-	color: black;
-	background: none;
-	text-shadow: 0 1px white;
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-	text-align: left;
-	white-space: pre;
-	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
-	line-height: 1.5;
-
-	-moz-tab-size: 4;
-	-o-tab-size: 4;
-	tab-size: 4;
-
-	-webkit-hyphens: none;
-	-moz-hyphens: none;
-	-ms-hyphens: none;
-	hyphens: none;
-}
-
-pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-	text-shadow: none;
-	background: #b3d4fc;
-}
-
-pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-code[class*="language-"]::selection, code[class*="language-"] ::selection {
-	text-shadow: none;
-	background: #b3d4fc;
-}
-
-@media print {
-	code[class*="language-"],
-	pre[class*="language-"] {
-		text-shadow: none;
-	}
-}
-
-/* Code blocks */
-pre[class*="language-"] {
-	padding: 1em;
-	margin: .5em 0;
-	overflow: auto;
-}
-
-:not(pre) > code[class*="language-"],
-pre[class*="language-"] {
-	background: #f5f2f0;
-}
-
-/* Inline code */
-:not(pre) > code[class*="language-"] {
-	padding: .1em;
-	border-radius: .3em;
-	white-space: normal;
-}
-
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-	color: slategray;
-}
-
-.token.punctuation {
-	color: #999;
-}
-
-.namespace {
-	opacity: .7;
-}
-
-.token.property,
-.token.tag,
-.token.boolean,
-.token.number,
-.token.constant,
-.token.symbol,
-.token.deleted {
-	color: #905;
-}
-
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
-	color: #690;
-}
-
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string {
-	color: #a67f59;
-	background: hsla(0, 0%, 100%, .5);
-}
-
-.token.atrule,
-.token.attr-value,
-.token.keyword {
-	color: #07a;
-}
-
-.token.function {
-	color: #DD4A68;
-}
-
-.token.regex,
-.token.important,
-.token.variable {
-	color: #e90;
-}
-
-.token.important,
-.token.bold {
-	font-weight: bold;
-}
-.token.italic {
-	font-style: italic;
-}
-
-.token.entity {
-	cursor: help;
-}</style>
-<script src="prism.js"></script>
+    <link rel="stylesheet" href="prism.css"/>
+    <script src="prism.js"></script>
 </head>
-
 <body>
 <h1>Tests</h1>
-<h2>Scripts</h2>
+<ul>
+<li><a href="#Scripts">Scripts</a></li>
+<li><a href="#Fractions">Fractions</a></li>
+<li><a href="#Accents">Accents</a></li>
+<li><a href="#Radicals">Radicals</a></li>
+<h2 id="Scripts">Scripts</h2>
 <h3>Properly scale with standard algorithm</h3>
 <code class="language-latex">a^2\textstyle a^2\scriptstyle a^2 \scriptscriptstyle a^2</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="157.26528" height="51.74464" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="133.26528" height="41.26464" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -405,7 +278,102 @@ pre[class*="language-"] {
 <g transform="translate(0,16.224)">
 <g transform="scale(0.5)"><text>0</text></g>
 </g></g></g></g></g></g></svg></p>
-<h2>Fractions</h2>
+<h3>Should nest properly</h3>
+<code class="language-latex">x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="94.75200000000001" height="151.64991999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="70.75200000000001" height="83.42495999999998" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,62.256959999999985)">
+<rect x="0" y="0" width="26.400000000000002" height="21.168" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,21.168)">
+<text>𝑥</text></g>
+</g><g transform="translate(26.400000000000002,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="44.352000000000004" height="40.92648" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="44.352000000000004" height="40.92648" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,26.532239999999998)">
+<rect x="0" y="0" width="17.952" height="14.39424" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,14.39424)">
+<g transform="scale(0.68)"><text>𝑥</text></g>
+</g></g><g transform="translate(17.952,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="20.951999999999998" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="20.951999999999998" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.367999999999999)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(13.200000000000001,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(0,17.136)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g></g></g></g><g transform="translate(0,36.55296)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,8.868000000000002)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(13.200000000000001,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(0,17.136000000000003)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g></g></g></g></g></g></g><g transform="translate(0,77.16095999999999)">
+<rect x="0" y="0" width="44.352000000000004" height="39.930479999999996" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="44.352000000000004" height="39.930479999999996" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,25.536239999999996)">
+<rect x="0" y="0" width="17.952" height="14.39424" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,14.39424)">
+<g transform="scale(0.68)"><text>𝑥</text></g>
+</g></g><g transform="translate(17.952,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,8.868000000000002)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(13.200000000000001,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(0,17.136000000000003)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g></g></g></g><g transform="translate(0,36.55296)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="26.400000000000002" height="19.452" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,8.868000000000002)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(13.200000000000001,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g><g transform="translate(0,17.136000000000003)">
+<rect x="0" y="0" width="13.200000000000001" height="10.584" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,10.584)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g></g></g></g></g></g></g></g></g></g></svg></p>
+<h2 id="Fractions">Fractions</h2>
 <h3>Should properly scale</h3>
 <code class="language-latex">\frac12\textstyle\frac12\scriptstyle\frac12\scriptscriptstyle\frac12</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="101.12" height="103.88799999999998" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="77.12" height="60.28799999999998" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -651,7 +619,7 @@ pre[class*="language-"] {
 <g transform="translate(0,21.168)">
 <text>𝑥</text></g>
 </g></g></g></g></svg></p>
-<h2>Accents</h2>
+<h2 id="Accents">Accents</h2>
 <h3>Should properly scale</h3>
 <code class="language-latex">\hat A\textstyle\hat A\scriptstyle\hat A\scriptscriptstyle\hat A</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="150.8064" height="57.232000000000006" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
 <rect x="0" y="0" width="126.8064" height="47.232000000000006" fill="none" stroke="blue" stroke-width="0.2"/>
@@ -755,5 +723,212 @@ pre[class*="language-"] {
 </g><g transform="translate(29.64,13.128)">
 <g transform="scale(0.5)"><text>𝑦</text></g>
 </g></g></g></g></g></g></svg></p>
+<h3>Should extend when possible</h3>
+<code class="language-latex">\mathop{\overbrace{1+2+3+4+5+6}}\limits^{\mathrm{Arithmetic}} = 21</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="551.9466666666667" height="153.97312" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="527.9466666666667" height="113.20512" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="415.0666666666667" height="22.293120000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(136.81877333333335,0)">
+<rect x="0" y="0" width="141.42912" height="22.293120000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="141.42912" height="22.293120000000005" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,22.293120000000005)">
+<g transform="scale(0.68)"><text>A</text></g>
+</g><g transform="translate(23.56608,22.293120000000005)">
+<g transform="scale(0.68)"><text>r</text></g>
+</g><g transform="translate(34.4352,22.293120000000005)">
+<g transform="scale(0.68)"><text>i</text></g>
+</g><g transform="translate(43.50912,22.293120000000005)">
+<g transform="scale(0.68)"><text>t</text></g>
+</g><g transform="translate(52.583040000000004,22.293120000000005)">
+<g transform="scale(0.68)"><text>h</text></g>
+</g><g transform="translate(68.90304,22.293120000000005)">
+<g transform="scale(0.68)"><text>m</text></g>
+</g><g transform="translate(94.29696000000001,22.293120000000005)">
+<g transform="scale(0.68)"><text>e</text></g>
+</g><g transform="translate(108.78912000000001,22.293120000000005)">
+<g transform="scale(0.68)"><text>t</text></g>
+</g><g transform="translate(117.86304000000001,22.293120000000005)">
+<g transform="scale(0.68)"><text>i</text></g>
+</g><g transform="translate(126.93696000000001,22.293120000000005)">
+<g transform="scale(0.68)"><text>c</text></g>
+</g></g></g></g><g transform="translate(0,36.69312000000001)">
+<rect x="0" y="0" width="415.0666666666667" height="76.512" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="415.0666666666667" height="76.512" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="411.80266666666694" height="65.08800000000001" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(3.2639999999997826,0)">
+<rect x="0" y="0" width="408.53866666666715" height="65.08800000000001" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,65.08800000000001)">
+<text></text></g>
+<g transform="translate(38.50244444444445,65.08800000000001)">
+<text></text></g>
+<g transform="translate(49.5488888888889,65.08800000000001)">
+<text></text></g>
+<g transform="translate(60.59533333333336,65.08800000000001)">
+<text></text></g>
+<g transform="translate(71.64177777777782,65.08800000000001)">
+<text></text></g>
+<g transform="translate(82.68822222222228,65.08800000000001)">
+<text></text></g>
+<g transform="translate(93.73466666666674,65.08800000000001)">
+<text></text></g>
+<g transform="translate(104.7811111111112,65.08800000000001)">
+<text></text></g>
+<g transform="translate(115.82755555555566,65.08800000000001)">
+<text></text></g>
+<g transform="translate(126.87400000000012,65.08800000000001)">
+<text></text></g>
+<g transform="translate(137.92044444444457,65.08800000000001)">
+<text></text></g>
+<g transform="translate(148.966888888889,65.08800000000001)">
+<text></text></g>
+<g transform="translate(160.01333333333343,65.08800000000001)">
+<text></text></g>
+<g transform="translate(243.97177777777787,65.08800000000001)">
+<text></text></g>
+<g transform="translate(255.0182222222223,65.08800000000001)">
+<text></text></g>
+<g transform="translate(266.06466666666677,65.08800000000001)">
+<text></text></g>
+<g transform="translate(277.11111111111126,65.08800000000001)">
+<text></text></g>
+<g transform="translate(288.15755555555575,65.08800000000001)">
+<text></text></g>
+<g transform="translate(299.20400000000024,65.08800000000001)">
+<text></text></g>
+<g transform="translate(310.2504444444447,65.08800000000001)">
+<text></text></g>
+<g transform="translate(321.2968888888892,65.08800000000001)">
+<text></text></g>
+<g transform="translate(332.3433333333337,65.08800000000001)">
+<text></text></g>
+<g transform="translate(343.3897777777782,65.08800000000001)">
+<text></text></g>
+<g transform="translate(354.4362222222227,65.08800000000001)">
+<text></text></g>
+<g transform="translate(365.48266666666717,65.08800000000001)">
+<text></text></g>
+</g></g><g transform="translate(0,43.48800000000001)">
+<rect x="0" y="0" width="415.0666666666667" height="33.024" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<rect x="0" y="0" width="415.0666666666667" height="33.024" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,33.024)">
+<text>1</text></g>
+<g transform="translate(34.666666666666664,33.024)">
+<text>+</text></g>
+<g transform="translate(78.21333333333334,33.024)">
+<text>2</text></g>
+<g transform="translate(112.88000000000001,33.024)">
+<text>+</text></g>
+<g transform="translate(156.42666666666668,33.024)">
+<text>3</text></g>
+<g transform="translate(191.09333333333333,33.024)">
+<text>+</text></g>
+<g transform="translate(234.64,33.024)">
+<text>4</text></g>
+<g transform="translate(269.3066666666667,33.024)">
+<text>+</text></g>
+<g transform="translate(312.85333333333335,33.024)">
+<text>5</text></g>
+<g transform="translate(347.52000000000004,33.024)">
+<text>+</text></g>
+<g transform="translate(391.0666666666667,33.024)">
+<text>6</text></g>
+</g></g></g></g></g><g transform="translate(0,143.97312)">
+<rect x="0" y="0" width="415.0666666666667" height="0" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(207.53333333333336,0)">
+<rect x="0" y="0" width="0" height="0" fill="none" stroke="blue" stroke-width="0.2"/>
+</g></g></g><g transform="translate(431.0666666666667,113.20512)">
+<text>=</text></g>
+<g transform="translate(479.9466666666667,113.20512)">
+<text>2</text></g>
+<g transform="translate(503.9466666666667,113.20512)">
+<text>1</text></g>
+</g></g></svg></p>
+<h2 id="Radicals">Radicals</h2>
+<h3>Should properly scale</h3>
+<code class="language-latex">\sqrt2\textstyle\sqrt2\scriptstyle\sqrt2\scriptscriptstyle\sqrt2</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="241.96992" height="71.632" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="217.96992" height="51.84" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,46.704)">
+<text>√</text></g>
+</g><g transform="translate(44.544000000000004,0)">
+<rect x="0" y="0" width="24" height="3.168" fill="\#000"/><g transform="translate(0,19.392000000000003)">
+<rect x="0" y="0" width="24" height="32.448" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,32.448)">
+<text>2</text></g>
+</g></g><g transform="translate(68.54400000000001,2.496000000000002)">
+<g transform="translate(0,46.704)">
+<text>√</text></g>
+</g><g transform="translate(113.08800000000002,2.496000000000002)">
+<rect x="0" y="0" width="24" height="3.168" fill="\#000"/><g transform="translate(0,16.896)">
+<rect x="0" y="0" width="24" height="32.448" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,32.448)">
+<text>2</text></g>
+</g></g><g transform="translate(137.08800000000002,18.28608)">
+<g transform="translate(0,31.758720000000004)">
+<g transform="scale(0.68)"><text>√</text></g>
+</g></g><g transform="translate(167.37792000000002,18.28608)">
+<rect x="0" y="0" width="16.32" height="2.15424" fill="\#000"/><g transform="translate(0,11.489280000000003)">
+<rect x="0" y="0" width="16.32" height="22.06464" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,22.06464)">
+<g transform="scale(0.68)"><text>2</text></g>
+</g></g></g><g transform="translate(183.69792,27.168000000000003)">
+<g transform="translate(0,23.352)">
+<g transform="scale(0.5)"><text>√</text></g>
+</g></g><g transform="translate(205.96992,27.168000000000003)">
+<rect x="0" y="0" width="12" height="1.584" fill="\#000"/><g transform="translate(0,8.448)">
+<rect x="0" y="0" width="12" height="16.224" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,16.224)">
+<g transform="scale(0.5)"><text>2</text></g>
+</g></g></g></g></g></svg></p>
+<code class="language-latex">\sqrt{\int x}\textstyle\sqrt{\int x}\scriptstyle\sqrt{\int x}\scriptscriptstyle\sqrt{\int x}</code><p><?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="415.2288" height="157.60000000000002" encoding="utf-8" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('rex-xits.otf');}</style></defs><g font-family="rex" font-size="48.0px"><g transform="translate(12.00,5.00)">
+<rect x="0" y="0" width="391.2288" height="91.84800000000001" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,123.12)">
+<text></text></g>
+</g><g transform="translate(51.648,0)">
+<rect x="0" y="0" width="88.88000000000001" height="3.168" fill="\#000"/><g transform="translate(0,25.392000000000003)">
+<rect x="0" y="0" width="88.88000000000001" height="66.456" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,0)">
+<g transform="translate(0,96)">
+<text></text></g>
+</g><g transform="translate(62.480000000000004,66.456)">
+<text>𝑥</text></g>
+</g></g><g transform="translate(140.52800000000002,31.872000000000014)">
+<g transform="translate(0,74.49600000000001)">
+<text></text></g>
+</g><g transform="translate(191.264,31.872000000000014)">
+<rect x="0" y="0" width="67.616" height="3.168" fill="\#000"/><g transform="translate(0,20.424)">
+<rect x="0" y="0" width="67.616" height="39.552" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,39.552)">
+<text>∫</text></g>
+<g transform="translate(41.215999999999994,39.552)">
+<text>𝑥</text></g>
+</g></g><g transform="translate(258.88,61.10112000000001)">
+<g transform="translate(0,31.758720000000004)">
+<g transform="scale(0.68)"><text>√</text></g>
+</g></g><g transform="translate(289.16992,61.10112000000001)">
+<rect x="0" y="0" width="45.978880000000004" height="2.15424" fill="\#000"/><g transform="translate(0,3.851520000000003)">
+<rect x="0" y="0" width="45.978880000000004" height="26.89536" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,26.89536)">
+<g transform="scale(0.68)"><text>∫</text></g>
+</g><g transform="translate(28.02688,26.89536)">
+<g transform="scale(0.68)"><text>𝑥</text></g>
+</g></g></g><g transform="translate(335.1488,69.24000000000001)">
+<g transform="translate(0,23.352)">
+<g transform="scale(0.5)"><text>√</text></g>
+</g></g><g transform="translate(357.4208,69.24000000000001)">
+<rect x="0" y="0" width="33.808" height="1.584" fill="\#000"/><g transform="translate(0,2.832000000000001)">
+<rect x="0" y="0" width="33.808" height="19.776" fill="none" stroke="blue" stroke-width="0.2"/>
+<g transform="translate(0,19.776)">
+<g transform="scale(0.5)"><text>∫</text></g>
+</g><g transform="translate(20.607999999999997,19.776)">
+<g transform="scale(0.5)"><text>𝑥</text></g>
+</g></g></g></g></g></svg></p>
 
 </body></html>
