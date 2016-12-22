@@ -122,7 +122,7 @@ fn add_accent(result: &mut Layout, acc: &Accent, style: Style) {
 
     let base = layout(&mut [ *acc.nucleus.clone() ], style.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode)
-        .horz_variant(*base.width / FONT_SIZE * *UNITS_PER_EM);
+        .horz_variant(*base.width / style.cramped().font_scale() / FONT_SIZE * *UNITS_PER_EM);
     let accent = accent_variant.as_layout(style);
 
     // Attachment points for accent & base are calculated by
@@ -150,7 +150,7 @@ fn add_accent(result: &mut Layout, acc: &Accent, style: Style) {
                 if glyph.attachment != 0 {
                     Unit::Font(
                         glyph.attachment as f64
-                    ).as_pixels()
+                    ).scaled(style)
                 } else {
                     // For glyphs without attachmens, we must
                     // also account for combining glyphs
