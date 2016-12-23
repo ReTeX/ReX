@@ -485,7 +485,7 @@ fn add_frac(result: &mut Layout, frac: &mut GenFraction, style: Style) {
     let kern_den = (shift_down + axis - denom.height - 0.5*bar).max(gap_denom);
     let offset = denom.height + kern_den + 0.5*bar - axis;
 
-    let width  = numer.width.max(numer.width);
+    let width = numer.width;
     let inner = vbox!(offset: offset;
         numer,
         kern!(vert: kern_num),
