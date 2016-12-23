@@ -1,3 +1,5 @@
+[![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
+
 # ReX
 Typesetting mathematics.
 
