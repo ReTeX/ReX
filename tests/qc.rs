@@ -130,7 +130,8 @@ fn test_images() {
 
     cat!("Fractions" =>
       test!("Should properly scale",
-        r"\frac12\textstyle\frac12\scriptstyle\frac12\scriptscriptstyle\frac12"),
+        r"\frac12\textstyle\frac12\scriptstyle\frac12\scriptscriptstyle\frac12",
+        r"\frac{\int x}{\int x}\textstyle\frac{\int x}{\int x}\scriptstyle\frac{\int x}{\int x}\scriptscriptstyle\frac{\int x}{\int x}"),
 
       test!("Should center",
         r"\frac{1}{x+y}\frac{x+y}{1}",

@@ -447,7 +447,7 @@ fn add_frac(result: &mut Layout, frac: &mut GenFraction, style: Style) {
         BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(style),
         BarThickness::None    => Pixels(0.0),
         BarThickness::Unit(u) => u.scaled(style),
-    } ;
+    };
 
     let mut n = layout(&mut frac.numerator,   style.numerator());
     let mut d = layout(&mut frac.denominator, style.denominator());
@@ -481,16 +481,16 @@ fn add_frac(result: &mut Layout, frac: &mut GenFraction, style: Style) {
         gap_denom = FRACTION_DENOMINATOR_GAP_MIN.scaled(style);
     }
 
-    let kern_up = (shift_up - axis - bar/2.0).max(gap_num - numer.depth);
-    let kern_down = (shift_down + axis - denom.height - 0.5*bar).max(-1. * gap_denom);
-    let offset = denom.height + kern_down + 0.5*bar - axis;
+    let kern_num = (shift_up - axis - 0.5*bar).max(gap_num - numer.depth);
+    let kern_den = (shift_down + axis - denom.height - 0.5*bar).max(gap_denom);
+    let offset = denom.height + kern_den + 0.5*bar - axis;
 
     let width  = numer.width.max(numer.width);
     let inner = vbox!(offset: offset;
         numer,
-        kern!(vert: kern_up),
+        kern!(vert: kern_num),
         rule!(width: width, height: bar),
-        kern!(vert: kern_down),
+        kern!(vert: kern_den),
         denom
     );
 
