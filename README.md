@@ -1,5 +1,7 @@
 [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
 
+[Build: Usually Passes]
+
 # ReX
 Typesetting mathematics.
 
