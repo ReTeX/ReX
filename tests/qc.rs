@@ -156,6 +156,24 @@ fn test_images() {
         r"\sqrt{\int x}\textstyle\sqrt{\int x}\scriptstyle\sqrt{\int x}\scriptscriptstyle\sqrt{\int x}")
     ),
 
+    cat!("Color" =>
+      test!("Should handle scripts, and scale",
+        r"a^{\color{red}{2}}\textstyle a^{\color{red}{2}}\scriptstyle a^{\color{red}{2}}\scriptscriptstyle a^{\color{red}{2}}",
+        r"a_{\color{red}{2}}\textstyle a_{\color{red}{2}}\scriptstyle a_{\color{red}{2}}\scriptscriptstyle a_{\color{red}{2}}",
+        r"a^{\color{red}{2}}_{\color{blue}{2}}"
+      ),
+
+      test!("Should be transparent to atom spacing",
+        r"\color{red}{a} + b\ a\color{blue}{+}b\ \color{red}{+}\color{blue}{+}\color{red}{+}"
+      ),
+
+      test!("Should be transpare to operators and accents",
+        r"\color{red}{\int}_0^1",
+        r"\color{red}{\sum}_0^1",
+        r"\color{red}{\hat A}_0^1 A_0^1"
+      )
+    ),
+
     cat!("Front Page" =>
       test!("Should be updated when changed?",
         r"\iint \sqrt{1 + f^2(x,t,t)}\,\mathrm{d}x\mathrm{d}y\mathrm{d}t = \sum \xi(t)",
