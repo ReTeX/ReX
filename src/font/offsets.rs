@@ -1,5 +1,5 @@
 // Do not modify.  Automatically generated.
-use parser::nodes::AtomType;
+use parser::AtomType;
 
 pub trait IsAtom {
     fn atom_type(&self) -> Option<AtomType>;

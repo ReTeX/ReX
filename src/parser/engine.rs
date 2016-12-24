@@ -3,7 +3,8 @@
 use font::fontselection::{ style_offset, Family, Weight };
 use font::{SYMBOLS, Symbol, IsAtom};
 use lexer::{Lexer, Token};
-use parser::nodes::{ AtomType, Delimited, ParseNode, Scripts };
+use parser::nodes::{ Delimited, ParseNode, Scripts };
+use parser::AtomType;
 use parser::Locals;
 use functions::COMMANDS;
 

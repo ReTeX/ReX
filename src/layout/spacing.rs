@@ -1,4 +1,4 @@
-use parser::nodes::{ AtomType, ParseNode };
+use parser::{ AtomType, ParseNode };
 use dimensions::Unit;
 use font::IsAtom;
 use layout::Style;

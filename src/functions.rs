@@ -1,6 +1,7 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color };
+use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color };
+use parser::AtomType;
 use lexer::Lexer;
 use parser;
 use parser::Locals;
@@ -106,8 +107,6 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
 pub enum MathStyle {
     Display,
     Text,
-    Script,
-    ScriptScript,
     NoChange,
 }
 

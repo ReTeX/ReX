@@ -12,7 +12,7 @@ pub use self::glyphs::GLYPHS;
 pub use self::symbols::SYMBOLS;
 pub use self::offsets::IsAtom;
 
-use parser::nodes::AtomType;
+use parser::AtomType;
 
 pub fn glyph_metrics(code : u32) -> Glyph {
     GLYPHS.get(&code)

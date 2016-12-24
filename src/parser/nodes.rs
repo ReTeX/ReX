@@ -1,44 +1,8 @@
-#![allow(dead_code)]
 use dimensions::Unit;
 use layout::Style;
-
-// There are additional classes defined from unicode-math
-// in addition to those defined by TeX.
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum AtomType {
-    Punctuation,
-    Ordinal,
-    Open,
-    Close,
-    Binary,
-    Relation,
-    Accent,
-    AccentWide,
-    BotAccent,
-    BotAccentWide,
-    Alpha,
-    Fence,
-    Operator(bool),     // bool := limits or nolimits?
-    Over,
-    Under,
-    Inner,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Scripts {
-    pub base:        Option<Box<ParseNode>>,
-    pub superscript: Option<Box<ParseNode>>,
-    pub subscript:   Option<Box<ParseNode>>,
-}
-
 use font::Symbol;
-#[derive(Debug, PartialEq, Clone)]
-pub struct Delimited {
-    pub left:  Symbol,
-    pub right: Symbol,
-    pub inner: Vec<ParseNode>,
-}
+
+use super::atoms::AtomType;
 
 // TODO: It might be worth letting the `Group` variant
 //   to have an atomtype associated with it.  By default,
@@ -47,17 +11,31 @@ pub struct Delimited {
 pub enum ParseNode {
     Symbol      (Symbol),
     Delimited   (Delimited),
-    Group       (Vec<ParseNode>),
     Radical     (Radical),
     GenFraction (GenFraction),
     Scripts     (Scripts),
     Rule        (Rule),
     Kerning     (Unit),
-    Extend      (u32, Unit),
     Accent      (Accent),
     Style       (Style),
     AtomChange  (AtomChange),
     Color       (Color),
+    Group       (Vec<ParseNode>),
+    Extend      (u32, Unit),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Delimited {
+    pub left:  Symbol,
+    pub right: Symbol,
+    pub inner: Vec<ParseNode>,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Scripts {
+    pub base:        Option<Box<ParseNode>>,
+    pub superscript: Option<Box<ParseNode>>,
+    pub subscript:   Option<Box<ParseNode>>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -77,6 +55,40 @@ pub struct Rule {
     pub width:  Unit,
     pub height: Unit,
     //pub depth:  Unit,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum MathField {
+    Symbol (Symbol),
+    Group  (Vec<ParseNode>),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Radical {
+    pub inner: Vec<ParseNode>,
+    // pub superscript: Vec<ParseNode>,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct GenFraction {
+    pub numerator:       Vec<ParseNode>,
+    pub denominator:     Vec<ParseNode>,
+    pub bar_thickness:   BarThickness,
+    pub left_delimiter:  Option<Symbol>,
+    pub right_delimiter: Option<Symbol>,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum BarThickness {
+    Default,
+    None,
+    Unit (Unit),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Color {
+    pub color: String,
+    pub inner: Vec<ParseNode>
 }
 
 impl ParseNode {
@@ -107,32 +119,6 @@ impl ParseNode {
             }
         } else {
             unreachable!()
-        }
-    }
-}
-
-use font::IsAtom;
-impl IsAtom for ParseNode {
-    fn atom_type(&self) -> Option<AtomType> {
-        match *self {
-            ParseNode::Symbol(ref sym) => Some(sym.atom_type),
-            ParseNode::Group(_)        => Some(AtomType::Alpha),
-            ParseNode::Delimited(_)    => Some(AtomType::Fence),
-            ParseNode::Radical(_)      => Some(AtomType::Alpha),
-            ParseNode::GenFraction(_)  => Some(AtomType::Inner),
-            ParseNode::Scripts(Scripts { base: ref b, .. })
-                => if let Some(ref c) = *b { c.atom_type() } else { Some(AtomType::Alpha) },
-            ParseNode::Accent(Accent { nucleus: ref n, .. })
-                                       => n.atom_type(),
-            ParseNode::Rule(_)         => None,
-            ParseNode::Kerning(_)      => None,
-            ParseNode::Extend(_, _)    => None,
-            ParseNode::Style(_)        => None,
-            ParseNode::AtomChange(AtomChange { at, .. }) => Some(at),
-            ParseNode::Color(Color { ref inner, ..}) => {
-                if inner.len() != 1 { return None }
-                inner[0].atom_type()
-            }
         }
     }
 }
@@ -171,39 +157,4 @@ impl ParseNode {
             _ => None,
         }
     }
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub enum MathField {
-    Symbol (Symbol),
-    Group  (Vec<ParseNode>),
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Radical {
-    pub inner: Vec<ParseNode>,
-    // We will handle optional arguments at a later day
-    // pub superscript: Vec<ParseNode>,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct GenFraction {
-    pub numerator:       Vec<ParseNode>,
-    pub denominator:     Vec<ParseNode>,
-    pub bar_thickness:   BarThickness,
-    pub left_delimiter:  Option<Symbol>,
-    pub right_delimiter: Option<Symbol>,
-}
-
-#[derive(Debug, Copy, Clone, PartialEq)]
-pub enum BarThickness {
-    Default,
-    None,
-    Unit (Unit),
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Color {
-    pub color: String,
-    pub inner: Vec<ParseNode>
 }

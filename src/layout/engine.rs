@@ -19,7 +19,8 @@ use font::Symbol;
 use font::kerning::{superscript_kern, subscript_kern};
 use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::BarThickness;
-use parser::nodes::{ ParseNode, AtomType, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts };
+use parser::nodes::{ ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts };
+use parser::AtomType;
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
