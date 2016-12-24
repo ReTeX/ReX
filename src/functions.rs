@@ -18,10 +18,10 @@ pub enum TexCommand {
     Color,
     ColorLit(&'static str),
     GenFraction {
-        left_delimiter:  Option<Symbol>,
-        right_delimiter: Option<Symbol>,
-        bar_thickness:   BarThickness,
-        math_style:      MathStyle,
+        left:  Option<Symbol>,
+        right: Option<Symbol>,
+        bar:   BarThickness,
+        style: MathStyle,
     },
     DelimiterSize {
         atom_type: AtomType,
@@ -32,13 +32,28 @@ pub enum TexCommand {
     AtomChange(AtomType),
 }
 
+macro_rules! sym {
+    (@at ord) => { AtomType::Ordinal };
+    (@at bin) => { AtomType::Binary };
+    (@at op)  => { AtomType::Operator };
+    (@at open) => { AtomType::Open };
+    (@at close) => { AtomType::Close };
+
+    ($code:expr, $ord:ident) => ({
+        Symbol {
+            unicode: $code as u32,
+            atom_type: sym!(@at $ord),
+        }
+    });
+}
+
 pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
-    "frac"   => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None,  bar_thickness: BarThickness::Default, math_style: MathStyle::NoChange },
-    "tfrac"  => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Text },
-    "dfrac"  => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Display },
-    "binom"  => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness:  BarThickness::None, math_style: MathStyle::NoChange },
-    "tbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness: BarThickness::None, math_style: MathStyle::Text },
-    "dbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness: BarThickness::None, math_style: MathStyle::Display },
+    "frac"   => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::NoChange },
+    "tfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Text },
+    "dfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Display },
+    "binom"  => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::NoChange },
+    "tbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Text },
+    "dbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Display },
 
     "sqrt" => TexCommand::Radical,
 
@@ -121,10 +136,10 @@ impl TexCommand {
                 })),
 
             TexCommand::GenFraction {
-                left_delimiter:  ld,
-                right_delimiter: rd,
-                bar_thickness:   bt,
-                math_style:      ms,
+                left:  ld,
+                right: rd,
+                bar:   bt,
+                style: ms,
             } =>
                 Some(ParseNode::GenFraction(GenFraction{
                     left_delimiter:  ld,
