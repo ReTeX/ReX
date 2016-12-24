@@ -41,6 +41,7 @@ pub enum TexCommand {
     VExtend,
     HExtend,
     Color,
+    ColorLit(&'static str),
     GenFraction {
         left_delimiter:  Option<Symbol>,
         right_delimiter: Option<Symbol>,
@@ -136,11 +137,17 @@ impl TexCommand {
             },
 
             TexCommand::Color => {
-                println!("Color!");
                 let color = lex.group()?.to_string();
 
                 Some(ParseNode::Color(Color {
                     color: color,
+                    inner: parser::required_macro_argument(lex, local)?
+                }))
+            },
+
+            TexCommand::ColorLit(clr) => {
+                Some(ParseNode::Color(Color {
+                    color: clr.to_string(),
                     inner: parser::required_macro_argument(lex, local)?
                 }))
             }
@@ -149,45 +156,56 @@ impl TexCommand {
 }
 
 pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
-    "frac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None,  bar_thickness: BarThickness::Default, math_style: MathStyle::NoChange },
-    "tfrac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Text },
-    "dfrac" => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Display },
-    "binom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness:  BarThickness::None, math_style: MathStyle::NoChange },
+    "frac"   => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None,  bar_thickness: BarThickness::Default, math_style: MathStyle::NoChange },
+    "tfrac"  => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Text },
+    "dfrac"  => TexCommand::GenFraction { left_delimiter: None, right_delimiter: None, bar_thickness: BarThickness::Default, math_style: MathStyle::Display },
+    "binom"  => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness:  BarThickness::None, math_style: MathStyle::NoChange },
     "tbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness: BarThickness::None, math_style: MathStyle::Text },
     "dbinom" => TexCommand::GenFraction { left_delimiter: Some(Symbol { unicode: '(' as u32, atom_type: AtomType::Open }), right_delimiter: Some(Symbol { unicode: ')' as u32, atom_type: AtomType::Close }), bar_thickness: BarThickness::None, math_style: MathStyle::Display },
+
     "sqrt" => TexCommand::Radical,
-    "bigl" => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Open },
-    "Bigl" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Open },
+
+    "bigl"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Open },
+    "Bigl"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Open },
     "biggl" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Open },
     "Biggl" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Open },
-    "bigr" => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Close },
-    "Bigr" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Close },
+    "bigr"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Close },
+    "Bigr"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Close },
     "biggr" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Close },
     "Biggr" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Close },
-    "bigm" => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Relation },
-    "Bigm" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Relation },
+    "bigm"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Relation },
+    "Bigm"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Relation },
     "biggm" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Relation },
     "Biggm" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Relation },
-    "big" => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Ordinal },
-    "Big" => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Ordinal },
-    "bigg" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Ordinal },
-    "Bigg" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
-    "!" => TexCommand::Kerning(Unit::Em(-3f64/18f64)),
-    "," => TexCommand::Kerning(Unit::Em(3f64/18f64)),
-    ":" => TexCommand::Kerning(Unit::Em(4f64/18f64)),
-    " " => TexCommand::Kerning(Unit::Em(1f64/4f64)),
-    ";" => TexCommand::Kerning(Unit::Em(5f64/18f64)),
-    "quad" => TexCommand::Kerning(Unit::Em(1.0f64)),
+    "big"   => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Ordinal },
+    "Big"   => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Ordinal },
+    "bigg"  => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Ordinal },
+    "Bigg"  => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
+
+    "!"     => TexCommand::Kerning(Unit::Em(-3f64/18f64)),
+    ","     => TexCommand::Kerning(Unit::Em(3f64/18f64)),
+    ":"     => TexCommand::Kerning(Unit::Em(4f64/18f64)),
+    " "     => TexCommand::Kerning(Unit::Em(1f64/4f64)),
+    ";"     => TexCommand::Kerning(Unit::Em(5f64/18f64)),
+    "quad"  => TexCommand::Kerning(Unit::Em(1.0f64)),
     "qquad" => TexCommand::Kerning(Unit::Em(2.0f64)),
-    "rule" => TexCommand::Rule,
+    "rule"  => TexCommand::Rule,
+
     "vextend" => TexCommand::VExtend,
     "hextend" => TexCommand::HExtend,
-    "textstyle" => TexCommand::Style(Style::Text),
-    "displaystyle" => TexCommand::Style(Style::Display),
-    "scriptstyle" => TexCommand::Style(Style::Script),
+
+    "textstyle"         => TexCommand::Style(Style::Text),
+    "displaystyle"      => TexCommand::Style(Style::Display),
+    "scriptstyle"       => TexCommand::Style(Style::Script),
     "scriptscriptstyle" => TexCommand::Style(Style::ScriptScript),
+
     "mathop"  => TexCommand::AtomChange(AtomType::Operator(false)),
     "mathrel" => TexCommand::AtomChange(AtomType::Relation),
     "mathord" => TexCommand::AtomChange(AtomType::Alpha),
-    "color" => TexCommand::Color,
+
+    "color"   => TexCommand::Color,
+    "blue"    => TexCommand::ColorLit("blue"),
+    "red"     => TexCommand::ColorLit("red"),
+    "gray"    => TexCommand::ColorLit("gray"),
+    "phantom" => TexCommand::ColorLit("rgba(0,0,0,0)"),
 };
