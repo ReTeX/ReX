@@ -23,6 +23,7 @@ macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
 macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
+macro_rules! COLOR_TEMPLATE { () => { r#"<g transform="translate({:.2},{:.2})" fill="{}">"# } }
 
 const SVG_HEADER: &'static str = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">"#;
 
@@ -179,6 +180,12 @@ impl SVGRenderer {
             },
             LayoutVariant::Kern =>
                 width += node.width,
+            LayoutVariant::Color(ref clr) => {
+                result += &format!(COLOR_TEMPLATE!(), width, height - node.height, clr.color);
+                result += &self.render_hbox(&clr.inner, node.height, node.width, Alignment::Default);
+                result += "</g>";
+                width += node.width;
+            }
         }}
 
         result
@@ -227,6 +234,9 @@ impl SVGRenderer {
 
                 height += node.height;
             },
+            LayoutVariant::Color(ref clr) => {
+                panic!("Shouldn't have a color in a vertical box???")
+            }
             //_ => (),
         }}
 

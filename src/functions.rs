@@ -1,6 +1,6 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange };
+use parser::nodes::{ AtomType, ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color };
 use lexer::Lexer;
 use parser;
 use parser::Locals;
@@ -40,6 +40,7 @@ pub enum TexCommand {
     Rule,
     VExtend,
     HExtend,
+    Color,
     GenFraction {
         left_delimiter:  Option<Symbol>,
         right_delimiter: Option<Symbol>,
@@ -132,6 +133,16 @@ impl TexCommand {
                     at: sty,
                     inner: parser::required_macro_argument(lex, local)?
                 }))
+            },
+
+            TexCommand::Color => {
+                println!("Color!");
+                let color = lex.group()?.to_string();
+
+                Some(ParseNode::Color(Color {
+                    color: color,
+                    inner: parser::required_macro_argument(lex, local)?
+                }))
             }
         })
     }
@@ -178,4 +189,5 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "mathop"  => TexCommand::AtomChange(AtomType::Operator(false)),
     "mathrel" => TexCommand::AtomChange(AtomType::Relation),
     "mathord" => TexCommand::AtomChange(AtomType::Alpha),
+    "color" => TexCommand::Color,
 };

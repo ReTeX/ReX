@@ -3,7 +3,7 @@
 
 use super::Alignment;
 use super::builders;
-use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style };
+use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style, ColorChange };
 use super::convert::AsLayoutNode;
 use super::convert::ToPixels;
 use super::LayoutSettings;
@@ -56,6 +56,21 @@ pub fn layout(nodes: &mut [ParseNode], mut config: LayoutSettings) -> Layout {
             ParseNode::Rule(rule) => result.add_node(rule.as_layout(config)),
             ParseNode::Kerning(kern) => result.add_node(kern!(horz: kern.scaled(config))),
             ParseNode::Style(sty) => config.style = sty,
+
+            ParseNode::Color(ref mut clr) => {
+                let layout = layout(&mut clr.inner, config);
+
+                result.add_node(LayoutNode {
+                    width:  layout.width,
+                    height: layout.height,
+                    depth:  layout.depth,
+                    node:   LayoutVariant::Color(ColorChange {
+                        color: clr.color.clone(),
+                        inner: layout.contents
+                    })
+                })
+            },
+
             ParseNode::AtomChange(AtomChange { at, ref mut inner }) =>
                 add_atom_change(&mut result, at, inner, config),
 

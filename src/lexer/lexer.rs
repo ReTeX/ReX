@@ -52,8 +52,8 @@ impl<'a> Lexer<'a> {
 
     pub fn consume_whitespace(&mut self) {
         if self.current != Token::WhiteSpace { return; }
-        
-        // while the current character points to a 
+
+        // while the current character points to a
         // whitespace token, advance the position.
         while let Some(c) = self.current_char() {
             if !c.is_whitespace() { break; }
@@ -70,7 +70,7 @@ impl<'a> Lexer<'a> {
     /// we are currently pointing to the first character
     /// after `\`.  This method continues advancing the cursor
     /// until a first non-alphabetic character is reached.
-    /// The first character is special, in that a non-alphabetic 
+    /// The first character is special, in that a non-alphabetic
     /// character is valid, but will terminate the advance.
     /// Afterwards, this method consumes all whitespace characters.
 
@@ -91,13 +91,13 @@ impl<'a> Lexer<'a> {
 
         while let Some(c) = self.next_char()  {
             if c.is_alphabetic() { continue; }
-            
+
             // backtrack, this is not part of the cs name
             self.pos -= c.len_utf8();
             break;
         };
 
-        // We can not relay on the `self.consume_whitespace()` method 
+        // We can not relay on the `self.consume_whitespace()` method
         // since it assumes that `self.current` points to the token
         // that is currently being processed--this control sequence--which
         // we have not yet placed into `self.current`.
@@ -111,8 +111,8 @@ impl<'a> Lexer<'a> {
     }
 
     /// This method will parse a dimension.  It assumes
-    /// that the lexer is currently pointed to the first valid 
-    /// character in a dimension.  So it may be necessary to 
+    /// that the lexer is currently pointed to the first valid
+    /// character in a dimension.  So it may be necessary to
     /// consume_whitespace() prior to using this method.
 
     pub fn dimension(&mut self) -> Result<Option<Unit>, String> {
@@ -125,7 +125,7 @@ impl<'a> Lexer<'a> {
         self.backtrack();
         let pos = self.pos;
         while let Some(n) = self.next_char() {
-            if n.is_numeric() || n == '.' { continue; }            
+            if n.is_numeric() || n == '.' { continue; }
             self.pos -= n.len_utf8();
             break
         }
@@ -140,6 +140,35 @@ impl<'a> Lexer<'a> {
         // TODO: Handle dimensions, px, em, etc.
         self.next();
         Ok(result)
+    }
+
+    /// Expect to find an {<inner>}, and return <inner>
+
+    pub fn group(&mut self) -> Result<&str, String> {
+        println!("{:?}", self);
+        self.consume_whitespace();
+        if self.current != Token::Symbol('{') {
+            return Err("Expected to find an open group.".into())
+        }
+
+        let start = self.pos;
+        let mut end   = self.pos;
+        while let Some(c) = self.next_char() {
+            if c == '{' {
+                self.pos -= 1;
+                end = self.pos - 1;
+                self.next();
+                break;
+            }
+        }
+
+        if start == end {
+            return Err("Unable to find closing bracket.".into())
+        }
+
+        println!("{}", &self.input[start..end]);
+        println!("{:?}", self);
+        Ok(&self.input[start..end])
     }
 
     /// This method and `current_char` return the same value.
@@ -161,7 +190,7 @@ impl<'a> Lexer<'a> {
                 self.pos -= 1;
                 while let Token::WhiteSpace = self.current {
                     self.pos -= 1;
-                } 
+                }
             },
             Token::ControlSequence(_) => {
                 /* TODO: Implement me */

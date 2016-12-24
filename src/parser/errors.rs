@@ -1,0 +1,4 @@
+enum ParseErrorType {
+    UnknownCommand(&str),
+
+}

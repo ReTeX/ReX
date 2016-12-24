@@ -100,8 +100,15 @@ pub enum LayoutVariant {
     HorizontalBox (HorizontalBox),
     VerticalBox   (VerticalBox),
     Glyph         (LayoutGlyph),
+    Color         (ColorChange),
     Rule,
     Kern,
+}
+
+#[derive(Clone)]
+pub struct ColorChange {
+    pub color: String,
+    pub inner: Vec<LayoutNode>,
 }
 
 #[derive(Clone, Default)]
@@ -196,6 +203,9 @@ impl fmt::Debug for LayoutNode {
                 } else { self.width };
 
                 write!(f, "Kern({:.1})", kern)
+            }
+            LayoutVariant::Color(ref clr) => {
+                write!(f, "Color({}, {:?})", clr.color, clr.inner)
             }
         }
     }

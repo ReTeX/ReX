@@ -57,6 +57,7 @@ pub enum ParseNode {
     Accent      (Accent),
     Style       (Style),
     AtomChange  (AtomChange),
+    Color       (Color),
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -128,6 +129,10 @@ impl IsAtom for ParseNode {
             ParseNode::Extend(_, _)    => None,
             ParseNode::Style(_)        => None,
             ParseNode::AtomChange(AtomChange { at, .. }) => Some(at),
+            ParseNode::Color(Color { ref inner, ..}) => {
+                if inner.len() != 1 { return None }
+                inner[0].atom_type()
+            }
         }
     }
 }
@@ -159,6 +164,10 @@ impl ParseNode {
                     b.is_symbol()
                 } else { None }
             },
+            ParseNode::Color(Color { ref inner, ..}) => {
+                if inner.len() != 1 { return None }
+                inner[0].is_symbol()
+            }
             _ => None,
         }
     }
@@ -191,4 +200,10 @@ pub enum BarThickness {
     Default,
     None,
     Unit (Unit),
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Color {
+    pub color: String,
+    pub inner: Vec<ParseNode>
 }
