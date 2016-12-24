@@ -4,27 +4,27 @@ use font::constants;
 use font::variants::VariantGlyph;
 use font::Glyph;
 use dimensions::{ FontUnit, Unit, Unital, Pixels };
-use render::FONT_SIZE;
+use layout::LayoutSettings;
 
 use super::builders;
 use super::{ Style, LayoutNode, LayoutVariant, LayoutGlyph };
 use parser::nodes::Rule;
 
 pub trait AsLayoutNode {
-    fn as_layout(&self, sty: Style) -> LayoutNode;
+    fn as_layout(&self, config: LayoutSettings) -> LayoutNode;
 }
 
 impl AsLayoutNode for Glyph {
-    fn as_layout(&self, style: Style) -> LayoutNode {
+    fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         LayoutNode {
-            height: self.height() .scaled(style),
-            width:  self.advance().scaled(style),
-            depth:  self.depth()  .scaled(style),
+            height: self.height() .scaled(config),
+            width:  self.advance().scaled(config),
+            depth:  self.depth()  .scaled(config),
             node:   LayoutVariant::Glyph(LayoutGlyph {
                 unicode: self.unicode,
-                scale: style.font_scale(),
-                attachment: self.attachment_offset().scaled(style),
-                italics: self.italic_correction().scaled(style),
+                scale: config.style.font_scale(),
+                attachment: self.attachment_offset().scaled(config),
+                italics: self.italic_correction().scaled(config),
                 offset:  Pixels(0.0),
             })
         }
@@ -32,11 +32,11 @@ impl AsLayoutNode for Glyph {
 }
 
 impl AsLayoutNode for Rule {
-    fn as_layout(&self, style: Style) -> LayoutNode {
+    fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         LayoutNode {
             node:   LayoutVariant::Rule,
-            width:  self.width.scaled(style),
-            height: self.height.scaled(style),
+            width:  self.width.scaled(config),
+            height: self.height.scaled(config),
             depth:  Pixels(0f64),
         }
     }
@@ -44,11 +44,11 @@ impl AsLayoutNode for Rule {
 
 use font::variants::Direction;
 impl AsLayoutNode for VariantGlyph {
-    fn as_layout(&self, style: Style) -> LayoutNode {
+    fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         match *self {
             VariantGlyph::Replacement(g) => {
                 let glyph = font::glyph_metrics(g.unicode);
-                glyph.as_layout(style)
+                glyph.as_layout(config)
             },
 
             VariantGlyph::Constructable(dir, ref c) => {
@@ -56,10 +56,10 @@ impl AsLayoutNode for VariantGlyph {
                     Direction::Vertical => {
                         let mut contents = builders::VBox::new();
                         for instr in c.iter().rev() {
-                            contents.add_node(instr.glyph.as_layout(style));
+                            contents.add_node(instr.glyph.as_layout(config));
                             if instr.overlap != 0.0 {
                                 let unit = Unit::Font(-instr.overlap);
-                                let kern = unit.scaled(style);
+                                let kern = unit.scaled(config);
                                 contents.add_node(kern!(vert: kern));
                             }
                         }
@@ -72,10 +72,10 @@ impl AsLayoutNode for VariantGlyph {
                         for instr in c.iter() {
                             if instr.overlap != 0.0 {
                                 let unit = Unit::Font(-instr.overlap);
-                                let kern = unit.scaled(style);
+                                let kern = unit.scaled(config);
                                 contents.add_node(kern!(horz: kern));
                             }
-                            contents.add_node(instr.glyph.as_layout(style));
+                            contents.add_node(instr.glyph.as_layout(config));
                         }
 
                         contents.build()
@@ -87,34 +87,26 @@ impl AsLayoutNode for VariantGlyph {
 }
 
 pub trait ToPixels: Sized {
-    fn as_pixels(self) -> Pixels;
-    fn scaled(self, sty: Style) -> Pixels {
-        self.as_pixels() * sty.font_scale()
+    fn as_pixels(self, font_size: f64) -> Pixels;
+    fn scaled(self, config: LayoutSettings) -> Pixels {
+        self.as_pixels(config.font_size) * config.style.font_scale()
     }
 }
 
 impl ToPixels for Unit {
     // TODO: You can't assign pt values to fonts with given `font_size: f64`
-    fn as_pixels(self) -> Pixels {
+    fn as_pixels(self, font_size: f64) -> Pixels {
         Pixels(match self {
-            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * FONT_SIZE,
-            Unit::Em(u)   => u * FONT_SIZE,
-            Unit::Ex(u)   => u * FONT_SIZE, // TODO: measure x width here
+            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * font_size,
+            Unit::Em(u)   => u * font_size,
+            Unit::Ex(u)   => u * font_size, // TODO: measure x width here
             Unit::Px(u)   => u
         })
     }
 }
 
 impl<U: Unital> ToPixels for FontUnit<U> {
-    fn as_pixels(self) -> Pixels {
-        Unit::from(self).as_pixels()
+    fn as_pixels(self, font_size: f64) -> Pixels {
+        Unit::from(self).as_pixels(font_size)
     }
-}
-
-pub trait ToFont {
-    fn in_font(self) -> f64;
-}
-
-impl ToFont for Pixels {
-    fn in_font(self) -> f64 { *self / FONT_SIZE * *constants::UNITS_PER_EM }
 }

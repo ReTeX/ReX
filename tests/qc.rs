@@ -4,11 +4,6 @@ use std::fmt;
 
 extern crate rex;
 
-use rex::parser::parse;
-use rex::render::Renderer;
-use rex::layout::engine::layout;
-use rex::layout::Style;
-
 const HEADER: &'static str =
 r##"<!DOCTYPE html>
 <html>
@@ -70,12 +65,10 @@ impl fmt::Display for Categories {
 impl fmt::Display for Test {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "<h3>{}</h3>", self.description)?;
+        let svg = rex::SVGRenderer::new().font_size(32.0);
 
         for test in &self.tests {
-            let mut p = parse(test).unwrap();
-            let r = layout(&mut p, Style::Display);
-            let output = Renderer::new(r).render();
-
+            let output = svg.render(test);
             writeln!(f, r#"<code class="language-latex">{}</code><p>{}</p>"#, test, output)?;
         }
 
@@ -87,7 +80,7 @@ macro_rules! cat {
     ($desc:expr => $($test:expr),* ) => ({
         Categories {
             description: $desc,
-            tests:       {
+            tests: {
                 let mut v = vec![];
                 $( v.push($test); )*
                 v
@@ -161,7 +154,23 @@ fn test_images() {
       test!("Should properly scale",
         r"\sqrt2\textstyle\sqrt2\scriptstyle\sqrt2\scriptscriptstyle\sqrt2",
         r"\sqrt{\int x}\textstyle\sqrt{\int x}\scriptstyle\sqrt{\int x}\scriptscriptstyle\sqrt{\int x}")
-    )]);
+    ),
+
+    cat!("Front Page" =>
+      test!("Should be updated when changed?",
+        r"\iint \sqrt{1 + f^2(x,t,t)}\,\mathrm{d}x\mathrm{d}y\mathrm{d}t = \sum \xi(t)",
+        r"\Vert f \Vert_2 = \sqrt{\int f^2(x)\,\mathrm{d}x}",
+        r"\left.x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}\right\rbrace \mathrm{wat?}",
+        r"\hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave y\bar y\tilde y",
+        r"\mathop{\overbrace{1+2+3+\unicodecdots+n}}\limits^{\mathrm{Arithmatic}} = \frac{n(n+1)}{2}",
+        r"\sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}",
+        r"\left\vert\sum_k a_k b_k\right\vert \leq \left(\sum_k a_k^2\right)^{\frac12}\left(\sum_k b_k^2\right)^{\frac12}",
+        r"f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\,\mathrm{d}\xi",
+        r"\frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}} = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \unicodecdots}}}}",
+        r"\mathop{\mathrm{lim\,sup}}\limits_{x\rightarrow\infty}\ \mathop{\mathrm{sin}}(x)\mathrel{\mathop{=}\limits^?}1"
+      )
+    )
+    ]);
 
     let output = format!("{}\n{}\n{}", HEADER, results, END);
 

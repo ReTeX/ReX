@@ -351,3 +351,46 @@ impl Style {
         }
     }
 }
+
+#[derive(Copy, Clone)]
+pub struct LayoutSettings {
+    pub font_size: f64,
+    pub style:     Style,
+}
+
+impl LayoutSettings {
+    fn cramped(self) -> LayoutSettings {
+        LayoutSettings {
+            style: self.style.cramped(),
+            ..self
+        }
+    }
+
+    fn superscript_variant(self) -> LayoutSettings {
+        LayoutSettings {
+            style: self.style.superscript_variant(),
+            ..self
+        }
+    }
+
+    fn subscript_variant(self) -> LayoutSettings {
+        LayoutSettings {
+            style: self.style.subscript_variant(),
+            ..self
+        }
+    }
+
+    fn numerator(self) -> LayoutSettings {
+        LayoutSettings {
+            style: self.style.numerator(),
+            ..self
+        }
+    }
+
+    fn denominator(self) -> LayoutSettings {
+        LayoutSettings {
+            style: self.style.denominator(),
+            ..self
+        }
+    }
+}

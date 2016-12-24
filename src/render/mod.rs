@@ -5,6 +5,17 @@
 use layout::{ LayoutNode, Layout, LayoutVariant, Alignment };
 //use layout::boundingbox::Bounded;
 use dimensions::Pixels;
+use std::path::Path;
+use std::convert::AsRef;
+
+use parser::parse;
+use layout::LayoutSettings;
+use layout::engine::layout;
+use layout::Style;
+
+use std::fs::File;
+use std::io::Write;
+use std::env;
 
 macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" encoding=\"utf-8\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
 macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
@@ -13,49 +24,112 @@ macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
 macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
 macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
 
-struct Cursor {
-    x: f64,
-    y: f64,
+const SVG_HEADER: &'static str = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">"#;
+
+macro_rules! debug {
+    ($fmt:expr, $($arg:tt)*) => (
+        if cfg!(debug_assertions) {
+            println!($fmt, $($arg)*);
+        }
+    )
 }
 
-pub struct Renderer {
-    cursor: Cursor,
-    layout: Layout,
+// let svg = rex::SVGRenderer::new();
+//
+// let svg = rex::SVGRenderer::new()
+//      .style(Style::Display)
+//      .font_size(48)
+//      .horz_padding(12)
+//      .vert_padding(12)
+//      .strict(true)
+//      .gzip(true);
+//
+// // Redner to file
+// let _ = svg.render_to_file("temp.svg", r"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}");
+//
+// // Render to String
+// let result = svg.render(r"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}")
+//      .expect("Unable render svg!");
+//
+
+#[derive(Copy, Clone)]
+pub struct SVGRenderer {
+    pub font_size:    f64,
+    pub horz_padding: f64,
+    pub vert_padding: f64,
+    pub strict:       bool,
+    pub gzip:         bool,
+    pub style:        Style,
+    cursor:           Cursor,
 }
 
-pub const FONT_SIZE:    f64 = 128.0;
-const     LEFT_PADDING: f64 = 12.0;
-const     TOP_PADDING:  f64 = 5.0;
-const     SVG_HEADER: &'static str = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\
-    <!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">";
-
-impl Renderer {
-    pub fn new(layout: Layout) -> Renderer {
-        let cursor = Cursor {
-            x: LEFT_PADDING, // Left padding
-            y: TOP_PADDING,  // Top  padding
-        };
-
-        Renderer {
-            cursor: cursor,
-            layout: layout,
+impl SVGRenderer {
+    pub fn new() -> SVGRenderer {
+        SVGRenderer {
+            font_size:    48.0,
+            horz_padding: 12.0,
+            vert_padding: 5.0,
+            strict:       true,
+            gzip:         false,
+            style:        Style::Display,
+            cursor:       Cursor { x: 0.0, y: 0.0 },
         }
     }
 
-    pub fn render(&self) -> String {
+    pub fn font_size(self, size: f64) -> SVGRenderer {
+        SVGRenderer {
+            font_size: size,
+            ..self
+        }
+    }
+
+    pub fn horz_padding(self, size: f64) -> SVGRenderer {
+        SVGRenderer {
+            horz_padding: size,
+            ..self
+        }
+    }
+
+    pub fn vert_padding(self, size: f64) -> SVGRenderer {
+        SVGRenderer {
+            vert_padding: size,
+            ..self
+        }
+    }
+
+    pub fn style(self, style: Style) -> SVGRenderer {
+        SVGRenderer {
+            style: style,
+            ..self
+        }
+    }
+
+    pub fn render_to_file<P: AsRef<Path>>(&self, file: P, tex: &str) {
+        let output = self.render(tex);
+
+        let mut f = File::create(file).unwrap();
+        f.write_all(output.as_bytes()).unwrap();
+    }
+
+    pub fn render(&self, tex: &str) -> String {
+        let mut parse = parse(&tex).unwrap();
+        debug!("Parse: {:?}", parse);
+
+        let layout = layout(&mut parse, self.layout_settings());
+        debug!("layout: {:?}", layout);
+
         let mut output = String::from(SVG_HEADER);
 
-        let width  = self.layout.width  + 2.0 * self.cursor.x;   // Left and right padding
-        let height = self.layout.height + 2.0 * self.cursor.y;   // Top and bot padding
-        let depth  = self.layout.depth;
+        let width  = layout.width  + 2.0 * self.horz_padding;   // Left and right padding
+        let height = layout.height + 2.0 * self.vert_padding;   // Top and bot padding
+        let depth  = layout.depth;
 
-        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", FONT_SIZE);
+        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", self.font_size);
+        output += &format!(G_TEMPLATE!(), self.horz_padding, self.vert_padding);
 
-        output += &format!(G_TEMPLATE!(), LEFT_PADDING, TOP_PADDING);
-        output += &self.render_hbox(&self.layout.contents,
-            self.layout.height, self.layout.width, Alignment::Default);
-        output += "</g>";
-        output += "</g></svg>";
+        output += &self.render_hbox(
+            &layout.contents, layout.height, layout.width, Alignment::Default);
+        output += "</g></g></svg>";
         output
     }
 
@@ -157,5 +231,18 @@ impl Renderer {
         }}
 
         result
-   }
+    }
+
+    fn layout_settings(&self) -> LayoutSettings {
+        LayoutSettings {
+            font_size: self.font_size,
+            style:     self.style,
+        }
+    }
+}
+
+#[derive(Clone, Copy)]
+struct Cursor {
+    x: f64,
+    y: f64,
 }
