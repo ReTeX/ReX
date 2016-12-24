@@ -61,6 +61,7 @@ pub struct SVGRenderer {
     pub strict:       bool,
     pub gzip:         bool,
     pub style:        Style,
+    pub debug:        bool,
     cursor:           Cursor,
 }
 
@@ -73,6 +74,7 @@ impl SVGRenderer {
             strict:       true,
             gzip:         false,
             style:        Style::Display,
+            debug:        false,
             cursor:       Cursor { x: 0.0, y: 0.0 },
         }
     }
@@ -101,6 +103,13 @@ impl SVGRenderer {
     pub fn style(self, style: Style) -> SVGRenderer {
         SVGRenderer {
             style: style,
+            ..self
+        }
+    }
+
+    pub fn debug(self, debug: bool) -> SVGRenderer {
+        SVGRenderer {
+            debug: debug,
             ..self
         }
     }
@@ -143,7 +152,9 @@ impl SVGRenderer {
             width += (nodes_width - w)/2.0;
         }
 
-        result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes_width, height);
+        if cfg!(debug_assertions) && self.debug {
+            result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes_width, height);
+        }
 
         for node in nodes { match node.node {
             LayoutVariant::Glyph(ref gly) => {
