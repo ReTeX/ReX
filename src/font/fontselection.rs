@@ -135,6 +135,10 @@ impl<'a> TryFrom<&'a str> for Weight {
 }
 
 pub fn style_offset(unicode: u32, family: Family, weight: Weight) -> u32 {
+    if unicode == b'-' as u32 {
+        return 0x2212 - b'-' as u32
+    }
+
     match unicode {
         DIGIT_START...DIGIT_END => {
             match (family, weight) {
