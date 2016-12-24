@@ -604,6 +604,10 @@ impl IsSymbol for Layout {
                     vb.contents[0].is_symbol()
                 }
             },
+            LayoutVariant::Color(ref clr) => {
+                if clr.inner.len() != 1 { return None }
+                clr.inner[0].is_symbol()
+            }
             _ => None,
         }
     }
@@ -626,6 +630,10 @@ impl IsSymbol for LayoutNode {
                 } else {
                     vb.contents[0].is_symbol()
                 }
+            },
+            LayoutVariant::Color(ref clr) => {
+                if clr.inner.len() != 1 { return None }
+                clr.inner[0].is_symbol()
             }
             _ => None,
         }
