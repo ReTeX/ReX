@@ -160,14 +160,14 @@ impl Variant for Glyph {
         if find_min {
             while min_size(&construction.parts, count) < size {
                 count +=1 ;
-                if count > 20 { panic!("Unable to construct large glyph! Max iteration hit."); }
+                if count > 100 { panic!("Unable to construct large glyph! Max iteration hit."); }
             }
             // Current glyph is too large, go back one.
             count = ::std::cmp::max(0, count - 1);
         } else {
             while max_size(&construction.parts, count) < size {
                 count += 1;
-                if count > 20 { panic!("Unable to construct large glyph."); }
+                if count > 100 { panic!("Unable to construct large glyph."); }
             }
         }
 
@@ -253,6 +253,7 @@ impl fmt::Debug for GlyphInstruction {
         write!(f, "GlyphInst {{ glyph: 0x{:X}, overlap: {} }}", self.glyph.unicode, self.overlap)
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::Variant;
@@ -260,7 +261,7 @@ mod tests {
 
     #[test]
     fn can_extend_parenthesis() {
-        let paren = glyph_metrics(0x28); // Left parantheses
+        //let paren = glyph_metrics(0x28); // Left parantheses
         // println!("800:  {:#?}", paren.variant(800 as f64));
         // println!("1200: {:#?}", paren.variant(1200 as f64));
         // println!("1800: {:#?}", paren.variant(1800 as f64));

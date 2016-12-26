@@ -8,6 +8,8 @@ use parser::Locals;
 use dimensions::Unit;
 use layout::Style;
 use lexer::Token;
+use font::fontselection::{ Family, Weight };
+use font::fontselection::style_offset;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -31,6 +33,7 @@ pub enum TexCommand {
     Kerning(Unit),
     Style(Style),
     AtomChange(AtomType),
+    TextOperator(&'static str, bool),
 }
 
 macro_rules! sym {
@@ -46,6 +49,33 @@ macro_rules! sym {
             atom_type: sym!(@at $ord),
         }
     });
+}
+
+macro_rules! text {
+    ($code:expr) => ({
+        ParseNode::Symbol(Symbol {
+            unicode: $code as u32 + style_offset($code as u32, Family::Roman, Weight::None),
+            atom_type: AtomType::Ordinal,
+        })
+    })
+}
+
+fn text(s: &'static str) -> Vec<ParseNode> {
+    let mut result = Vec::with_capacity(s.len());
+    for c in s.chars() {
+        if c == ',' {
+            result.push(ParseNode::Kerning(Unit::Em(3f64/18f64)));
+        } else {
+            result.push(text!(c));
+        }
+    }
+    result
+}
+
+macro_rules! op_nolimits {
+    ($text:expr) => {
+        $text => TexCommand::TextOperator($text, false),
+    }
 }
 
 pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
@@ -101,6 +131,41 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "red"     => TexCommand::ColorLit("red"),
     "gray"    => TexCommand::ColorLit("gray"),
     "phantom" => TexCommand::ColorLit("rgba(0,0,0,0)"),
+
+    "det"     => TexCommand::TextOperator("det", true),
+    "gcd"     => TexCommand::TextOperator("gcd", true),
+    "lim"     => TexCommand::TextOperator("lim", true),
+    "limsup"  => TexCommand::TextOperator("lim,sup", true),
+    "liminf"  => TexCommand::TextOperator("lim,inf", true),
+    "sup"     => TexCommand::TextOperator("sup", true),
+    "supp"    => TexCommand::TextOperator("supp", true),
+    "inf"     => TexCommand::TextOperator("inf", true),
+    "max"     => TexCommand::TextOperator("max", true),
+    "min"     => TexCommand::TextOperator("min", true),
+    "Pr"      => TexCommand::TextOperator("Pr", true),
+
+    "sin"     => TexCommand::TextOperator("sin", false),
+    "cos"     => TexCommand::TextOperator("cos", false),
+    "tan"     => TexCommand::TextOperator("tan", false),
+    "cot"     => TexCommand::TextOperator("cot", false),
+    "csc"     => TexCommand::TextOperator("csc", false),
+    "sec"     => TexCommand::TextOperator("sec", false),
+    "arcsin"  => TexCommand::TextOperator("arcsin", false),
+    "arccos"  => TexCommand::TextOperator("arccos", false),
+    "arctan"  => TexCommand::TextOperator("arctan", false),
+    "sinh"    => TexCommand::TextOperator("sinh", false),
+    "cosh"    => TexCommand::TextOperator("cosh", false),
+    "tanh"    => TexCommand::TextOperator("tanh", false),
+    "arg"     => TexCommand::TextOperator("arg", false),
+    "deg"     => TexCommand::TextOperator("deg", false),
+    "dim"     => TexCommand::TextOperator("dim", false),
+    "exp"     => TexCommand::TextOperator("exp", false),
+    "hom"     => TexCommand::TextOperator("hom", false),
+    "Hom"     => TexCommand::TextOperator("Hom", false),
+    "ker"     => TexCommand::TextOperator("ker", false),
+    "Ker"     => TexCommand::TextOperator("Ker", false),
+    "ln"      => TexCommand::TextOperator("ln", false),
+    "log"     => TexCommand::TextOperator("log", false),
 };
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
@@ -215,6 +280,13 @@ impl TexCommand {
                 Some(ParseNode::Color(Color {
                     color: clr.to_string(),
                     inner: parser::required_macro_argument(lex, local)?
+                }))
+            },
+
+            TexCommand::TextOperator(op, limits) => {
+                Some(ParseNode::AtomChange(AtomChange {
+                    at: AtomType::Operator(limits),
+                    inner: text(op),
                 }))
             }
         })
