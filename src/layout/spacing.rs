@@ -1,6 +1,5 @@
-use parser::{ AtomType, ParseNode };
+use parser::AtomType;
 use dimensions::Unit;
-use parser::atoms::IsAtom;
 use layout::Style;
 
 #[allow(unused)]

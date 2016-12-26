@@ -10,7 +10,6 @@ use super::LayoutSettings;
 
 use dimensions::{ Pixels, Unit };
 use font;
-use font::OptionalAtom;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
@@ -24,8 +23,8 @@ use parser::AtomType;
 use parser::atoms::IsAtom;
 
 /// Entry point to our recursive algorithm
-pub fn layout(nodes: &[ParseNode], mut config: LayoutSettings) -> Layout {
-    layout_recurse(nodes, config, &mut AtomType::Transparent, AtomType::Transparent)
+pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
+    layout_recurse(nodes, config, AtomType::Transparent)
 }
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
@@ -33,11 +32,10 @@ pub fn layout(nodes: &[ParseNode], mut config: LayoutSettings) -> Layout {
 #[allow(dead_code)]
 fn layout_recurse(nodes: &[ParseNode],
               mut config: LayoutSettings,
-              prev: &mut AtomType,
               parent_next: AtomType) -> Layout  {
 
     let mut result = Layout::new();
-    let prev = &mut AtomType::Transparent;
+    let mut prev = AtomType::Transparent;
 
     for idx in 0..nodes.len() {
         let node = &nodes[idx];
@@ -48,17 +46,16 @@ fn layout_recurse(nodes: &[ParseNode],
                 parent_next
             };
 
-        let mut sp  = Spacing::None;
         let mut current = node.atom_type();
         if current == AtomType::Binary {
-            if *prev == AtomType::Transparent
-                || *prev == AtomType::Binary
-                || *prev == AtomType::Relation
-                || *prev == AtomType::Open
-                || *prev == AtomType::Punctuation
+            if prev == AtomType::Transparent
+                || prev == AtomType::Binary
+                || prev == AtomType::Relation
+                || prev == AtomType::Open
+                || prev == AtomType::Punctuation
             {
                 current = AtomType::Alpha;
-            } else if let AtomType::Operator(_) = *prev {
+            } else if let AtomType::Operator(_) = prev {
                 current = AtomType::Alpha;
             } else if next == AtomType::Relation
                 || next == AtomType::Close
@@ -66,12 +63,9 @@ fn layout_recurse(nodes: &[ParseNode],
             {
                 current = AtomType::Alpha;
             }
-
-            sp = atom_spacing(*prev, current, config.style);
-        } else if current != AtomType::Transparent {
-            sp = atom_spacing(*prev, current, config.style);
         }
 
+        let sp = atom_spacing(prev, current, config.style);
         if sp != Spacing::None {
             let kern = sp.to_unit().scaled(config);
             result.add_node(kern!(horz: kern));
@@ -79,7 +73,7 @@ fn layout_recurse(nodes: &[ParseNode],
 
         println!("{:?}, {:?} -> {:?}", prev, current, sp);
 
-        *prev = current;
+        prev = current;
 
         match *node {
             ParseNode::Symbol(sym) => add_symbol(&mut result, sym, config),
@@ -94,7 +88,7 @@ fn layout_recurse(nodes: &[ParseNode],
             ParseNode::Style(sty) => config.style = sty,
 
             ParseNode::Color(ref clr) => {
-                let layout = layout_recurse(&clr.inner, config, prev, next);
+                let layout = layout_recurse(&clr.inner, config, next);
 
                 result.add_node(LayoutNode {
                     width:  layout.width,
