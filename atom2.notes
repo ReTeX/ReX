@@ -1,0 +1,61 @@
+\documentclass{article}\usepackage{unicode-math}\setmathfont{xits-math.otf}\begin{document}\[ \int_0^\infty \]\end{document}
+
+# Scripts algorithm variations
+
+## Accents 
+    - influences vertical height calculation.
+    - only by redefining the height of the base, if only a symbol.
+
+## Operators 
+    (a) Limits:   Branch to new specialized algorithm.
+    (b) Nolimits: Influences the horizontal kerning of the limits.
+
+## Symbols
+    - Influences the horizontal kerning of the limits.
+
+Sub-routines for scripts:
+
+ - Check if base is an operator.
+
+ParseNode:
+fn atom_type(&self) -> AtomType {
+    match *self {
+        Symbol(ref sym) => sym.atom_type,
+        Delimited(_)    => AtomType::Inner,
+        Radical(_)      => AtomType::Alpha,
+        Fraction(_)     => AtomType::Inner,
+        Group(_)        => AtomType::Alpha,
+        Scripts(ref scr) => {
+            if let Some(ref base) = scr.base {
+                base.atom_type()
+            } else {
+                AtomType::Alpha
+            }
+        }
+        Rule            => AtomType::Alpha,
+        Kerning         => AtomType::Transparent,
+        Accent(ref acc) => {
+            if let Some(ref base) = acc.nucleus {
+                base.atom_type()
+            } else {
+                AtomType::Alpha,
+            }
+        }
+        Style              => AtomType::Transparent,
+        AtomChange(ref ac) => ac.atom_type,
+        Color(ref clr)     => {
+            if let Some(ref node) = clr.inner.first() {
+                node.atom_type()
+            } else {
+                AtomType::Alpha
+            }
+        }
+    }
+}
+
+impl HasAtomType for Delimited:
+fn atom_type(&self) -> AtomType {
+    // return the atom-type of the left delimiter, 
+    // otherwise return the atom_type of the first inner.
+    
+}

@@ -10,7 +10,7 @@ pub mod fontselection;
 
 pub use self::glyphs::GLYPHS;
 pub use self::symbols::SYMBOLS;
-pub use self::offsets::IsAtom;
+pub use self::offsets::OptionalAtom;
 
 use parser::AtomType;
 

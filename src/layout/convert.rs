@@ -7,7 +7,7 @@ use dimensions::{ FontUnit, Unit, Unital, Pixels };
 use layout::LayoutSettings;
 
 use super::builders;
-use super::{ Style, LayoutNode, LayoutVariant, LayoutGlyph };
+use super::{ LayoutNode, LayoutVariant, LayoutGlyph };
 use parser::nodes::Rule;
 
 pub trait AsLayoutNode {

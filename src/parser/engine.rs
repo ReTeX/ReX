@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
 use font::fontselection::{ style_offset, Family, Weight };
-use font::{SYMBOLS, Symbol, IsAtom};
+use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
 use parser::nodes::{ Delimited, ParseNode, Scripts };
 use parser::AtomType;

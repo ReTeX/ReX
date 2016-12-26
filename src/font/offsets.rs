@@ -1,11 +1,11 @@
 // Do not modify.  Automatically generated.
 use parser::AtomType;
 
-pub trait IsAtom {
+pub trait OptionalAtom {
     fn atom_type(&self) -> Option<AtomType>;
 }
 
-impl IsAtom for char {
+impl OptionalAtom for char {
     fn atom_type(&self) -> Option<AtomType> {
         Some(match *self {
             'a'...'z' | 'A'...'Z' |

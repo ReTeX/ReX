@@ -20,29 +20,41 @@ pub enum AtomType {
     Over,
     Under,
     Inner,
+    Transparent,
+}
+
+pub trait IsAtom {
+    fn atom_type(&self) -> AtomType;
 }
 
 impl IsAtom for ParseNode {
-    fn atom_type(&self) -> Option<AtomType> {
+    fn atom_type(&self) -> AtomType {
         match *self {
-            ParseNode::Symbol(ref sym) => Some(sym.atom_type),
-            ParseNode::Group(_)        => Some(AtomType::Alpha),
-            ParseNode::Delimited(_)    => Some(AtomType::Fence),
-            ParseNode::Radical(_)      => Some(AtomType::Alpha),
-            ParseNode::GenFraction(_)  => Some(AtomType::Inner),
-            ParseNode::Scripts(Scripts { base: ref b, .. })
-                => if let Some(ref c) = *b { c.atom_type() } else { Some(AtomType::Alpha) },
-            ParseNode::Accent(Accent { nucleus: ref n, .. })
-                                       => n.atom_type(),
-            ParseNode::Rule(_)         => None,
-            ParseNode::Kerning(_)      => None,
-            ParseNode::Extend(_, _)    => None,
-            ParseNode::Style(_)        => None,
-            ParseNode::AtomChange(AtomChange { at, .. }) => Some(at),
-            ParseNode::Color(Color { ref inner, ..}) => {
-                if inner.len() != 1 { return None }
-                inner[0].atom_type()
-            }
+            ParseNode::Symbol(ref sym)  => sym.atom_type,
+            ParseNode::Delimited(_)     => AtomType::Inner,
+            ParseNode::Radical(_)       => AtomType::Alpha,
+            ParseNode::GenFraction(_)   => AtomType::Inner,
+            ParseNode::Group(_)         => AtomType::Alpha,
+            ParseNode::Scripts(ref scr) =>
+                if let Some(ref base) = scr.base {
+                    base.atom_type()
+                } else {
+                    AtomType::Alpha
+                },
+
+            ParseNode::Rule(_)          => AtomType::Alpha,
+            ParseNode::Kerning(_)       => AtomType::Transparent,
+            ParseNode::Accent(ref acc)  =>
+                acc.nucleus.atom_type(),
+
+            ParseNode::Style(_)         => AtomType::Transparent,
+            ParseNode::AtomChange(ref ac) => ac.at,
+            ParseNode::Color(ref clr)     =>
+                if let Some(ref node) = clr.inner.first() {
+                    node.atom_type()
+                } else {
+                    AtomType::Alpha
+                },
         }
     }
 }

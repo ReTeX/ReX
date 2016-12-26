@@ -2,7 +2,7 @@
 // use parser::nodes::{ ParseNode };
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
-use layout::{ LayoutNode, Layout, LayoutVariant, Alignment };
+use layout::{ LayoutNode, LayoutVariant, Alignment };
 //use layout::boundingbox::Bounded;
 use dimensions::Pixels;
 use std::path::Path;
@@ -15,7 +15,6 @@ use layout::Style;
 
 use std::fs::File;
 use std::io::Write;
-use std::env;
 
 macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" encoding=\"utf-8\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
 macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
@@ -34,24 +33,6 @@ macro_rules! debug {
         }
     )
 }
-
-// let svg = rex::SVGRenderer::new();
-//
-// let svg = rex::SVGRenderer::new()
-//      .style(Style::Display)
-//      .font_size(48)
-//      .horz_padding(12)
-//      .vert_padding(12)
-//      .strict(true)
-//      .gzip(true);
-//
-// // Redner to file
-// let _ = svg.render_to_file("temp.svg", r"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}");
-//
-// // Render to String
-// let result = svg.render(r"\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}")
-//      .expect("Unable render svg!");
-//
 
 #[derive(Copy, Clone)]
 pub struct SVGRenderer {
@@ -245,7 +226,7 @@ impl SVGRenderer {
 
                 height += node.height;
             },
-            LayoutVariant::Color(ref clr) => {
+            LayoutVariant::Color(_) => {
                 panic!("Shouldn't have a color in a vertical box???")
             }
             //_ => (),

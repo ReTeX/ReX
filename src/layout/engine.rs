@@ -10,7 +10,7 @@ use super::LayoutSettings;
 
 use dimensions::{ Pixels, Unit };
 use font;
-use font::IsAtom;
+use font::OptionalAtom;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variants::Variant;
@@ -21,13 +21,73 @@ use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::BarThickness;
 use parser::nodes::{ ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts };
 use parser::AtomType;
+use parser::atoms::IsAtom;
+
+/// Entry point to our recursive algorithm
+pub fn layout_new(nodes: &mut [ParseNode], mut config: LayoutSettings) -> Layout {
+    unimplemented!()
+}
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn layout(nodes: &mut [ParseNode], mut config: LayoutSettings) -> Layout {
-    use super::spacing::normalize_types;
-    normalize_types(nodes);
+pub fn layout(nodes: &[ParseNode],
+              mut config: LayoutSettings,
+              prev: &mut AtomType,
+              parent_next: &ParseNode) -> Layout  {
+
+    for idx in 0..nodes.len() {
+        let node = &nodes[idx];
+        let next = if idx+1 < nodes.len() {
+                &nodes[idx+1]
+            } else {
+                parent_next
+            }
+
+        if node.atom_type() == AtomType::Binary {
+            if
+        }
+
+    }
+    // Rule (5), pg 442.  If first item is a Bin atom, change it
+    // to an Ordinal item.
+    if let Some(mut node) = nodes.get_mut(0) {
+        if node.atom_type() == Some(AtomType::Binary) {
+            node.set_atom_type(AtomType::Alpha)
+        }
+    }
+
+    // Atom Changing Rules:
+    //   Rule 5:
+    //   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
+    //   Rule 6:
+    //   - Current in {Rel,Close,Punct} && Prev == Bin => Prev -> Ord.
+    for idx in 0..nodes.len() {
+        if nodes[idx].atom_type() == Some(AtomType::Binary)
+            && idx > 1 {
+            match nodes[idx - 1].atom_type() {
+                Some(AtomType::Binary) |
+                Some(AtomType::Operator(_)) |
+                Some(AtomType::Relation) |
+                Some(AtomType::Open) |
+                Some(AtomType::Punctuation) => {
+                    nodes[idx].set_atom_type(AtomType::Alpha);
+                },
+                _ => (),
+            }
+        }
+
+        if idx > 1
+            && nodes[idx - 1].atom_type() == Some(AtomType::Binary) {
+            match nodes[idx].atom_type() {
+                Some(AtomType::Relation) |
+                Some(AtomType::Close) |
+                Some(AtomType::Punctuation) =>
+                    nodes[idx - 1].set_atom_type(AtomType::Alpha),
+                _ => (),
+            }
+        }
+    }
 
     let mut prev_at: Option<AtomType> = None;
     let mut result = Layout::new();
