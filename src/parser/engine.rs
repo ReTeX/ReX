@@ -4,6 +4,7 @@ use font::fontselection::{ style_offset, Family, Weight };
 use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
 use parser::nodes::{ Delimited, ParseNode, Scripts };
+use parser::atoms::IsAtom;
 use parser::AtomType;
 use parser::Locals;
 use functions::COMMANDS;
@@ -41,7 +42,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
                     lex.next();
 
                     if let Some(ref mut n) = node {
-                        if let Some(AtomType::Operator(_)) = n.atom_type() {
+                        if let AtomType::Operator(_) = n.atom_type() {
                             n.set_atom_type(AtomType::Operator(true));
                         } else {
                             return Err("limit must follow an operator.".to_string());

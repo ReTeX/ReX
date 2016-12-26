@@ -1,6 +1,5 @@
 use super::ParseNode;
 use super::nodes::{ Scripts, Accent, AtomChange, Color };
-use font::IsAtom;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum AtomType {
@@ -55,6 +54,7 @@ impl IsAtom for ParseNode {
                 } else {
                     AtomType::Alpha
                 },
+            ParseNode::Extend(_,_) => AtomType::Inner,
         }
     }
 }

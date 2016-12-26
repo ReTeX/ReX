@@ -24,102 +24,77 @@ use parser::AtomType;
 use parser::atoms::IsAtom;
 
 /// Entry point to our recursive algorithm
-pub fn layout_new(nodes: &mut [ParseNode], mut config: LayoutSettings) -> Layout {
-    unimplemented!()
+pub fn layout(nodes: &[ParseNode], mut config: LayoutSettings) -> Layout {
+    layout_recurse(nodes, config, &mut AtomType::Transparent, AtomType::Transparent)
 }
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
 #[allow(dead_code)]
-pub fn layout(nodes: &[ParseNode],
+fn layout_recurse(nodes: &[ParseNode],
               mut config: LayoutSettings,
               prev: &mut AtomType,
-              parent_next: &ParseNode) -> Layout  {
+              parent_next: AtomType) -> Layout  {
+
+    let mut result = Layout::new();
+    let prev = &mut AtomType::Transparent;
 
     for idx in 0..nodes.len() {
         let node = &nodes[idx];
+
         let next = if idx+1 < nodes.len() {
-                &nodes[idx+1]
+                nodes[idx+1].atom_type()
             } else {
                 parent_next
+            };
+
+        let mut sp  = Spacing::None;
+        let mut current = node.atom_type();
+        if current == AtomType::Binary {
+            if *prev == AtomType::Transparent
+                || *prev == AtomType::Binary
+                || *prev == AtomType::Relation
+                || *prev == AtomType::Open
+                || *prev == AtomType::Punctuation
+            {
+                current = AtomType::Alpha;
+            } else if let AtomType::Operator(_) = *prev {
+                current = AtomType::Alpha;
+            } else if next == AtomType::Relation
+                || next == AtomType::Close
+                || next == AtomType::Punctuation
+            {
+                current = AtomType::Alpha;
             }
 
-        if node.atom_type() == AtomType::Binary {
-            if
+            sp = atom_spacing(*prev, current, config.style);
+        } else if current != AtomType::Transparent {
+            sp = atom_spacing(*prev, current, config.style);
         }
 
-    }
-    // Rule (5), pg 442.  If first item is a Bin atom, change it
-    // to an Ordinal item.
-    if let Some(mut node) = nodes.get_mut(0) {
-        if node.atom_type() == Some(AtomType::Binary) {
-            node.set_atom_type(AtomType::Alpha)
-        }
-    }
-
-    // Atom Changing Rules:
-    //   Rule 5:
-    //   - Current == Bin && Prev in {Bin,Op,Rel,Open,Punct}, Current -> Ord.
-    //   Rule 6:
-    //   - Current in {Rel,Close,Punct} && Prev == Bin => Prev -> Ord.
-    for idx in 0..nodes.len() {
-        if nodes[idx].atom_type() == Some(AtomType::Binary)
-            && idx > 1 {
-            match nodes[idx - 1].atom_type() {
-                Some(AtomType::Binary) |
-                Some(AtomType::Operator(_)) |
-                Some(AtomType::Relation) |
-                Some(AtomType::Open) |
-                Some(AtomType::Punctuation) => {
-                    nodes[idx].set_atom_type(AtomType::Alpha);
-                },
-                _ => (),
-            }
+        if sp != Spacing::None {
+            let kern = sp.to_unit().scaled(config);
+            result.add_node(kern!(horz: kern));
         }
 
-        if idx > 1
-            && nodes[idx - 1].atom_type() == Some(AtomType::Binary) {
-            match nodes[idx].atom_type() {
-                Some(AtomType::Relation) |
-                Some(AtomType::Close) |
-                Some(AtomType::Punctuation) =>
-                    nodes[idx - 1].set_atom_type(AtomType::Alpha),
-                _ => (),
-            }
-        }
-    }
+        println!("{:?}, {:?} -> {:?}", prev, current, sp);
 
-    let mut prev_at: Option<AtomType> = None;
-    let mut result = Layout::new();
-
-    for node in nodes {
-        if let Some(p_at) = prev_at {
-            if let Some(at) = node.atom_type() {
-                let sp = atom_spacing(p_at, at, config.style);
-                if sp != Spacing::None {
-                    let kern = sp.to_unit().scaled(config);
-                    result.add_node(kern!(horz: kern));
-                }
-            }
-        }
-
-        // TODO: May need to ignore this if transparent atom_type.
-        prev_at = node.atom_type();
+        *prev = current;
 
         match *node {
             ParseNode::Symbol(sym) => add_symbol(&mut result, sym, config),
-            ParseNode::Scripts(ref mut scripts) => add_scripts(&mut result, scripts, config),
-            ParseNode::Radical(ref mut rad) => add_radical(&mut result, rad, config),
-            ParseNode::Delimited(ref mut delim) => add_delimited(&mut result, delim, config),
+            ParseNode::Scripts(ref scripts) => add_scripts(&mut result, scripts, config),
+            ParseNode::Radical(ref rad) => add_radical(&mut result, rad, config),
+            ParseNode::Delimited(ref delim) => add_delimited(&mut result, delim, config),
             ParseNode::Accent(ref acc) => add_accent(&mut result, acc, config),
-            ParseNode::GenFraction(ref mut frac) => add_frac(&mut result, frac, config),
-            ParseNode::Group(ref mut gp) => result.add_node(layout(gp, config).as_node()),
+            ParseNode::GenFraction(ref frac) => add_frac(&mut result, frac, config),
+            ParseNode::Group(ref gp) => result.add_node(layout(gp, config).as_node()),
             ParseNode::Rule(rule) => result.add_node(rule.as_layout(config)),
             ParseNode::Kerning(kern) => result.add_node(kern!(horz: kern.scaled(config))),
             ParseNode::Style(sty) => config.style = sty,
 
-            ParseNode::Color(ref mut clr) => {
-                let layout = layout(&mut clr.inner, config);
+            ParseNode::Color(ref clr) => {
+                let layout = layout_recurse(&clr.inner, config, prev, next);
 
                 result.add_node(LayoutNode {
                     width:  layout.width,
@@ -132,7 +107,7 @@ pub fn layout(nodes: &[ParseNode],
                 })
             },
 
-            ParseNode::AtomChange(AtomChange { at, ref mut inner }) =>
+            ParseNode::AtomChange(AtomChange { at, ref inner }) =>
                 add_atom_change(&mut result, at, inner, config),
 
             _ => println!("Warning: Ignored ParseNode: {:?}", node),
@@ -196,7 +171,7 @@ fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     //       no correction takes place.
     // [ ] WideAccent vs Accent: Don't expand Accent types.
 
-    let base = layout(&mut [ *acc.nucleus.clone() ], config.cramped());
+    let base = layout(&[ *acc.nucleus.clone() ], config.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode)
         .horz_variant(*base.width
             / config.style.cramped().font_scale() / config.font_size * *UNITS_PER_EM);
@@ -254,8 +229,8 @@ fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     ));
 }
 
-fn add_delimited(result: &mut Layout, delim: &mut Delimited, config: LayoutSettings) {
-    let inner = layout(&mut delim.inner, config).as_node();
+fn add_delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings) {
+    let inner = layout(&delim.inner, config).as_node();
 
     // Convert inner group dimensions to font unit
     let height = *inner.height / config.font_size * *UNITS_PER_EM as f64;
@@ -310,29 +285,29 @@ fn add_delimited(result: &mut Layout, delim: &mut Delimited, config: LayoutSetti
     }
 }
 
-fn add_scripts(result: &mut Layout, scripts: &mut Scripts, config: LayoutSettings) {
+fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     // See: https://tug.org/TUGboat/tb27-1/tb86jackowski.pdf
     //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
 
     let base = match scripts.base {
-        Some(ref b) => layout(&mut [ *b.clone() ], config),
+        Some(ref b) => layout(&[ *b.clone() ], config),
         None        => Layout::new(),
     };
 
     let mut sup = match scripts.superscript {
-        Some(ref b) => layout(&mut [ *b.clone() ], config.superscript_variant()),
+        Some(ref b) => layout(&[ *b.clone() ], config.superscript_variant()),
         None        => Layout::new(),
     };
 
     let mut sub = match scripts.subscript {
-        Some(ref b) => layout(&mut [ *b.clone() ], config.subscript_variant()),
+        Some(ref b) => layout(&[ *b.clone() ], config.subscript_variant()),
         None        => Layout::new(),
     };
 
     // We use a different algoirthm for handling scripts for operators with limits.
     // This is where he handle Operators with limits.
     if let Some(ref b) = scripts.base {
-        if Some(AtomType::Operator(true)) == b.atom_type() {
+        if AtomType::Operator(true) == b.atom_type() {
             add_operator_limits(result, base, sup, sub, config);
             return;
         }
@@ -370,7 +345,7 @@ fn add_scripts(result: &mut Layout, scripts: &mut Scripts, config: LayoutSetting
             else if let Some(base_sym) = base.is_symbol() {
                 // Provided that the base is a operator, we only use
                 // italics correction infomration.
-                if let Some(AtomType::Operator(_)) = b.atom_type() {
+                if let AtomType::Operator(_) = b.atom_type() {
                     // This recently changed in LuaTeX.  See `nolimitsmode`.
                     // This needs to be the glyph information _after_ layout for base.
                     sub_kern = -1. * base_sym.italics;
@@ -519,15 +494,15 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
     ));
 }
 
-fn add_frac(result: &mut Layout, frac: &mut GenFraction, config: LayoutSettings) {
+fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     let bar = match frac.bar_thickness {
         BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(config),
         BarThickness::None    => Pixels(0.0),
         BarThickness::Unit(u) => u.scaled(config),
     };
 
-    let mut n = layout(&mut frac.numerator,   config.numerator());
-    let mut d = layout(&mut frac.denominator, config.denominator());
+    let mut n = layout(&frac.numerator,   config.numerator());
+    let mut d = layout(&frac.denominator, config.denominator());
 
     if n.width > d.width {
         d.alignment = Alignment::Centered(d.width);
@@ -576,7 +551,7 @@ fn add_frac(result: &mut Layout, frac: &mut GenFraction, config: LayoutSettings)
     result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
 }
 
-fn add_atom_change(result: &mut Layout, at: AtomType, inner: &mut [ParseNode], config: LayoutSettings) {
+fn add_atom_change(result: &mut Layout, at: AtomType, inner: &[ParseNode], config: LayoutSettings) {
     // Atom Types can change control flow for operators.
     // We handle this change in control flow here,
     // otherwise we do nothing.
@@ -589,9 +564,9 @@ fn add_atom_change(result: &mut Layout, at: AtomType, inner: &mut [ParseNode], c
 
     match at {
         AtomType::Operator(_) => {
-            if let Some(sym) = inner[0].is_symbol() {
-                inner[0].set_atom_type(at);
-            }
+            // if let Some(sym) = inner[0].is_symbol() {
+            //     inner[0].set_atom_type(at);
+            // }
         }
         _ => (),
     }
@@ -599,9 +574,9 @@ fn add_atom_change(result: &mut Layout, at: AtomType, inner: &mut [ParseNode], c
     result.add_node(layout(inner, config).as_node());
 }
 
-fn add_radical(result: &mut Layout, rad: &mut Radical, config: LayoutSettings) {
+fn add_radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
     //Reference rule 11 from pg 443 of TeXBook
-    let contents = layout(&mut rad.inner, config.cramped()).as_node();
+    let contents = layout(&rad.inner, config.cramped()).as_node();
     let sqrt  = glyph_metrics(0x221A); // The sqrt symbol.
 
     let gap = match config.style >= Style::Display {
