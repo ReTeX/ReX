@@ -325,37 +325,31 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 
         // TODO: These checks should be recursive?
         if let Some(ref b) = scripts.base {
-            // For accents, whose base is a simple symbol, we do not take
-            // the accent into account while positioning the superscript.
-            if let ParseNode::Accent(ref acc) = **b {
-                if let Some(sym) = acc.nucleus.is_symbol() {
-                    height = glyph_metrics(sym.unicode)
-                        .height()
-                        .scaled(config);
-                }
-            }
-
-            // Apply italics correction is base is a symbol
-            else if let Some(base_sym) = base.is_symbol() {
-                // Provided that the base is a operator, we only use
-                // italics correction infomration.
-                if let AtomType::Operator(_) = b.atom_type() {
-                    // This recently changed in LuaTeX.  See `nolimitsmode`.
-                    // This needs to be the glyph information _after_ layout for base.
-                    sub_kern = -1. * base_sym.italics;
+            if b.atom_type() != AtomType::Operator(false) {
+                // For accents, whose base is a simple symbol, we do not take
+                // the accent into account while positioning the superscript.
+                if let ParseNode::Accent(ref acc) = **b {
+                    if let Some(sym) = acc.nucleus.is_symbol() {
+                        height = glyph_metrics(sym.unicode)
+                            .height()
+                            .scaled(config);
+                    }
                 }
 
-                // Lookup font kerning of superscript is also a symbol
-                else if let Some(sup_sym) = sup.is_symbol() {
-                    let bg = glyph_metrics(base_sym.unicode);
-                    let sg = glyph_metrics(sup_sym.unicode);
+                // Apply italics correction is base is a symbol
+                else if let Some(base_sym) = base.is_symbol() {
+                    // Lookup font kerning of superscript is also a symbol
+                    if let Some(sup_sym) = sup.is_symbol() {
+                        let bg = glyph_metrics(base_sym.unicode);
+                        let sg = glyph_metrics(sup_sym.unicode);
 
-                    let kern = Unit::Font(superscript_kern(bg, sg,
-                        *adjust_up / config.font_size * *UNITS_PER_EM)).scaled(config);
+                        let kern = Unit::Font(superscript_kern(bg, sg,
+                            *adjust_up / config.font_size * *UNITS_PER_EM)).scaled(config);
 
-                    sup_kern = base_sym.italics + kern;
-                } else {
-                    sup_kern = base_sym.italics;
+                        sup_kern = base_sym.italics + kern;
+                    } else {
+                        sup_kern = base_sym.italics;
+                    }
                 }
             }
         }
@@ -382,6 +376,16 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
         // Provided that the base and subscript are symbols, we apply
         // kerning values found in the kerning font table
         if let Some(ref b) = scripts.base {
+            if let Some(base_sym) = base.is_symbol() {
+                if AtomType::Operator(false) == b.atom_type() {
+                    // This recently changed in LuaTeX.  See `nolimitsmode`.
+                    // This needs to be the glyph information _after_ layout for base.
+                    sub_kern = -1. * glyph_metrics(base_sym.unicode)
+                        .italic_correction()
+                        .scaled(config);
+                }
+            }
+
             if let (Some(ssym), Some(bsym)) = (sub.is_symbol(), base.is_symbol()) {
                 let bg = glyph_metrics(bsym.unicode);
                 let sg = glyph_metrics(ssym.unicode);
