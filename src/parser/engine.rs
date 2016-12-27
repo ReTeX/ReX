@@ -271,9 +271,7 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
             }
         },
         Token::Symbol(c) => {
-            // TODO: Properly handle fontmode here.
             Ok(match c.atom_type() {
-                //None => Err(format!("Unable to find symbol representation for {}", c)),
                 None => None,
                 Some(sym) => {
                     lex.next();
