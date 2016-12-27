@@ -1,8 +1,4 @@
-[![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
-
-[Build: Usually Passes]
-
-# ReX
+# ReX &nbsp; [![](https://travis-ci.org/cbreeden/ReX.svg?branch=master)](build status) [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
 Typesetting mathematics.
 
 # Progress
