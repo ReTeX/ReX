@@ -29,9 +29,10 @@ impl<'a> Token<'a> {
     #[allow(dead_code)]
     pub fn ends_expression(&self) -> bool {
         match *self {
-            Token::EOF         |
-            Token::Symbol('}') |
-            Token::Command("right") => true,
+            Token::EOF
+            | Token::Symbol('}')
+            | Token::Command("right")
+            | Token::Command(r"\") => true,
             _ => false,
         }
     }

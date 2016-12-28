@@ -19,7 +19,7 @@ use super::builders as build;
 /// inside this method will fail and raise and error.
 
 
-fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
+pub fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
     let mut ml: Vec<ParseNode> = Vec::new();
 
     loop {
@@ -347,7 +347,15 @@ pub fn expect_type(lex: &mut Lexer, local: Locals, expected: AtomType) -> Result
 pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
     let mut lexer = Lexer::new(input);
     let local = Locals::new();
-    expression(&mut lexer, local)
+
+    let result = expression(&mut lexer, local);
+    if lexer.current != Token::EOF {
+        println!("Unexpectedly ended parsing; \
+                  unmatched end of expression? \
+                  Stoped parsing at {}", lexer.current);
+    }
+
+    result
 }
 
 

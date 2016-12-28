@@ -4,9 +4,9 @@ use dimensions::Pixels;
 
 #[derive(Default)]
 pub struct VBox {
-    width:  Pixels,
-    height: Pixels,
-    depth:  Pixels,
+    pub width:  Pixels,
+    pub height: Pixels,
+    pub depth:  Pixels,
     node:   VerticalBox,
 }
 

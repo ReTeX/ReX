@@ -18,7 +18,7 @@ use font::Symbol;
 use font::kerning::{superscript_kern, subscript_kern};
 use layout::spacing::{atom_spacing, Spacing};
 use parser::nodes::BarThickness;
-use parser::nodes::{ ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts };
+use parser::nodes::{ ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts, Stack };
 use parser::AtomType;
 use parser::atoms::IsAtom;
 
@@ -80,6 +80,7 @@ fn layout_recurse(nodes: &[ParseNode],
             ParseNode::Delimited(ref delim) => add_delimited(&mut result, delim, config),
             ParseNode::Accent(ref acc) => add_accent(&mut result, acc, config),
             ParseNode::GenFraction(ref frac) => add_frac(&mut result, frac, config),
+            ParseNode::Stack(ref stack) => add_substack(&mut result, stack, config),
             ParseNode::Group(ref gp) => result.add_node(layout(gp, config).as_node()),
             ParseNode::Rule(rule) => result.add_node(rule.as_layout(config)),
             ParseNode::Kerning(kern) => result.add_node(kern!(horz: kern.scaled(config))),
@@ -610,6 +611,56 @@ fn add_radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
             kern!(vert: kerning),
             contents
         ));
+}
+
+fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
+    let mut lines: Vec<Layout> = Vec::with_capacity(stack.lines.len());
+    for line in &stack.lines {
+        lines.push(layout(line, config));
+    }
+
+    // The line gap will be taken from STACK_GAP constants
+    let gap_min = if config.style > Style::Text {
+            STACK_DISPLAY_STYLE_GAP_MIN
+        } else {
+            STACK_GAP_MIN
+        }.scaled(config);
+
+    let gap_try = if config.style > Style::Text {
+            STACK_TOP_DISPLAY_STYLE_SHIFT_UP
+            - AXIS_HEIGHT
+            + STACK_BOTTOM_SHIFT_DOWN
+            - ACCENT_BASE_HEIGHT - ACCENT_BASE_HEIGHT
+        } else {
+            STACK_TOP_SHIFT_UP         //   480
+            - AXIS_HEIGHT              // - 250
+            + STACK_BOTTOM_SHIFT_DOWN  // + 800
+            - ACCENT_BASE_HEIGHT       //
+            - ACCENT_BASE_HEIGHT       // - 900
+        }.scaled(config);
+
+    let mut stak = builders::VBox::new();
+
+    let rest = lines.split_off(1);
+
+    if lines.is_empty() { return }
+    stak.add_node(lines.pop().unwrap().as_node());
+
+    let mut prev = Pixels(0.0);
+    for line in rest {
+        let gap = gap_min.max(gap_try - prev);
+        prev = line.depth;
+
+        stak.add_node(kern![vert: gap]);
+        stak.add_node(line.as_node());
+    }
+
+    // center the stack
+    let offset = 0.5 * (stak.height + stak.depth)
+        - AXIS_HEIGHT.scaled(config);
+
+    stak.set_offset(offset);
+    result.add_node(stak.build());
 }
 
 trait IsSymbol {

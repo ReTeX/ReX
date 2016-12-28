@@ -21,7 +21,14 @@ pub enum ParseNode {
     AtomChange  (AtomChange),
     Color       (Color),
     Group       (Vec<ParseNode>),
+    Stack       (Stack),
     Extend      (u32, Unit),
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct Stack {
+    pub atom_type: AtomType,
+    pub lines:     Vec<Vec<ParseNode>>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -133,6 +140,8 @@ impl ParseNode {
                 },
             ParseNode::AtomChange(ref mut node) =>
                 node.at = at,
+            ParseNode::Stack(Stack { ref mut atom_type, .. }) =>
+                *atom_type = at,
             _ => (),
         }
     }

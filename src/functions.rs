@@ -1,13 +1,13 @@
 use phf;
 use font::Symbol;
-use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color };
+use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
 use parser::AtomType;
 use lexer::Lexer;
-use parser;
+use lexer::Token;
+use parser as parse;
 use parser::Locals;
 use dimensions::Unit;
 use layout::Style;
-use lexer::Token;
 use font::fontselection::{ Family, Weight };
 use font::fontselection::style_offset;
 
@@ -34,6 +34,7 @@ pub enum TexCommand {
     Style(Style),
     AtomChange(AtomType),
     TextOperator(&'static str, bool),
+    Stack(AtomType),
 }
 
 macro_rules! sym {
@@ -85,6 +86,8 @@ pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "binom"  => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::NoChange },
     "tbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Text },
     "dbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Display },
+
+    "substack" => TexCommand::Stack(AtomType::Inner),
 
     "sqrt" => TexCommand::Radical,
 
@@ -196,7 +199,7 @@ impl TexCommand {
         Ok(match self {
             TexCommand::Radical =>
                 Some(ParseNode::Radical(Radical {
-                    inner: parser::required_macro_argument(lex, local)?,
+                    inner: parse::required_macro_argument(lex, local)?,
                 })),
 
             TexCommand::GenFraction {
@@ -209,15 +212,15 @@ impl TexCommand {
                     left_delimiter:  ld,
                     right_delimiter: rd,
                     bar_thickness:   bt,
-                    numerator: parser::required_macro_argument(lex, local)?,
-                    denominator: parser::required_macro_argument(lex, local)?,
+                    numerator: parse::required_macro_argument(lex, local)?,
+                    denominator: parse::required_macro_argument(lex, local)?,
                 })),
 
             TexCommand::DelimiterSize {
                 size: s,
                 atom_type: at,
             } =>
-                Some(ParseNode::Symbol(parser::expect_type(lex, local, at)?)),
+                Some(ParseNode::Symbol(parse::expect_type(lex, local, at)?)),
             TexCommand::Rule => {
                 lex.consume_whitespace();
                 let w = lex.dimension()?
@@ -263,7 +266,7 @@ impl TexCommand {
             TexCommand::AtomChange(sty) => {
                 Some(ParseNode::AtomChange(AtomChange {
                     at: sty,
-                    inner: parser::required_macro_argument(lex, local)?
+                    inner: parse::required_macro_argument(lex, local)?
                 }))
             },
 
@@ -272,14 +275,14 @@ impl TexCommand {
 
                 Some(ParseNode::Color(Color {
                     color: color,
-                    inner: parser::required_macro_argument(lex, local)?
+                    inner: parse::required_macro_argument(lex, local)?
                 }))
             },
 
             TexCommand::ColorLit(clr) => {
                 Some(ParseNode::Color(Color {
                     color: clr.to_string(),
-                    inner: parser::required_macro_argument(lex, local)?
+                    inner: parse::required_macro_argument(lex, local)?
                 }))
             },
 
@@ -288,7 +291,37 @@ impl TexCommand {
                     at: AtomType::Operator(limits),
                     inner: text(op),
                 }))
+            },
+
+            TexCommand::Stack(atom) => {
+                if lex.current != Token::Symbol('{') {
+                    return Err("Stack commands must follow a group.".into());
+                }
+
+                lex.next();
+                let mut result: Vec<Vec<ParseNode>> = Vec::new();
+                // Continue parsing expressions, until we reach '}'
+                loop {
+                    let expr = parse::expression(lex, local)?;
+                    result.push(expr);
+
+                    if lex.current == Token::Symbol('}') { break }
+                    if lex.current != Token::Command(r"\") {
+                        return Err(format!(
+                            "Stack command parsing terminated pre-maturely. \
+                            Perhaps there is an unbalenced bracket? \
+                            Expression terminated with {}", lex.current));
+                    } else {
+                        lex.next();
+                    }
+                }
+
+                lex.next();
+                Some(ParseNode::Stack(Stack {
+                    atom_type: atom,
+                    lines: result,
+                }))
             }
-        })
+        }) // End Match
     }
 }

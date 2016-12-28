@@ -53,7 +53,8 @@ impl IsAtom for ParseNode {
                 } else {
                     AtomType::Alpha
                 },
-            ParseNode::Extend(_,_) => AtomType::Inner,
+            ParseNode::Extend(_,_)   => AtomType::Inner,
+            ParseNode::Stack(ref s)  => s.atom_type,
         }
     }
 }
