@@ -84,7 +84,7 @@ impl<'a> Lexer<'a> {
             Some(c) if !c.is_alphabetic() => {
                 let end = self.pos;
                 self.consume_whitespace();
-                return Token::ControlSequence(&self.input[start..end]);
+                return Token::Command(&self.input[start..end]);
             },
             _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ },
         };
@@ -107,7 +107,7 @@ impl<'a> Lexer<'a> {
             self.pos += 1;
         }
 
-        Token::ControlSequence(&self.input[start..end])
+        Token::Command(&self.input[start..end])
     }
 
     /// This method will parse a dimension.  It assumes
@@ -192,7 +192,7 @@ impl<'a> Lexer<'a> {
                     self.pos -= 1;
                 }
             },
-            Token::ControlSequence(_) => {
+            Token::Command(_) => {
                 /* TODO: Implement me */
             },
             _ => { /* EOF? */ }

@@ -18,7 +18,7 @@ pub struct Lexer<'a> {
 #[allow(dead_code)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Token<'a> {
-    ControlSequence(&'a str),
+    Command(&'a str),
     Symbol(char),
     WhiteSpace,
     EOF,
@@ -30,7 +30,7 @@ impl<'a> Token<'a> {
         match *self {
             Token::EOF         |
             Token::Symbol('}') |
-            Token::ControlSequence("right") => true,
+            Token::Command("right") => true,
             _ => false,
         }
     }

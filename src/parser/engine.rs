@@ -8,6 +8,7 @@ use parser::atoms::IsAtom;
 use parser::AtomType;
 use parser::Locals;
 use functions::COMMANDS;
+use super::builders as build;
 
 /// This method is served as an entry point to parsing the input.
 /// It can also but used to parse sub-expressions (or more formally known)
@@ -16,6 +17,7 @@ use functions::COMMANDS;
 /// This method will always return something, though it may be an emptylist.
 /// This method itself will not fail, but it is possible that expressions
 /// inside this method will fail and raise and error.
+
 
 fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
     let mut ml: Vec<ParseNode> = Vec::new();
@@ -32,73 +34,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
         // Handle commands that can change that state of the parser
         if node.is_none() && state_change(lex, local, &mut ml)? { continue }
 
-        // Here we handle all post-fix operators, like superscripts, subscripts
-        // `\limits`, `\nolimits`, and anything else that may require us to modify
-        // the current vector of ParseNodes
-        loop {
-            lex.consume_whitespace();
-            match lex.current {
-                Token::ControlSequence("limits") => {
-                    lex.next();
-
-                    if let Some(ref mut n) = node {
-                        if let AtomType::Operator(_) = n.atom_type() {
-                            n.set_atom_type(AtomType::Operator(true));
-                        } else {
-                            return Err("limit must follow an operator.".to_string());
-                        }
-                    } else { continue }
-                }
-                Token::Symbol('_') => {
-                    lex.next();
-                    let script = math_field(lex, local)?;
-
-                    if let Some(ParseNode::Scripts(ref mut b)) = node {
-                        // We are already parsing a script, place the next
-                        // group into the appropriate field.  If we already
-                        // have a subscript, this is an error.
-                        if b.subscript.is_some() {
-                            return Err("Multiple subscripts!".to_string());
-                        }
-                        b.subscript = Some(Box::new(script));
-                    } else {
-                        // This is our first script, so we need to create a
-                        // new one.
-                        node = Some(ParseNode::Scripts(Scripts {
-                            base:
-                                match node {
-                                    None => None,
-                                    Some(n) => Some(Box::new(n))
-                                },
-                            subscript: Some(Box::new(script)),
-                            superscript: None,
-                        }));
-                    }
-                },
-                Token::Symbol('^') => {
-                    lex.next();
-                    let script = math_field(lex, local)?;
-                    if let Some(ParseNode::Scripts(ref mut b)) = node {
-                        if b.superscript.is_some() {
-                            return Err("Multiple superscripts!".to_string());
-                        }
-                        b.superscript = Some(Box::new(script));
-                    } else {
-                        node = Some(ParseNode::Scripts(Scripts {
-                            base:
-                                match node {
-                                    None => None,
-                                    Some(n) => Some(Box::new(n))
-                                },
-                            superscript: Some(Box::new(script)),
-                            subscript: None,
-                        }));
-                    }
-                },
-                _ => { break; }
-            }
-            // End of post-fix processing
-        }
+        let node = postfix(lex, local, node)?;
 
         ml.push(match node {
             None => return Err(format!("Unable to parse {:?}", node)),
@@ -109,12 +45,64 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
     Ok(ml)
 }
 
+fn postfix(lex: &mut Lexer,
+           local: Locals,
+           mut prev: Option<ParseNode>) -> Result<Option<ParseNode>, String> {
+    let mut superscript: Option<ParseNode> = None;
+    let mut subscript:   Option<ParseNode> = None;
+
+    const LIMITS_ERR: &'static str = "Limits must follow an operator";
+
+    loop {
+        lex.consume_whitespace();
+        let token = lex.current;
+
+        match token {
+            Token::Symbol('_') => {
+                // If we already have a subscript, bail.
+                lex.next();
+                if subscript.is_some() { return Err("Excessive subscripts".into()); }
+                subscript = Some(math_field(lex, local)?);
+            },
+            Token::Symbol('^') => {
+                // If we already have a superscript, bail.
+                lex.next();
+                if superscript.is_some() { return Err("Excessive superscripts".into()); }
+                superscript = Some(math_field(lex, local)?);
+            },
+            Token::Command("limits") => {
+                lex.next();
+                let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
+
+                if let AtomType::Operator(_) = op.atom_type() {
+                    op.set_atom_type(AtomType::Operator(true));
+                } else { return Err(LIMITS_ERR.into()); }
+            },
+            Token::Command("nolimits") => {
+                lex.next();
+                let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
+
+                if let AtomType::Operator(_) = op.atom_type() {
+                    op.set_atom_type(AtomType::Operator(false));
+                } else { return Err(LIMITS_ERR.into()); }
+            },
+            _ => break,
+        } // End match
+    } // End loop
+
+    Ok(if superscript.is_some() || subscript.is_some() {
+        Some(build::scripts(prev, superscript, subscript))
+    } else {
+        prev
+    })
+}
+
 /// Theses commands may change the state of the parser, and so will
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
 pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<bool, String> {
-    if let Token::ControlSequence(cmd) = lex.current {
+    if let Token::Command(cmd) = lex.current {
         use ::std::convert::TryFrom;
         if let Ok(family) = Family::try_from(cmd) {
             lex.next();
@@ -172,7 +160,7 @@ pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
 
 pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands
-    let cmd = if let Token::ControlSequence(cmd) = lex.current {
+    let cmd = if let Token::Command(cmd) = lex.current {
         match COMMANDS.get(cmd).cloned() {
             Some(command) => command,
             None => return Ok(None),
@@ -196,14 +184,14 @@ pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Stri
 pub fn implicit_group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     let token = lex.current;
 
-    if token == Token::ControlSequence("left") {
+    if token == Token::Command("left") {
         lex.next(); // consume the `\left` token`
         let left = symbol(lex, local)?
             .ok_or(String::from(r#"No symbol found after `\left`"#))?
             .expect_left()?;
 
         let inner = expression(lex, local)?;
-        lex.current.expect(Token::ControlSequence("right"))?;
+        lex.current.expect(Token::Command("right"))?;
         lex.next();
         let right = symbol(lex, local)?
             .ok_or(String::from(r#"No symbol found after '\right'"#))?
@@ -250,7 +238,7 @@ pub fn group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String
 
 pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
     match lex.current {
-        Token::ControlSequence(cs) => {
+        Token::Command(cs) => {
             match SYMBOLS.get(cs).cloned() {
                 None => Ok(None),
                 Some(sym) => {
