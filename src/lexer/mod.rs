@@ -1,6 +1,7 @@
 mod lexer;
 //mod nom;
 pub use self::lexer::*;
+use std::fmt;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Lexer<'a> {
@@ -42,6 +43,17 @@ impl<'a> Token<'a> {
         } else {
             Err(format!("Expected token '{:?}', found the token '{:?}'",
                 expected, self))
+        }
+    }
+}
+
+impl<'a> fmt::Display for Token<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Token::Command(cmd) => write!(f, r"\{}", cmd),
+            Token::Symbol(c)    => write!(f, r"'{}'", c),
+            Token::WhiteSpace   => write!(f, r"' '"),
+            Token::EOF          => write!(f, "EOF"),
         }
     }
 }

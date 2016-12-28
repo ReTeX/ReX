@@ -71,8 +71,6 @@ fn layout_recurse(nodes: &[ParseNode],
             result.add_node(kern!(horz: kern));
         }
 
-        println!("{:?}, {:?} -> {:?}", prev, current, sp);
-
         prev = current;
 
         match *node {

@@ -103,7 +103,14 @@ impl SVGRenderer {
     }
 
     pub fn render(&self, tex: &str) -> String {
-        let mut parse = parse(&tex).unwrap();
+        let mut parse = match parse(&tex) {
+                Ok(res)  => res,
+                Err(err) => {
+                    println!("Error -- {}", err);
+                    return String::new();
+                }
+            };
+
         debug!("Parse: {:?}", parse);
 
         let layout = layout(&mut parse, self.layout_settings());

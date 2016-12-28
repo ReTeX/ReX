@@ -37,7 +37,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
         let node = postfix(lex, local, node)?;
 
         ml.push(match node {
-            None => return Err(format!("Unable to parse {:?}", node)),
+            None => return Err(format!("Unable to parse {}", lex.current)),
             Some(s) => s
         });
     }
