@@ -1,7 +1,5 @@
 use super::nodes::Scripts;
 use super::ParseNode;
-use super::AtomType;
-use font::Symbol;
 
 // Convenience macro: Opt<T> -> Option<Box<T>>
 macro_rules! opt_box {

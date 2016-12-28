@@ -3,7 +3,7 @@
 use font::fontselection::{ style_offset, Family, Weight };
 use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
-use parser::nodes::{ Delimited, ParseNode, Scripts };
+use parser::nodes::{ Delimited, ParseNode };
 use parser::atoms::IsAtom;
 use parser::AtomType;
 use parser::Locals;
@@ -28,7 +28,7 @@ fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> 
         lex.consume_whitespace();
         if lex.current.ends_expression() { break; }
 
-        let mut node = first_some!(lex, local,
+        let node = first_some!(lex, local,
             command, group, symbol, implicit_group,);
 
         // Handle commands that can change that state of the parser
@@ -59,21 +59,20 @@ fn postfix(lex: &mut Lexer,
 
         match token {
             Token::Symbol('_') => {
-                // If we already have a subscript, bail.
                 lex.next();
+                // If we already have a subscript, bail.
                 if subscript.is_some() { return Err("Excessive subscripts".into()); }
                 subscript = Some(math_field(lex, local)?);
             },
             Token::Symbol('^') => {
-                // If we already have a superscript, bail.
                 lex.next();
+                // If we already have a superscript, bail.
                 if superscript.is_some() { return Err("Excessive superscripts".into()); }
                 superscript = Some(math_field(lex, local)?);
             },
             Token::Command("limits") => {
                 lex.next();
                 let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
-
                 if let AtomType::Operator(_) = op.atom_type() {
                     op.set_atom_type(AtomType::Operator(true));
                 } else { return Err(LIMITS_ERR.into()); }
@@ -81,7 +80,6 @@ fn postfix(lex: &mut Lexer,
             Token::Command("nolimits") => {
                 lex.next();
                 let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
-
                 if let AtomType::Operator(_) = op.atom_type() {
                     op.set_atom_type(AtomType::Operator(false));
                 } else { return Err(LIMITS_ERR.into()); }
