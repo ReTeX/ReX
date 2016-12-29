@@ -1,6 +1,8 @@
 # ReX &nbsp; [![](https://travis-ci.org/cbreeden/ReX.svg?branch=master)](build status) [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
 Typesetting mathematics.
 
+![ReX logo](rex.png)
+
 # Progress
 
 ![Integral equation](samples/integral.png)
