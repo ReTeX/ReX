@@ -42,6 +42,7 @@ impl<'a> Lexer<'a> {
             None       => Token::EOF,
         };
 
+        //println!("{:?}", self.current);
         self.current
     }
 
@@ -83,7 +84,10 @@ impl<'a> Lexer<'a> {
             None => return Token::EOF,
             Some(c) if !c.is_alphabetic() => {
                 let end = self.pos;
-                self.consume_whitespace();
+                while let Some(c) = self.current_char() {
+                    if !c.is_whitespace() { break; }
+                    self.pos += 1;
+                }
                 return Token::Command(&self.input[start..end]);
             },
             _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ },
@@ -145,7 +149,7 @@ impl<'a> Lexer<'a> {
     /// Expect to find an {<inner>}, and return <inner>
 
     pub fn group(&mut self) -> Result<&str, String> {
-        println!("{:?}", self);
+       // println!("{:?}", self);
         self.consume_whitespace();
         if self.current != Token::Symbol('{') {
             return Err("Expected to find an open group.".into())
@@ -166,8 +170,8 @@ impl<'a> Lexer<'a> {
             return Err("Unable to find closing bracket.".into())
         }
 
-        println!("{}", &self.input[start..end]);
-        println!("{:?}", self);
+       // println!("{}", &self.input[start..end]);
+        //println!("{:?}", self);
         Ok(&self.input[start..end])
     }
 
@@ -271,6 +275,19 @@ mod tests {
         assert_eq_token_stream!(r"\cs1", r"\cs  1");
         assert_eq_token_stream!(r"\cs1", "\\cs\n\t\r 1");
         assert_eq_token_stream!(r"\test\test", r"\test  \test");
+    }
+
+    #[test]
+    fn fix_lex_bug() {
+        let mut lex = Lexer::new(r"123 \\ abc \\ xyz");
+        loop {
+            let tok = lex.current;
+            if tok == Token::EOF { break; }
+            println!("{:?}", tok);
+            lex.next();
+        }
+        println!("");
+        panic!();
     }
 
     #[test]
