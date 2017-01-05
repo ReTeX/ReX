@@ -36,13 +36,9 @@ fn main() {
         } else {
             "rex-xits.woff2"
         };
+
     let out = matches.value_of("output")
         .unwrap_or("test.svg");
-
-    if input.len() == 0 {
-        println!("Provide a TeX argument");
-        return
-    }
 
     let svg = rex::SVGRenderer::new()
         .font_src(font)
