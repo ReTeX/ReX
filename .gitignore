@@ -9,5 +9,6 @@ Cargo.lock
 *.js
 *.css
 *.notes*
-test*
+/test*.*
+!/test/*
 README.samples
