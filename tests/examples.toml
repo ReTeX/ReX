@@ -49,5 +49,9 @@ name="An unneccesary number of scripts"
 tex='x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}'
 
 [[example]]
+name="Quartic Function"
+tex='\mathop{\overbrace{c_4x^4 + c_3x^3 + c_2x^2 + c_1x + c_0}}\limits^{\gray{\mathrm{Quartic}}}'
+
+[[example]]
 name="Another fun identity"
 tex='3^3 + 4^4 + 3^3 + 5^5 = 3435'

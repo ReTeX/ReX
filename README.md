@@ -49,7 +49,7 @@ See the `samples/` folder for the original SVG source.
 ![Example](samples/Ramanujan's_Identity.png)
 
 ### A surprising identity
-`\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{sin^2(x)}{x^2}\,\mathrm{d}x`
+`\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{\sin^2(x)}{x^2}\,\mathrm{d}x`
 
 ![Example](samples/A_surprising_identity.png)
 
@@ -67,6 +67,11 @@ See the `samples/` folder for the original SVG source.
 `x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}`
 
 ![Example](samples/An_unneccesary_number_of_scripts.png)
+
+### Quartic Function
+`\mathop{\overbrace{c_4x^4 + c_3x^3 + c_2x^2 + c_1x + c_0}}\limits^{\gray{\mathrm{Quartic}}}`
+
+![Example](samples/Quartic_Function.png)
 
 ### Another fun identity
 `3^3 + 4^4 + 3^3 + 5^5 = 3435`
