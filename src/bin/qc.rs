@@ -27,6 +27,6 @@ fn main() {
         return
     }
 
-    let svg = rex::SVGRenderer::new().font_size(96.0).debug(true);
+    let svg = rex::SVGRenderer::new().font_size(96.0).debug(false);
     svg.render_to_file("test.svg", &input);
 }

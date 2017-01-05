@@ -278,19 +278,6 @@ mod tests {
     }
 
     #[test]
-    fn fix_lex_bug() {
-        let mut lex = Lexer::new(r"123 \\ abc \\ xyz");
-        loop {
-            let tok = lex.current;
-            if tok == Token::EOF { break; }
-            println!("{:?}", tok);
-            lex.next();
-        }
-        println!("");
-        panic!();
-    }
-
-    #[test]
     fn lex_dimension() {
         use dimensions::Unit;
         macro_rules! assert_dim {

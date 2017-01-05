@@ -288,7 +288,7 @@ pub fn macro_argument(lex: &mut Lexer, local: Locals) -> Result<Option<Vec<Parse
     while lex.current == Token::WhiteSpace { lex.next(); }
 
     match first_some!(lex, local,
-            command, group, symbol,) {
+            group, command, symbol,) {
         Some(ParseNode::Group(inner)) => Ok(Some(inner)),
         Some(node) => Ok(Some(vec![node])),
         _ => Ok(None),

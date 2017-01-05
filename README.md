@@ -1,50 +1,90 @@
 # ReX &nbsp; [![](https://travis-ci.org/cbreeden/ReX.svg?branch=master)](build status) [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
-Typesetting mathematics.
 
-![ReX logo](rex.png)
+<center><img src="rex.png" alt="ReX logo" width="300px"/></center>
+<center><h2>Typesetting Mathematics</h2></center>
 
-# Progress
+# Samples
 
-![Integral equation](samples/integral.png)
+Note: Rex rendered all of these examples in SVG, but due to limitations in SVG rendering on GitHub, we need to convert them to PNG.
+See the `samples/` folder for the original SVG source.
 
-Extendable glyphs (integral, sqrt): `\Vert f \Vert_2 = \sqrt{\int f^2(x)\,\mathrm{d}x}`
+### The Quadratic Fromula
+`x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}`
 
-![l2 norm](samples/norm.png)
+![Example](samples/The_Quadratic_Fromula.png)
 
-Scripts: `x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}`
+### Double angle formula for Sine
+`\sin(\theta + \phi) = \sin(\theta)\cos(\phi) + \sin(\phi)\cos(\theta)`
 
-Todo: Add horizontal kerning to scripts (test `P_n`).
+![Example](samples/Double_angle_formula_for_Sine.png)
 
-![scripts](samples/scripts.png)
+### Divergence Theorem
+`\int_D (\nabla \cdot F)\,\mathrm{d}V = \int_{\partial D} F \cdot n\,\mathrm{d}S`
 
-Accents: '\hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave y\bar y\tilde y'
+![Example](samples/Divergence_Theorem.png)
 
-Todo: Compensate for overshot from accents (see kerning)?
+### Standard Deviation
+`\sigma = \sqrt{ \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2 }`
 
-![accents](samples/accents.png)
+![Example](samples/Standard_Deviation.png)
 
-![quadratic equation](samples/quadratic_accent.png)
+### Fourier Inverse
+`f(x) = \int_{-\infty}^{\infty} \hat f(\xi) e^{2\pi i \xi x}\,\mathrm{d}\xi`
 
-`\left` and `\right`: `\sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}`
+![Example](samples/Fourier_Inverse.png)
 
-![leftright](samples/leftright.png)
+### Cauchy-Schwarz Inequality
+`\left\vert \sum_k a_kb_k \right\vert \leq \left(\sum_k a_k^2\right)^{\frac12}\left(\sum_k b_k^2\right)^{\frac12}`
 
-![holder](samples/holder.png)
+![Example](samples/Cauchy-Schwarz_Inequality.png)
 
-Fractions: `f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\,\mathrm{d}\xi`
+### Exponent
+`e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n`
 
-TODO: There seems to be a few inconsistencies with some fonts and the standard...
+![Example](samples/Exponent.png)
 
-![cauchy](samples/cauchy.png)
+### Ramanujan's Identity
+`\frac{1}{\pi} = \frac{2\sqrt{2}}{9801} \sum_{k=0}^\infty \frac{ (4k)! (1103+26390k) }{ (k!)^4 396^{4k} }`
 
-`\frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}} = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \unicodecdots}}}}`
+![Example](samples/Ramanujan's_Identity.png)
 
-![nested fractions](samples/nested_fractions.png)
+### A surprising identity
+`\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{sin^2(x)}{x^2}\,\mathrm{d}x`
 
-Atom commands [`\mathop`, `\mathrel`, `\mathord`]: `\mathop{\mathrm{lim\,sup}}\limits_{x\rightarrow\infty}\ \mathop{\mathrm{sin}}(x)\mathrel{\mathop{=}\limits^?}1`
+![Example](samples/A_surprising_identity.png)
 
-![atom commands](samples/atoms.png)
+### Another gem from Ramanujan
+`\frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}} = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \cdots}}}}`
 
+![Example](samples/Another_gem_from_Ramanujan.png)
+
+### Another gem from Cauchy
+`f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\,\mathrm{d}\xi`
+
+![Example](samples/Another_gem_from_Cauchy.png)
+
+### An unneccesary number of scripts
+`x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}`
+
+![Example](samples/An_unneccesary_number_of_scripts.png)
+
+### Another fun identity
+`3^3 + 4^4 + 3^3 + 5^5 = 3435`
+
+![Example](samples/Another_fun_identity.png)
+
+# Install
+
+First note that ReX is currently in heavy development and is not intended to be used in any way other than for testing and debugging.
+That being said, you can install ReX using a Rust compiler.  Instructions are found [here](https://www.rustup.rs/).
+
+You can look at the examples in the `tests/` folder to see ReX in action, or simply run
+
+```
+cargo run 'x = \frac{-b \pm \sqrt{b^2 - 4ac}{2a}'
+```
+
+for a standalone SVG.  The file will be saved as "test.svg".
 
 # License
 

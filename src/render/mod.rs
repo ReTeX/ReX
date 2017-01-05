@@ -16,11 +16,11 @@ use layout::Style;
 use std::fs::File;
 use std::io::Write;
 
-macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" encoding=\"utf-8\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
+macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
 macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
-macro_rules! RULE_TEMPLATE { () => { r#"<rect x="{}" y="{}" width="{}" height="{}" fill="\#000"/>"# } }
+macro_rules! RULE_TEMPLATE { () => { r##"<rect x="{}" y="{}" width="{}" height="{}" fill="#000"/>"## } }
 macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
 macro_rules! COLOR_TEMPLATE { () => { r#"<g transform="translate({:.2},{:.2})" fill="{}">"# } }
 
@@ -111,10 +111,12 @@ impl SVGRenderer {
                 }
             };
 
-        debug!("Parse: {:?}", parse);
-
         let layout = layout(&mut parse, self.layout_settings());
-        debug!("layout: {:?}", layout);
+
+        if cfg!(debug_assertions) && self.debug {
+            println!("Parse: {:?}\n", parse);
+            println!("Layout: {:?}", layout);
+        }
 
         let mut output = String::from(SVG_HEADER);
 
@@ -122,7 +124,7 @@ impl SVGRenderer {
         let height = layout.height + 2.0 * self.vert_padding;   // Top and bot padding
         let depth  = layout.depth;
 
-        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "rex-xits.otf", self.font_size);
+        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "http://rex.breeden.cc/rex-xits.otf", self.font_size);
         output += &format!(G_TEMPLATE!(), self.horz_padding, self.vert_padding);
 
         output += &self.render_hbox(
@@ -210,7 +212,7 @@ impl SVGRenderer {
                 height += node.height;
             },
             LayoutVariant::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height /*+ vbox.offset*/);
+                result += &format!(G_TEMPLATE!(), width, height);
                 result += &self.render_vbox(&vbox.contents);
                 result += "</g>";
                 height += node.height;
