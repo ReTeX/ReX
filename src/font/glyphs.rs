@@ -4521,6 +4521,5 @@ pub static GLYPHS: [(u32, Glyph); 4517] =
     (126649, Glyph { unicode: 126649, bbox: BBox(53,-250,1162,617), advance: 1212, lsb: 53, italics: 0, attachment: 0 }),
     (126650, Glyph { unicode: 126650, bbox: BBox(33,-50,740,752), advance: 792, lsb: 33, italics: 0, attachment: 0 }),
     (126651, Glyph { unicode: 126651, bbox: BBox(50,-492,741,676), advance: 540, lsb: 50, italics: 0, attachment: 0 }),
->>>>>>> binary search for glyphs
     // Replacement UNICODE values from unicode.toml exceptions
 ];
