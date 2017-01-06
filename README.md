@@ -5,7 +5,9 @@
 
 # Samples
 
-Note: Rex rendered all of these examples in SVG, but due to limitations in SVG rendering on GitHub, we need to convert them to PNG.
+You can try ReX live [here](https://s3bk.github.io/iReX/editor.html)!  Simply type in a formula in the editor and click the display on the top to update the rendering.
+
+Note: ReX rendered all of these examples in SVG, but due to limitations in SVG rendering on GitHub, we need to convert them to PNG.
 See the `samples/` folder for the original SVG source.
 
 ### The Quadratic Fromula
