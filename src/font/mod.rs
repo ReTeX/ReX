@@ -15,9 +15,11 @@ pub use self::offsets::OptionalAtom;
 use parser::AtomType;
 
 pub fn glyph_metrics(code : u32) -> Glyph {
-    GLYPHS.get(&code)
-        .expect(&format!("Unable to find glyph for code {}", code))
-        .clone()
+    if let Ok(idx) = GLYPHS.binary_search_by(|&(id, _)| id.cmp(&code)) {
+        GLYPHS[idx].1.clone()
+    } else {
+        panic!(format!("Unable to find glyph for code '{}'", code));
+    }
 }
 
 #[allow(dead_code)]
