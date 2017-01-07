@@ -5,7 +5,9 @@
 
 # Samples
 
-Note: Rex rendered all of these examples in SVG, but due to limitations in SVG rendering on GitHub, we need to convert them to PNG.
+You can try ReX live [here](https://s3bk.github.io/iReX/editor.html)!  Simply type in a formula in the editor and click the display on the top to update the rendering.
+
+Note: ReX rendered all of these examples in SVG, but due to limitations in SVG rendering on GitHub, we need to convert them to PNG.
 See the `samples/` folder for the original SVG source.
 
 ### The Quadratic Fromula
@@ -49,7 +51,7 @@ See the `samples/` folder for the original SVG source.
 ![Example](samples/Ramanujan's_Identity.png)
 
 ### A surprising identity
-`\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{sin^2(x)}{x^2}\,\mathrm{d}x`
+`\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{\sin^2(x)}{x^2}\,\mathrm{d}x`
 
 ![Example](samples/A_surprising_identity.png)
 
@@ -67,6 +69,11 @@ See the `samples/` folder for the original SVG source.
 `x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}`
 
 ![Example](samples/An_unneccesary_number_of_scripts.png)
+
+### Quartic Function
+`\mathop{\overbrace{c_4x^4 + c_3x^3 + c_2x^2 + c_1x + c_0}}\limits^{\gray{\mathrm{Quartic}}}`
+
+![Example](samples/Quartic_Function.png)
 
 ### Another fun identity
 `3^3 + 4^4 + 3^3 + 5^5 = 3435`

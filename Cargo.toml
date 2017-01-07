@@ -9,6 +9,7 @@ phf_macros="*"
 lazy_static="*"
 nom="*"
 regex="*"
+clap = "2.19.3"
 
 [dev-dependencies]
 toml = "0.2.1"

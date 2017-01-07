@@ -1,10 +1,14 @@
 target
 Cargo.lock
 .vscode
+.idea/*
 *.pdf
 *.log
 *.aux
-*.svg
 *.iml
-.idea/*
-test.svg
+*.js
+*.css
+*.notes*
+/test*.*
+!/test/*
+README.samples

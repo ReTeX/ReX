@@ -34,7 +34,7 @@ tex='\frac{1}{\pi} = \frac{2\sqrt{2}}{9801} \sum_{k=0}^\infty \frac{ (4k)! (1103
 
 [[example]]
 name="A surprising identity"
-tex='\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{sin^2(x)}{x^2}\,\mathrm{d}x'
+tex='\int_{-\infty}^{\infty} \frac{\sin(x)}{x}\,\mathrm{d}x = \int_{-\infty}^{\infty}\frac{\sin^2(x)}{x^2}\,\mathrm{d}x'
 
 [[example]]
 name="Another gem from Ramanujan"
@@ -47,6 +47,10 @@ tex='f^{(n)}(z) = \frac{n!}{2\pi i} \oint \frac{f(\xi)}{(\xi - z)^{n+1}}\,\mathr
 [[example]]
 name="An unneccesary number of scripts"
 tex='x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}'
+
+[[example]]
+name="Quartic Function"
+tex='\mathop{\overbrace{c_4x^4 + c_3x^3 + c_2x^2 + c_1x + c_0}}\limits^{\gray{\mathrm{Quartic}}}'
 
 [[example]]
 name="Another fun identity"

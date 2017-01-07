@@ -34,9 +34,10 @@ macro_rules! debug {
     )
 }
 
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct SVGRenderer {
     pub font_size:    f64,
+    pub font_src:     String,
     pub horz_padding: f64,
     pub vert_padding: f64,
     pub strict:       bool,
@@ -57,6 +58,14 @@ impl SVGRenderer {
             style:        Style::Display,
             debug:        false,
             cursor:       Cursor { x: 0.0, y: 0.0 },
+            font_src:     "http://rex.breeden.cc/rex-xits.otf".into(),
+        }
+    }
+
+    pub fn font_src(self, src: &str) -> Self {
+        SVGRenderer {
+            font_src: src.into(),
+            ..self
         }
     }
 
@@ -124,7 +133,7 @@ impl SVGRenderer {
         let height = layout.height + 2.0 * self.vert_padding;   // Top and bot padding
         let depth  = layout.depth;
 
-        output += &format!(HEAD_TEMPLATE!(), width, height - depth, "http://rex.breeden.cc/rex-xits.otf", self.font_size);
+        output += &format!(HEAD_TEMPLATE!(), width, height - depth, self.font_src, self.font_size);
         output += &format!(G_TEMPLATE!(), self.horz_padding, self.vert_padding);
 
         output += &self.render_hbox(

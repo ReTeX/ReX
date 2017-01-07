@@ -3,7 +3,7 @@ extern crate toml;
 
 use std::fs::File;
 use std::io::Read;
-use std::fmt;
+use std::io::Write;
 
 use toml::Value;
 
@@ -42,7 +42,8 @@ fn generate_examples() {
             }
         };
 
-    println!("");   // remove indent from debugging in panics.
+    let mut readme = String::new();
+
     let svg = rex::SVGRenderer::new().font_size(96.0).debug(false);
     for example in examples {
         if let &Value::Table(ref table) = example {
@@ -52,14 +53,16 @@ fn generate_examples() {
             let filename = format!("samples/{}.svg", name.replace(" ", "_"));
             let filename_png = format!("samples/{}.png", name.replace(" ", "_"));
 
-            println!(r"### {}", name);
-            println!(r"`{}`", tex);
-            println!(r"");
-            println!(r"![Example]({})", filename_png);
-            println!(r"");
+            readme += &format!("### {}\n", name);
+            readme += &format!("`{}`\n\n", tex);
+            readme += &format!("![Example]({})\n\n", filename_png);
 
             svg.render_to_file(filename, &tex);
         }
     }
-    panic!()
+
+    let mut readme_file = File::create("README.samples")
+        .expect("Unable to create `README.samples` file!");
+    readme_file.write_all(&readme.into_bytes())
+        .expect("Unable to write to `README.samples` file!");
 }
