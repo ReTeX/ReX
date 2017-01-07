@@ -1,47 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="1101.0427733333333" height="233.34208" xmlns="http://www.w3.org/2000/svg"><defs><style type="text/css">@font-face{font-family: rex;src: url('http://rex.breeden.cc/rex-xits.otf');}</style></defs><g font-family="rex" font-size="96.0px"><g transform="translate(12.00,5.00)">
-<g transform="translate(0,0)">
-<g transform="translate(0,0)">
-<g transform="translate(0,192)">
-<text></text></g>
-</g></g><g transform="translate(108.96000000000001,179.99615999999997)">
-<g transform="translate(0,0)">
-<g transform="translate(-52.800000000000004,42.627840000000006)">
-<g transform="scale(0.68)"><text>𝐷</text></g>
-</g></g></g><g transform="translate(108.96000000000001,132.912)">
-<text>(</text></g>
-<g transform="translate(140.928,132.912)">
-<text>∇</text></g>
-<g transform="translate(232.43733333333333,132.912)">
-<text>⋅</text></g>
-<g transform="translate(281.22666666666663,132.912)">
-<text>𝐹</text></g>
-<g transform="translate(340.55466666666666,132.912)">
-<text>)</text></g>
-<g transform="translate(388.5226666666667,132.912)">
-<text>d</text></g>
-<g transform="translate(436.5226666666667,132.912)">
-<text>𝑉</text></g>
-<g transform="translate(523.7226666666667,132.912)">
-<text>=</text></g>
-<g transform="translate(621.4826666666667,0)">
-<g transform="translate(0,0)">
-<g transform="translate(0,192)">
-<text></text></g>
-</g></g><g transform="translate(730.4426666666667,179.27808)">
-<g transform="translate(0,0)">
-<g transform="translate(-52.800000000000004,0)">
-<g transform="translate(0,43.34592)">
-<g transform="scale(0.68)"><text>∂</text></g>
-</g><g transform="translate(28.26624,43.34592)">
-<g transform="scale(0.68)"><text>𝐷</text></g>
-</g></g></g></g><g transform="translate(773.4801066666666,132.912)">
-<text>𝐹</text></g>
-<g transform="translate(854.14144,132.912)">
-<text>⋅</text></g>
-<g transform="translate(902.9307733333334,132.912)">
-<text>𝑛</text></g>
-<g transform="translate(966.6427733333334,132.912)">
-<text>d</text></g>
-<g transform="translate(1014.6427733333334,132.912)">
-<text>𝑆</text></g>
-</g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="1101.04" height="233.34" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
+</defs>
+<g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)"><g transform="translate(0.00 192.00)"><text></text></g><g transform="translate(108.96 180.00)"><g transform="translate(-52.80 42.63)"><text transform="scale(0.68)">𝐷</text></g></g><g transform="translate(108.96 132.91)"><text>(</text></g><g transform="translate(140.93 132.91)"><text>∇</text></g><g transform="translate(232.44 132.91)"><text>⋅</text></g><g transform="translate(281.23 132.91)"><text>𝐹</text></g><g transform="translate(340.55 132.91)"><text>)</text></g><g transform="translate(388.52 132.91)"><text>d</text></g><g transform="translate(436.52 132.91)"><text>𝑉</text></g><g transform="translate(523.72 132.91)"><text>=</text></g><g transform="translate(621.48 0.00)"><g transform="translate(0.00 192.00)"><text></text></g></g><g transform="translate(730.44 179.28)"><g transform="translate(-52.80 0.00)"><g transform="translate(0.00 43.35)"><text transform="scale(0.68)">∂</text></g><g transform="translate(28.27 43.35)"><text transform="scale(0.68)">𝐷</text></g></g></g><g transform="translate(773.48 132.91)"><text>𝐹</text></g><g transform="translate(854.14 132.91)"><text>⋅</text></g><g transform="translate(902.93 132.91)"><text>𝑛</text></g><g transform="translate(966.64 132.91)"><text>d</text></g><g transform="translate(1014.64 132.91)"><text>𝑆</text></g></g></g></svg>

@@ -2,10 +2,11 @@
 #![feature(plugin)]
 #![plugin(phf_macros)]
 
-#[macro_use]
-extern crate nom;
-extern crate regex;
+// #[macro_use]
+// extern crate nom;
+// extern crate regex;
 extern crate phf;
+extern crate log;
 
 #[macro_use]
 mod macros;

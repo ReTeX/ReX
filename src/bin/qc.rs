@@ -1,10 +1,13 @@
+#[macro_use] extern crate log;
+extern crate env_logger;
 extern crate clap;
 extern crate rex;
 
-use std::env;
 use clap::{Arg, App};
 
 fn main() {
+    env_logger::init().unwrap();
+
     let matches = App::new("ReX Debugging Utitlity")
         .version("0.1a")
         .author("Christopher Breeden <github@u.breeden.cc>")
@@ -45,5 +48,6 @@ fn main() {
         .font_size(96.0)
         .debug(debug);
 
+    debug!("Rendering: {}", input);
     svg.render_to_file(out, &input);
 }

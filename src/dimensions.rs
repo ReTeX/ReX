@@ -189,6 +189,6 @@ impl Pixels {
 
 impl Display for Pixels {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", **self)
+        write!(f, "{:.2}", **self)
     }
 }

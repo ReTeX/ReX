@@ -7,9 +7,11 @@ authors = ["Christopher Breeden <github@u.breeden.cc>"]
 phf="*"
 phf_macros="*"
 lazy_static="*"
-nom="*"
-regex="*"
+#nom="*"
+#regex="*"
 clap = "2.19.3"
+log = "0.3.6"
+env_logger = "0.3.5"
 
 [dev-dependencies]
 toml = "0.2.1"

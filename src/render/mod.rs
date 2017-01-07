@@ -15,12 +15,13 @@ use layout::Style;
 
 use std::fs::File;
 use std::io::Write;
+use std::fmt;
 
 macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
 macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
 macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
 macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
-macro_rules! RULE_TEMPLATE { () => { r##"<rect x="{}" y="{}" width="{}" height="{}" fill="#000"/>"## } }
+macro_rules! RULE_TEMPLATE { () => { r##"<rect x="{:.2}" y="{:.2}" width="{:.2}" height="{:.2}" fill="#000"/>"## } }
 macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
 macro_rules! COLOR_TEMPLATE { () => { r#"<g transform="translate({:.2},{:.2})" fill="{}">"# } }
 
@@ -133,9 +134,9 @@ impl SVGRenderer {
         let height = layout.height + 2.0 * self.vert_padding;   // Top and bot padding
         let depth  = layout.depth;
 
-        output += &format!(HEAD_TEMPLATE!(), width, height - depth, self.font_src, self.font_size);
-        output += &format!(G_TEMPLATE!(), self.horz_padding, self.vert_padding);
 
+        header(&mut output, width, height -depth, &self.font_src, self.font_size);
+        g(&mut output, Pixels(self.horz_padding), Pixels(self.vert_padding));
         output += &self.render_hbox(
             &layout.contents, layout.height, layout.width, Alignment::Default);
         output += "</g></g></svg>";
@@ -152,46 +153,42 @@ impl SVGRenderer {
         }
 
         if cfg!(debug_assertions) && self.debug {
-            result += &format!(BBOX_TEMPLATE!(), 0, 0, nodes_width, height);
+            bbox(&mut result, nodes_width, height);
         }
 
         for node in nodes { match node.node {
             LayoutVariant::Glyph(ref gly) => {
-                result += &format!(G_TEMPLATE!(), width, height);
-                //result += &format!(BBOX_TEMPLATE!(), 0, -gh, gw, gh-gd);
-                if gly.scale != 1f64 {
-                    result += &format!(SCALE_TEMPLATE!(), gly.scale);
-                }
-
-                result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
-                    .expect("Unable to decode unicode!"));
-
-                if gly.scale != 1f64 {
+                g(&mut result, width, height);
+                symbol(&mut result, gly.unicode, gly.scale);
+                if width != Pixels(0.0) || height != Pixels(0.0) {
                     result += "</g>";
                 }
                 width += node.width;
             },
             LayoutVariant::Rule => {
-                result += &format!(RULE_TEMPLATE!(),
-                    width, height - node.height, node.width, node.height);
+                rule(&mut result, width, height - node.height, node.width, node.height);
                 width += node.width;
             },
             LayoutVariant::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - node.height /*+ vbox.offset*/);
+                g(&mut result, width, height - node.height);
                 result += &self.render_vbox(&vbox.contents);
-                result += "</g>";
+                if width != Pixels(0.0) || (height - node.height) != Pixels(0.0) {
+                    result += "</g>";
+                }
                 width += node.width;
             },
             LayoutVariant::HorizontalBox(ref hbox) => {
-                result += &format!(G_TEMPLATE!(), width, height - node.height);
+                g(&mut result, width, height - node.height);
                 result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
-                result += "</g>";
+                if width != Pixels(0.0) || (height - node.height) != Pixels(0.0) {
+                    result += "</g>";
+                }
                 width += node.width;
             },
             LayoutVariant::Kern =>
                 width += node.width,
             LayoutVariant::Color(ref clr) => {
-                result += &format!(COLOR_TEMPLATE!(), width, height - node.height, clr.color);
+                color(&mut result, /*width, height - node.height,*/ &clr.color);
                 result += &self.render_hbox(&clr.inner, node.height, node.width, Alignment::Default);
                 result += "</g>";
                 width += node.width;
@@ -209,39 +206,33 @@ impl SVGRenderer {
 
         for node in nodes { match node.node {
             LayoutVariant::Rule => {
-                result += &format!(RULE_TEMPLATE!(),
-                    width, height,
-                    node.width, node.height);
+                rule(&mut result, width, height, node.width, node.height);
                 height += node.height;
             },
             LayoutVariant::HorizontalBox(ref hbox) => {
-                result += &format!(G_TEMPLATE!(), width, height);
+                g(&mut result, width, height);
                 result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
-                result += "</g>";
+                if width != Pixels(0.0) || height != Pixels(0.0) {
+                    result += "</g>";
+                }
                 height += node.height;
             },
             LayoutVariant::VerticalBox(ref vbox) => {
-                result += &format!(G_TEMPLATE!(), width, height);
+                g(&mut result, width, height);
                 result += &self.render_vbox(&vbox.contents);
-                result += "</g>";
+                if width != Pixels(0.0) || height != Pixels(0.0) {
+                    result += "</g>";
+                }
                 height += node.height;
             },
             LayoutVariant::Kern =>
                 height += node.height,
             LayoutVariant::Glyph(ref gly) => {
-                result += &format!(G_TEMPLATE!(), width, height + node.height);
-
-                if gly.scale != 1f64 {
-                    result += &format!(SCALE_TEMPLATE!(), gly.scale);
-                }
-
-                result += &format!(SYM_TEMPLATE!(), ::std::char::from_u32(gly.unicode)
-                    .expect("Unable to decode unicode!"));
-
-                if gly.scale != 1f64 {
+                g(&mut result, width, height + node.height);
+                symbol(&mut result, gly.unicode, gly.scale);
+                if width != Pixels(0.0) || (height + node.height) != Pixels(0.0) {
                     result += "</g>";
                 }
-
                 height += node.height;
             },
             LayoutVariant::Color(_) => {
@@ -265,4 +256,59 @@ impl SVGRenderer {
 struct Cursor {
     x: f64,
     y: f64,
+}
+
+fn header<W: fmt::Write>(w: &mut W, width: Pixels, height: Pixels, font: &str, font_size: f64) {
+    w.write_fmt(format_args!(
+r#"<svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <style type="text/css">@font-face{{font-family:rex;src:url('{}');}}</style>
+</defs>
+<g font-family="rex" font-size="{:.1}px">"#,
+        width, height, font, font_size))
+        .expect("Failed to write to buffer!");
+}
+
+fn g<W: fmt::Write>(w: &mut W, width: Pixels, height: Pixels) {
+    if width == Pixels(0.0) && height == Pixels(0.0) { return }
+    w.write_fmt(format_args!(
+        r#"<g transform="translate({:.2} {:.2})">"#,
+        width, height))
+        .expect("Failed to write to buffer!");
+}
+
+fn bbox<W: fmt::Write>(w: &mut W, width: Pixels, height: Pixels) {
+    w.write_fmt(format_args!(
+        r#"<rect width="{}" height="{}" fill="none" stroke="blue" stroke-width="0.2"/>"#,
+        width, height))
+        .expect("Failed to write to buffer!");
+}
+
+fn symbol<W: fmt::Write>(w: &mut W, symbol: u32, scale: f64) {
+    use std::char;
+    if scale != 1f64 {
+        w.write_fmt(format_args!(
+            r#"<text transform="scale({:.2})">{}</text>"#,
+            scale,
+            char::from_u32(symbol).expect("Unabale to decode utf8 code-point!")))
+            .expect("Failed to write to buffer!");
+    } else {
+        w.write_fmt(format_args!(
+            r#"<text>{}</text>"#,
+            char::from_u32(symbol).expect("Unabale to decode utf8 code-point!")))
+            .expect("Failed to write to buffer!");
+    }
+}
+
+fn rule<W: fmt::Write>(w: &mut W, x: Pixels, y: Pixels, width: Pixels, height: Pixels) {
+    w.write_fmt(format_args!(
+        r##"<rect x="{}" y ="{}" width="{}" height="{}" fill="#000"/>"##,
+        x, y, width, height))
+        .expect("Failed to write to buffer!");
+}
+
+fn color<W: fmt::Write>(w: &mut W, color: &str) {
+    w.write_fmt(format_args!(
+        r#"<g fill="{}">"#, color))
+        .expect("Failed to write to buffer!");
 }
