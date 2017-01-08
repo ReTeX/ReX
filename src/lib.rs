@@ -2,6 +2,8 @@
 #![feature(plugin)]
 #![plugin(phf_macros)]
 
+#![feature(test)]
+extern crate test;
 // #[macro_use]
 // extern crate nom;
 // extern crate regex;

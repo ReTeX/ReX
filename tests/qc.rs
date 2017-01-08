@@ -65,7 +65,7 @@ impl fmt::Display for Categories {
 impl fmt::Display for Test {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "<h3>{}</h3>", self.description)?;
-        let svg = rex::SVGRenderer::new().font_size(32.0);
+        let svg = rex::SVGRenderer::new().font_src("rex-xits.woff2").font_size(32.0);
 
         for test in &self.tests {
             let output = svg.render(test);

@@ -8,15 +8,26 @@ pub mod variants;
 pub mod variant_tables;
 pub mod fontselection;
 
+#[cfg(test)]
+mod tests;
+
 pub use self::glyphs::GLYPHS;
 pub use self::symbols::SYMBOLS;
 pub use self::offsets::OptionalAtom;
 
 use parser::AtomType;
 
+#[cfg(not(test))]
 pub fn glyph_metrics(code : u32) -> Glyph {
     GLYPHS.get(&code)
-        .expect(&format!("Unable to find glyph for code {}", code))
+        .expect(&format!("Unable to find glyph for code '0x{:x}'", code))
+        .clone()
+}
+
+#[cfg(test)]
+pub fn glyph_metrics(code: u32) -> Glyph {
+    GLYPHS.get(&code)
+        .unwrap_or(& Glyph { unicode: 0, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 })
         .clone()
 }
 
