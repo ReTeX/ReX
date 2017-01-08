@@ -17,14 +17,6 @@ use std::fs::File;
 use std::io::Write;
 use std::fmt;
 
-macro_rules! HEAD_TEMPLATE { () => { "<svg width=\"{:.2}\" height=\"{:.2}\" xmlns=\"http://www.w3.org/2000/svg\"><defs><style type=\"text/css\">@font-face{{font-family: rex;src: url('{}');}}</style></defs><g font-family=\"rex\" font-size=\"{:.1}px\">" } }
-macro_rules! G_TEMPLATE { () => { "<g transform=\"translate({:.2},{:.2})\">\n" } }
-macro_rules! BBOX_TEMPLATE { () => { "<rect x=\"{:.2}\" y=\"{:.2}\" width=\"{:.2}\" height=\"{:.2}\" fill=\"none\" stroke=\"blue\" stroke-width=\"0.2\"/>\n" } }
-macro_rules! SYM_TEMPLATE { () => { "<text>{}</text></g>\n" } }
-macro_rules! RULE_TEMPLATE { () => { r##"<rect x="{:.2}" y="{:.2}" width="{:.2}" height="{:.2}" fill="#000"/>"## } }
-macro_rules! SCALE_TEMPLATE { () => { r#"<g transform="scale({})">"# } }
-macro_rules! COLOR_TEMPLATE { () => { r#"<g transform="translate({:.2},{:.2})" fill="{}">"# } }
-
 const SVG_HEADER: &'static str = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">"#;
 
 macro_rules! debug {
@@ -136,16 +128,24 @@ impl SVGRenderer {
 
 
         header(&mut output, width, height -depth, &self.font_src, self.font_size);
-        g(&mut output, Pixels(self.horz_padding), Pixels(self.vert_padding));
-        output += &self.render_hbox(
-            &layout.contents, layout.height, layout.width, Alignment::Default);
-        output += "</g></g></svg>";
+        g(&mut output, Pixels(self.horz_padding),
+                       Pixels(self.vert_padding), |res| {
+            self.render_hbox(res,
+                &layout.contents, layout.height,
+                layout.width, Alignment::Default);
+        });
+
+        output += "</g></svg>";
         output
     }
 
-    pub fn render_hbox(&self, nodes: &[LayoutNode],
-            height: Pixels, nodes_width: Pixels, alignment: Alignment) -> String {
-        let mut result = String::new();
+    pub fn render_hbox<W: fmt::Write>(&self,
+                                      mut result: &mut W,
+                                      nodes: &[LayoutNode],
+                                      height: Pixels,
+                                      nodes_width: Pixels,
+                                      alignment: Alignment)
+    {
         let mut width = Pixels(0.0);
 
         if let Alignment::Centered(w) = alignment {
@@ -153,95 +153,80 @@ impl SVGRenderer {
         }
 
         if cfg!(debug_assertions) && self.debug {
-            bbox(&mut result, nodes_width, height);
+            bbox(result, nodes_width, height);
         }
 
-        for node in nodes { match node.node {
-            LayoutVariant::Glyph(ref gly) => {
-                g(&mut result, width, height);
-                symbol(&mut result, gly.unicode, gly.scale);
-                if width != Pixels(0.0) || height != Pixels(0.0) {
-                    result += "</g>";
-                }
-                width += node.width;
-            },
-            LayoutVariant::Rule => {
-                rule(&mut result, width, height - node.height, node.width, node.height);
-                width += node.width;
-            },
-            LayoutVariant::VerticalBox(ref vbox) => {
-                g(&mut result, width, height - node.height);
-                result += &self.render_vbox(&vbox.contents);
-                if width != Pixels(0.0) || (height - node.height) != Pixels(0.0) {
-                    result += "</g>";
-                }
-                width += node.width;
-            },
-            LayoutVariant::HorizontalBox(ref hbox) => {
-                g(&mut result, width, height - node.height);
-                result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
-                if width != Pixels(0.0) || (height - node.height) != Pixels(0.0) {
-                    result += "</g>";
-                }
-                width += node.width;
-            },
-            LayoutVariant::Kern =>
-                width += node.width,
-            LayoutVariant::Color(ref clr) => {
-                color(&mut result, /*width, height - node.height,*/ &clr.color);
-                result += &self.render_hbox(&clr.inner, node.height, node.width, Alignment::Default);
-                result += "</g>";
-                width += node.width;
-            }
-        }}
+        for node in nodes {
+            match node.node {
+                LayoutVariant::Glyph(ref gly) =>
+                    g(result, width, height, |res| {
+                        symbol(res, gly.unicode, gly.scale);
+                    }),
 
-        result
+                LayoutVariant::Rule =>
+                    rule(result,
+                        width, height - node.height,
+                        node.width, node.height),
+
+                LayoutVariant::VerticalBox(ref vbox) =>
+                    g(result, width, height - node.height, |res| {
+                        self.render_vbox(res, &vbox.contents);
+                    }),
+
+                LayoutVariant::HorizontalBox(ref hbox) =>
+                    g(result, width, height - node.height, |res| {
+                        self.render_hbox(res,
+                            &hbox.contents, node.height,
+                            node.width, hbox.alignment);
+                    }),
+
+                LayoutVariant::Color(ref clr) =>
+                    color(result, &clr.color, |res| {
+                        self.render_hbox(res, &clr.inner,
+                            node.height, node.width, Alignment::Default);
+                    }),
+
+                LayoutVariant::Kern => { }
+            } // End macth
+
+            width += node.width;
+        }
     }
 
-    pub fn render_vbox(&self, nodes: &[LayoutNode]) -> String {
-        let mut result = String::new();
-
+    pub fn render_vbox<W: fmt::Write>(&self, mut result: &mut W, nodes: &[LayoutNode]) {
         let mut height = Pixels(0.0);
         let width      = Pixels(0.0);
 
-        for node in nodes { match node.node {
-            LayoutVariant::Rule => {
-                rule(&mut result, width, height, node.width, node.height);
-                height += node.height;
-            },
-            LayoutVariant::HorizontalBox(ref hbox) => {
-                g(&mut result, width, height);
-                result += &self.render_hbox(&hbox.contents, node.height, node.width, hbox.alignment);
-                if width != Pixels(0.0) || height != Pixels(0.0) {
-                    result += "</g>";
-                }
-                height += node.height;
-            },
-            LayoutVariant::VerticalBox(ref vbox) => {
-                g(&mut result, width, height);
-                result += &self.render_vbox(&vbox.contents);
-                if width != Pixels(0.0) || height != Pixels(0.0) {
-                    result += "</g>";
-                }
-                height += node.height;
-            },
-            LayoutVariant::Kern =>
-                height += node.height,
-            LayoutVariant::Glyph(ref gly) => {
-                g(&mut result, width, height + node.height);
-                symbol(&mut result, gly.unicode, gly.scale);
-                if width != Pixels(0.0) || (height + node.height) != Pixels(0.0) {
-                    result += "</g>";
-                }
-                height += node.height;
-            },
-            LayoutVariant::Color(_) => {
-                panic!("Shouldn't have a color in a vertical box???")
-            }
-            //_ => (),
-        }}
+        for node in nodes {
+            match node.node {
+                LayoutVariant::Rule =>
+                    rule(result, width, height, node.width, node.height),
 
-        result
+                LayoutVariant::HorizontalBox(ref hbox) =>
+                    g(result, width, height, |res| {
+                        self.render_hbox(res,
+                            &hbox.contents, node.height,
+                            node.width, hbox.alignment);
+                    }),
+
+                LayoutVariant::VerticalBox(ref vbox) =>
+                    g(result, width, height, |res| {
+                        self.render_vbox(res, &vbox.contents);
+                    }),
+
+                LayoutVariant::Glyph(ref gly) =>
+                    g(result, width, height + node.height, |res| {
+                        symbol(res, gly.unicode, gly.scale);
+                    }),
+
+                LayoutVariant::Color(_) =>
+                    panic!("Shouldn't have a color in a vertical box???"),
+
+                LayoutVariant::Kern => { }
+            }
+
+            height += node.height;
+        }
     }
 
     fn layout_settings(&self) -> LayoutSettings {
@@ -269,12 +254,24 @@ r#"<svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
         .expect("Failed to write to buffer!");
 }
 
-fn g<W: fmt::Write>(w: &mut W, width: Pixels, height: Pixels) {
-    if width == Pixels(0.0) && height == Pixels(0.0) { return }
-    w.write_fmt(format_args!(
-        r#"<g transform="translate({:.2} {:.2})">"#,
-        width, height))
-        .expect("Failed to write to buffer!");
+fn g<F, W>(w: &mut W,
+           width: Pixels,
+           height: Pixels,
+           mut contents: F)
+    where W: fmt::Write, F: FnMut(&mut W)
+{
+    if width == Pixels(0.0) && height == Pixels(0.0) {
+        contents(w);
+    } else {
+        w.write_fmt(format_args!(
+            r#"<g transform="translate({:.2} {:.2})">"#,
+            width, height))
+            .expect("Failed to write to buffer!");
+
+        contents(w);
+        w.write_str("</g>")
+            .expect("Failed to write to buffer!");
+    }
 }
 
 fn bbox<W: fmt::Write>(w: &mut W, width: Pixels, height: Pixels) {
@@ -307,8 +304,14 @@ fn rule<W: fmt::Write>(w: &mut W, x: Pixels, y: Pixels, width: Pixels, height: P
         .expect("Failed to write to buffer!");
 }
 
-fn color<W: fmt::Write>(w: &mut W, color: &str) {
+fn color<F, W>(w: &mut W, color: &str, mut contents: F)
+    where W: fmt::Write,
+          F: FnMut(&mut W)
+{
     w.write_fmt(format_args!(
         r#"<g fill="{}">"#, color))
+        .expect("Failed to write to buffer!");
+    contents(w);
+    w.write_str("</g>")
         .expect("Failed to write to buffer!");
 }
