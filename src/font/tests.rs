@@ -458,10 +458,19 @@ pub static unicodes: [u32; 4525] = [
     0x11a8, 0x11a9, 0x11aa, 0x11ab, 0x11ac, ];
 
 #[bench]
-fn bench_glyph_metrics(b: &mut Bencher) {
+fn bench_glyph_metrics_all(b: &mut Bencher) {
     b.iter(|| {
         for &code in unicodes.iter() {
             let x = glyph_metrics(code);
         }
     });
+}
+
+#[bench]
+fn bench_glyph_metrics_20(b: &mut Bencher) {
+    b.iter(|| {
+        for &code in unicodes[2000..2020].iter() {
+            let x = glyph_metrics(code);
+        }
+    })
 }

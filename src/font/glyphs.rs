@@ -2,11 +2,12 @@
 // Automatically generated... blah blah blah, you know the deal.
 use std::collections::HashMap;
 use font::{ Glyph, BBox };
+use fnv::FnvHashMap;
 
 #[allow(dead_code)]
 lazy_static! {
-  pub static ref GLYPHS: HashMap<u32, Glyph> = {
-    let mut m = HashMap::new();
+  pub static ref GLYPHS: FnvHashMap<u32, Glyph> = {
+    let mut m = FnvHashMap::default();
     m.insert(0, Glyph { unicode: 0, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 });
     m.insert(1, Glyph { unicode: 1, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 });
     m.insert(2, Glyph { unicode: 2, bbox: BBox(0,0,0,0), advance: 0, lsb: 0, italics: 0, attachment: 0 });
