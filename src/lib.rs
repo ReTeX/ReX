@@ -6,7 +6,6 @@
 // extern crate nom;
 // extern crate regex;
 extern crate phf;
-extern crate log;
 
 #[macro_use]
 mod macros;
