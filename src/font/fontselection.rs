@@ -77,9 +77,9 @@ mod offset {
 const DIGIT_START: u32 = 48;
 const DIGIT_END: u32 = 48 + 10;
 const LATIN_LOWER_START: u32 = 97;
-const LATIN_LOWER_END: u32 = 97 + 26;
+const LATIN_LOWER_END: u32 = 97 + 25;
 const LATIN_UPPER_START: u32 = 65;
-const LATIN_UPPER_END: u32 = 65 + 26;
+const LATIN_UPPER_END: u32 = 65 + 25;
 const GREEK_LOWER_START: u32 = 0x3B1;
 const GREEK_LOWER_END: u32 = 0x3B1 + 25;
 const GREEK_UPPER_START: u32 = 0x391;
