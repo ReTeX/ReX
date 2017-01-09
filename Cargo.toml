@@ -8,6 +8,7 @@ phf="*"
 phf_macros="*"
 lazy_static="*"
 clap = "2.19.3"
+fnv = "1.0.3"
 
 [dev-dependencies]
 toml = "0.2.1"
