@@ -1,18 +1,13 @@
-#![allow(dead_code)]
+//#![allow(dead_code)]
 // use parser::nodes::{ ParseNode };
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
-use layout::Alignment;
 //use layout::boundingbox::Bounded;
-use dimensions::Pixels;
-use parser::parse;
-use layout::engine::layout;
+use dimensions::{Pixels, Float};
 use render::{Renderer, RenderSettings};
 use std::fmt::Write;
 use std::fs::File;
 use std::path::Path;
-
-const SVG_HEADER: &'static str = r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">"#;
 
 macro_rules! debug {
     ($fmt:expr, $($arg:tt)*) => (
@@ -53,63 +48,40 @@ impl<'a, W: Write> SVGRenderer<'a, W> {
             out:          output
         }
     }
-
-    pub fn render(&mut self, tex: &str) {
-        let mut parse = match parse(&tex) {
-                Ok(res)  => res,
-                Err(err) => {
-                    println!("Error -- {}", err);
-                    return;
-                }
-            };
-
-        let layout = layout(&mut parse, self.settings.layout_settings());
-
-        if self.settings.debug {
-            println!("Parse: {:?}\n", parse);
-            println!("Layout: {:?}", layout);
-        }
-
-        self.out.write_str(SVG_HEADER).expect("failed to write");
-
-        let width  = layout.width  + 2.0 * self.settings.horz_padding;   // Left and right padding
-        let height = layout.height + 2.0 * self.settings.vert_padding;   // Top and bot padding
-        let depth  = layout.depth;
-
-
-        self.header(width, height -depth);
-        
-        let width = Pixels(self.settings.horz_padding);
-        let height = Pixels(self.settings.vert_padding);
-        self.g(width, height, |r| {
-            r.render_hbox(
-                &layout.contents, layout.height,
-                layout.width, Alignment::Default
-            )
-        });
-        writeln!(self.out, "</g></svg>").unwrap();
-    }
     
-    fn header(&mut self, width: Pixels, height: Pixels) {
-        write!(self.out,
-    r#"<svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-    <style type="text/css">@font-face{{font-family:rex;src:url('{}');}}</style>
-    </defs>
-    <g font-family="rex" font-size="{:.1}px">"#,
-            width, height, self.settings.font_src, self.settings.font_size
-        ).expect("Failed to write to buffer!");
-    }
 }
 
 #[derive(Clone, Copy)]
 struct Cursor {
-    x: f64,
-    y: f64,
+    x: Float,
+    y: Float,
 }
 
-
 impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
+    fn settings(&self) -> &RenderSettings {
+        self.settings
+    }
+    
+    fn prepare(&mut self, width: Pixels, height: Pixels) {
+        write!(self.out,
+r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <style type="text/css">@font-face{{font-family:rex;src:url('{}');}}</style>
+    </defs>
+    <g font-family="rex" font-size="{:.1}px">"#,
+            *width, *height, self.settings.font_src, self.settings.font_size
+        ).expect("Failed to write to buffer!");
+    }
+    
+    fn finish(&mut self) {
+        writeln!(self.out, "\
+    </g>
+</svg>"
+        ).unwrap();
+    }
+    
     fn g<F>(&mut self, width: Pixels, height: Pixels, mut contents: F)
         where F: FnMut(&mut Self)
     {
@@ -136,9 +108,9 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
         }
     }
 
-    fn symbol(&mut self, symbol: u32, scale: f64) {
+    fn symbol(&mut self, symbol: u32, scale: Float) {
         use std::char;
-        if scale != 1f64 {
+        if scale != 1. {
             write!(self.out,
                 r#"<text transform="scale({:.2})">{}</text>"#,
                 scale,

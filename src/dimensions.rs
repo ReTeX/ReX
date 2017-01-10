@@ -4,17 +4,19 @@ use std::fmt;
 use std::fmt::{Display, Debug};
 use std::ops::{Add, AddAssign, Deref, Div, Mul, MulAssign, Sub, SubAssign};
 
+pub type Float = f64;
+
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Unit {
     // Internal font units
-    Font(f64),
+    Font(Float),
 
     // Font relative
-    Em(f64),
-    Ex(f64),
+    Em(Float),
+    Ex(Float),
 
     // Relative to the viewport
-    Px(f64),
+    Px(Float),
 }
 
 pub trait Unital: Copy + Clone + Default +
@@ -23,7 +25,7 @@ pub trait Unital: Copy + Clone + Default +
     Mul + MulAssign +
     PartialOrd + PartialEq +
     Sub + SubAssign +
-    Into<f64> { }
+    Into<Float> { }
 
 impl Unital for u32 {}
 impl Unital for i16 {}
@@ -123,11 +125,11 @@ implement_fontunit!{ i16, u32 }
 
 // At some point in time, everything will be in Pixels for computer display renderings.
 #[derive(Copy, Debug, Clone, Default, PartialOrd, PartialEq)]
-pub struct Pixels(pub f64);
+pub struct Pixels(pub Float);
 
 impl Deref for Pixels {
-    type Target = f64;
-    fn deref(&self) -> &f64 { &self.0 }
+    type Target = Float;
+    fn deref(&self) -> &Float { &self.0 }
 }
 
 impl Add for Pixels {
@@ -135,12 +137,12 @@ impl Add for Pixels {
     fn add(self, rhs: Pixels) -> Pixels { Pixels(self.0 + rhs.0) }
 }
 
-impl Add<f64> for Pixels {
+impl Add<Float> for Pixels {
     type Output = Pixels;
-    fn add(self, rhs: f64) -> Pixels { Pixels(self.0 + rhs) }
+    fn add(self, rhs: Float) -> Pixels { Pixels(self.0 + rhs) }
 }
 
-impl Add<Pixels> for f64 {
+impl Add<Pixels> for Float {
     type Output = Pixels;
     fn add(self, rhs: Pixels) -> Pixels { Pixels(self + rhs.0)}
 }
@@ -163,12 +165,12 @@ impl Mul for Pixels {
     fn mul(self, rhs: Pixels) -> Pixels { Pixels(self.0 * rhs.0) }
 }
 
-impl Mul<f64> for Pixels {
+impl Mul<Float> for Pixels {
     type Output = Pixels;
-    fn mul(self, rhs: f64) -> Pixels { Pixels(self.0 * rhs) }
+    fn mul(self, rhs: Float) -> Pixels { Pixels(self.0 * rhs) }
 }
 
-impl Mul<Pixels> for f64 {
+impl Mul<Pixels> for Float {
     type Output = Pixels;
     fn mul(self, rhs: Pixels) -> Pixels { Pixels(self * rhs.0) }
 }
@@ -177,9 +179,9 @@ impl MulAssign for Pixels {
     fn mul_assign(&mut self, rhs: Pixels) { *self = *self * rhs; }
 }
 
-impl Div<f64> for Pixels {
+impl Div<Float> for Pixels {
     type Output = Pixels;
-    fn div(self, rhs: f64) -> Pixels { Pixels(self.0 / rhs) }
+    fn div(self, rhs: Float) -> Pixels { Pixels(self.0 / rhs) }
 }
 
 impl Pixels {
