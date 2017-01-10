@@ -4,8 +4,8 @@ extern crate rex;
 extern crate json;
 extern crate test;
 
-use test::Bencher;
 use json::JsonValue;
+use rex::*;
 
 #[test]
 fn main() {
@@ -18,7 +18,11 @@ fn main() {
             let tex = case["latex"].as_str().expect("'tex' is not a string");
             
             let samples = test::bench::benchmark(|b| {
-                b.iter(move || rex::SVGRenderer::new().render(tex));
+                b.iter(move || {
+                    let mut output = String::new();
+                    SVGRenderer::new(&mut output, &RenderSettings::default())
+                    .render(tex)
+                });
             });
             println!("{:50} {}", title, test::fmt_bench_samples(&samples));
         }

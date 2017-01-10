@@ -65,10 +65,14 @@ impl fmt::Display for Categories {
 impl fmt::Display for Test {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         writeln!(f, "<h3>{}</h3>", self.description)?;
-        let svg = rex::SVGRenderer::new().font_size(32.0);
 
+        let mut output = String::new();
         for test in &self.tests {
-            let output = svg.render(test);
+            output.clear();
+            rex::SVGRenderer::new(
+                &mut output,
+                &rex::RenderSettings::default().font_size(32.0).font_src("rex-xits.otf")
+            ).render(test);
             writeln!(f, r#"<code class="language-latex">{}</code><p>{}</p>"#, test, output)?;
         }
 

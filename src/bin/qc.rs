@@ -2,6 +2,7 @@ extern crate clap;
 extern crate rex;
 
 use clap::{Arg, App};
+use rex::*;
 
 fn main() {
     let matches = App::new("ReX Debugging Utitlity")
@@ -38,11 +39,11 @@ fn main() {
 
     let out = matches.value_of("output")
         .unwrap_or("test.svg");
-
-    let svg = rex::SVGRenderer::new()
-        .font_src(font)
-        .font_size(96.0)
-        .debug(debug);
-
-    svg.render_to_file(out, &input);
+    
+    let settings = RenderSettings::default()
+    .font_size(96.0)
+    .font_src(font)
+    .debug(debug);
+    
+    svg::render_to_path(out, &settings, &input);
 }
