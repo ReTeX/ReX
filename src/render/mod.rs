@@ -1,12 +1,14 @@
-use dimensions::Pixels;
+use dimensions::{Pixels, Float};
 use layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
+use parser::parse;
+use layout::engine::layout;
 
 #[derive(Clone)]
 pub struct RenderSettings {
-    pub font_size:    f64,
+    pub font_size:    Float,
     pub font_src:     String,
-    pub horz_padding: f64,
-    pub vert_padding: f64,
+    pub horz_padding: Float,
+    pub vert_padding: Float,
     pub strict:       bool,
     pub style:        Style,
     pub debug:        bool
@@ -27,7 +29,7 @@ impl Default for RenderSettings {
 }
 
 impl RenderSettings {
-    pub fn font_size(self, size: f64) -> Self {
+    pub fn font_size(self, size: Float) -> Self {
         RenderSettings {
             font_size: size,
             ..self
@@ -41,14 +43,14 @@ impl RenderSettings {
         }
     }
     
-    pub fn horz_padding(self, size: f64) -> RenderSettings {
+    pub fn horz_padding(self, size: Float) -> RenderSettings {
         RenderSettings {
             horz_padding: size,
             ..self
         }
     }
 
-    pub fn vert_padding(self, size: f64) -> RenderSettings {
+    pub fn vert_padding(self, size: Float) -> RenderSettings {
         RenderSettings {
             vert_padding: size,
             ..self
@@ -77,13 +79,13 @@ impl RenderSettings {
     }
 }
 
-trait Renderer {
+pub trait Renderer {
     fn g<F>(&mut self, off_x: Pixels, off_y: Pixels, contents: F)
     where F: FnMut(&mut Self);
 
     fn bbox(&mut self, width: Pixels, height: Pixels);
 
-    fn symbol(&mut self, symbol: u32, scale: f64);
+    fn symbol(&mut self, symbol: u32, scale: Float);
     
     fn rule(&mut self, x: Pixels, y: Pixels, width: Pixels, height: Pixels);
 
@@ -173,6 +175,50 @@ trait Renderer {
 
             height += node.height;
         }
+    }
+    
+    fn prepare(&mut self, _width: Pixels, _height: Pixels) {}
+    fn finish(&mut self) {}
+    fn settings(&self) -> &RenderSettings;
+    
+    fn render(&mut self, tex: &str) {
+        let mut parse = match parse(&tex) {
+                Ok(res)  => res,
+                Err(err) => {
+                    println!("Error -- {}", err);
+                    return;
+                }
+            };
+
+        let layout = layout(&mut parse, self.settings().layout_settings());
+
+        if self.settings().debug {
+            println!("Parse: {:?}\n", parse);
+            println!("Layout: {:?}", layout);
+        }
+        
+        let padding = (
+            self.settings().horz_padding,
+            self.settings().vert_padding
+        );
+        
+        self.prepare(
+            // Left and right padding
+            layout.width  + 2.0 * padding.0,
+            // Top and bot padding
+            layout.height + 2.0 * padding.1 - layout.depth
+        );
+
+        let x = Pixels(padding.0);
+        let y = Pixels(padding.1);
+        self.g(x, y, |r| {
+            r.render_hbox(
+                &layout.contents, layout.height,
+                layout.width, Alignment::Default
+            )
+        });
+        
+        self.finish();
     }
 }
 

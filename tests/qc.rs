@@ -64,6 +64,7 @@ impl fmt::Display for Categories {
 
 impl fmt::Display for Test {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        use rex::Renderer;
         writeln!(f, "<h3>{}</h3>", self.description)?;
 
         let mut output = String::new();
