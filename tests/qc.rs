@@ -71,7 +71,7 @@ impl fmt::Display for Test {
             output.clear();
             rex::SVGRenderer::new(
                 &mut output,
-                &rex::RenderSettings::default().font_size(32.0)
+                &rex::RenderSettings::default().font_size(32.0).font_src("rex-xits.otf")
             ).render(test);
             writeln!(f, r#"<code class="language-latex">{}</code><p>{}</p>"#, test, output)?;
         }
