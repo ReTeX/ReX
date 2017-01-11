@@ -11,7 +11,7 @@ const GREEK_UPPER_OMEGA: u32 = 0x3A9;
 const GREEK_LOWER_ALPHA: u32 = 0x3B1;
 const GREEK_LOWER_OMEGA: u32 = 0x3C9;
 
-// TODO: Verify this -1
+// TODO: Verify the -1
 const GREEK_LOWER_OFFSET: u32 = 0x3B1 - 0x391 - 1;
 
 const DIGIT_0: u32 = 0x30;
@@ -57,61 +57,160 @@ const BOLD_PARTIAL_DIFFERENTIAL: u32 = 0x1D6DB;
 // Commands will map to BMP unicode values.
 // Characters in these BMP ranges will have their respective stlyes applied.
 
-pub fn style_symbol(unicode: u32, style: Style) {
-    match unicode {
-        LATIN_UPPER_A...LATIN_UPPER_Z =>
-            style_latin(unicode - LATIN_UPPER_A, style),
+// TODO: Investigate how this relates to mapping standard symbols
+//    to unicode + atomtype.  Construct a public API here.
 
-        LATIN_LOWER_A...LATIN_LOWER_Z =>
-            style_latin(unicode - LATIN_LOWER_A + LATIN_LOWER_OFFSET, style),
+impl Style {
+    pub fn style_symbol(unicode: u32, style: Style) {
+        match unicode {
+            LATIN_UPPER_A...LATIN_UPPER_Z =>
+                style_latin(unicode - LATIN_UPPER_A, style),
 
-        GREEK_UPPER_ALPHA...GREEK_UPPER_OMEGA =>
-            style_greek(unicode - GREEK_UPPER_ALPHA, style),
+            LATIN_LOWER_A...LATIN_LOWER_Z =>
+                style_latin(unicode - LATIN_LOWER_A + LATIN_LOWER_OFFSET, style),
 
-        GREEK_LOWER_ALPHA...GREEK_LOWER_OMEGA =>
-            style_greek(
-                unicode - GREEK_LOWER_ALPHA + GREEK_LOWER_OFFSET,
-                style),
+            GREEK_UPPER_ALPHA...GREEK_UPPER_OMEGA =>
+                style_greek(unicode - GREEK_UPPER_ALPHA, style),
 
-        DIGIT_0...DIGIT_9 =>
-            style_digit(unicode - DIGIT_0, style),
+            GREEK_LOWER_ALPHA...GREEK_LOWER_OMEGA =>
+                style_greek(
+                    unicode - GREEK_LOWER_ALPHA + GREEK_LOWER_OFFSET,
+                    style),
 
-        _ => style_exceptions(unicode, style),
+            DIGIT_0...DIGIT_9 =>
+                style_digit(unicode - DIGIT_0, style),
+
+            _ => style_exceptions(unicode, style),
+        }
+    }
+
+    pub fn style_latin(offset: u32, family: FAMILY, weight: WEIGHT) -> u32 {
+        // Determine the jump from the base case of BOLD
+        let base = match family {
+            Roman => {
+                match weight {
+                    Bold       => 0x1D400,
+                    BoldItalic => 0x1D468,
+                    _          => 0x1D434,
+                }
+            },
+
+            Script => {
+                match weight {
+                    Bold => 0x1D4D0,
+                    _    => 0x1D49C,
+                }
+            },
+
+            Fraktur => {
+                match weight {
+                    Bold => 0x1D56C,
+                    _    => 0x1D504,
+                }
+            },
+
+            SansSerif => {
+                match weight {
+                    Bold       => 0x1D5D4,
+                    Italic     => 0x1D608,
+                    BoldItalic => 0x1D63C,
+                }
+            },
+
+            Blackboard => 0x1D538,
+            Monospace=> 0x1D670,
+        };
+
+        base + offset
+    }
+
+    fn style_greek(offset: u32, family: Family, weight: Weight) -> u32 {
+        let base = match family {
+            SansSerif => {
+                match weight {
+                    Bold => 0x1D756,
+                    BoldItalic => 0x1D790,
+                    _ => 0x1D6E2, /* fallback to Roman */
+                }
+            },
+
+            /* fallback to Roman */
+            _ => {
+                match weight {
+                    Bold => 0x1D6A8,
+                    BoldItalic => 0x1D71C,
+                    _ => 0x1D6E2, /* fallback to Italic */
+                }
+            }
+        };
+
+        base + offset
+    }
+
+    fn style_digit(offset: u32, family: Family, weight: Weidht) -> u32 {
+        let base = match family {
+            Roman => {
+                match weight {
+                    Bold => 0x1D7CE,
+                    _    => 42, /* ASCII is normal */
+                }
+            }
+
+            SansSerif  => {
+                match weight {
+                    Bold => 0x1D7EC,
+                    _    => 0x1D7E2,
+                }
+            }
+
+            BlackBoard => 0x1D7D8,
+            Monospace => 0x1D7F6,
+
+            _ => 42, /* ASCII is fallback */
+        };
+
+        base + offset
+    }
+
+    fn style_other(offset: u32, family: Family, weight: Weight) -> u32 {
+        match offset {
+            VAR_UPPER_THEAT => {
+                match
+            }
+            const VAR_UPPER_THETA:      u32 = 0x3F4;
+            //const VAR_DIGAMMA:        u32 = 0x3DC;  ??
+            const VAR_EPSILON:          u32 = 0x3F5;
+            const VAR_THETA:            u32 = 0x3D1;
+            const VAR_KAPPA:            u32 = 0x3F0;
+            const VAR_PHI:              u32 = 0x3D5;
+            const VAR_RHO:              u32 = 0x3F1;
+            const VAR_PI:               u32 = 0x3D6;
+            //const DIGAMMA:            u32 = 0x3DD; ??
+            const PARTIAL_DIFFERENTIAL: u32 = 0x2202;
+            const NABLA:                u32 = 0x2207;
         }
     }
 }
 
-fn latin_offset(FAMILY, WEIGHT) -> u32 {
-    // Determine the jump from the base case of BOLD
-    let jump = match (FAMILY, WEIGHT) {
-        (BOLD,       ROMAN) =>   0,
-        (ITALIC,     ROMAN) =>   1,
-        (BOLD_ITALC, ROMAN) =>   2,
-        (NONE,       ROMAN) =>   1,
-        (BOLD,       SCRIPT) =>  4,
-        (_,          SCRIPT) =>  3,
-        (BOLD,       FRAKTUR) => 7,
-        (_,          FRAKTUR) => 5,
-        (_,          BLACKBOARD) => 6,
-        (NONE, SANS_SERIF) => 8,
-        (BOLD, SANS_SERIF) => 9,
-        (ITALIC, SANS_SERIF) => 10,
-        (BOLD_ITALIC, SANS_SERIF) => 11
-        (_, MONOSPACE) => 12,
-    };
+struct Style {
+    family: Family,
+    weight: Weight,
 }
 
 enum Family {
-    BoldRoman,
-    ItalicRoman,
-    BoldItalicRoman,
-    Script,
-    BoldScript,
-    Frakture
+    Math,
+    Text,
     Roman,
     Script,
     Fraktur,
     Blackboard,
     SansSerif,
     Monospace,
+}
+
+enum Weight {
+    None,
+    Bold,
+    Italic,
+    BoldItalic,
 }
