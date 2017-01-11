@@ -57,6 +57,9 @@ const BOLD_PARTIAL_DIFFERENTIAL: u32 = 0x1D6DB;
 // Commands will map to BMP unicode values.
 // Characters in these BMP ranges will have their respective stlyes applied.
 
+// TODO: Investigate how this relates to mapping standard symbols
+//    to unicode + atomtype.  Construct a public API here.
+
 pub fn style_symbol(unicode: u32, style: Style) {
     match unicode {
         LATIN_UPPER_A...LATIN_UPPER_Z =>
@@ -81,37 +84,84 @@ pub fn style_symbol(unicode: u32, style: Style) {
     }
 }
 
-fn latin_offset(FAMILY, WEIGHT) -> u32 {
+fn latin_offset(offset: u32, family: FAMILY, weight: WEIGHT) -> u32 {
     // Determine the jump from the base case of BOLD
-    let jump = match (FAMILY, WEIGHT) {
-        (BOLD,       ROMAN) =>   0,
-        (ITALIC,     ROMAN) =>   1,
-        (BOLD_ITALC, ROMAN) =>   2,
-        (NONE,       ROMAN) =>   1,
-        (BOLD,       SCRIPT) =>  4,
-        (_,          SCRIPT) =>  3,
-        (BOLD,       FRAKTUR) => 7,
-        (_,          FRAKTUR) => 5,
-        (_,          BLACKBOARD) => 6,
-        (NONE, SANS_SERIF) => 8,
-        (BOLD, SANS_SERIF) => 9,
-        (ITALIC, SANS_SERIF) => 10,
-        (BOLD_ITALIC, SANS_SERIF) => 11
-        (_, MONOSPACE) => 12,
+    let base = match family {
+        Roman => {
+            match weight {
+                Bold       => 0x1D400,
+                Italic     => 0x1D434,
+                BoldItalic => 0x1D468,
+            }
+        },
+
+        Script => {
+            match weight {
+                Bold => 0x1D4D0,
+                _    => 0x1D49C,
+            }
+        },
+
+        Fraktur => {
+            match weight {
+                Bold => 0x1D56C,
+                _    => 0x1D504,
+            }
+        },
+
+        Blackboard => 0x1D538,
+
+        SansSerif => {
+            match weight {
+                Bold       => 0x1D5D4,
+                Italic     => 0x1D608,
+                BoldItalic => 0x1D63C,
+            }
+        },
+
+        Monospace=> 0x1D670,
     };
+
+    base + offset
+}
+
+fn style_greek(offset: u32, family: Family, weight: Weight) -> u32 {
+    let base = match family {
+        SansSerif => {
+            match weight {
+                Bold => 0x1D756,
+                BoldItalic => 0x1D790,
+                _ => 0x1D6E2, /* fallback to Roman */
+            }
+        },
+
+        /* fallback to Roman */
+        _ => {
+            match weight {
+                Bold => 0x1D6A8,
+                Italic => 0x1D6E2,
+                BoldItalic => 0x1D71C,
+            }
+        }
+    };
+
+    base + offset
 }
 
 enum Family {
-    BoldRoman,
-    ItalicRoman,
-    BoldItalicRoman,
-    Script,
-    BoldScript,
-    Frakture
-    Roman,
+    Math,
+    Text,
+    Romand,
     Script,
     Fraktur,
     Blackboard,
     SansSerif,
     Monospace,
+}
+
+enum Weight {
+    None,
+    Bold,
+    Italic,
+    BoldItalic,
 }
