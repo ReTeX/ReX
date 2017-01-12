@@ -192,9 +192,68 @@ impl Style {
     }
 }
 
-struct Style {
-    family: Family,
-    weight: Weight,
+fn latin_offset(offset: u32, family: FAMILY, weight: WEIGHT) -> u32 {
+    // Determine the jump from the base case of BOLD
+    let base = match family {
+        Roman => {
+            match weight {
+                Bold       => 0x1D400,
+                Italic     => 0x1D434,
+                BoldItalic => 0x1D468,
+            }
+        },
+
+        Script => {
+            match weight {
+                Bold => 0x1D4D0,
+                _    => 0x1D49C,
+            }
+        },
+
+        Fraktur => {
+            match weight {
+                Bold => 0x1D56C,
+                _    => 0x1D504,
+            }
+        },
+
+        Blackboard => 0x1D538,
+
+        SansSerif => {
+            match weight {
+                Bold       => 0x1D5D4,
+                Italic     => 0x1D608,
+                BoldItalic => 0x1D63C,
+            }
+        },
+
+        Monospace=> 0x1D670,
+    };
+
+    base + offset
+}
+
+fn style_greek(offset: u32, family: Family, weight: Weight) -> u32 {
+    let base = match family {
+        SansSerif => {
+            match weight {
+                Bold => 0x1D756,
+                BoldItalic => 0x1D790,
+                _ => 0x1D6E2, /* fallback to Roman */
+            }
+        },
+
+        /* fallback to Roman */
+        _ => {
+            match weight {
+                Bold => 0x1D6A8,
+                Italic => 0x1D6E2,
+                BoldItalic => 0x1D71C,
+            }
+        }
+    };
+
+    base + offset
 }
 
 enum Family {
