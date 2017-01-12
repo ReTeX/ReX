@@ -25,4 +25,4 @@ pub mod render;
 mod font;
 mod functions;
 
-pub use render::SVGRenderer;
+pub use render::*;

@@ -6,6 +6,7 @@ use std::io::Read;
 use std::io::Write;
 
 use toml::Value;
+use rex::*;
 
 macro_rules! expect_string {
     ($value:expr) => ({
@@ -43,8 +44,7 @@ fn generate_examples() {
         };
 
     let mut readme = String::new();
-
-    let svg = rex::SVGRenderer::new().font_size(96.0).debug(false);
+    let settings = RenderSettings::default().font_size(96.0).debug(false);
     for example in examples {
         if let &Value::Table(ref table) = example {
             let name = expect_string!(table["name"]);
@@ -57,7 +57,7 @@ fn generate_examples() {
             readme += &format!("`{}`\n\n", tex);
             readme += &format!("![Example]({})\n\n", filename_png);
 
-            svg.render_to_file(filename, &tex);
+            svg::render_to_path(filename, &settings, &tex);
         }
     }
 
