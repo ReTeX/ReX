@@ -1,5 +1,4 @@
 use font::{ Glyph, BBox };
-use fnv::FnvHashMap;
 
 #[allow(dead_code)]
 pub static GLYPHS: [(u32, Glyph); 4517] =

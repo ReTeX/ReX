@@ -2,7 +2,7 @@
 use super::glyph_metrics;
 use test::Bencher;
 
-pub static unicodes: [u32; 4525] = [
+pub static UNICODES: [u32; 4525] = [
     0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9,
     0xa, 0xb, 0xc, 0xd, 0xe, 0xf, 0x10, 0x11, 0x12, 0x13,
     0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d,
@@ -460,7 +460,7 @@ pub static unicodes: [u32; 4525] = [
 #[bench]
 fn bench_glyph_metrics_all(b: &mut Bencher) {
     b.iter(|| {
-        for &code in unicodes.iter() {
+        for &code in UNICODES.iter() {
             let x = glyph_metrics(code);
         }
     });
@@ -469,7 +469,7 @@ fn bench_glyph_metrics_all(b: &mut Bencher) {
 #[bench]
 fn bench_glyph_metrics_20(b: &mut Bencher) {
     b.iter(|| {
-        for &code in unicodes[2000..2020].iter() {
+        for &code in UNICODES[2000..2020].iter() {
             let x = glyph_metrics(code);
         }
     })
