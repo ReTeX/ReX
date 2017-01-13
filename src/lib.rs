@@ -1,11 +1,13 @@
-#![feature(try_from)]
 #![feature(plugin)]
 #![plugin(phf_macros)]
 
+#![feature(test)]
+extern crate test;
 // #[macro_use]
 // extern crate nom;
 // extern crate regex;
 extern crate phf;
+extern crate fnv;
 
 #[macro_use]
 mod macros;

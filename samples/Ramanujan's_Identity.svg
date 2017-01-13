@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1411.82" height="279.49" xmlns="http://www.w3.org/2000/svg">
+<svg width="1417.29" height="279.49" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="96.0px">
-<text transform="translate(13.65, 113.77)">1</text>
-<rect x="13.60" y ="142.28" width="48.10" height="6.34" fill="#000"/>
-<text transform="translate(13.60, 236.65)">π</text>
-<text transform="translate(95.30, 169.45)">=</text>
-<text transform="translate(198.11, 103.69)">2</text>
-<text transform="translate(246.11, 98.41)">√</text>
-<rect x="335.20" y ="5.00" width="48.00" height="6.34" fill="#000"/>
-<text transform="translate(335.20, 103.69)">2</text>
-<rect x="194.66" y ="142.28" width="192.00" height="6.34" fill="#000"/>
-<text transform="translate(194.66, 236.65)">9</text>
-<text transform="translate(242.66, 236.65)">8</text>
-<text transform="translate(290.66, 236.65)">0</text>
-<text transform="translate(338.66, 236.65)">1</text>
-<text transform="translate(436.05, 47.05) scale(0.68)">∞</text>
-<text transform="translate(404.26, 219.75)"></text>
-<text transform="translate(409.90, 273.58) scale(0.68)">𝑘</text>
-<text transform="translate(445.28, 273.58) scale(0.68)">=</text>
-<text transform="translate(490.00, 273.58) scale(0.68)">0</text>
-<text transform="translate(545.89, 106.28)">(</text>
-<text transform="translate(577.86, 106.28)">4</text>
-<text transform="translate(625.86, 106.28)">𝑘</text>
-<text transform="translate(677.89, 106.28)">)</text>
-<text transform="translate(709.86, 106.28)">!</text>
-<text transform="translate(741.82, 106.28)">(</text>
-<text transform="translate(773.79, 106.28)">1</text>
-<text transform="translate(821.79, 106.28)">1</text>
-<text transform="translate(869.79, 106.28)">0</text>
-<text transform="translate(917.79, 106.28)">3</text>
-<text transform="translate(987.13, 106.28)">+</text>
-<text transform="translate(1074.22, 106.28)">2</text>
-<text transform="translate(1122.22, 106.28)">6</text>
-<text transform="translate(1170.22, 106.28)">3</text>
-<text transform="translate(1218.22, 106.28)">9</text>
-<text transform="translate(1266.22, 106.28)">0</text>
-<text transform="translate(1314.22, 106.28)">𝑘</text>
-<text transform="translate(1366.25, 106.28)">)</text>
-<rect x="545.89" y ="142.28" width="852.33" height="6.34" fill="#000"/>
-<text transform="translate(775.75, 241.42)">(</text>
-<text transform="translate(807.72, 241.42)">𝑘</text>
-<text transform="translate(859.75, 241.42)">!</text>
-<text transform="translate(891.72, 241.42)">)</text>
-<text transform="translate(923.69, 212.52) scale(0.68)">4</text>
-<text transform="translate(956.33, 241.42)">3</text>
-<text transform="translate(1004.33, 241.42)">9</text>
-<text transform="translate(1052.33, 241.42)">6</text>
-<text transform="translate(1100.33, 211.75) scale(0.68)">4</text>
-<text transform="translate(1132.97, 211.75) scale(0.68)">𝑘</text>
+<text transform="translate(16.38, 113.77)">1</text>
+<rect x="13.60" y ="142.28" width="53.57" height="6.34" fill="#000"/>
+<text transform="translate(13.60, 236.65)">𝜋</text>
+<text transform="translate(100.77, 169.45)">=</text>
+<text transform="translate(203.58, 103.69)">2</text>
+<text transform="translate(251.58, 98.41)">√</text>
+<rect x="340.67" y ="5.00" width="48.00" height="6.34" fill="#000"/>
+<text transform="translate(340.67, 103.69)">2</text>
+<rect x="200.13" y ="142.28" width="192.00" height="6.34" fill="#000"/>
+<text transform="translate(200.13, 236.65)">9</text>
+<text transform="translate(248.13, 236.65)">8</text>
+<text transform="translate(296.13, 236.65)">0</text>
+<text transform="translate(344.13, 236.65)">1</text>
+<text transform="translate(441.52, 47.05) scale(0.68)">∞</text>
+<text transform="translate(409.73, 219.75)"></text>
+<text transform="translate(415.37, 273.58) scale(0.68)">𝑘</text>
+<text transform="translate(450.76, 273.58) scale(0.68)">=</text>
+<text transform="translate(495.47, 273.58) scale(0.68)">0</text>
+<text transform="translate(551.36, 106.28)">(</text>
+<text transform="translate(583.33, 106.28)">4</text>
+<text transform="translate(631.33, 106.28)">𝑘</text>
+<text transform="translate(683.36, 106.28)">)</text>
+<text transform="translate(715.33, 106.28)">!</text>
+<text transform="translate(747.30, 106.28)">(</text>
+<text transform="translate(779.26, 106.28)">1</text>
+<text transform="translate(827.26, 106.28)">1</text>
+<text transform="translate(875.26, 106.28)">0</text>
+<text transform="translate(923.26, 106.28)">3</text>
+<text transform="translate(992.60, 106.28)">+</text>
+<text transform="translate(1079.69, 106.28)">2</text>
+<text transform="translate(1127.69, 106.28)">6</text>
+<text transform="translate(1175.69, 106.28)">3</text>
+<text transform="translate(1223.69, 106.28)">9</text>
+<text transform="translate(1271.69, 106.28)">0</text>
+<text transform="translate(1319.69, 106.28)">𝑘</text>
+<text transform="translate(1371.72, 106.28)">)</text>
+<rect x="551.36" y ="142.28" width="852.33" height="6.34" fill="#000"/>
+<text transform="translate(781.23, 241.42)">(</text>
+<text transform="translate(813.19, 241.42)">𝑘</text>
+<text transform="translate(865.23, 241.42)">!</text>
+<text transform="translate(897.19, 241.42)">)</text>
+<text transform="translate(929.16, 212.52) scale(0.68)">4</text>
+<text transform="translate(961.80, 241.42)">3</text>
+<text transform="translate(1009.80, 241.42)">9</text>
+<text transform="translate(1057.80, 241.42)">6</text>
+<text transform="translate(1105.80, 211.75) scale(0.68)">4</text>
+<text transform="translate(1138.44, 211.75) scale(0.68)">𝑘</text>
 </g>
 </svg>
 

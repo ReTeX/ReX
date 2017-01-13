@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1448.37" height="391.73" xmlns="http://www.w3.org/2000/svg">
+<svg width="1463.08" height="391.73" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="96.0px">
-<text transform="translate(354.21, 87.53)">1</text>
-<rect x="13.60" y ="116.04" width="729.23" height="6.34" fill="#000"/>
+<text transform="translate(360.20, 87.53)">1</text>
+<rect x="13.60" y ="116.04" width="741.20" height="6.34" fill="#000"/>
 <text transform="translate(13.60, 339.72)"></text>
-<text transform="translate(85.60, 297.82)"></text>
-<rect x="187.07" y ="148.83" width="196.90" height="6.34" fill="#000"/>
-<text transform="translate(187.07, 283.47)">φ</text>
-<text transform="translate(246.88, 278.28)">√</text>
-<rect x="335.97" y ="184.87" width="48.00" height="6.34" fill="#000"/>
-<text transform="translate(335.97, 283.47)">5</text>
-<text transform="translate(405.30, 283.47)">−</text>
-<text transform="translate(492.39, 283.47)">φ</text>
-<text transform="translate(552.20, 339.72)"></text>
-<text transform="translate(640.20, 283.47)">𝑒</text>
-<text transform="translate(684.52, 208.12) scale(0.50)">2</text>
-<rect x="684.52" y ="220.98" width="24.00" height="4.31" fill="#000"/>
-<text transform="translate(684.52, 270.79) scale(0.50)">5</text>
-<text transform="translate(710.12, 239.46) scale(0.68)">π</text>
-<text transform="translate(776.43, 143.21)">=</text>
-<text transform="translate(874.19, 143.21)">1</text>
-<text transform="translate(943.52, 143.21)">+</text>
-<text transform="translate(1157.10, 87.53)">𝑒</text>
-<text transform="translate(1199.82, 49.13) scale(0.68)">−</text>
-<text transform="translate(1244.54, 49.13) scale(0.68)">2</text>
-<text transform="translate(1277.18, 49.13) scale(0.68)">π</text>
-<rect x="1032.21" y ="116.04" width="402.55" height="6.34" fill="#000"/>
-<text transform="translate(1032.21, 237.87)">1</text>
-<text transform="translate(1101.55, 237.87)">+</text>
-<text transform="translate(1256.71, 191.79) scale(0.68)">𝑒</text>
-<text transform="translate(1285.76, 173.83) scale(0.50)">−</text>
-<text transform="translate(1318.64, 173.83) scale(0.50)">4</text>
-<text transform="translate(1342.64, 173.83) scale(0.50)">π</text>
-<rect x="1190.24" y ="210.70" width="242.92" height="6.34" fill="#000"/>
-<text transform="translate(1190.24, 300.74) scale(0.68)">1</text>
-<text transform="translate(1222.88, 300.74) scale(0.68)">+</text>
-<text transform="translate(1299.24, 269.40) scale(0.50)">𝑒</text>
-<text transform="translate(1320.60, 256.20) scale(0.50)">−</text>
-<text transform="translate(1353.48, 256.20) scale(0.50)">6</text>
-<text transform="translate(1377.48, 256.20) scale(0.50)">π</text>
-<rect x="1269.20" y ="282.26" width="162.37" height="4.31" fill="#000"/>
-<text transform="translate(1269.20, 359.57) scale(0.50)">1</text>
-<text transform="translate(1293.20, 359.57) scale(0.50)">+</text>
-<text transform="translate(1327.68, 336.53) scale(0.50)">𝑒</text>
-<text transform="translate(1349.04, 323.33) scale(0.50)">−</text>
-<text transform="translate(1381.92, 323.33) scale(0.50)">8</text>
-<text transform="translate(1405.92, 323.33) scale(0.50)">π</text>
-<rect x="1327.68" y ="345.98" width="102.29" height="3.17" fill="#000"/>
-<text transform="translate(1328.16, 384.77) scale(0.50)">1</text>
-<text transform="translate(1352.16, 384.77) scale(0.50)">+</text>
-<text transform="translate(1385.04, 384.77) scale(0.50)">⋯</text>
+<text transform="translate(85.60, 297.24)"></text>
+<rect x="187.07" y ="148.25" width="201.02" height="6.34" fill="#000"/>
+<text transform="translate(187.07, 283.47)">𝜑</text>
+<text transform="translate(251.01, 278.28)">√</text>
+<rect x="340.10" y ="184.87" width="48.00" height="6.34" fill="#000"/>
+<text transform="translate(340.10, 283.47)">5</text>
+<text transform="translate(409.43, 283.47)">−</text>
+<text transform="translate(496.52, 283.47)">𝜑</text>
+<text transform="translate(560.46, 339.72)"></text>
+<text transform="translate(648.46, 283.47)">𝑒</text>
+<text transform="translate(692.78, 208.12) scale(0.50)">2</text>
+<rect x="692.78" y ="220.98" width="24.00" height="4.31" fill="#000"/>
+<text transform="translate(692.78, 270.79) scale(0.50)">5</text>
+<text transform="translate(718.38, 239.46) scale(0.68)">𝜋</text>
+<text transform="translate(788.40, 143.21)">=</text>
+<text transform="translate(886.16, 143.21)">1</text>
+<text transform="translate(955.50, 143.21)">+</text>
+<text transform="translate(1168.58, 87.53)">𝑒</text>
+<text transform="translate(1211.30, 49.13) scale(0.68)">−</text>
+<text transform="translate(1256.02, 49.13) scale(0.68)">2</text>
+<text transform="translate(1288.66, 49.13) scale(0.68)">𝜋</text>
+<rect x="1044.19" y ="116.04" width="405.29" height="6.34" fill="#000"/>
+<text transform="translate(1044.19, 237.87)">1</text>
+<text transform="translate(1113.52, 237.87)">+</text>
+<text transform="translate(1268.69, 191.79) scale(0.68)">𝑒</text>
+<text transform="translate(1297.74, 173.83) scale(0.50)">−</text>
+<text transform="translate(1330.62, 173.83) scale(0.50)">4</text>
+<text transform="translate(1354.62, 173.83) scale(0.50)">𝜋</text>
+<rect x="1202.22" y ="210.70" width="245.66" height="6.34" fill="#000"/>
+<text transform="translate(1202.22, 300.74) scale(0.68)">1</text>
+<text transform="translate(1234.86, 300.74) scale(0.68)">+</text>
+<text transform="translate(1311.22, 269.40) scale(0.50)">𝑒</text>
+<text transform="translate(1332.58, 256.20) scale(0.50)">−</text>
+<text transform="translate(1365.46, 256.20) scale(0.50)">6</text>
+<text transform="translate(1389.46, 256.20) scale(0.50)">𝜋</text>
+<rect x="1281.18" y ="282.26" width="165.10" height="4.31" fill="#000"/>
+<text transform="translate(1281.18, 359.57) scale(0.50)">1</text>
+<text transform="translate(1305.18, 359.57) scale(0.50)">+</text>
+<text transform="translate(1339.66, 336.53) scale(0.50)">𝑒</text>
+<text transform="translate(1361.02, 323.33) scale(0.50)">−</text>
+<text transform="translate(1393.90, 323.33) scale(0.50)">8</text>
+<text transform="translate(1417.90, 323.33) scale(0.50)">𝜋</text>
+<rect x="1339.66" y ="345.98" width="105.02" height="3.17" fill="#000"/>
+<text transform="translate(1341.50, 384.77) scale(0.50)">1</text>
+<text transform="translate(1365.50, 384.77) scale(0.50)">+</text>
+<text transform="translate(1398.38, 384.77) scale(0.50)">⋯</text>
 </g>
 </svg>
 

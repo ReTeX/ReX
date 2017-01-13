@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="863.38" height="305.20" xmlns="http://www.w3.org/2000/svg">
+<svg width="867.22" height="305.20" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 194.79)">σ</text>
-<text transform="translate(96.61, 194.79)">=</text>
-<text transform="translate(194.37, 251.24)"></text>
-<rect x="297.66" y ="5.00" width="553.72" height="6.34" fill="#000"/>
-<text transform="translate(316.11, 139.11)">1</text>
-<rect x="299.26" y ="167.62" width="81.70" height="6.34" fill="#000"/>
-<text transform="translate(299.26, 261.99)">𝑁</text>
-<text transform="translate(432.80, 72.39) scale(0.68)">𝑁</text>
-<text transform="translate(398.56, 245.09)"></text>
-<text transform="translate(411.75, 298.92) scale(0.68)">𝑖</text>
-<text transform="translate(432.05, 298.92) scale(0.68)">=</text>
-<text transform="translate(476.77, 298.92) scale(0.68)">1</text>
-<text transform="translate(522.59, 194.79)">(</text>
-<text transform="translate(554.56, 194.79)">𝑥</text>
-<text transform="translate(607.36, 218.79) scale(0.68)">𝑖</text>
-<text transform="translate(649.00, 194.79)">−</text>
-<text transform="translate(736.09, 194.79)">μ</text>
-<text transform="translate(786.78, 194.79)">)</text>
-<text transform="translate(818.74, 165.89) scale(0.68)">2</text>
+<text transform="translate(12.00, 194.79)">𝜎</text>
+<text transform="translate(95.55, 194.79)">=</text>
+<text transform="translate(193.31, 251.24)"></text>
+<rect x="296.61" y ="5.00" width="558.62" height="6.34" fill="#000"/>
+<text transform="translate(315.06, 139.11)">1</text>
+<rect x="298.21" y ="167.62" width="81.70" height="6.34" fill="#000"/>
+<text transform="translate(298.21, 261.99)">𝑁</text>
+<text transform="translate(431.74, 72.39) scale(0.68)">𝑁</text>
+<text transform="translate(397.50, 245.09)"></text>
+<text transform="translate(410.69, 298.92) scale(0.68)">𝑖</text>
+<text transform="translate(430.99, 298.92) scale(0.68)">=</text>
+<text transform="translate(475.71, 298.92) scale(0.68)">1</text>
+<text transform="translate(521.54, 194.79)">(</text>
+<text transform="translate(553.50, 194.79)">𝑥</text>
+<text transform="translate(606.30, 218.79) scale(0.68)">𝑖</text>
+<text transform="translate(647.94, 194.79)">−</text>
+<text transform="translate(735.03, 194.79)">𝜇</text>
+<text transform="translate(790.62, 194.79)">)</text>
+<text transform="translate(822.58, 165.89) scale(0.68)">2</text>
 </g>
 </svg>
 

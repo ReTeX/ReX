@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="987.62" height="232.62" xmlns="http://www.w3.org/2000/svg">
+<svg width="992.36" height="232.62" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
@@ -17,16 +17,16 @@
 <text transform="translate(569.95, 116.98)">̂</text>
 <text transform="translate(497.19, 137.91)">𝑓</text>
 <text transform="translate(569.95, 137.91)">(</text>
-<text transform="translate(601.92, 137.91)">ξ</text>
-<text transform="translate(644.26, 137.91)">)</text>
-<text transform="translate(676.23, 137.91)">𝑒</text>
-<text transform="translate(718.95, 99.51) scale(0.68)">2</text>
-<text transform="translate(751.59, 99.51) scale(0.68)">π</text>
-<text transform="translate(784.29, 99.51) scale(0.68)">𝑖</text>
-<text transform="translate(804.59, 99.51) scale(0.68)">ξ</text>
-<text transform="translate(833.38, 99.51) scale(0.68)">𝑥</text>
-<text transform="translate(885.29, 137.91)">d</text>
-<text transform="translate(933.29, 137.91)">ξ</text>
+<text transform="translate(601.92, 137.91)">𝜉</text>
+<text transform="translate(643.49, 137.91)">)</text>
+<text transform="translate(675.46, 137.91)">𝑒</text>
+<text transform="translate(718.18, 99.51) scale(0.68)">2</text>
+<text transform="translate(750.82, 99.51) scale(0.68)">𝜋</text>
+<text transform="translate(787.24, 99.51) scale(0.68)">𝑖</text>
+<text transform="translate(807.55, 99.51) scale(0.68)">𝜉</text>
+<text transform="translate(835.81, 99.51) scale(0.68)">𝑥</text>
+<text transform="translate(887.72, 137.91)">𝑑</text>
+<text transform="translate(938.79, 137.91)">𝜉</text>
 </g>
 </svg>
 

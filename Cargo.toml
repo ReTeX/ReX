@@ -10,6 +10,7 @@ authors = [
 phf="*"
 phf_macros="*"
 lazy_static="*"
+fnv = "1.0.3"
 
 [dev-dependencies]
 toml = "0.2.1"
