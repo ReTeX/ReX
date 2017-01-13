@@ -16,7 +16,7 @@ const GREEK: &'static str =
      \\Lambda\\Mu\\Nu\\Pi\\Rho\\Sigma\\Tau\\Upsilon\\Phi\\Chi\\Psi\\Omega";
 const other: &'static str = "\\nabla\\partial";
 
-static styles: [&'static str; 13] = [
+static styles: [&'static str; 14] = [
     r"\mathrm",
     r"\mathbf",
     r"\mathit",
@@ -30,7 +30,7 @@ static styles: [&'static str; 13] = [
     r"\mathbf{\mathsf",
     r"\mathit{\mathsf",
     r"\mathbf{\mathit{\mathsf",
-   // r"\mathtt",
+    r"\mathtt",
 ];
 
 const HEADER: &'static str =
@@ -48,7 +48,7 @@ r##"<!DOCTYPE html>
 
 const END: &'static str = r"</body></html>";
 
-#[test]
+//#[test]
 fn font_styles_render() {
     let svg  = rex::SVGRenderer::new().font_src("rex-xits.woff2").font_size(32.0);
     let mut file = File::create("tests/out/font_styles.html")
