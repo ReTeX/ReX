@@ -80,19 +80,21 @@ impl RenderSettings {
 }
 
 pub trait Renderer {
-    fn g<F>(&mut self, off_x: Pixels, off_y: Pixels, contents: F)
-    where F: FnMut(&mut Self);
+    type Out;
 
-    fn bbox(&mut self, width: Pixels, height: Pixels);
+    fn g<F>(&self, out: &mut Self::Out, off_x: Pixels, off_y: Pixels, contents: F)
+    where F: FnMut(&Self, &mut Self::Out);
 
-    fn symbol(&mut self, symbol: u32, scale: Float);
+    fn bbox(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
+
+    fn symbol(&self, out: &mut Self::Out, symbol: u32, scale: Float);
     
-    fn rule(&mut self, x: Pixels, y: Pixels, width: Pixels, height: Pixels);
+    fn rule(&self, out: &mut Self::Out, x: Pixels, y: Pixels, width: Pixels, height: Pixels);
 
-    fn color<F>(&mut self, color: &str, contents: F)
-    where F: FnMut(&mut Self);
+    fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
+    where F: FnMut(&Self, &mut Self::Out);
     
-    fn render_hbox(&mut self,
+    fn render_hbox(&self, out: &mut Self::Out,
         nodes: &[LayoutNode],
         height: Pixels,
         nodes_width: Pixels,
@@ -104,33 +106,37 @@ pub trait Renderer {
             width += (nodes_width - w)/2.0;
         }
 
-        self.bbox(nodes_width, height);
+        self.bbox(out, nodes_width, height);
 
         for node in nodes {
             match node.node {
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(width, height, |r| r.symbol(gly.unicode, gly.scale)),
+                    self.g(out, width, height,
+                        |r, out| r.symbol(out, gly.unicode, gly.scale)
+                    ),
 
                 LayoutVariant::Rule =>
-                    self.rule(
+                    self.rule(out,
                         width, height - node.height,
                         node.width, node.height
                     ),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(width, height - node.height, |r| r.render_vbox(&vbox.contents)),
+                    self.g(out, width, height - node.height,
+                        |r, out| r.render_vbox(out, &vbox.contents)
+                    ),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(width, height - node.height, |r| {
-                        r.render_hbox(
+                    self.g(out, width, height - node.height, |r, out| {
+                        r.render_hbox(out,
                             &hbox.contents, node.height,
                             node.width, hbox.alignment
                         )
                     }),
 
                 LayoutVariant::Color(ref clr) =>
-                    self.color(&clr.color, |r| {
-                        r.render_hbox(&clr.inner,
+                    self.color(out, &clr.color, |r, out| {
+                        r.render_hbox(out, &clr.inner,
                             node.height, node.width, Alignment::Default
                         );
                     }),
@@ -142,29 +148,29 @@ pub trait Renderer {
         }
     }
 
-    fn render_vbox(&mut self, nodes: &[LayoutNode]) {
+    fn render_vbox(&self, out: &mut Self::Out, nodes: &[LayoutNode]) {
         let mut height = Pixels(0.0);
         let width      = Pixels(0.0);
 
         for node in nodes {
             match node.node {
                 LayoutVariant::Rule =>
-                    self.rule(width, height, node.width, node.height),
+                    self.rule(out, width, height, node.width, node.height),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(width, height, |r| {
-                        r.render_hbox(
+                    self.g(out, width, height, |r, out| {
+                        r.render_hbox(out,
                             &hbox.contents, node.height,
                             node.width, hbox.alignment
                         )
                     }),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(width, height, |r| r.render_vbox(&vbox.contents)),
+                    self.g(out, width, height, |r, out| r.render_vbox(out, &vbox.contents)),
 
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(width, height + node.height, |r| {
-                        r.symbol(gly.unicode, gly.scale)
+                    self.g(out, width, height + node.height, |r, out| {
+                        r.symbol(out, gly.unicode, gly.scale)
                     }),
 
                 LayoutVariant::Color(_) =>
@@ -177,11 +183,11 @@ pub trait Renderer {
         }
     }
     
-    fn prepare(&mut self, _width: Pixels, _height: Pixels) {}
-    fn finish(&mut self) {}
+    fn prepare(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
+    fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
     
-    fn render(&mut self, tex: &str) {
+    fn render_to(&self, out: &mut Self::Out, tex: &str) {
         let mut parse = match parse(&tex) {
                 Ok(res)  => res,
                 Err(err) => {
@@ -202,7 +208,7 @@ pub trait Renderer {
             self.settings().vert_padding
         );
         
-        self.prepare(
+        self.prepare(out,
             // Left and right padding
             layout.width  + 2.0 * padding.0,
             // Top and bot padding
@@ -211,14 +217,20 @@ pub trait Renderer {
 
         let x = Pixels(padding.0);
         let y = Pixels(padding.1);
-        self.g(x, y, |r| {
-            r.render_hbox(
+        self.g(out, x, y, |r, out| {
+            r.render_hbox(out,
                 &layout.contents, layout.height,
                 layout.width, Alignment::Default
             )
         });
         
-        self.finish();
+        self.finish(out);
+    }
+    
+    fn render(&self, tex: &str) -> Self::Out where Self::Out: Default {
+        let mut out = Self::Out::default();
+        self.render_to(&mut out, tex);
+        out
     }
 }
 

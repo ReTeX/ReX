@@ -67,11 +67,8 @@ impl fmt::Display for Test {
         use rex::Renderer;
         writeln!(f, "<h3>{}</h3>", self.description)?;
 
-        let mut output = String::new();
         for test in &self.tests {
-            output.clear();
-            rex::SVGRenderer::new(
-                &mut output,
+            let output: String = rex::SVGRenderer::new(
                 &rex::RenderSettings::default().font_size(32.0).font_src("rex-xits.otf")
             ).render(test);
             writeln!(f, r#"<code class="language-latex">{}</code><p>{}</p>"#, test, output)?;

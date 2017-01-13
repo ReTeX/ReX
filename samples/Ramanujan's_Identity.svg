@@ -1,5 +1,180 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="1411.82" height="279.49" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
-</defs>
-<g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)"><g transform="translate(1.60 43.87)"><g transform="translate(0.05 64.90)"><text>1</text></g><rect x="0.00" y ="93.41" width="48.10" height="6.34" fill="#000"/><g transform="translate(0.00 144.58)"><g transform="translate(0.00 43.20)"><text>π</text></g></g></g><g transform="translate(83.30 164.45)"><text>=</text></g><g transform="translate(182.66 0.00)"><g transform="translate(3.46 98.69)"><text>2</text></g><g transform="translate(51.46 0.00)"><g transform="translate(0.00 93.41)"><text>√</text></g></g><g transform="translate(140.54 0.00)"><rect x="0.00" y ="0.00" width="48.00" height="6.34" fill="#000"/><g transform="translate(0.00 33.79)"><g transform="translate(0.00 64.90)"><text>2</text></g></g></g><rect x="0.00" y ="137.28" width="192.00" height="6.34" fill="#000"/><g transform="translate(0.00 166.75)"><g transform="translate(0.00 64.90)"><text>9</text></g><g transform="translate(48.00 64.90)"><text>8</text></g><g transform="translate(96.00 64.90)"><text>0</text></g><g transform="translate(144.00 64.90)"><text>1</text></g></g></g><g transform="translate(392.26 13.98)"><g transform="translate(31.79 0.00)"><g transform="translate(0.00 28.07)"><text transform="scale(0.68)">∞</text></g></g><g transform="translate(0.00 56.87)"><g transform="translate(0.00 143.90)"><text></text></g></g><g transform="translate(0.00 210.47)"><g transform="translate(5.65 0.00)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">𝑘</text></g><g transform="translate(35.38 44.13)"><text transform="scale(0.68)">=</text></g><g transform="translate(80.10 44.13)"><text transform="scale(0.68)">0</text></g></g></g></g><g transform="translate(533.89 35.62)"><g transform="translate(0.00 65.66)"><text>(</text></g><g transform="translate(31.97 65.66)"><text>4</text></g><g transform="translate(79.97 65.66)"><text>𝑘</text></g><g transform="translate(132.00 65.66)"><text>)</text></g><g transform="translate(163.97 65.66)"><text>!</text></g><g transform="translate(195.94 65.66)"><text>(</text></g><g transform="translate(227.90 65.66)"><text>1</text></g><g transform="translate(275.90 65.66)"><text>1</text></g><g transform="translate(323.90 65.66)"><text>0</text></g><g transform="translate(371.90 65.66)"><text>3</text></g><g transform="translate(441.24 65.66)"><text>+</text></g><g transform="translate(528.33 65.66)"><text>2</text></g><g transform="translate(576.33 65.66)"><text>6</text></g><g transform="translate(624.33 65.66)"><text>3</text></g><g transform="translate(672.33 65.66)"><text>9</text></g><g transform="translate(720.33 65.66)"><text>0</text></g><g transform="translate(768.33 65.66)"><text>𝑘</text></g><g transform="translate(820.36 65.66)"><text>)</text></g><rect x="0.00" y ="101.66" width="852.33" height="6.34" fill="#000"/><g transform="translate(0.00 127.01)"><g transform="translate(229.87 73.79)"><text>(</text></g><g transform="translate(261.83 73.79)"><text>𝑘</text></g><g transform="translate(313.87 73.79)"><text>!</text></g><g transform="translate(345.83 8.90)"><g transform="translate(0.00 64.90)"><text>)</text></g></g><g transform="translate(377.80 0.77)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">4</text></g></g><g transform="translate(410.44 73.79)"><text>3</text></g><g transform="translate(458.44 73.79)"><text>9</text></g><g transform="translate(506.44 8.13)"><g transform="translate(0.00 65.66)"><text>6</text></g></g><g transform="translate(554.44 0.00)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">4</text></g><g transform="translate(32.64 44.13)"><text transform="scale(0.68)">𝑘</text></g></g></g></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1411.82" height="279.49" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
+    </defs>
+    <g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)">
+<g transform="translate(1.60 43.87)">
+<g transform="translate(0.05 64.90)">
+<text>1</text>
+</g>
+<rect x="0.00" y ="93.41" width="48.10" height="6.34" fill="#000"/>
+<g transform="translate(0.00 144.58)">
+<g transform="translate(0.00 43.20)">
+<text>π</text>
+</g>
+</g>
+</g>
+<g transform="translate(83.30 164.45)">
+<text>=</text>
+</g>
+<g transform="translate(182.66 0.00)">
+<g transform="translate(3.46 98.69)">
+<text>2</text>
+</g>
+<g transform="translate(51.46 0.00)">
+<g transform="translate(0.00 93.41)">
+<text>√</text>
+</g>
+</g>
+<g transform="translate(140.54 0.00)">
+<rect x="0.00" y ="0.00" width="48.00" height="6.34" fill="#000"/>
+<g transform="translate(0.00 33.79)">
+<g transform="translate(0.00 64.90)">
+<text>2</text>
+</g>
+</g>
+</g>
+<rect x="0.00" y ="137.28" width="192.00" height="6.34" fill="#000"/>
+<g transform="translate(0.00 166.75)">
+<g transform="translate(0.00 64.90)">
+<text>9</text>
+</g>
+<g transform="translate(48.00 64.90)">
+<text>8</text>
+</g>
+<g transform="translate(96.00 64.90)">
+<text>0</text>
+</g>
+<g transform="translate(144.00 64.90)">
+<text>1</text>
+</g>
+</g>
+</g>
+<g transform="translate(392.26 13.98)">
+<g transform="translate(31.79 0.00)">
+<g transform="translate(0.00 28.07)">
+<text transform="scale(0.68)">∞</text>
+</g>
+</g>
+<g transform="translate(0.00 56.87)">
+<g transform="translate(0.00 143.90)">
+<text></text>
+</g>
+</g>
+<g transform="translate(0.00 210.47)">
+<g transform="translate(5.65 0.00)">
+<g transform="translate(0.00 44.13)">
+<text transform="scale(0.68)">𝑘</text>
+</g>
+<g transform="translate(35.38 44.13)">
+<text transform="scale(0.68)">=</text>
+</g>
+<g transform="translate(80.10 44.13)">
+<text transform="scale(0.68)">0</text>
+</g>
+</g>
+</g>
+</g>
+<g transform="translate(533.89 35.62)">
+<g transform="translate(0.00 65.66)">
+<text>(</text>
+</g>
+<g transform="translate(31.97 65.66)">
+<text>4</text>
+</g>
+<g transform="translate(79.97 65.66)">
+<text>𝑘</text>
+</g>
+<g transform="translate(132.00 65.66)">
+<text>)</text>
+</g>
+<g transform="translate(163.97 65.66)">
+<text>!</text>
+</g>
+<g transform="translate(195.94 65.66)">
+<text>(</text>
+</g>
+<g transform="translate(227.90 65.66)">
+<text>1</text>
+</g>
+<g transform="translate(275.90 65.66)">
+<text>1</text>
+</g>
+<g transform="translate(323.90 65.66)">
+<text>0</text>
+</g>
+<g transform="translate(371.90 65.66)">
+<text>3</text>
+</g>
+<g transform="translate(441.24 65.66)">
+<text>+</text>
+</g>
+<g transform="translate(528.33 65.66)">
+<text>2</text>
+</g>
+<g transform="translate(576.33 65.66)">
+<text>6</text>
+</g>
+<g transform="translate(624.33 65.66)">
+<text>3</text>
+</g>
+<g transform="translate(672.33 65.66)">
+<text>9</text>
+</g>
+<g transform="translate(720.33 65.66)">
+<text>0</text>
+</g>
+<g transform="translate(768.33 65.66)">
+<text>𝑘</text>
+</g>
+<g transform="translate(820.36 65.66)">
+<text>)</text>
+</g>
+<rect x="0.00" y ="101.66" width="852.33" height="6.34" fill="#000"/>
+<g transform="translate(0.00 127.01)">
+<g transform="translate(229.87 73.79)">
+<text>(</text>
+</g>
+<g transform="translate(261.83 73.79)">
+<text>𝑘</text>
+</g>
+<g transform="translate(313.87 73.79)">
+<text>!</text>
+</g>
+<g transform="translate(345.83 8.90)">
+<g transform="translate(0.00 64.90)">
+<text>)</text>
+</g>
+</g>
+<g transform="translate(377.80 0.77)">
+<g transform="translate(0.00 44.13)">
+<text transform="scale(0.68)">4</text>
+</g>
+</g>
+<g transform="translate(410.44 73.79)">
+<text>3</text>
+</g>
+<g transform="translate(458.44 73.79)">
+<text>9</text>
+</g>
+<g transform="translate(506.44 8.13)">
+<g transform="translate(0.00 65.66)">
+<text>6</text>
+</g>
+</g>
+<g transform="translate(554.44 0.00)">
+<g transform="translate(0.00 44.13)">
+<text transform="scale(0.68)">4</text>
+</g>
+<g transform="translate(32.64 44.13)">
+<text transform="scale(0.68)">𝑘</text>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>
+

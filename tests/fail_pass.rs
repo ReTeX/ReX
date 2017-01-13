@@ -19,9 +19,9 @@ fn pass() {
             let tex = case.as_str().unwrap();
             println!("test: {}", tex);
             
-            let mut output = String::new();
-            SVGRenderer::new(&mut output, &RenderSettings::default())
-            .render(tex);
+            let output: String =
+                SVGRenderer::new(&RenderSettings::default()).render(tex);
+            drop(output);
         }
     }
 }

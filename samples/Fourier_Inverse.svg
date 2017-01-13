@@ -1,5 +1,93 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="987.62" height="232.62" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
-</defs>
-<g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)"><g transform="translate(0.00 132.91)"><text>𝑓</text></g><g transform="translate(53.28 132.91)"><text>(</text></g><g transform="translate(85.25 132.91)"><text>𝑥</text></g><g transform="translate(138.05 132.91)"><text>)</text></g><g transform="translate(202.02 132.91)"><text>=</text></g><g transform="translate(299.78 0.00)"><g transform="translate(0.00 192.00)"><text></text></g></g><g transform="translate(408.74 7.93)"><g transform="translate(0.00 28.07)"><text transform="scale(0.68)">∞</text></g><g transform="translate(0.00 186.62)"><g transform="translate(-52.80 0.00)"><g transform="translate(0.00 28.07)"><text transform="scale(0.68)">−</text></g><g transform="translate(44.72 28.07)"><text transform="scale(0.68)">∞</text></g></g></g></g><g transform="translate(485.19 47.28)"><g transform="translate(72.77 64.70)"><text>̂</text></g><g transform="translate(0.00 21.50)"><g transform="translate(0.00 64.13)"><text>𝑓</text></g></g></g><g transform="translate(557.95 132.91)"><text>(</text></g><g transform="translate(589.92 132.91)"><text>ξ</text></g><g transform="translate(632.26 132.91)"><text>)</text></g><g transform="translate(664.23 90.58)"><g transform="translate(0.00 42.34)"><text>𝑒</text></g></g><g transform="translate(706.95 49.93)"><g transform="translate(0.00 44.59)"><text transform="scale(0.68)">2</text></g><g transform="translate(32.64 44.59)"><text transform="scale(0.68)">π</text></g><g transform="translate(65.35 44.59)"><text transform="scale(0.68)">𝑖</text></g><g transform="translate(85.65 44.59)"><text transform="scale(0.68)">ξ</text></g><g transform="translate(114.44 44.59)"><text transform="scale(0.68)">𝑥</text></g></g><g transform="translate(873.29 132.91)"><text>d</text></g><g transform="translate(921.29 132.91)"><text>ξ</text></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="987.62" height="232.62" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
+    </defs>
+    <g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)">
+<g transform="translate(0.00 132.91)">
+<text>𝑓</text>
+</g>
+<g transform="translate(53.28 132.91)">
+<text>(</text>
+</g>
+<g transform="translate(85.25 132.91)">
+<text>𝑥</text>
+</g>
+<g transform="translate(138.05 132.91)">
+<text>)</text>
+</g>
+<g transform="translate(202.02 132.91)">
+<text>=</text>
+</g>
+<g transform="translate(299.78 0.00)">
+<g transform="translate(0.00 192.00)">
+<text></text>
+</g>
+</g>
+<g transform="translate(408.74 7.93)">
+<g transform="translate(0.00 28.07)">
+<text transform="scale(0.68)">∞</text>
+</g>
+<g transform="translate(0.00 186.62)">
+<g transform="translate(-52.80 0.00)">
+<g transform="translate(0.00 28.07)">
+<text transform="scale(0.68)">−</text>
+</g>
+<g transform="translate(44.72 28.07)">
+<text transform="scale(0.68)">∞</text>
+</g>
+</g>
+</g>
+</g>
+<g transform="translate(485.19 47.28)">
+<g transform="translate(72.77 64.70)">
+<text>̂</text>
+</g>
+<g transform="translate(0.00 21.50)">
+<g transform="translate(0.00 64.13)">
+<text>𝑓</text>
+</g>
+</g>
+</g>
+<g transform="translate(557.95 132.91)">
+<text>(</text>
+</g>
+<g transform="translate(589.92 132.91)">
+<text>ξ</text>
+</g>
+<g transform="translate(632.26 132.91)">
+<text>)</text>
+</g>
+<g transform="translate(664.23 90.58)">
+<g transform="translate(0.00 42.34)">
+<text>𝑒</text>
+</g>
+</g>
+<g transform="translate(706.95 49.93)">
+<g transform="translate(0.00 44.59)">
+<text transform="scale(0.68)">2</text>
+</g>
+<g transform="translate(32.64 44.59)">
+<text transform="scale(0.68)">π</text>
+</g>
+<g transform="translate(65.35 44.59)">
+<text transform="scale(0.68)">𝑖</text>
+</g>
+<g transform="translate(85.65 44.59)">
+<text transform="scale(0.68)">ξ</text>
+</g>
+<g transform="translate(114.44 44.59)">
+<text transform="scale(0.68)">𝑥</text>
+</g>
+</g>
+<g transform="translate(873.29 132.91)">
+<text>d</text>
+</g>
+<g transform="translate(921.29 132.91)">
+<text>ξ</text>
+</g>
+</g>
+</g>
+</svg>
+
