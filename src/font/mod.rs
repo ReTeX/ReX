@@ -10,31 +10,16 @@ pub mod variants;
 pub mod variant_tables;
 pub mod fontselection;
 
-#[cfg(test)]
-mod tests;
-
 pub use self::glyphs::GLYPHS;
 pub use self::symbols::SYMBOLS;
 pub use self::offsets::OptionalAtom;
 
 use parser::AtomType;
 
-#[cfg(not(test))]
 pub fn glyph_metrics(code : u32) -> Glyph {
-    if let Ok(idx) = GLYPHS.binary_search_by(|&(id, _)| id.cmp(&code)) {
-        GLYPHS[idx].1.clone()
-    } else {
-        panic!(format!("Unable to find glyph for code '{}'", code));
-    }
-}
-
-#[cfg(test)]
-pub fn glyph_metrics(code: u32) -> Glyph {
-    if let Ok(idx) = GLYPHS.binary_search_by(|&(id, _)| id.cmp(&code)) {
-        GLYPHS[idx].1.clone()
-    } else {
-        GLYPHS[0].1.clone()
-    }
+    GLYPHS.get(&code)
+        .expect(&format!("Unable to find glyph for code {}", code))
+        .clone()
 }
 
 #[allow(dead_code)]
