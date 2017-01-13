@@ -162,6 +162,6 @@ impl Default for Family {
 
 impl Default for Weight {
     fn default() -> Weight {
-        Weight::None
+        Weight::Italic
     }
 }
