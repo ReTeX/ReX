@@ -16,7 +16,7 @@ const GREEK: &'static str =
      \\Lambda\\Mu\\Nu\\Pi\\Rho\\Sigma\\Tau\\Upsilon\\Phi\\Chi\\Psi\\Omega";
 const other: &'static str = "\\nabla\\partial";
 
-static styles: [&'static str; 14] = [
+static styles: [&'static str; 13] = [
     r"\mathrm",
     r"\mathbf",
     r"\mathit",
@@ -27,10 +27,10 @@ static styles: [&'static str; 14] = [
     r"\mathbf{\mathfrak",
     r"\mathcal",
     r"\mathsf",
-    r"\mathbbsf",
-    r"\mathitsf",
-    r"\mathbbitsf",
-    r"\mathtt",
+    r"\mathbf{\mathsf",
+    r"\mathit{\mathsf",
+    r"\mathbf{\mathit{\mathsf",
+   // r"\mathtt",
 ];
 
 const HEADER: &'static str =
