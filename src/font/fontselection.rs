@@ -1,256 +1,192 @@
-#[allow(dead_code)]
+use super::Style;
+use super::Family::*;
+use super::Weight::*;
 
-mod offset {
-   pub const LATIN_UPPER_BLACKBOARD_NONE: u32 = 120055;
-   pub const LATIN_UPPER_CALLIGRAPHIC_NONE: u32 = 119899;
-   pub const LATIN_UPPER_CALLIGRAPHIC_BOLD: u32 = 119951;
-   pub const LATIN_UPPER_FRAKTUR_NONE: u32 = 120003;
-   pub const LATIN_UPPER_FRAKTUR_BOLD: u32 = 120107;
-   pub const LATIN_UPPER_NORMAL_NONE: u32 = 119795;
-   pub const LATIN_UPPER_NORMAL_BOLD: u32 = 119743;
-   pub const LATIN_UPPER_NORMAL_BOLDITALIC: u32 = 119847;
-   pub const LATIN_UPPER_NORMAL_ITALIC: u32 = 119795;
-   pub const LATIN_UPPER_ROMAN_NONE: u32 = 0;
-   pub const LATIN_UPPER_ROMAN_BOLD: u32 = 119743;
-   pub const LATIN_UPPER_ROMAN_BOLDITALIC: u32 = 119847;
-   pub const LATIN_UPPER_ROMAN_ITALIC: u32 = 119795;
-   pub const LATIN_UPPER_SCRIPT_NONE: u32 = 119899;
-   pub const LATIN_UPPER_SCRIPT_BOLD: u32 = 119951;
-   pub const LATIN_UPPER_SANSSERIF_NONE: u32 = 120159;
-   pub const LATIN_UPPER_SANSSERIF_BOLD: u32 = 120211;
-   pub const LATIN_UPPER_SANSSERIF_BOLDITALIC: u32 = 120315;
-   pub const LATIN_UPPER_SANSSERIF_ITALIC: u32 = 120263;
-   pub const LATIN_UPPER_TELETYPE_NONE: u32 = 120367;
-   pub const GREEK_UPPER_NORMAL_NONE: u32 = 119633;
-   pub const GREEK_UPPER_NORMAL_BOLD: u32 = 119575;
-   pub const GREEK_UPPER_NORMAL_BOLDITALIC: u32 = 119691;
-   pub const GREEK_UPPER_NORMAL_ITALIC: u32 = 119633;
-   pub const GREEK_UPPER_ROMAN_NONE: u32 = 0;
-   pub const GREEK_UPPER_ROMAN_BOLD: u32 = 119575;
-   pub const GREEK_UPPER_ROMAN_BOLDITALIC: u32 = 119691;
-   pub const GREEK_UPPER_ROMAN_ITALIC: u32 = 119633;
-   pub const GREEK_UPPER_SANSSERIF_BOLD: u32 = 119749;
-   pub const GREEK_UPPER_SANSSERIF_ITALIC: u32 = 119807;
-   pub const GREEK_LOWER_NORMAL_NONE: u32 = 119627;
-   pub const GREEK_LOWER_NORMAL_BOLD: u32 = 119569;
-   pub const GREEK_LOWER_NORMAL_BOLDITALIC: u32 = 119685;
-   pub const GREEK_LOWER_NORMAL_ITALIC: u32 = 119627;
-   pub const GREEK_LOWER_ROMAN_NONE: u32 = 0;
-   pub const GREEK_LOWER_ROMAN_BOLD: u32 = 119569;
-   pub const GREEK_LOWER_ROMAN_BOLDITALIC: u32 = 119685;
-   pub const GREEK_LOWER_ROMAN_ITALIC: u32 = 119627;
-   pub const GREEK_LOWER_SANSSERIF_BOLD: u32 = 119743;
-   pub const GREEK_LOWER_SANSSERIF_BOLDITALIC: u32 = 119801;
-   pub const DIGIT_BLACKBOARD_NONE: u32 = 120744;
-   pub const DIGIT_NORMAL_NONE: u32 = 0;
-   pub const DIGIT_NORMAL_BOLD: u32 = 120734;
-   pub const DIGIT_NORMAL_BOLDITALIC: u32 = 120734;
-   pub const DIGIT_NORMAL_ITALIC: u32 = 120754;
-   pub const DIGIT_ROMAN_NONE: u32 = 0;
-   pub const DIGIT_ROMAN_BOLD: u32 = 120734;
-   pub const DIGIT_ROMAN_BOLDITALIC: u32 = 120734;
-   pub const DIGIT_SANSSERIF_NONE: u32 = 120754;
-   pub const DIGIT_SANSSERIF_BOLD: u32 = 120734;
-   pub const DIGIT_SANSSERIF_BOLDITALIC: u32 = 120734;
-   pub const DIGIT_SANSSERIF_ITALIC: u32 = 120754;
-   pub const DIGIT_TELETYPE_NONE: u32 = 120774;
-   pub const LATIN_LOWER_BLACKBOARD_NONE: u32 = 120049;
-   pub const LATIN_LOWER_FRAKTUR_NONE: u32 = 119997;
-   pub const LATIN_LOWER_FRAKTUR_BOLD: u32 = 120101;
-   pub const LATIN_LOWER_NORMAL_NONE: u32 = 119789;
-   pub const LATIN_LOWER_NORMAL_BOLD: u32 = 119737;
-   pub const LATIN_LOWER_NORMAL_BOLDITALIC: u32 = 119841;
-   pub const LATIN_LOWER_NORMAL_ITALIC: u32 = 119789;
-   pub const LATIN_LOWER_ROMAN_NONE: u32 = 0;
-   pub const LATIN_LOWER_ROMAN_BOLD: u32 = 119737;
-   pub const LATIN_LOWER_ROMAN_BOLDITALIC: u32 = 119841;
-   pub const LATIN_LOWER_ROMAN_ITALIC: u32 = 119789;
-   pub const LATIN_LOWER_SCRIPT_NONE: u32 = 119893;
-   pub const LATIN_LOWER_SCRIPT_BOLD: u32 = 119945;
-   pub const LATIN_LOWER_SANSSERIF_NONE: u32 = 120153;
-   pub const LATIN_LOWER_SANSSERIF_BOLD: u32 = 120205;
-   pub const LATIN_LOWER_SANSSERIF_BOLDITALIC: u32 = 120309;
-   pub const LATIN_LOWER_SANSSERIF_ITALIC: u32 = 120257;
-   pub const LATIN_LOWER_TELETYPE_NONE: u32 = 120361;
-}
+// BMP unicode points of each symbol group.
+const UPPER_A: u32 = 0x41;
+const UPPER_Z: u32 = 0x5A;
+const LOWER_A: u32 = 0x61;
+const LOWER_Z: u32 = 0x7A;
 
-const DIGIT_START: u32 = 48;
-const DIGIT_END: u32 = 48 + 10;
-const LATIN_LOWER_START: u32 = 97;
-const LATIN_LOWER_END: u32 = 97 + 26;
-const LATIN_UPPER_START: u32 = 65;
-const LATIN_UPPER_END: u32 = 65 + 26;
-const GREEK_LOWER_START: u32 = 0x3B1;
-const GREEK_LOWER_END: u32 = 0x3B1 + 25;
-const GREEK_UPPER_START: u32 = 0x391;
-const GREEK_UPPER_END: u32 = 0x391 + 24;
+const UPPER_ALPHA: u32 = 0x391;
+const UPPER_OMEGA: u32 = 0x3A9;
+const LOWER_ALPHA: u32 = 0x3B1;
+const LOWER_OMEGA: u32 = 0x3C9;
 
-#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-pub enum Family {
-    Normal,
-    Roman,
-    Script,
-    Calligraphic,
-    SansSerif,
-    Fraktur,
-    Blackboard,
-    Teletype,
-}
+const DIGIT_0: u32 = 0x30;
+const DIGIT_9: u32 = 0x39;
 
-use ::std::convert::TryFrom;
-impl<'a> TryFrom<&'a str> for Family {
-    type Err = ();
-    fn try_from(s: &str) -> Result<Family, Self::Err> {
-        match s {
-            "mathbb"     => Ok(Family::Blackboard),
-            "mathrm"     => Ok(Family::Roman),
-            "mathcal"    => Ok(Family::Calligraphic),
-            "mathfrak"   => Ok(Family::Fraktur),
-            "mathnormal" => Ok(Family::Normal),
-            "mathsf"     => Ok(Family::SansSerif),
-            "mathscr"    => Ok(Family::Script),
-            "mathtt"     => Ok(Family::Teletype),
-            _ => Err(())
+static LATIN_UPPER_LUT: [u32; 24] = [
+//  None,    Italic,  Bold,    BoldItalic
+    65,      0x1D434, 0x1D400, 0x1D468,   // Roman
+    0x1D49C, 0x1D49C, 0x1D4D0, 0x1D4D0,   // Script
+    0x1D504, 0x1D504, 0x1D56C, 0x1D56C,   // Fractur
+    0x1D5A0, 0x1D608, 0x1D5D4, 0x1D63C,   // SansSerif
+    0x1D538, 0x1D538, 0x1D538, 0x1D538,   // Blackboard
+    0x1D670, 0x1D670, 0x1D670, 0x1D670,   // Monospace
+];
+
+static LATIN_LOWER_LUT: [u32; 24] = [
+//  None,    Italic,  Bold,    BoldItalic
+    97,      0x1D44E, 0x1D41A, 0x1D482,   // Roman
+    0x1D4B6, 0x1D4B6, 0x1D4EA, 0x1D4EA,   // Script
+    0x1D51E, 0x1D51E, 0x1D586, 0x1D586,   // Fracture
+    0x1D5BA, 0x1D622, 0x1D5EE, 0x1D656,   // SansSerif
+    0x1D552, 0x1D552, 0x1D552, 0x1D552,   // Blackboard
+    0x1D68A, 0x1D68A, 0x1D68A, 0x1D68A,   // Monospace
+];
+
+// Exceptional glyphs that are not found in BMP
+// and don't belong in the previous groups
+// The handling of these values can be reference
+//   unicode-math-usv.dtx in unicode-math
+//   RenderMathMLToken.cpp in WebKit
+// const VAR_UPPER_THETA:      u32 = 0x3F4;
+// //const VAR_DIGAMMA:        u32 = 0x3DC;  ??
+// const VAR_EPSILON:          u32 = 0x3F5;
+// const VAR_THETA:            u32 = 0x3D1;
+// const VAR_KAPPA:            u32 = 0x3F0;
+// const VAR_PHI:              u32 = 0x3D5;
+// const VAR_RHO:              u32 = 0x3F1;
+// const VAR_PI:               u32 = 0x3D6;
+// //const DIGAMMA:            u32 = 0x3DD; ??
+// const PARTIAL_DIFFERENTIAL: u32 = 0x2202;
+// const NABLA:                u32 = 0x2207;
+
+// const BOLD_VAR_UPPER_THETA:      u32 = 0x1D6B9;
+// const BOLD_VAR_EPSILON:          u32 = 0x1D6DC;
+// const BOLD_VAR_THETA:            u32 = 0x1D6DD;
+// const BOLD_VAR_KAPPA:            u32 = 0x1D6DE;
+// const BOLD_VAR_PHI:              u32 = 0x1D6DF;
+// const BOLD_VAR_RHO:              u32 = 0x1D6E0;
+// const BOLD_VAR_PI:               u32 = 0x1D6E1;
+// const BOLD_NABLA:                u32 = 0x1D6C1;
+// const BOLD_PARTIAL_DIFFERENTIAL: u32 = 0x1D6DB;
+
+// style_symbol behavior:
+// Commands will map to BMP unicode values.
+// Characters in these BMP ranges will have their respective stlyes applied.
+
+// TODO: Investigate how this relates to mapping standard symbols
+//    to unicode + atomtype.  Construct a public API here.
+
+impl Style {
+    pub fn style_symbol(&self, unicode: u32) -> u32 {
+        match unicode {
+            LOWER_A...LOWER_Z =>
+                self.style_lower_latin(unicode - LOWER_A),
+
+            UPPER_A...UPPER_Z =>
+                self.style_upper_latin(unicode - UPPER_A),
+
+            UPPER_ALPHA...UPPER_OMEGA =>
+                self.style_upper_greek(unicode - UPPER_ALPHA),
+
+            LOWER_ALPHA...LOWER_OMEGA =>
+                self.style_lower_greek(unicode - LOWER_ALPHA),
+
+            DIGIT_0...DIGIT_9 =>
+                self.style_digit(unicode - DIGIT_0),
+
+            _ => self.style_other(unicode),
         }
     }
-}
 
-#[derive(Copy, Clone, PartialEq, Eq, Debug)]
-pub enum Weight {
-    None,
-    Bold,
-    Italic,
-    BoldItalic,
-}
+    pub fn style_upper_latin(&self, offset: u32) -> u32 {
+        let y = self.family as usize;
+        let x = self.weight as usize;
+        let base = LATIN_UPPER_LUT[4*y + x];
+        base + offset
+    }
 
-impl<'a> TryFrom<&'a str> for Weight {
-    type Err = ();
-    fn try_from(s: &str) -> Result<Weight, Self::Err> {
-        match s {
-            "bf" | "mathbf" => Ok(Weight::Bold),
-            "it" | "mathit" => Ok(Weight::Italic),
-            _ => Err(())
+    pub fn style_lower_latin(&self, offset: u32) -> u32 {
+        let y = self.family as usize;
+        let x = self.weight as usize;
+        let base = LATIN_LOWER_LUT[4*y + x];
+        base + offset
+    }
+
+    fn style_upper_greek(&self, offset: u32) -> u32 {
+        let base = match self.family {
+            SansSerif => {
+                match self.weight {
+                    Italic     => 0x1D6E2,
+                    Bold       => 0x1D756,
+                    BoldItalic => 0x1D790,
+                    None       => 0x391,
+                }
+            },
+
+            // fallback to Roman
+            _ => {
+                match self.weight {
+                    Italic     => 0x1D6E2,
+                    Bold       => 0x1D6A8,
+                    BoldItalic => 0x1D71C,
+                    None       => 0x391,
+                }
+            }
+        };
+
+        base + offset
+    }
+
+    fn style_lower_greek(&self, offset: u32) -> u32 {
+        let base = match self.family {
+            SansSerif => {
+                match self.weight {
+                    Italic     => 0x1D6FC,
+                    Bold       => 0x1D770,
+                    BoldItalic => 0x1D7AA,
+                    None       => 0x3B1,
+                }
+            },
+
+            // fallback to Roman
+            _ => {
+                match self.weight {
+                    Italic     => 0x1D6FC,
+                    Bold       => 0x1D6C2,
+                    BoldItalic => 0x1D736,
+                    None       => 0x3B1,
+                }
+            }
+        };
+
+        base + offset
+    }
+
+    fn style_digit(&self, offset: u32) -> u32 {
+        let base = match self.family {
+            SansSerif  => {
+                match self.weight {
+                    BoldItalic | Bold => 0x1D7EC,
+                    _  => 0x1D7E2,
+                }
+            }
+
+            Blackboard => 0x1D7D8,
+            Monospace  => 0x1D7F6,
+
+            // fallback to Roman
+            _ => {
+                match self.weight {
+                    BoldItalic | Bold => 0x1D7CE,
+                    _  => 48,
+                }
+            }
+        };
+
+        base + offset
+    }
+
+    fn style_other(&self, sym: u32) -> u32 {
+        // TODO add symbols that require styling
+        // like varepsilon, etc...
+        match sym {
+            // Minus Sign
+            0x2D => 0x2212,
+            _ => sym,
         }
-    }
-}
-
-pub fn style_offset(unicode: u32, family: Family, weight: Weight) -> u32 {
-    if unicode == b'-' as u32 {
-        return 0x2212 - b'-' as u32
-    }
-
-    match unicode {
-        DIGIT_START...DIGIT_END => {
-            match (family, weight) {
-                (Family::Blackboard, Weight::None) => offset::DIGIT_BLACKBOARD_NONE,
-                (Family::Normal, Weight::None) => offset::DIGIT_NORMAL_NONE,
-                (Family::Normal, Weight::Bold) => offset::DIGIT_NORMAL_BOLD,
-                (Family::Normal, Weight::BoldItalic) => offset::DIGIT_NORMAL_BOLDITALIC,
-                (Family::Normal, Weight::Italic) => offset::DIGIT_NORMAL_ITALIC,
-                (Family::Roman, Weight::None) => offset::DIGIT_ROMAN_NONE,
-                (Family::Roman, Weight::Bold) => offset::DIGIT_ROMAN_BOLD,
-                (Family::Roman, Weight::BoldItalic) => offset::DIGIT_ROMAN_BOLDITALIC,
-                (Family::SansSerif, Weight::None) => offset::DIGIT_SANSSERIF_NONE,
-                (Family::SansSerif, Weight::Bold) => offset::DIGIT_SANSSERIF_BOLD,
-                (Family::SansSerif, Weight::BoldItalic) => offset::DIGIT_SANSSERIF_BOLDITALIC,
-                (Family::SansSerif, Weight::Italic) => offset::DIGIT_SANSSERIF_ITALIC,
-                (Family::Teletype, Weight::None) => offset::DIGIT_TELETYPE_NONE,
-                (_, Weight::None) => offset::DIGIT_NORMAL_NONE,
-                (_, Weight::Bold) => offset::DIGIT_NORMAL_BOLD,
-                (_, Weight::Italic) => offset::DIGIT_NORMAL_ITALIC,
-                (_, Weight::BoldItalic) => offset::DIGIT_NORMAL_BOLDITALIC,
-            }
-        },
-        LATIN_LOWER_START...LATIN_LOWER_END => {
-            match (family, weight) {
-                (Family::Blackboard, Weight::None) => offset::LATIN_LOWER_BLACKBOARD_NONE,
-                (Family::Fraktur, Weight::None) => offset::LATIN_LOWER_FRAKTUR_NONE,
-                (Family::Fraktur, Weight::Bold) => offset::LATIN_LOWER_FRAKTUR_BOLD,
-                (Family::Normal, Weight::None) => offset::LATIN_LOWER_NORMAL_NONE,
-                (Family::Normal, Weight::Bold) => offset::LATIN_LOWER_NORMAL_BOLD,
-                (Family::Normal, Weight::BoldItalic) => offset::LATIN_LOWER_NORMAL_BOLDITALIC,
-                (Family::Normal, Weight::Italic) => offset::LATIN_LOWER_NORMAL_ITALIC,
-                (Family::Roman, Weight::None) => offset::LATIN_LOWER_ROMAN_NONE,
-                (Family::Roman, Weight::Bold) => offset::LATIN_LOWER_ROMAN_BOLD,
-                (Family::Roman, Weight::BoldItalic) => offset::LATIN_LOWER_ROMAN_BOLDITALIC,
-                (Family::Roman, Weight::Italic) => offset::LATIN_LOWER_ROMAN_ITALIC,
-                (Family::Script, Weight::None) => offset::LATIN_LOWER_SCRIPT_NONE,
-                (Family::Script, Weight::Bold) => offset::LATIN_LOWER_SCRIPT_BOLD,
-                (Family::SansSerif, Weight::None) => offset::LATIN_LOWER_SANSSERIF_NONE,
-                (Family::SansSerif, Weight::Bold) => offset::LATIN_LOWER_SANSSERIF_BOLD,
-                (Family::SansSerif, Weight::BoldItalic) => offset::LATIN_LOWER_SANSSERIF_BOLDITALIC,
-                (Family::SansSerif, Weight::Italic) => offset::LATIN_LOWER_SANSSERIF_ITALIC,
-                (Family::Teletype, Weight::None) => offset::LATIN_LOWER_TELETYPE_NONE,
-                (_, Weight::None) => offset::LATIN_LOWER_NORMAL_NONE,
-                (_, Weight::Bold) => offset::LATIN_LOWER_NORMAL_BOLD,
-                (_, Weight::Italic) => offset::LATIN_LOWER_NORMAL_ITALIC,
-                (_, Weight::BoldItalic) => offset::LATIN_LOWER_NORMAL_BOLDITALIC,
-            }
-        },
-        GREEK_UPPER_START...GREEK_UPPER_END => {
-            match (family, weight) {
-                (Family::Normal, Weight::None) => offset::GREEK_UPPER_NORMAL_NONE,
-                (Family::Normal, Weight::Bold) => offset::GREEK_UPPER_NORMAL_BOLD,
-                (Family::Normal, Weight::BoldItalic) => offset::GREEK_UPPER_NORMAL_BOLDITALIC,
-                (Family::Normal, Weight::Italic) => offset::GREEK_UPPER_NORMAL_ITALIC,
-                (Family::Roman, Weight::None) => offset::GREEK_UPPER_ROMAN_NONE,
-                (Family::Roman, Weight::Bold) => offset::GREEK_UPPER_ROMAN_BOLD,
-                (Family::Roman, Weight::BoldItalic) => offset::GREEK_UPPER_ROMAN_BOLDITALIC,
-                (Family::Roman, Weight::Italic) => offset::GREEK_UPPER_ROMAN_ITALIC,
-                (Family::SansSerif, Weight::Bold) => offset::GREEK_UPPER_SANSSERIF_BOLD,
-                (Family::SansSerif, Weight::Italic) => offset::GREEK_UPPER_SANSSERIF_ITALIC,
-                (_, Weight::None) => offset::GREEK_UPPER_NORMAL_NONE,
-                (_, Weight::Bold) => offset::GREEK_UPPER_NORMAL_BOLD,
-                (_, Weight::Italic) => offset::GREEK_UPPER_NORMAL_ITALIC,
-                (_, Weight::BoldItalic) => offset::GREEK_UPPER_NORMAL_BOLDITALIC,
-            }
-        },
-        LATIN_UPPER_START...LATIN_UPPER_END => {
-            match (family, weight) {
-                (Family::Blackboard, Weight::None) => offset::LATIN_UPPER_BLACKBOARD_NONE,
-                (Family::Calligraphic, Weight::None) => offset::LATIN_UPPER_CALLIGRAPHIC_NONE,
-                (Family::Calligraphic, Weight::Bold) => offset::LATIN_UPPER_CALLIGRAPHIC_BOLD,
-                (Family::Fraktur, Weight::None) => offset::LATIN_UPPER_FRAKTUR_NONE,
-                (Family::Fraktur, Weight::Bold) => offset::LATIN_UPPER_FRAKTUR_BOLD,
-                (Family::Normal, Weight::None) => offset::LATIN_UPPER_NORMAL_NONE,
-                (Family::Normal, Weight::Bold) => offset::LATIN_UPPER_NORMAL_BOLD,
-                (Family::Normal, Weight::BoldItalic) => offset::LATIN_UPPER_NORMAL_BOLDITALIC,
-                (Family::Normal, Weight::Italic) => offset::LATIN_UPPER_NORMAL_ITALIC,
-                (Family::Roman, Weight::None) => offset::LATIN_UPPER_ROMAN_NONE,
-                (Family::Roman, Weight::Bold) => offset::LATIN_UPPER_ROMAN_BOLD,
-                (Family::Roman, Weight::BoldItalic) => offset::LATIN_UPPER_ROMAN_BOLDITALIC,
-                (Family::Roman, Weight::Italic) => offset::LATIN_UPPER_ROMAN_ITALIC,
-                (Family::Script, Weight::None) => offset::LATIN_UPPER_SCRIPT_NONE,
-                (Family::Script, Weight::Bold) => offset::LATIN_UPPER_SCRIPT_BOLD,
-                (Family::SansSerif, Weight::None) => offset::LATIN_UPPER_SANSSERIF_NONE,
-                (Family::SansSerif, Weight::Bold) => offset::LATIN_UPPER_SANSSERIF_BOLD,
-                (Family::SansSerif, Weight::BoldItalic) => offset::LATIN_UPPER_SANSSERIF_BOLDITALIC,
-                (Family::SansSerif, Weight::Italic) => offset::LATIN_UPPER_SANSSERIF_ITALIC,
-                (Family::Teletype, Weight::None) => offset::LATIN_UPPER_TELETYPE_NONE,
-                //(_, Weight::None) => offset::LATIN_UPPER_NORMAL_NONE,
-                (_, Weight::Bold) => offset::LATIN_UPPER_NORMAL_BOLD,
-                (_, Weight::Italic) => offset::LATIN_UPPER_NORMAL_ITALIC,
-                (_, Weight::BoldItalic) => offset::LATIN_UPPER_NORMAL_BOLDITALIC,
-            }
-        },
-        GREEK_LOWER_START...GREEK_LOWER_END => {
-            match (family, weight) {
-                (Family::Normal, Weight::None) => offset::GREEK_LOWER_NORMAL_NONE,
-                (Family::Normal, Weight::Bold) => offset::GREEK_LOWER_NORMAL_BOLD,
-                (Family::Normal, Weight::BoldItalic) => offset::GREEK_LOWER_NORMAL_BOLDITALIC,
-                (Family::Normal, Weight::Italic) => offset::GREEK_LOWER_NORMAL_ITALIC,
-                (Family::Roman, Weight::None) => offset::GREEK_LOWER_ROMAN_NONE,
-                (Family::Roman, Weight::Bold) => offset::GREEK_LOWER_ROMAN_BOLD,
-                (Family::Roman, Weight::BoldItalic) => offset::GREEK_LOWER_ROMAN_BOLDITALIC,
-                (Family::Roman, Weight::Italic) => offset::GREEK_LOWER_ROMAN_ITALIC,
-                (Family::SansSerif, Weight::Bold) => offset::GREEK_LOWER_SANSSERIF_BOLD,
-                (Family::SansSerif, Weight::BoldItalic) => offset::GREEK_LOWER_SANSSERIF_BOLDITALIC,
-                (_, Weight::None) => offset::GREEK_LOWER_NORMAL_NONE,
-                (_, Weight::Bold) => offset::GREEK_LOWER_NORMAL_BOLD,
-                (_, Weight::Italic) => offset::GREEK_LOWER_NORMAL_ITALIC,
-                (_, Weight::BoldItalic) => offset::GREEK_LOWER_NORMAL_BOLDITALIC,
-            }
-        },
-        _ => 0,
     }
 }

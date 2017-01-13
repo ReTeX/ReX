@@ -1,3 +1,5 @@
+use std::default::Default;
+
 mod glyphs;
 mod symbols;
 mod offsets;
@@ -53,30 +55,6 @@ pub struct Symbol {
     pub atom_type: AtomType,
 }
 
-#[allow(dead_code)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum Style {
-    Roman,
-    Bold,
-    Italic,
-    BoldItalic,
-    Caligraphic,  // Non-standard in UNICODE
-                  // Many fonts treat Script <-> Caligraphic
-    Script,
-    ScriptBold,
-    SansSerif,
-    BoldSansSerif,
-    ItalicSansSerif,
-    BoldItalicSansSerif,
-    DoubleStruck,
-    BoldDoubleStruck,       // Non-standard
-    ItalicDoubleStruck,     // Non-standard
-    BoldItalicDoubleStruck, // Non-standard
-    Fraktur,
-    BoldFraktur,
-    Monospace,
-}
-
 #[derive(Debug, Clone)]
 pub struct KernRecord {
     top_right:     Option<KernTable>,
@@ -89,4 +67,101 @@ pub struct KernRecord {
 pub struct KernTable {
     correction_heights: Vec<i16>,   // unit::Font::<i16>()
     kern_values:        Vec<i16>,   // unit::Font::<i16>()
+}
+
+#[derive(Default, Debug, Copy, Clone, PartialEq, Eq)]
+pub struct Style {
+    family: Family,
+    weight: Weight,
+}
+
+impl Style {
+    pub fn new() -> Style {
+        Style::default()
+    }
+
+    pub fn with_family(&self, fam: Family) -> Style {
+        Style {
+            family: fam,
+            ..*self
+        }
+    }
+
+    pub fn with_weight(&self, weight: Weight) -> Style {
+        Style {
+            weight: weight,
+            ..*self
+        }
+    }
+
+    pub fn from_cmd(cmd: &str, old: &Style) -> Option<Style> {
+        if let Some(weight) = match cmd {
+            "mathbf"   => {
+                match old.weight {
+                    Weight::Bold | Weight::None => Some(Weight::Bold),
+                    _ => Some(Weight::BoldItalic),
+                }
+            },
+            "mathit"   => {
+                match old.weight {
+                    Weight::Italic | Weight::None => Some(Weight::Italic),
+                    _ => Some(Weight::BoldItalic),
+                }
+            },
+            _ => None,
+        } {
+            Some(old.with_weight(weight))
+        }
+
+        else if let Some(family) = match cmd {
+            "mathrm"   => Some(Family::Roman),
+            "mathscr"  => Some(Family::Script),
+            "mathfrak" => Some(Family::Fraktur),
+            "mathbb"   => Some(Family::Blackboard),
+            "mathsf"   => Some(Family::SansSerif),
+            "mathtt"   => Some(Family::Monospace),
+            "mathcal"  => Some(Family::Script),
+            _ => None,
+        } {
+            Some(old.with_family(family))
+        }
+
+        else {
+            None
+        }
+    }
+}
+
+// NB: Changing the order of these variants requires
+//     changing the LUP in fontselection
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum Family {
+    Roman,
+    Script,
+    Fraktur,
+    SansSerif,
+    Blackboard,
+    Monospace,
+}
+
+// NB: Changing the order of these variants requires
+//     changing the LUP in fontselection
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum Weight {
+    None,
+    Italic,
+    Bold,
+    BoldItalic,
+}
+
+impl Default for Family {
+    fn default() -> Family {
+        Family::Roman
+    }
+}
+
+impl Default for Weight {
+    fn default() -> Weight {
+        Weight::None
+    }
 }
