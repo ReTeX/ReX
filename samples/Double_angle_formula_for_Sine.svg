@@ -4,118 +4,41 @@
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)">
-<g transform="translate(0.00 65.57)">
-<text>s</text>
-</g>
-<g transform="translate(37.34 65.57)">
-<text>i</text>
-</g>
-<g transform="translate(64.03 65.57)">
-<text>n</text>
-</g>
-<g transform="translate(112.03 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(144.00 65.57)">
-<text>θ</text>
-</g>
-<g transform="translate(212.95 65.57)">
-<text>+</text>
-</g>
-<g transform="translate(300.04 65.57)">
-<text>φ</text>
-</g>
-<g transform="translate(359.85 65.57)">
-<text>)</text>
-</g>
-<g transform="translate(423.82 65.57)">
-<text>=</text>
-</g>
-<g transform="translate(521.58 0.00)">
-<g transform="translate(0.00 65.57)">
-<text>s</text>
-</g>
-<g transform="translate(37.34 65.57)">
-<text>i</text>
-</g>
-<g transform="translate(64.03 65.57)">
-<text>n</text>
-</g>
-</g>
-<g transform="translate(633.61 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(665.58 65.57)">
-<text>θ</text>
-</g>
-<g transform="translate(713.19 65.57)">
-<text>)</text>
-</g>
-<g transform="translate(761.16 21.41)">
-<g transform="translate(0.00 44.16)">
-<text>c</text>
-</g>
-<g transform="translate(42.62 44.16)">
-<text>o</text>
-</g>
-<g transform="translate(90.62 44.16)">
-<text>s</text>
-</g>
-</g>
-<g transform="translate(889.13 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(921.10 65.57)">
-<text>φ</text>
-</g>
-<g transform="translate(980.91 65.57)">
-<text>)</text>
-</g>
-<g transform="translate(1034.21 65.57)">
-<text>+</text>
-</g>
-<g transform="translate(1121.30 0.00)">
-<g transform="translate(0.00 65.57)">
-<text>s</text>
-</g>
-<g transform="translate(37.34 65.57)">
-<text>i</text>
-</g>
-<g transform="translate(64.03 65.57)">
-<text>n</text>
-</g>
-</g>
-<g transform="translate(1233.33 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(1265.30 65.57)">
-<text>φ</text>
-</g>
-<g transform="translate(1325.11 65.57)">
-<text>)</text>
-</g>
-<g transform="translate(1373.08 21.41)">
-<g transform="translate(0.00 44.16)">
-<text>c</text>
-</g>
-<g transform="translate(42.62 44.16)">
-<text>o</text>
-</g>
-<g transform="translate(90.62 44.16)">
-<text>s</text>
-</g>
-</g>
-<g transform="translate(1501.05 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(1533.01 65.57)">
-<text>θ</text>
-</g>
-<g transform="translate(1580.63 65.57)">
-<text>)</text>
-</g>
-</g>
+    <g font-family="rex" font-size="96.0px">
+<text transform="translate(12.00, 70.57)">s</text>
+<text transform="translate(49.34, 70.57)">i</text>
+<text transform="translate(76.03, 70.57)">n</text>
+<text transform="translate(124.03, 70.57)">(</text>
+<text transform="translate(156.00, 70.57)">θ</text>
+<text transform="translate(224.95, 70.57)">+</text>
+<text transform="translate(312.04, 70.57)">φ</text>
+<text transform="translate(371.85, 70.57)">)</text>
+<text transform="translate(435.82, 70.57)">=</text>
+<text transform="translate(533.58, 70.57)">s</text>
+<text transform="translate(570.92, 70.57)">i</text>
+<text transform="translate(597.61, 70.57)">n</text>
+<text transform="translate(645.61, 70.57)">(</text>
+<text transform="translate(677.58, 70.57)">θ</text>
+<text transform="translate(725.19, 70.57)">)</text>
+<text transform="translate(773.16, 70.57)">c</text>
+<text transform="translate(815.79, 70.57)">o</text>
+<text transform="translate(863.79, 70.57)">s</text>
+<text transform="translate(901.13, 70.57)">(</text>
+<text transform="translate(933.10, 70.57)">φ</text>
+<text transform="translate(992.91, 70.57)">)</text>
+<text transform="translate(1046.21, 70.57)">+</text>
+<text transform="translate(1133.30, 70.57)">s</text>
+<text transform="translate(1170.65, 70.57)">i</text>
+<text transform="translate(1197.33, 70.57)">n</text>
+<text transform="translate(1245.33, 70.57)">(</text>
+<text transform="translate(1277.30, 70.57)">φ</text>
+<text transform="translate(1337.11, 70.57)">)</text>
+<text transform="translate(1385.08, 70.57)">c</text>
+<text transform="translate(1427.70, 70.57)">o</text>
+<text transform="translate(1475.70, 70.57)">s</text>
+<text transform="translate(1513.05, 70.57)">(</text>
+<text transform="translate(1545.01, 70.57)">θ</text>
+<text transform="translate(1592.63, 70.57)">)</text>
 </g>
 </svg>
 

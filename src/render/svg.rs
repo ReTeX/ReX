@@ -4,7 +4,7 @@
 // use spacing::atom_spacing;
 //use layout::boundingbox::Bounded;
 use dimensions::{Pixels, Float};
-use render::{Renderer, RenderSettings};
+use render::{Renderer, RenderSettings, Cursor};
 use std::fmt::Write;
 use std::fs::File;
 use std::path::Path;
@@ -57,7 +57,7 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
     }
     
     fn prepare(&self, out: &mut W, width: Pixels, height: Pixels) {
-        write!(out,
+        writeln!(out,
 r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
@@ -77,62 +77,46 @@ r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         ).unwrap();
     }
     
-    fn g<F>(&self, out: &mut W, width: Pixels, height: Pixels, mut contents: F)
-        where F: FnMut(&Self, &mut W)
-    {
-        if width == Pixels(0.0) && height == Pixels(0.0) {
-            contents(self, out);
-        } else {
-            writeln!(out,
-                r#"<g transform="translate({:.2} {:.2})">"#,
-                width, height
-            ).expect("Failed to write to buffer!");
-
-            contents(self, out);
-            writeln!(out, "</g>")
-            .expect("Failed to write to buffer!");
-        }
-    }
-
-    fn bbox(&self, out: &mut W, width: Pixels, height: Pixels) {
+    fn bbox(&self, out: &mut W, pos: Cursor, width: Pixels, height: Pixels) {
         if self.settings.debug {
             writeln!(out,
-                r#"<rect width="{}" height="{}" fill="none" stroke="blue" stroke-width="0.2"/>"#,
+                r#"<rect x="{}", y="{}", width="{}" height="{}" fill="none" stroke="blue" stroke-width="0.2"/>"#,
+                pos.x, pos.y,
                 width, height
             ).expect("Failed to write to buffer!");
         }
     }
 
-    fn symbol(&self, out: &mut W, symbol: u32, scale: Float) {
+    fn symbol(&self, out: &mut W, pos: Cursor, symbol: u32, scale: Float) {
         use std::char;
         if scale != 1. {
             writeln!(out,
-                r#"<text transform="scale({:.2})">{}</text>"#,
+                r#"<text transform="translate({}, {}) scale({:.2})">{}</text>"#,
+                pos.x, pos.y,
                 scale,
                 char::from_u32(symbol).expect("Unabale to decode utf8 code-point!")
             ).expect("Failed to write to buffer!");
         } else {
             writeln!(out,
-                r#"<text>{}</text>"#,
+                r#"<text transform="translate({}, {})">{}</text>"#,
+                pos.x, pos.y,
                 char::from_u32(symbol).expect("Unabale to decode utf8 code-point!")
             ).expect("Failed to write to buffer!");
         }
     }
 
-    fn rule(&self, out: &mut W, x: Pixels, y: Pixels, width: Pixels, height: Pixels) {
+    fn rule(&self, out: &mut W, pos: Cursor, width: Pixels, height: Pixels) {
         writeln!(out,
             r##"<rect x="{}" y ="{}" width="{}" height="{}" fill="#000"/>"##,
-            x, y, width, height
+            pos.x, pos.y, width, height
         ).expect("Failed to write to buffer!");
     }
 
     fn color<F>(&self, out: &mut W, color: &str, mut contents: F)
         where F: FnMut(&Self, &mut W)
     {
-        writeln!(out, r#"<g fill="{}">"#, color)
-        .expect("Failed to write to buffer!");
+        writeln!(out, r#"<g fill="{}">"#, color).expect("Failed to write to buffer!");
         contents(self, out);
-        writeln!(out, "</g>")
-        .expect("Failed to write to buffer!");
+        writeln!(out, "</g>").expect("Failed to write to buffer!");
     }
 }

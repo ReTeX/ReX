@@ -14,6 +14,44 @@ pub struct RenderSettings {
     pub debug:        bool
 }
 
+#[derive(Copy, Clone, Default)]
+pub struct Cursor {
+    pub x:  Pixels,
+    pub y:  Pixels
+}
+impl Cursor {
+    pub fn translate(self, dx: Pixels, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x + dx,
+            y:  self.y + dy
+        }
+    }
+    pub fn left(self, dx: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x - dx,
+            y:  self.y
+        }
+    }
+    pub fn right(self, dx: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x + dx,
+            y:  self.y
+        }
+    }
+    pub fn up(self, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x,
+            y:  self.y - dy
+        }
+    }
+    pub fn down(self, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x,
+            y:  self.y + dy
+        }
+    }
+}
+
 impl Default for RenderSettings {
     fn default() -> Self {
         RenderSettings {
@@ -82,61 +120,52 @@ impl RenderSettings {
 pub trait Renderer {
     type Out;
 
-    fn g<F>(&self, out: &mut Self::Out, off_x: Pixels, off_y: Pixels, contents: F)
-    where F: FnMut(&Self, &mut Self::Out);
+    fn bbox(&self, _out: &mut Self::Out, _pos: Cursor, _width: Pixels, _height: Pixels) {}
 
-    fn bbox(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
-
-    fn symbol(&self, out: &mut Self::Out, symbol: u32, scale: Float);
+    fn symbol(&self, out: &mut Self::Out, pos: Cursor, symbol: u32, scale: Float);
     
-    fn rule(&self, out: &mut Self::Out, x: Pixels, y: Pixels, width: Pixels, height: Pixels);
+    fn rule(&self, out: &mut Self::Out, pos: Cursor, width: Pixels, height: Pixels);
 
     fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
     where F: FnMut(&Self, &mut Self::Out);
     
-    fn render_hbox(&self, out: &mut Self::Out,
+    fn render_hbox(&self,
+        out: &mut Self::Out,
+        mut pos: Cursor,
         nodes: &[LayoutNode],
         height: Pixels,
         nodes_width: Pixels,
         alignment: Alignment)
     {
-        let mut width = Pixels(0.0);
-
         if let Alignment::Centered(w) = alignment {
-            width += (nodes_width - w)/2.0;
+            pos.x += (nodes_width - w)/2.0;
         }
 
-        self.bbox(out, nodes_width, height);
+        self.bbox(out, pos, nodes_width, height);
 
         for node in nodes {
             match node.node {
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(out, width, height,
-                        |r, out| r.symbol(out, gly.unicode, gly.scale)
-                    ),
+                    self.symbol(out, pos, gly.unicode, gly.scale),
 
                 LayoutVariant::Rule =>
                     self.rule(out,
-                        width, height - node.height,
+                        pos.up(node.height),
                         node.width, node.height
                     ),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(out, width, height - node.height,
-                        |r, out| r.render_vbox(out, &vbox.contents)
-                    ),
+                    self.render_vbox(out, pos.up(node.height), &vbox.contents),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(out, width, height - node.height, |r, out| {
-                        r.render_hbox(out,
-                            &hbox.contents, node.height,
-                            node.width, hbox.alignment
-                        )
-                    }),
+                    self.render_hbox(out, pos,
+                        &hbox.contents, node.height,
+                        node.width, hbox.alignment
+                    ),
 
                 LayoutVariant::Color(ref clr) =>
                     self.color(out, &clr.color, |r, out| {
-                        r.render_hbox(out, &clr.inner,
+                        r.render_hbox(out, pos, &clr.inner,
                             node.height, node.width, Alignment::Default
                         );
                     }),
@@ -144,34 +173,27 @@ pub trait Renderer {
                 LayoutVariant::Kern => { }
             } // End macth
 
-            width += node.width;
+            pos.x += node.width;
         }
     }
 
-    fn render_vbox(&self, out: &mut Self::Out, nodes: &[LayoutNode]) {
-        let mut height = Pixels(0.0);
-        let width      = Pixels(0.0);
-
+    fn render_vbox(&self, out: &mut Self::Out, mut pos: Cursor, nodes: &[LayoutNode]) {
         for node in nodes {
             match node.node {
                 LayoutVariant::Rule =>
-                    self.rule(out, width, height, node.width, node.height),
+                    self.rule(out, pos, node.width, node.height),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(out, width, height, |r, out| {
-                        r.render_hbox(out,
-                            &hbox.contents, node.height,
-                            node.width, hbox.alignment
-                        )
-                    }),
+                    self.render_hbox(out, pos.down(node.height),
+                        &hbox.contents, node.height,
+                        node.width, hbox.alignment
+                    ),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(out, width, height, |r, out| r.render_vbox(out, &vbox.contents)),
+                    self.render_vbox(out, pos, &vbox.contents),
 
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(out, width, height + node.height, |r, out| {
-                        r.symbol(out, gly.unicode, gly.scale)
-                    }),
+                    self.symbol(out, pos.down(node.height), gly.unicode, gly.scale),
 
                 LayoutVariant::Color(_) =>
                     panic!("Shouldn't have a color in a vertical box???"),
@@ -179,7 +201,7 @@ pub trait Renderer {
                 LayoutVariant::Kern => { }
             }
 
-            height += node.height;
+            pos.y += node.height;
         }
     }
     
@@ -215,14 +237,14 @@ pub trait Renderer {
             layout.height + 2.0 * padding.1 - layout.depth
         );
 
-        let x = Pixels(padding.0);
-        let y = Pixels(padding.1);
-        self.g(out, x, y, |r, out| {
-            r.render_hbox(out,
-                &layout.contents, layout.height,
-                layout.width, Alignment::Default
-            )
-        });
+        let pos = Cursor {
+            x: Pixels(padding.0),
+            y: Pixels(padding.1) + layout.height
+        };
+        self.render_hbox(out, pos,
+            &layout.contents, layout.height,
+            layout.width, Alignment::Default
+        );
         
         self.finish(out);
     }

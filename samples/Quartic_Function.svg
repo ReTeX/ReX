@@ -4,255 +4,76 @@
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)">
-<g transform="translate(454.73 0.00)">
+    <g font-family="rex" font-size="96.0px">
 <g fill="gray">
-<g transform="translate(0.00 44.59)">
-<text transform="scale(0.68)">Q</text>
-</g>
-<g transform="translate(47.13 44.59)">
-<text transform="scale(0.68)">u</text>
-</g>
-<g transform="translate(79.77 44.59)">
-<text transform="scale(0.68)">a</text>
-</g>
-<g transform="translate(108.76 44.59)">
-<text transform="scale(0.68)">r</text>
-</g>
-<g transform="translate(130.49 44.59)">
-<text transform="scale(0.68)">t</text>
-</g>
-<g transform="translate(148.64 44.59)">
-<text transform="scale(0.68)">i</text>
-</g>
-<g transform="translate(166.79 44.59)">
-<text transform="scale(0.68)">c</text>
-</g>
-</g>
-</g>
-<g transform="translate(0.00 73.39)">
-<g transform="translate(7.87 0.00)">
-<g transform="translate(0.00 130.18)">
-<text></text>
-</g>
-<g transform="translate(76.03 130.18)">
-<text></text>
-</g>
-<g transform="translate(97.16 130.18)">
-<text></text>
-</g>
-<g transform="translate(118.28 130.18)">
-<text></text>
-</g>
-<g transform="translate(139.40 130.18)">
-<text></text>
-</g>
-<g transform="translate(160.52 130.18)">
-<text></text>
-</g>
-<g transform="translate(181.64 130.18)">
-<text></text>
-</g>
-<g transform="translate(202.77 130.18)">
-<text></text>
-</g>
-<g transform="translate(223.89 130.18)">
-<text></text>
-</g>
-<g transform="translate(245.01 130.18)">
-<text></text>
-</g>
-<g transform="translate(266.13 130.18)">
-<text></text>
-</g>
-<g transform="translate(287.25 130.18)">
-<text></text>
-</g>
-<g transform="translate(308.38 130.18)">
-<text></text>
-</g>
-<g transform="translate(329.50 130.18)">
-<text></text>
-</g>
-<g transform="translate(350.62 130.18)">
-<text></text>
-</g>
-<g transform="translate(371.74 130.18)">
-<text></text>
-</g>
-<g transform="translate(392.86 130.18)">
-<text></text>
-</g>
-<g transform="translate(413.99 130.18)">
-<text></text>
-</g>
-<g transform="translate(435.11 130.18)">
-<text></text>
-</g>
-<g transform="translate(456.23 130.18)">
-<text></text>
-</g>
-<g transform="translate(623.18 130.18)">
-<text></text>
-</g>
-<g transform="translate(644.30 130.18)">
-<text></text>
-</g>
-<g transform="translate(665.42 130.18)">
-<text></text>
-</g>
-<g transform="translate(686.54 130.18)">
-<text></text>
-</g>
-<g transform="translate(707.66 130.18)">
-<text></text>
-</g>
-<g transform="translate(728.79 130.18)">
-<text></text>
-</g>
-<g transform="translate(749.91 130.18)">
-<text></text>
-</g>
-<g transform="translate(771.03 130.18)">
-<text></text>
-</g>
-<g transform="translate(792.15 130.18)">
-<text></text>
-</g>
-<g transform="translate(813.27 130.18)">
-<text></text>
-</g>
-<g transform="translate(834.39 130.18)">
-<text></text>
-</g>
-<g transform="translate(855.52 130.18)">
-<text></text>
-</g>
-<g transform="translate(876.64 130.18)">
-<text></text>
-</g>
-<g transform="translate(897.76 130.18)">
-<text></text>
-</g>
-<g transform="translate(918.88 130.18)">
-<text></text>
-</g>
-<g transform="translate(940.00 130.18)">
-<text></text>
-</g>
-<g transform="translate(961.13 130.18)">
-<text></text>
-</g>
-<g transform="translate(982.25 130.18)">
-<text></text>
-</g>
-<g transform="translate(1003.37 130.18)">
-<text></text>
-</g>
-</g>
-<g transform="translate(0.00 86.98)">
-<g transform="translate(0.00 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑐</text>
-</g>
-</g>
-<g transform="translate(39.84 50.40)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">4</text>
-</g>
-</g>
-<g transform="translate(72.48 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑥</text>
-</g>
-</g>
-<g transform="translate(125.28 0.00)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">4</text>
-</g>
-</g>
-<g transform="translate(179.25 70.53)">
-<text>+</text>
-</g>
-<g transform="translate(266.35 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑐</text>
-</g>
-</g>
-<g transform="translate(306.19 50.40)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">3</text>
-</g>
-</g>
-<g transform="translate(338.83 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑥</text>
-</g>
-</g>
-<g transform="translate(391.63 0.00)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">3</text>
-</g>
-</g>
-<g transform="translate(445.60 70.53)">
-<text>+</text>
-</g>
-<g transform="translate(532.69 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑐</text>
-</g>
-</g>
-<g transform="translate(572.53 50.40)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">2</text>
-</g>
-</g>
-<g transform="translate(605.17 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑥</text>
-</g>
-</g>
-<g transform="translate(657.97 0.00)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">2</text>
-</g>
-</g>
-<g transform="translate(711.95 70.53)">
-<text>+</text>
-</g>
-<g transform="translate(799.04 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑐</text>
-</g>
-</g>
-<g transform="translate(838.88 50.40)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">1</text>
-</g>
-</g>
-<g transform="translate(871.52 70.53)">
-<text>𝑥</text>
-</g>
-<g transform="translate(945.65 70.53)">
-<text>+</text>
-</g>
-<g transform="translate(1032.75 28.19)">
-<g transform="translate(0.00 42.34)">
-<text>𝑐</text>
-</g>
-</g>
-<g transform="translate(1072.59 50.40)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">0</text>
-</g>
-</g>
-</g>
-</g>
-<g transform="translate(0.00 313.41)">
-<g transform="translate(552.61 0.00)">
-</g>
-</g>
-</g>
+<text transform="translate(466.73, 49.59) scale(0.68)">Q</text>
+<text transform="translate(513.86, 49.59) scale(0.68)">u</text>
+<text transform="translate(546.50, 49.59) scale(0.68)">a</text>
+<text transform="translate(575.48, 49.59) scale(0.68)">r</text>
+<text transform="translate(597.22, 49.59) scale(0.68)">t</text>
+<text transform="translate(615.37, 49.59) scale(0.68)">i</text>
+<text transform="translate(633.52, 49.59) scale(0.68)">c</text>
+</g>
+<text transform="translate(19.87, 208.56)"></text>
+<text transform="translate(95.91, 208.56)"></text>
+<text transform="translate(117.03, 208.56)"></text>
+<text transform="translate(138.15, 208.56)"></text>
+<text transform="translate(159.27, 208.56)"></text>
+<text transform="translate(180.39, 208.56)"></text>
+<text transform="translate(201.52, 208.56)"></text>
+<text transform="translate(222.64, 208.56)"></text>
+<text transform="translate(243.76, 208.56)"></text>
+<text transform="translate(264.88, 208.56)"></text>
+<text transform="translate(286.00, 208.56)"></text>
+<text transform="translate(307.13, 208.56)"></text>
+<text transform="translate(328.25, 208.56)"></text>
+<text transform="translate(349.37, 208.56)"></text>
+<text transform="translate(370.49, 208.56)"></text>
+<text transform="translate(391.61, 208.56)"></text>
+<text transform="translate(412.74, 208.56)"></text>
+<text transform="translate(433.86, 208.56)"></text>
+<text transform="translate(454.98, 208.56)"></text>
+<text transform="translate(476.10, 208.56)"></text>
+<text transform="translate(643.05, 208.56)"></text>
+<text transform="translate(664.17, 208.56)"></text>
+<text transform="translate(685.29, 208.56)"></text>
+<text transform="translate(706.41, 208.56)"></text>
+<text transform="translate(727.54, 208.56)"></text>
+<text transform="translate(748.66, 208.56)"></text>
+<text transform="translate(769.78, 208.56)"></text>
+<text transform="translate(790.90, 208.56)"></text>
+<text transform="translate(812.02, 208.56)"></text>
+<text transform="translate(833.14, 208.56)"></text>
+<text transform="translate(854.27, 208.56)"></text>
+<text transform="translate(875.39, 208.56)"></text>
+<text transform="translate(896.51, 208.56)"></text>
+<text transform="translate(917.63, 208.56)"></text>
+<text transform="translate(938.75, 208.56)"></text>
+<text transform="translate(959.88, 208.56)"></text>
+<text transform="translate(981.00, 208.56)"></text>
+<text transform="translate(1002.12, 208.56)"></text>
+<text transform="translate(1023.24, 208.56)"></text>
+<text transform="translate(12.00, 235.89)">𝑐</text>
+<text transform="translate(51.84, 259.89) scale(0.68)">4</text>
+<text transform="translate(84.48, 235.89)">𝑥</text>
+<text transform="translate(137.28, 209.49) scale(0.68)">4</text>
+<text transform="translate(191.25, 235.89)">+</text>
+<text transform="translate(278.35, 235.89)">𝑐</text>
+<text transform="translate(318.19, 259.89) scale(0.68)">3</text>
+<text transform="translate(350.83, 235.89)">𝑥</text>
+<text transform="translate(403.63, 209.49) scale(0.68)">3</text>
+<text transform="translate(457.60, 235.89)">+</text>
+<text transform="translate(544.69, 235.89)">𝑐</text>
+<text transform="translate(584.53, 259.89) scale(0.68)">2</text>
+<text transform="translate(617.17, 235.89)">𝑥</text>
+<text transform="translate(669.97, 209.49) scale(0.68)">2</text>
+<text transform="translate(723.95, 235.89)">+</text>
+<text transform="translate(811.04, 235.89)">𝑐</text>
+<text transform="translate(850.88, 259.89) scale(0.68)">1</text>
+<text transform="translate(883.52, 235.89)">𝑥</text>
+<text transform="translate(957.65, 235.89)">+</text>
+<text transform="translate(1044.75, 235.89)">𝑐</text>
+<text transform="translate(1084.59, 259.89) scale(0.68)">0</text>
 </g>
 </svg>
 

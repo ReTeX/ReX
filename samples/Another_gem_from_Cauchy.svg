@@ -4,114 +4,37 @@
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)">
-<g transform="translate(0.00 68.78)">
-<g transform="translate(0.00 64.13)">
-<text>𝑓</text>
-</g>
-</g>
-<g transform="translate(53.28 50.38)">
-<g transform="translate(11.52 0.00)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">(</text>
-</g>
-<g transform="translate(21.74 44.13)">
-<text transform="scale(0.68)">𝑛</text>
-</g>
-<g transform="translate(54.18 44.13)">
-<text transform="scale(0.68)">)</text>
-</g>
-</g>
-</g>
-<g transform="translate(140.72 132.91)">
-<text>(</text>
-</g>
-<g transform="translate(172.69 132.91)">
-<text>𝑧</text>
-</g>
-<g transform="translate(220.59 132.91)">
-<text>)</text>
-</g>
-<g transform="translate(284.56 132.91)">
-<text>=</text>
-</g>
-<g transform="translate(383.92 12.34)">
-<g transform="translate(23.14 64.90)">
-<text>𝑛</text>
-</g>
-<g transform="translate(70.85 64.90)">
-<text>!</text>
-</g>
-<rect x="0.00" y ="93.41" width="125.95" height="6.34" fill="#000"/>
-<g transform="translate(0.00 122.88)">
-<g transform="translate(0.00 64.90)">
-<text>2</text>
-</g>
-<g transform="translate(48.00 64.90)">
-<text>π</text>
-</g>
-<g transform="translate(96.10 64.90)">
-<text>𝑖</text>
-</g>
-</g>
-</g>
-<g transform="translate(527.47 0.00)">
-<g transform="translate(0.00 192.00)">
-<text></text>
-</g>
-</g>
-<g transform="translate(654.03 0.24)">
-<g transform="translate(106.43 65.57)">
-<text>𝑓</text>
-</g>
-<g transform="translate(159.71 65.57)">
-<text>(</text>
-</g>
-<g transform="translate(191.67 65.57)">
-<text>ξ</text>
-</g>
-<g transform="translate(234.01 65.57)">
-<text>)</text>
-</g>
-<rect x="0.00" y ="105.50" width="372.40" height="6.34" fill="#000"/>
-<g transform="translate(0.00 130.85)">
-<g transform="translate(0.00 73.03)">
-<text>(</text>
-</g>
-<g transform="translate(31.97 73.03)">
-<text>ξ</text>
-</g>
-<g transform="translate(95.64 73.03)">
-<text>−</text>
-</g>
-<g transform="translate(182.73 73.03)">
-<text>𝑧</text>
-</g>
-<g transform="translate(230.63 8.13)">
-<g transform="translate(0.00 64.90)">
-<text>)</text>
-</g>
-</g>
-<g transform="translate(262.60 0.00)">
-<g transform="translate(0.00 44.13)">
-<text transform="scale(0.68)">𝑛</text>
-</g>
-<g transform="translate(32.44 44.13)">
-<text transform="scale(0.68)">+</text>
-</g>
-<g transform="translate(77.16 44.13)">
-<text transform="scale(0.68)">1</text>
-</g>
-</g>
-</g>
-</g>
-<g transform="translate(1060.04 132.91)">
-<text>d</text>
-</g>
-<g transform="translate(1108.04 132.91)">
-<text>ξ</text>
-</g>
-</g>
+    <g font-family="rex" font-size="96.0px">
+<text transform="translate(12.00, 137.91)">𝑓</text>
+<text transform="translate(76.80, 99.51) scale(0.68)">(</text>
+<text transform="translate(98.54, 99.51) scale(0.68)">𝑛</text>
+<text transform="translate(130.98, 99.51) scale(0.68)">)</text>
+<text transform="translate(152.72, 137.91)">(</text>
+<text transform="translate(184.69, 137.91)">𝑧</text>
+<text transform="translate(232.59, 137.91)">)</text>
+<text transform="translate(296.56, 137.91)">=</text>
+<text transform="translate(419.06, 82.23)">𝑛</text>
+<text transform="translate(466.77, 82.23)">!</text>
+<rect x="395.92" y ="110.74" width="125.95" height="6.34" fill="#000"/>
+<text transform="translate(395.92, 205.11)">2</text>
+<text transform="translate(443.92, 205.11)">π</text>
+<text transform="translate(492.02, 205.11)">𝑖</text>
+<text transform="translate(539.47, 197.00)"></text>
+<text transform="translate(772.46, 70.81)">𝑓</text>
+<text transform="translate(825.74, 70.81)">(</text>
+<text transform="translate(857.71, 70.81)">ξ</text>
+<text transform="translate(900.04, 70.81)">)</text>
+<rect x="666.03" y ="110.74" width="372.40" height="6.34" fill="#000"/>
+<text transform="translate(666.03, 209.11)">(</text>
+<text transform="translate(698.00, 209.11)">ξ</text>
+<text transform="translate(761.67, 209.11)">−</text>
+<text transform="translate(848.76, 209.11)">𝑧</text>
+<text transform="translate(896.67, 209.11)">)</text>
+<text transform="translate(928.64, 180.22) scale(0.68)">𝑛</text>
+<text transform="translate(961.08, 180.22) scale(0.68)">+</text>
+<text transform="translate(1005.80, 180.22) scale(0.68)">1</text>
+<text transform="translate(1072.04, 137.91)">d</text>
+<text transform="translate(1120.04, 137.91)">ξ</text>
 </g>
 </svg>
 
