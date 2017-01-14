@@ -1,5 +1,6 @@
 #![allow(non_upper_case_globals)]
 extern crate rex;
+use rex::Renderer;
 
 use std::fs::File;
 use std::io::Write;
@@ -48,35 +49,36 @@ r##"<!DOCTYPE html>
 
 const END: &'static str = r"</body></html>";
 
-//#[test]
-// fn font_styles_render() {
-//     let svg  = rex::SVGRenderer::new().font_src("rex-xits.woff2").font_size(32.0);
-//     let mut file = File::create("tests/out/font_styles.html")
-//         .expect("Unable to create `font_styles.html`");
-//     let mut result = String::from(HEADER);
+#[test]
+fn font_styles_render() {
+    let settings = rex::RenderSettings::default().font_src("rex-xits.woff2").font_size(32.0);
+    let svg  = rex::SVGRenderer::<String>::new(&settings);
+    let mut file = File::create("tests/out/font_styles.html")
+        .expect("Unable to create `font_styles.html`");
+    let mut result = String::from(HEADER);
 
-//     for &style in styles.iter() {
-//         result += &format!(
-//             "<h2><center>{}</center></h2>\n\
-//              <center>{}</center>\n\
-//              <center>{}</center>\n\
-//              <center>{}</center>\n\
-//              <center>{}</center>\n\
-//              <center>{}</center>\n\
-//              <center>{}</center>\n",
-//              style,
-//              svg.render(&tex(style, latin)),
-//              svg.render(&tex(style, LATIN)),
-//              svg.render(&tex(style, greek)),
-//              svg.render(&tex(style, GREEK)),
-//              svg.render(&tex(style, digit)),
-//              svg.render(&tex(style, other)));
-//     }
+    for &style in styles.iter() {
+        result += &format!(
+            "<h2><center>{}</center></h2>\n\
+             <center>{}</center>\n\
+             <center>{}</center>\n\
+             <center>{}</center>\n\
+             <center>{}</center>\n\
+             <center>{}</center>\n\
+             <center>{}</center>\n",
+             style,
+             svg.render(&tex(style, latin)),
+             svg.render(&tex(style, LATIN)),
+             svg.render(&tex(style, greek)),
+             svg.render(&tex(style, GREEK)),
+             svg.render(&tex(style, digit)),
+             svg.render(&tex(style, other)));
+    }
 
-//     result += END;
-//     file.write_all(&result.as_bytes())
-//         .expect("Unable to write to `font_styles.html`");
-// }
+    result += END;
+    file.write_all(&result.as_bytes())
+        .expect("Unable to write to `font_styles.html`");
+}
 
 fn tex(style: &str, source: &str) -> String {
     // count the number of { and match
