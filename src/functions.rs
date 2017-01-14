@@ -5,11 +5,10 @@ use parser::AtomType;
 use lexer::Lexer;
 use lexer::Token;
 use parser as parse;
-use parser::Locals;
 use dimensions::Unit;
 use layout::Style;
-use font::fontselection::{ Family, Weight };
-use font::fontselection::style_offset;
+use font::Weight;
+use font::Style as FontStyle;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -55,7 +54,9 @@ macro_rules! sym {
 macro_rules! text {
     ($code:expr) => ({
         ParseNode::Symbol(Symbol {
-            unicode: $code as u32 + style_offset($code as u32, Family::Roman, Weight::None),
+            unicode: ::font::Style::default()
+                .with_weight(Weight::None)
+                .style_symbol($code as u32),
             atom_type: AtomType::Ordinal,
         })
     })
@@ -195,7 +196,7 @@ macro_rules! required {
 
 impl TexCommand {
     #[allow(dead_code, unused_variables)]
-    pub fn parse(self, lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
+    pub fn parse(self, lex: &mut Lexer, local: FontStyle) -> Result<Option<ParseNode>, String> {
         Ok(match self {
             TexCommand::Radical =>
                 Some(ParseNode::Radical(Radical {

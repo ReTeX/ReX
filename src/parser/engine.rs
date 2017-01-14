@@ -1,12 +1,11 @@
 #![allow(dead_code)]
 // TODO: Figure out how to handle functions which are in Symbols table.
-use font::fontselection::{ style_offset, Family, Weight };
+use font::Style;
 use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
 use parser::nodes::{ Delimited, ParseNode };
 use parser::atoms::IsAtom;
 use parser::AtomType;
-use parser::Locals;
 use functions::COMMANDS;
 use super::builders as build;
 
@@ -19,7 +18,7 @@ use super::builders as build;
 /// inside this method will fail and raise and error.
 
 
-pub fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
+pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
     let mut ml: Vec<ParseNode> = Vec::new();
 
     loop {
@@ -46,7 +45,7 @@ pub fn expression(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, Stri
 }
 
 fn postfix(lex: &mut Lexer,
-           local: Locals,
+           local: Style,
            mut prev: Option<ParseNode>) -> Result<Option<ParseNode>, String> {
     let mut superscript: Option<ParseNode> = None;
     let mut subscript:   Option<ParseNode> = None;
@@ -99,33 +98,11 @@ fn postfix(lex: &mut Lexer,
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
-pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) -> Result<bool, String> {
+pub fn state_change(lex: &mut Lexer, local: Style, nodes: &mut Vec<ParseNode>) -> Result<bool, String> {
     if let Token::Command(cmd) = lex.current {
-        use ::std::convert::TryFrom;
-        if let Ok(family) = Family::try_from(cmd) {
+        if let Some(style) = Style::from_cmd(cmd, &local) {
             lex.next();
-            nodes.append(
-                &mut macro_argument(lex, local.with_family(family))?
-                    .unwrap_or(vec![]));
-            return Ok(true);
-        }
-
-        if let Some(weight) =
-            match cmd {
-                "bf" | "mathbf" =>
-                    match local.weight {
-                        Weight::BoldItalic | Weight::Italic => Some(Weight::BoldItalic),
-                        _ => Some(Weight::Bold),
-                    },
-                "it" | "mathit" =>
-                    match local.weight {
-                        Weight::BoldItalic | Weight::Bold => Some(Weight::BoldItalic),
-                        _ => Some(Weight::Italic),
-                    },
-                _ => None,
-            } {
-            lex.next();
-            nodes.append(&mut macro_argument(lex, local.with_weight(weight))?
+            nodes.append(&mut macro_argument(lex, style)?
                 .unwrap_or(vec![]));
             return Ok(true);
         }
@@ -144,7 +121,7 @@ pub fn state_change(lex: &mut Lexer, local: Locals, nodes: &mut Vec<ParseNode>) 
 /// This method will result in an error if either the `Symbol` or
 /// `<mathmode material>` contains an error, or if no match is found.
 
-pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
+pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode, String> {
     first_some!(lex, local,
             command, group, symbol,)
         .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
@@ -156,7 +133,7 @@ pub fn math_field(lex: &mut Lexer, local: Locals) -> Result<ParseNode, String> {
 /// If no matching command is found, this will return `Ok(None)`.  This method
 /// can fail while parsing parameters for a TeX command.
 
-pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
+pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
     // TODO: We need to build a framework, that will match commands
     let cmd = if let Token::Command(cmd) = lex.current {
         match COMMANDS.get(cmd).cloned() {
@@ -179,7 +156,7 @@ pub fn command(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Stri
 ///
 /// This should be used almost anywhere `group()` is used.
 
-pub fn implicit_group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
+pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
     let token = lex.current;
 
     if token == Token::Command("left") {
@@ -212,7 +189,7 @@ pub fn implicit_group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode
 
 // TODO: This should also recognize `\bgroup` if we decide to go that route.
 
-pub fn group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
+pub fn group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
     if lex.current == Token::Symbol('{') {
         lex.next();
         let inner = expression(lex, local)?;
@@ -234,7 +211,7 @@ pub fn group(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String
 /// the `{` will not be recognized here and will therefore result in an `Err`.
 /// So in general, you should always parse for a group before parsing for a symbol.
 
-pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, String> {
+pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
     match lex.current {
         Token::Command(cs) => {
             match SYMBOLS.get(cs).cloned() {
@@ -251,7 +228,10 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
                             nucleus: Box::new(nucleus),
                         })))
                     } else {
-                        Ok(Some(ParseNode::Symbol(sym)))
+                        Ok(Some(ParseNode::Symbol(Symbol {
+                            unicode: local.style_symbol(sym.unicode),
+                            ..sym
+                        })))
                     }
                 },
             }
@@ -262,7 +242,7 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
                 Some(sym) => {
                     lex.next();
                     Some(ParseNode::Symbol(Symbol{
-                        unicode: c as u32 + style_offset(c as u32, local.family, local.weight),
+                        unicode:  local.style_symbol(c as u32),
                         atom_type: sym,
                     }))
                 },
@@ -283,7 +263,7 @@ pub fn symbol(lex: &mut Lexer, local: Locals) -> Result<Option<ParseNode>, Strin
 ///   - When can this possible fail?
 ///   - How to handle custom validators/parsers for arguments. ie: Argument is a color.
 
-pub fn macro_argument(lex: &mut Lexer, local: Locals) -> Result<Option<Vec<ParseNode>>, String> {
+pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseNode>>, String> {
     // Must figure out how to properly handle implicit groups here.
     while lex.current == Token::WhiteSpace { lex.next(); }
 
@@ -297,7 +277,7 @@ pub fn macro_argument(lex: &mut Lexer, local: Locals) -> Result<Option<Vec<Parse
 
 /// This method is like `macro_argument` except that it requires an argument to be present.
 
-pub fn required_macro_argument(lex: &mut Lexer, local: Locals) -> Result<Vec<ParseNode>, String> {
+pub fn required_macro_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
     let arg = macro_argument(lex, local)?;
     match arg {
         None => Err(format!("Expected a required macro argument! {:?}", arg)),
@@ -326,7 +306,7 @@ pub fn special_macro_argument(lex: &mut Lexer) -> () {
 ///
 /// This function _will_ advance the lexer.
 
-pub fn expect_type(lex: &mut Lexer, local: Locals, expected: AtomType) -> Result<Symbol, String> {
+pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<Symbol, String> {
     lex.consume_whitespace();
 
     if let Some(ParseNode::Symbol(sym)) = symbol(lex, local)? {
@@ -346,7 +326,7 @@ pub fn expect_type(lex: &mut Lexer, local: Locals, expected: AtomType) -> Result
 
 pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
     let mut lexer = Lexer::new(input);
-    let local = Locals::new();
+    let local = Style::new();
 
     let result = expression(&mut lexer, local);
     if lexer.current != Token::EOF {

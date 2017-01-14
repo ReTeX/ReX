@@ -1,5 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="1101.04" height="233.34" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
-</defs>
-<g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)"><g transform="translate(0.00 192.00)"><text></text></g><g transform="translate(108.96 180.00)"><g transform="translate(-52.80 42.63)"><text transform="scale(0.68)">𝐷</text></g></g><g transform="translate(108.96 132.91)"><text>(</text></g><g transform="translate(140.93 132.91)"><text>∇</text></g><g transform="translate(232.44 132.91)"><text>⋅</text></g><g transform="translate(281.23 132.91)"><text>𝐹</text></g><g transform="translate(340.55 132.91)"><text>)</text></g><g transform="translate(388.52 132.91)"><text>d</text></g><g transform="translate(436.52 132.91)"><text>𝑉</text></g><g transform="translate(523.72 132.91)"><text>=</text></g><g transform="translate(621.48 0.00)"><g transform="translate(0.00 192.00)"><text></text></g></g><g transform="translate(730.44 179.28)"><g transform="translate(-52.80 0.00)"><g transform="translate(0.00 43.35)"><text transform="scale(0.68)">∂</text></g><g transform="translate(28.27 43.35)"><text transform="scale(0.68)">𝐷</text></g></g></g><g transform="translate(773.48 132.91)"><text>𝐹</text></g><g transform="translate(854.14 132.91)"><text>⋅</text></g><g transform="translate(902.93 132.91)"><text>𝑛</text></g><g transform="translate(966.64 132.91)"><text>d</text></g><g transform="translate(1014.64 132.91)"><text>𝑆</text></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="1107.19" height="233.34" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
+    </defs>
+    <g font-family="rex" font-size="96.0px">
+<text transform="translate(12.00, 197.00)"></text>
+<text transform="translate(68.16, 227.62) scale(0.68)">𝐷</text>
+<text transform="translate(120.96, 137.91)">(</text>
+<text transform="translate(152.93, 137.91)">∇</text>
+<text transform="translate(244.44, 137.91)">⋅</text>
+<text transform="translate(293.23, 137.91)">𝐹</text>
+<text transform="translate(352.55, 137.91)">)</text>
+<text transform="translate(400.52, 137.91)">𝑑</text>
+<text transform="translate(451.59, 137.91)">𝑉</text>
+<text transform="translate(538.79, 137.91)">=</text>
+<text transform="translate(636.55, 197.00)"></text>
+<text transform="translate(692.71, 227.62) scale(0.68)">∂</text>
+<text transform="translate(720.98, 227.62) scale(0.68)">𝐷</text>
+<text transform="translate(788.55, 137.91)">𝐹</text>
+<text transform="translate(869.21, 137.91)">⋅</text>
+<text transform="translate(918.00, 137.91)">𝑛</text>
+<text transform="translate(981.71, 137.91)">𝑑</text>
+<text transform="translate(1032.79, 137.91)">𝑆</text>
+</g>
+</svg>
+

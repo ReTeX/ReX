@@ -1,5 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg width="993.60" height="97.25" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
-</defs>
-<g font-family="rex" font-size="96.0px"><g transform="translate(12.00 5.00)"><g transform="translate(0.00 18.42)"><g transform="translate(0.00 64.90)"><text>3</text></g></g><g transform="translate(48.00 0.78)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">3</text></g></g><g transform="translate(101.97 83.31)"><text>+</text></g><g transform="translate(189.07 18.42)"><g transform="translate(0.00 64.90)"><text>4</text></g></g><g transform="translate(237.07 0.78)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">4</text></g></g><g transform="translate(291.04 83.31)"><text>+</text></g><g transform="translate(378.13 18.42)"><g transform="translate(0.00 64.90)"><text>3</text></g></g><g transform="translate(426.13 0.78)"><g transform="translate(0.00 44.13)"><text transform="scale(0.68)">3</text></g></g><g transform="translate(480.11 83.31)"><text>+</text></g><g transform="translate(567.20 17.26)"><g transform="translate(0.00 66.05)"><text>5</text></g></g><g transform="translate(615.20 0.00)"><g transform="translate(0.00 44.91)"><text transform="scale(0.68)">5</text></g></g><g transform="translate(679.84 83.31)"><text>=</text></g><g transform="translate(777.60 83.31)"><text>3</text></g><g transform="translate(825.60 83.31)"><text>4</text></g><g transform="translate(873.60 83.31)"><text>3</text></g><g transform="translate(921.60 83.31)"><text>5</text></g></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="993.60" height="97.25" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+    <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
+    </defs>
+    <g font-family="rex" font-size="96.0px">
+<text transform="translate(12.00, 88.31)">3</text>
+<text transform="translate(60.00, 49.91) scale(0.68)">3</text>
+<text transform="translate(113.97, 88.31)">+</text>
+<text transform="translate(201.07, 88.31)">4</text>
+<text transform="translate(249.07, 49.91) scale(0.68)">4</text>
+<text transform="translate(303.04, 88.31)">+</text>
+<text transform="translate(390.13, 88.31)">3</text>
+<text transform="translate(438.13, 49.91) scale(0.68)">3</text>
+<text transform="translate(492.11, 88.31)">+</text>
+<text transform="translate(579.20, 88.31)">5</text>
+<text transform="translate(627.20, 49.91) scale(0.68)">5</text>
+<text transform="translate(691.84, 88.31)">=</text>
+<text transform="translate(789.60, 88.31)">3</text>
+<text transform="translate(837.60, 88.31)">4</text>
+<text transform="translate(885.60, 88.31)">3</text>
+<text transform="translate(933.60, 88.31)">5</text>
+</g>
+</svg>
+

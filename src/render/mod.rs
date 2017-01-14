@@ -14,6 +14,44 @@ pub struct RenderSettings {
     pub debug:        bool
 }
 
+#[derive(Copy, Clone, Default)]
+pub struct Cursor {
+    pub x:  Pixels,
+    pub y:  Pixels
+}
+impl Cursor {
+    pub fn translate(self, dx: Pixels, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x + dx,
+            y:  self.y + dy
+        }
+    }
+    pub fn left(self, dx: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x - dx,
+            y:  self.y
+        }
+    }
+    pub fn right(self, dx: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x + dx,
+            y:  self.y
+        }
+    }
+    pub fn up(self, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x,
+            y:  self.y - dy
+        }
+    }
+    pub fn down(self, dy: Pixels) -> Cursor {
+        Cursor {
+            x:  self.x,
+            y:  self.y + dy
+        }
+    }
+}
+
 impl Default for RenderSettings {
     fn default() -> Self {
         RenderSettings {
@@ -80,57 +118,54 @@ impl RenderSettings {
 }
 
 pub trait Renderer {
-    fn g<F>(&mut self, off_x: Pixels, off_y: Pixels, contents: F)
-    where F: FnMut(&mut Self);
+    type Out;
 
-    fn bbox(&mut self, width: Pixels, height: Pixels);
+    fn bbox(&self, _out: &mut Self::Out, _pos: Cursor, _width: Pixels, _height: Pixels) {}
 
-    fn symbol(&mut self, symbol: u32, scale: Float);
+    fn symbol(&self, out: &mut Self::Out, pos: Cursor, symbol: u32, scale: Float);
     
-    fn rule(&mut self, x: Pixels, y: Pixels, width: Pixels, height: Pixels);
+    fn rule(&self, out: &mut Self::Out, pos: Cursor, width: Pixels, height: Pixels);
 
-    fn color<F>(&mut self, color: &str, contents: F)
-    where F: FnMut(&mut Self);
+    fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
+    where F: FnMut(&Self, &mut Self::Out);
     
-    fn render_hbox(&mut self,
+    fn render_hbox(&self,
+        out: &mut Self::Out,
+        mut pos: Cursor,
         nodes: &[LayoutNode],
         height: Pixels,
         nodes_width: Pixels,
         alignment: Alignment)
     {
-        let mut width = Pixels(0.0);
-
         if let Alignment::Centered(w) = alignment {
-            width += (nodes_width - w)/2.0;
+            pos.x += (nodes_width - w)/2.0;
         }
 
-        self.bbox(nodes_width, height);
+        self.bbox(out, pos, nodes_width, height);
 
         for node in nodes {
             match node.node {
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(width, height, |r| r.symbol(gly.unicode, gly.scale)),
+                    self.symbol(out, pos, gly.unicode, gly.scale),
 
                 LayoutVariant::Rule =>
-                    self.rule(
-                        width, height - node.height,
+                    self.rule(out,
+                        pos.up(node.height),
                         node.width, node.height
                     ),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(width, height - node.height, |r| r.render_vbox(&vbox.contents)),
+                    self.render_vbox(out, pos.up(node.height), &vbox.contents),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(width, height - node.height, |r| {
-                        r.render_hbox(
-                            &hbox.contents, node.height,
-                            node.width, hbox.alignment
-                        )
-                    }),
+                    self.render_hbox(out, pos,
+                        &hbox.contents, node.height,
+                        node.width, hbox.alignment
+                    ),
 
                 LayoutVariant::Color(ref clr) =>
-                    self.color(&clr.color, |r| {
-                        r.render_hbox(&clr.inner,
+                    self.color(out, &clr.color, |r, out| {
+                        r.render_hbox(out, pos, &clr.inner,
                             node.height, node.width, Alignment::Default
                         );
                     }),
@@ -138,34 +173,27 @@ pub trait Renderer {
                 LayoutVariant::Kern => { }
             } // End macth
 
-            width += node.width;
+            pos.x += node.width;
         }
     }
 
-    fn render_vbox(&mut self, nodes: &[LayoutNode]) {
-        let mut height = Pixels(0.0);
-        let width      = Pixels(0.0);
-
+    fn render_vbox(&self, out: &mut Self::Out, mut pos: Cursor, nodes: &[LayoutNode]) {
         for node in nodes {
             match node.node {
                 LayoutVariant::Rule =>
-                    self.rule(width, height, node.width, node.height),
+                    self.rule(out, pos, node.width, node.height),
 
                 LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.g(width, height, |r| {
-                        r.render_hbox(
-                            &hbox.contents, node.height,
-                            node.width, hbox.alignment
-                        )
-                    }),
+                    self.render_hbox(out, pos.down(node.height),
+                        &hbox.contents, node.height,
+                        node.width, hbox.alignment
+                    ),
 
                 LayoutVariant::VerticalBox(ref vbox) =>
-                    self.g(width, height, |r| r.render_vbox(&vbox.contents)),
+                    self.render_vbox(out, pos, &vbox.contents),
 
                 LayoutVariant::Glyph(ref gly) =>
-                    self.g(width, height + node.height, |r| {
-                        r.symbol(gly.unicode, gly.scale)
-                    }),
+                    self.symbol(out, pos.down(node.height), gly.unicode, gly.scale),
 
                 LayoutVariant::Color(_) =>
                     panic!("Shouldn't have a color in a vertical box???"),
@@ -173,15 +201,15 @@ pub trait Renderer {
                 LayoutVariant::Kern => { }
             }
 
-            height += node.height;
+            pos.y += node.height;
         }
     }
     
-    fn prepare(&mut self, _width: Pixels, _height: Pixels) {}
-    fn finish(&mut self) {}
+    fn prepare(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
+    fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
     
-    fn render(&mut self, tex: &str) {
+    fn render_to(&self, out: &mut Self::Out, tex: &str) {
         let mut parse = match parse(&tex) {
                 Ok(res)  => res,
                 Err(err) => {
@@ -202,23 +230,29 @@ pub trait Renderer {
             self.settings().vert_padding
         );
         
-        self.prepare(
+        self.prepare(out,
             // Left and right padding
             layout.width  + 2.0 * padding.0,
             // Top and bot padding
             layout.height + 2.0 * padding.1 - layout.depth
         );
 
-        let x = Pixels(padding.0);
-        let y = Pixels(padding.1);
-        self.g(x, y, |r| {
-            r.render_hbox(
-                &layout.contents, layout.height,
-                layout.width, Alignment::Default
-            )
-        });
+        let pos = Cursor {
+            x: Pixels(padding.0),
+            y: Pixels(padding.1) + layout.height
+        };
+        self.render_hbox(out, pos,
+            &layout.contents, layout.height,
+            layout.width, Alignment::Default
+        );
         
-        self.finish();
+        self.finish(out);
+    }
+    
+    fn render(&self, tex: &str) -> Self::Out where Self::Out: Default {
+        let mut out = Self::Out::default();
+        self.render_to(&mut out, tex);
+        out
     }
 }
 
