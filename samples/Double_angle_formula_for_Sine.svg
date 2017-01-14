@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1665.01" height="92.46" xmlns="http://www.w3.org/2000/svg">
+<svg width="1645.53" height="93.14" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 69.90)">𝑠</text>
-<text transform="translate(54.24, 69.90)">𝑖</text>
-<text transform="translate(84.10, 69.90)">𝑛</text>
-<text transform="translate(131.81, 69.90)">(</text>
-<text transform="translate(163.78, 69.90)">𝜃</text>
-<text transform="translate(231.57, 69.90)">+</text>
-<text transform="translate(318.67, 69.90)">𝜑</text>
-<text transform="translate(382.60, 69.90)">)</text>
-<text transform="translate(446.57, 69.90)">=</text>
-<text transform="translate(544.33, 69.90)">𝑠</text>
-<text transform="translate(586.57, 69.90)">𝑖</text>
-<text transform="translate(616.43, 69.90)">𝑛</text>
-<text transform="translate(664.14, 69.90)">(</text>
-<text transform="translate(696.11, 69.90)">𝜃</text>
-<text transform="translate(742.57, 69.90)">)</text>
-<text transform="translate(790.54, 69.90)">𝑐</text>
-<text transform="translate(830.38, 69.90)">𝑜</text>
-<text transform="translate(874.35, 69.90)">𝑠</text>
-<text transform="translate(916.59, 69.90)">(</text>
-<text transform="translate(948.55, 69.90)">𝜑</text>
-<text transform="translate(1012.49, 69.90)">)</text>
-<text transform="translate(1065.79, 69.90)">+</text>
-<text transform="translate(1152.89, 69.90)">𝑠</text>
-<text transform="translate(1195.13, 69.90)">𝑖</text>
-<text transform="translate(1224.98, 69.90)">𝑛</text>
-<text transform="translate(1272.69, 69.90)">(</text>
-<text transform="translate(1304.66, 69.90)">𝜑</text>
-<text transform="translate(1368.60, 69.90)">)</text>
-<text transform="translate(1416.57, 69.90)">𝑐</text>
-<text transform="translate(1456.41, 69.90)">𝑜</text>
-<text transform="translate(1500.37, 69.90)">𝑠</text>
-<text transform="translate(1542.61, 69.90)">(</text>
-<text transform="translate(1574.58, 69.90)">𝜃</text>
-<text transform="translate(1621.05, 69.90)">)</text>
+<text transform="translate(12.00, 70.57)">s</text>
+<text transform="translate(49.34, 70.57)">i</text>
+<text transform="translate(76.03, 70.57)">n</text>
+<text transform="translate(124.03, 70.57)">(</text>
+<text transform="translate(156.00, 70.57)">𝜃</text>
+<text transform="translate(223.80, 70.57)">+</text>
+<text transform="translate(310.89, 70.57)">𝜑</text>
+<text transform="translate(374.83, 70.57)">)</text>
+<text transform="translate(438.79, 70.57)">=</text>
+<text transform="translate(536.55, 70.57)">s</text>
+<text transform="translate(573.90, 70.57)">i</text>
+<text transform="translate(600.59, 70.57)">n</text>
+<text transform="translate(648.59, 70.57)">(</text>
+<text transform="translate(680.55, 70.57)">𝜃</text>
+<text transform="translate(727.02, 70.57)">)</text>
+<text transform="translate(774.99, 70.57)">c</text>
+<text transform="translate(817.61, 70.57)">o</text>
+<text transform="translate(865.61, 70.57)">s</text>
+<text transform="translate(902.95, 70.57)">(</text>
+<text transform="translate(934.92, 70.57)">𝜑</text>
+<text transform="translate(998.86, 70.57)">)</text>
+<text transform="translate(1052.16, 70.57)">+</text>
+<text transform="translate(1139.25, 70.57)">s</text>
+<text transform="translate(1176.60, 70.57)">i</text>
+<text transform="translate(1203.29, 70.57)">n</text>
+<text transform="translate(1251.29, 70.57)">(</text>
+<text transform="translate(1283.25, 70.57)">𝜑</text>
+<text transform="translate(1347.19, 70.57)">)</text>
+<text transform="translate(1395.16, 70.57)">c</text>
+<text transform="translate(1437.78, 70.57)">o</text>
+<text transform="translate(1485.78, 70.57)">s</text>
+<text transform="translate(1523.13, 70.57)">(</text>
+<text transform="translate(1555.09, 70.57)">𝜃</text>
+<text transform="translate(1601.56, 70.57)">)</text>
 </g>
 </svg>
 

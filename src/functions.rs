@@ -7,7 +7,7 @@ use lexer::Token;
 use parser as parse;
 use dimensions::Unit;
 use layout::Style;
-use font::Weight;
+use font::{Weight, Family};
 use font::Style as FontStyle;
 
 #[allow(dead_code)]
@@ -55,6 +55,7 @@ macro_rules! text {
     ($code:expr) => ({
         ParseNode::Symbol(Symbol {
             unicode: ::font::Style::default()
+                .with_family(Family::Roman)
                 .with_weight(Weight::None)
                 .style_symbol($code as u32),
             atom_type: AtomType::Ordinal,
