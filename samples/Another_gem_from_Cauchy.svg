@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1181.38" height="231.68" xmlns="http://www.w3.org/2000/svg">
+<svg width="1178.31" height="231.68" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
@@ -33,8 +33,8 @@
 <text transform="translate(933.34, 180.22) scale(0.68)">𝑛</text>
 <text transform="translate(965.78, 180.22) scale(0.68)">+</text>
 <text transform="translate(1010.50, 180.22) scale(0.68)">1</text>
-<text transform="translate(1076.74, 137.91)">𝑑</text>
-<text transform="translate(1127.81, 137.91)">𝜉</text>
+<text transform="translate(1076.74, 137.91)">d</text>
+<text transform="translate(1124.74, 137.91)">𝜉</text>
 </g>
 </svg>
 

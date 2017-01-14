@@ -141,6 +141,7 @@ pub enum Family {
     SansSerif,
     Blackboard,
     Monospace,
+    Normal,
 }
 
 // NB: Changing the order of these variants requires
@@ -155,12 +156,12 @@ pub enum Weight {
 
 impl Default for Family {
     fn default() -> Family {
-        Family::Roman
+        Family::Normal
     }
 }
 
 impl Default for Weight {
     fn default() -> Weight {
-        Weight::Italic
+        Weight::None
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1107.19" height="233.34" xmlns="http://www.w3.org/2000/svg">
+<svg width="1101.04" height="233.34" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
@@ -12,17 +12,17 @@
 <text transform="translate(244.44, 137.91)">⋅</text>
 <text transform="translate(293.23, 137.91)">𝐹</text>
 <text transform="translate(352.55, 137.91)">)</text>
-<text transform="translate(400.52, 137.91)">𝑑</text>
-<text transform="translate(451.59, 137.91)">𝑉</text>
-<text transform="translate(538.79, 137.91)">=</text>
-<text transform="translate(636.55, 197.00)"></text>
-<text transform="translate(692.71, 227.62) scale(0.68)">∂</text>
-<text transform="translate(720.98, 227.62) scale(0.68)">𝐷</text>
-<text transform="translate(788.55, 137.91)">𝐹</text>
-<text transform="translate(869.21, 137.91)">⋅</text>
-<text transform="translate(918.00, 137.91)">𝑛</text>
-<text transform="translate(981.71, 137.91)">𝑑</text>
-<text transform="translate(1032.79, 137.91)">𝑆</text>
+<text transform="translate(400.52, 137.91)">d</text>
+<text transform="translate(448.52, 137.91)">𝑉</text>
+<text transform="translate(535.72, 137.91)">=</text>
+<text transform="translate(633.48, 197.00)"></text>
+<text transform="translate(689.64, 227.62) scale(0.68)">∂</text>
+<text transform="translate(717.91, 227.62) scale(0.68)">𝐷</text>
+<text transform="translate(785.48, 137.91)">𝐹</text>
+<text transform="translate(866.14, 137.91)">⋅</text>
+<text transform="translate(914.93, 137.91)">𝑛</text>
+<text transform="translate(978.64, 137.91)">d</text>
+<text transform="translate(1026.64, 137.91)">𝑆</text>
 </g>
 </svg>
 

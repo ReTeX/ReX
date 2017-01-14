@@ -16,7 +16,7 @@ const LOWER_OMEGA: u32 = 0x3C9;
 const DIGIT_0: u32 = 0x30;
 const DIGIT_9: u32 = 0x39;
 
-static LATIN_UPPER_LUT: [u32; 24] = [
+static LATIN_UPPER_LUT: [u32; 28] = [
 //  None,    Italic,  Bold,    BoldItalic
     65,      0x1D434, 0x1D400, 0x1D468,   // Roman
     0x1D49C, 0x1D49C, 0x1D4D0, 0x1D4D0,   // Script
@@ -24,9 +24,10 @@ static LATIN_UPPER_LUT: [u32; 24] = [
     0x1D5A0, 0x1D608, 0x1D5D4, 0x1D63C,   // SansSerif
     0x1D538, 0x1D538, 0x1D538, 0x1D538,   // Blackboard
     0x1D670, 0x1D670, 0x1D670, 0x1D670,   // Monospace
+    0x1D434, 0x1D434, 0x1D400, 0x1D468,   // Normal
 ];
 
-static LATIN_LOWER_LUT: [u32; 24] = [
+static LATIN_LOWER_LUT: [u32; 28] = [
 //  None,    Italic,  Bold,    BoldItalic
     97,      0x1D44E, 0x1D41A, 0x1D482,   // Roman
     0x1D4B6, 0x1D4B6, 0x1D4EA, 0x1D4EA,   // Script
@@ -34,6 +35,7 @@ static LATIN_LOWER_LUT: [u32; 24] = [
     0x1D5BA, 0x1D622, 0x1D5EE, 0x1D656,   // SansSerif
     0x1D552, 0x1D552, 0x1D552, 0x1D552,   // Blackboard
     0x1D68A, 0x1D68A, 0x1D68A, 0x1D68A,   // Monospace
+    0x1D44E, 0x1D44E, 0x1D41A, 0x1D482,   // Normal
 ];
 
 // Exceptional glyphs that are not found in BMP
@@ -108,6 +110,15 @@ impl Style {
 
     fn style_upper_greek(&self, offset: u32) -> u32 {
         let base = match self.family {
+            Normal => {
+                match self.weight {
+                    None       => 0x1D6E2,
+                    Italic     => 0x1D6E2,
+                    Bold       => 0x1D6A8,
+                    BoldItalic => 0x1D71C,
+                }
+            },
+
             SansSerif => {
                 match self.weight {
                     Italic     => 0x1D6E2,
@@ -133,6 +144,15 @@ impl Style {
 
     fn style_lower_greek(&self, offset: u32) -> u32 {
         let base = match self.family {
+            Normal => {
+                match self.weight {
+                    None       => 0x1D6FC,
+                    Italic     => 0x1D6FC,
+                    Bold       => 0x1D6C2,
+                    BoldItalic => 0x1D736,
+                }
+            },
+
             SansSerif => {
                 match self.weight {
                     Italic     => 0x1D6FC,
