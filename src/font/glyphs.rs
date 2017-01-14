@@ -1,6 +1,5 @@
-
 // Automatically generated... blah blah blah, you know the deal.
-use std::collections::HashMap;
+use fnv::FnvHashMap;
 use font::{ Glyph, BBox };
 
 static GLYPHS_DATA: [Glyph; 4549] = [
@@ -4558,8 +4557,8 @@ static GLYPHS_DATA: [Glyph; 4549] = [
 
 
 lazy_static! {
-    pub static ref GLYPHS: HashMap<u32, &'static Glyph> = {
-        let mut h = HashMap::new();
+    pub static ref GLYPHS: FnvHashMap<u32, &'static Glyph> = {
+        let mut h = FnvHashMap::with_capacity_and_hasher(4549, Default::default());
         h.insert(0, &GLYPHS_DATA[0]);
         h.insert(1, &GLYPHS_DATA[1]);
         h.insert(2, &GLYPHS_DATA[2]);
