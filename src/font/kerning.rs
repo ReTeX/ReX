@@ -1,5 +1,5 @@
 use font::Glyph;
-use super::kerning_table::KERNINGS;
+use super::kerning_table::KERNING_TABLE;
 
 #[derive(Debug)]
 enum Corner {
@@ -68,9 +68,9 @@ macro_rules! otry {
 }
 
 fn kern_from(gly: Glyph, height: f64, side: Corner) -> f64 {
-    let record = match KERNINGS.get(&gly.unicode) {
-        Some(rec) => rec,
-        None => return 0.0,
+    let record = match KERNING_TABLE.binary_search_by(|k| k.0.cmp(&gly.unicode)) {
+        Ok(idx) => &KERNING_TABLE[idx].1,
+        Err(_) => return 0.0,
     };
 
     let table = match side {
@@ -80,20 +80,13 @@ fn kern_from(gly: Glyph, height: f64, side: Corner) -> f64 {
         Corner::BottomLeft  => otry!(record.bottom_left),
     };
 
-    if table.correction_heights.is_empty() || height < (table.correction_heights[0] as f64) {
-        let v = table.kern_values[0] as f64;
-        println!("{}", v);
-        v
-    } else {
-        let mut value = **otry!(table.kern_values.last()) as f64;
-
-        for (idx, &h) in table.correction_heights.iter().enumerate() {
-            if height <= (h as f64) {
-                value = **otry!(table.kern_values.get(idx)) as f64;
-                break;
-            }
-        }
-
-        value
+    // Assert: Correction heights are increasing.
+    let mut idx: usize = 0;
+    for &correction in &table.correction_heights {
+        if correction == 0 ||
+            height <= (correction as f64) { break }
+        idx += 1;
     }
+
+    table.kern_values[idx] as f64
 }

@@ -65,8 +65,8 @@ pub struct KernRecord {
 
 #[derive(Debug, Clone)]
 pub struct KernTable {
-    correction_heights: Vec<i16>,   // unit::Font::<i16>()
-    kern_values:        Vec<i16>,   // unit::Font::<i16>()
+    correction_heights: [i16; 1],   // unit::Font::<i16>()
+    kern_values:        [i16; 2],   // unit::Font::<i16>()
 }
 
 #[derive(Default, Debug, Copy, Clone, PartialEq, Eq)]
@@ -162,6 +162,6 @@ impl Default for Family {
 
 impl Default for Weight {
     fn default() -> Weight {
-        Weight::Italic
+        Weight::None
     }
 }
