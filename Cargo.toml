@@ -5,6 +5,7 @@ authors = [
     "Christopher Breeden <github@u.breeden.cc>",
     "Sebastian Köln <sebk@rynx.org>"
 ]
+build = "build.rs"
 
 [dependencies]
 phf="*"
@@ -15,3 +16,10 @@ fnv = "1.0.3"
 [dev-dependencies]
 toml = "0.2.1"
 json = "0.11.4"
+
+[build-dependencies]
+phf_codegen="*"
+serde = "0.8"
+serde_json = "0.8"
+serde_derive = "0.8"
+time = "*"
