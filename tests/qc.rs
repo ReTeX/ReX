@@ -70,7 +70,7 @@ impl fmt::Display for Test {
         for test in &self.tests {
             let output: String = rex::SVGRenderer::new(
                 &rex::RenderSettings::default().font_size(32.0).font_src("rex-xits.otf")
-            ).render(test);
+            ).render(test).unwrap();
             writeln!(f, r#"<code class="language-latex">{}</code><p>{}</p>"#, test, output)?;
         }
 

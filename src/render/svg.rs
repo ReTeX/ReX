@@ -29,7 +29,7 @@ pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input:
 pub fn render_to_file(file: &mut File, settings: &RenderSettings, input: &str) {
     use std::io::Write;
     
-    let s: String = SVGRenderer::new(&settings).render(input);
+    let s: String = SVGRenderer::new(&settings).render(input).expect("failed to render");
     file.write(s.as_bytes()).expect("failed to write to file");
 }
 

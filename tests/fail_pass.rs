@@ -20,7 +20,7 @@ fn pass() {
             println!("test: {}", tex);
             
             let output: String =
-                SVGRenderer::new(&RenderSettings::default()).render(tex);
+                SVGRenderer::new(&RenderSettings::default()).render(tex).unwrap();
             drop(output);
         }
     }

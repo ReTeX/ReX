@@ -67,12 +67,12 @@ fn font_styles_render() {
              <center>{}</center>\n\
              <center>{}</center>\n",
              style,
-             svg.render(&tex(style, latin)),
-             svg.render(&tex(style, LATIN)),
-             svg.render(&tex(style, greek)),
-             svg.render(&tex(style, GREEK)),
-             svg.render(&tex(style, digit)),
-             svg.render(&tex(style, other)));
+             svg.render(&tex(style, latin)).unwrap(),
+             svg.render(&tex(style, LATIN)).unwrap(),
+             svg.render(&tex(style, greek)).unwrap(),
+             svg.render(&tex(style, GREEK)).unwrap(),
+             svg.render(&tex(style, digit)).unwrap(),
+             svg.render(&tex(style, other)).unwrap());
     }
 
     result += END;

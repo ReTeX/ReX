@@ -209,14 +209,8 @@ pub trait Renderer {
     fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
     
-    fn render_to(&self, out: &mut Self::Out, tex: &str) {
-        let mut parse = match parse(&tex) {
-                Ok(res)  => res,
-                Err(err) => {
-                    println!("Error -- {}", err);
-                    return;
-                }
-            };
+    fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), String> {
+        let mut parse = parse(&tex)?;
 
         let layout = layout(&mut parse, self.settings().layout_settings());
 
@@ -247,12 +241,13 @@ pub trait Renderer {
         );
         
         self.finish(out);
+        Ok(())
     }
     
-    fn render(&self, tex: &str) -> Self::Out where Self::Out: Default {
+    fn render(&self, tex: &str) -> Result<Self::Out, String> where Self::Out: Default {
         let mut out = Self::Out::default();
-        self.render_to(&mut out, tex);
-        out
+        self.render_to(&mut out, tex)?;
+        Ok(out)
     }
 }
 
