@@ -29,8 +29,6 @@
     "\\left(\\right.",
     "\\left\\vert\\right)",
     "\\left(\\right\\vert",
-    "\\mathfrak{R_E} \\mathrm{T_E X}",
-    "R_\\mathfrak{e}",
     "a^2\\textstyle a^2\\scriptstyle a^2 \\scriptscriptstyle a^2",
     "a_2\\textstyle a_2\\scriptstyle a_2 \\scriptscriptstyle a_2",
     "a_2^2\\textstyle a_2^2\\scriptstyle a_2^2 \\scriptscriptstyle a_2^2",
@@ -69,6 +67,8 @@
     "\\left\\vert\\sum_k a_k b_k\\right\\vert \\leq \\left(\\sum_k a_k^2\\right)^{\\frac12}\\left(\\sum_k b_k^2\\right)^{\\frac12}",
     "f^{(n)}(z) = \\frac{n!}{2\\pi i} \\oint \\frac{f(\\xi)}{(\\xi - z)^{n+1}}\\,\\mathrm{d}\\xi",
     "\\frac{1}{\\left(\\sqrt{\\phi\\sqrt5} - \\phi\\right) e^{\\frac{2}{5}\\pi}} = 1 + \\frac{e^{-2\\pi}}{1 + \\frac{e^{-4\\pi}}{1 + \\frac{e^{-6\\pi}}{1 + \\frac{e^{-8\\pi}}{1 + \\unicodecdots}}}}",
-    "\\mathop{\\mathrm{lim\\,sup}}\\limits_{x\\rightarrow\\infty}\\ \\mathop{\\mathrm{sin}}(x)\\mathrel{\\mathop{=}\\limits^?}1"
+    "\\mathop{\\mathrm{lim\\,sup}}\\limits_{x\\rightarrow\\infty}\\ \\mathop{\\mathrm{sin}}(x)\\mathrel{\\mathop{=}\\limits^?}1",
+    "R_\\mathfrak{e}",
+    "\\mathfrak{R_E} \\mathrm{T_E X}"
 ]
     
