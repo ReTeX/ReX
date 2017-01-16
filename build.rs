@@ -3,7 +3,6 @@ extern crate phf_codegen;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
-extern crate time;
 
 use std::env;
 use std::fmt;
@@ -102,7 +101,7 @@ fn make_glyphs() {
 
     let json: Glyphs = serde_json::from_str(&buffer).unwrap();
 
-    let output = Path::new(&::std::env::var_os("OUT_DIR").expect("OUT_DIR")).join("glyphs.rs");
+    let output = Path::new(&env::var_os("OUT_DIR").expect("OUT_DIR")).join("glyphs.rs");
     let mut file = BufWriter::new(File::create(&output).expect("glyphs.rs file"));
 
     write!(&mut file, "pub static GLYPHS: phf::Map<u32, Glyph> = ").unwrap();
