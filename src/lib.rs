@@ -8,6 +8,7 @@ extern crate test;
 // extern crate regex;
 extern crate phf;
 extern crate fnv;
+extern crate fp;
 
 #[macro_use]
 mod macros;

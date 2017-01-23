@@ -12,6 +12,7 @@ phf="0.7"
 phf_macros="0.7"
 lazy_static="*"
 fnv = "1.0.3"
+fp = { git = "https://github.com/ReTeX/fp.git" }
 
 [dev-dependencies]
 toml = "0.2.1"

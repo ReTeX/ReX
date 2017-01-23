@@ -3,8 +3,10 @@ use std::cmp::{PartialOrd, PartialEq};
 use std::fmt;
 use std::fmt::{Display, Debug};
 use std::ops::{Add, AddAssign, Deref, Div, Mul, MulAssign, Sub, SubAssign};
+use fp;
 
 pub type Float = f64;
+pub type FixedFloat = fp::F24P8;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Unit {
@@ -19,24 +21,17 @@ pub enum Unit {
     Px(Float),
 }
 
-pub trait Unital: Copy + Clone + Default +
-    Display + Debug +
-    Add + AddAssign +
-    Mul + MulAssign +
-    PartialOrd + PartialEq +
-    Sub + SubAssign +
-    Into<Float> { }
-
-impl Unital for u32 {}
-impl Unital for i16 {}
-impl Unital for u16 {}
-impl Unital for f64 {}
-
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Default)]
-pub struct FontUnit<U: Unital>(pub U);
+pub struct FontUnit {
+    fp: FixedFloat
+}
+impl FontUnit {
+    pub fn from_fp(fp: FixedFloat) {
+        FontUnit { fp: fp }
+    }
+}
 
-impl<U: Unital> Add for FontUnit<U>
-    where U: Add<Output = U>
+impl Add for FontUnit
 {
     type Output = Self;
     fn add(self, rhs: Self) -> Self {
@@ -44,16 +39,14 @@ impl<U: Unital> Add for FontUnit<U>
     }
 }
 
-impl<U: Unital> AddAssign for FontUnit<U>
-    where U: Add<Output = U>
+impl AddAssign for FontUnit
 {
     fn add_assign(&mut self, rhs: Self) {
         self.0 = self.0 + rhs.0;
     }
 }
 
-impl<U: Unital> Mul for FontUnit<U>
-    where U: Mul<Output = U>
+impl Mul for FontUnit
 {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self {
@@ -61,16 +54,14 @@ impl<U: Unital> Mul for FontUnit<U>
     }
 }
 
-impl<U: Unital> MulAssign for FontUnit<U>
-    where U: Mul<Output = U>
+impl MulAssign for FontUnit
 {
     fn mul_assign(&mut self, rhs: Self) {
         self.0 = self.0 * rhs.0;
     }
 }
 
-impl<U: Unital> Sub for FontUnit<U>
-    where U: Sub<Output = U>
+impl Sub for FontUnit
 {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self {
@@ -78,7 +69,7 @@ impl<U: Unital> Sub for FontUnit<U>
     }
 }
 
-impl<U: Unital> SubAssign for FontUnit<U>
+impl SubAssign for FontUnit
     where U: Sub<Output = U>
 {
     fn sub_assign(&mut self, rhs: Self) {
@@ -86,27 +77,27 @@ impl<U: Unital> SubAssign for FontUnit<U>
     }
 }
 
-impl<U: Unital> Deref for FontUnit<U> {
+impl Deref for FontUnit {
     type Target = U;
     fn deref(&self) -> &U {
         &self.0
     }
 }
 
-impl<U: Unital> Display for FontUnit<U> {
+impl Display for FontUnit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "FontUnit({})", self.0)
     }
 }
 
-impl<U: Unital> From<FontUnit<U>> for Unit {
-    fn from(unit: FontUnit<U>) -> Unit {
+impl From<FontUnit> for Unit {
+    fn from(unit: FontUnit) -> Unit {
         Unit::Font(unit.0.into())
     }
 }
 
-impl<U: Unital> From<FontUnit<U>> for f64 {
-    fn from(unit: FontUnit<U>) -> f64 {
+impl From<FontUnit> for f64 {
+    fn from(unit: FontUnit) -> f64 {
         unit.0.into()
     }
 }
