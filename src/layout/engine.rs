@@ -125,10 +125,9 @@ fn add_largeop(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
     let glyph = font::glyph_metrics(sym.unicode);
 
     if config.style > Style::Text {
-        let size = *DISPLAY_OPERATOR_MIN_HEIGHT as f64;
         let axis_offset = AXIS_HEIGHT.scaled(config);
 
-        let largeop = glyph.vert_variant(size).as_layout(config);
+        let largeop = glyph.vert_variant(DISPLAY_OPERATOR_MIN_HEIGHT).as_layout(config);
         let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
 
         result.add_node(vbox!(offset: shift; largeop));
@@ -166,8 +165,7 @@ fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
 
     let base = layout(&[ *acc.nucleus.clone() ], config.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode)
-        .horz_variant(*base.width
-            / config.style.cramped().font_scale() / config.font_size * *UNITS_PER_EM);
+        .horz_variant(base.width);
     let accent = accent_variant.as_layout(config);
 
     // Attachment points for accent & base are calculated by
@@ -226,8 +224,8 @@ fn add_delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings)
     let inner = layout(&delim.inner, config).as_node();
 
     // Convert inner group dimensions to font unit
-    let height = *inner.height / config.font_size * *UNITS_PER_EM as f64;
-    let depth  = *inner.depth  / config.font_size * *UNITS_PER_EM as f64;
+    let height = inner.height;
+    let depth  = inner.depth;
 
     // Only extend if we meet a certain size
     // TODO: This quick height check doesn't seem to be strong enough,

@@ -7,11 +7,11 @@ use dimensions::FontUnit;
 use dimensions::Pixels;
 
 pub static UNITS_PER_EM                                   : FontUnit = fontunit!(1000.0);
-pub static MIN_CONNECTOR_OVERLAP                          : FontUnit = fontunit!(50);
+pub static MIN_CONNECTOR_OVERLAP                          : FontUnit = fontunit!(50.0);
 
-pub static NULL_DELIMITER_SPACE                          : Pixels        = Pixels(1.6);  // This should probably depend on font size.
-pub static DELIMITER_SHORT_FALL                          : FontUnit<u16> = fontunit!(100);
-pub static DELIMITER_FACTOR                              : f64           = 901.0/1000.0;
+pub static NULL_DELIMITER_SPACE                           : Pixels   = Pixels(1.6);  // This should probably depend on font size.
+pub static DELIMITER_SHORT_FALL                           : FontUnit = fontunit!(100.0);
+pub static DELIMITER_FACTOR                               : f64      = 901.0/1000.0;
 
 pub static ACCENT_BASE_HEIGHT                             : FontUnit = fontunit!(450.0);
 pub static AXIS_HEIGHT                                    : FontUnit = fontunit!(250.0);

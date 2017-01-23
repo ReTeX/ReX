@@ -3,7 +3,7 @@ use font;
 use font::constants;
 use font::variants::VariantGlyph;
 use font::Glyph;
-use dimensions::{ FontUnit, Unit, Unital, Pixels };
+use dimensions::{ FontUnit, Unit, Pixels };
 use layout::LayoutSettings;
 
 use super::builders;
@@ -105,7 +105,7 @@ impl ToPixels for Unit {
     }
 }
 
-impl<U: Unital> ToPixels for FontUnit<U> {
+impl ToPixels for FontUnit {
     fn as_pixels(self, font_size: f64) -> Pixels {
         Unit::from(self).as_pixels(font_size)
     }

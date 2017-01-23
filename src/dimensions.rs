@@ -26,7 +26,7 @@ pub struct FontUnit {
     fp: FixedFloat
 }
 impl FontUnit {
-    pub fn from_fp(fp: FixedFloat) {
+    pub fn from_fp(fp: FixedFloat) -> FontUnit {
         FontUnit { fp: fp }
     }
 }
@@ -35,14 +35,14 @@ impl Add for FontUnit
 {
     type Output = Self;
     fn add(self, rhs: Self) -> Self {
-        FontUnit(self.0 + rhs.0)
+        FontUnit { fp: self.fp + rhs.fp }
     }
 }
 
 impl AddAssign for FontUnit
 {
     fn add_assign(&mut self, rhs: Self) {
-        self.0 = self.0 + rhs.0;
+        self.fp = self.fp + rhs.fp;
     }
 }
 
@@ -50,14 +50,14 @@ impl Mul for FontUnit
 {
     type Output = Self;
     fn mul(self, rhs: Self) -> Self {
-        FontUnit(self.0 * rhs.0)
+        FontUnit { fp: self.fp * rhs.fp }
     }
 }
 
 impl MulAssign for FontUnit
 {
     fn mul_assign(&mut self, rhs: Self) {
-        self.0 = self.0 * rhs.0;
+        self.fp = self.fp * rhs.fp;
     }
 }
 
@@ -65,54 +65,34 @@ impl Sub for FontUnit
 {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self {
-        FontUnit(self.0 - rhs.0)
+        FontUnit { fp: self.fp - rhs.fp }
     }
 }
 
 impl SubAssign for FontUnit
-    where U: Sub<Output = U>
 {
     fn sub_assign(&mut self, rhs: Self) {
-        self.0 = self.0 - rhs.0;
-    }
-}
-
-impl Deref for FontUnit {
-    type Target = U;
-    fn deref(&self) -> &U {
-        &self.0
+        self.fp = self.fp - rhs.fp;
     }
 }
 
 impl Display for FontUnit {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "FontUnit({})", self.0)
+        write!(f, "FontUnit({})", self.fp)
     }
 }
 
 impl From<FontUnit> for Unit {
     fn from(unit: FontUnit) -> Unit {
-        Unit::Font(unit.0.into())
+        Unit::Font(unit.fp.into())
     }
 }
 
 impl From<FontUnit> for f64 {
     fn from(unit: FontUnit) -> f64 {
-        unit.0.into()
+        unit.fp.into()
     }
 }
-
-macro_rules! implement_fontunit {
-    ( $($num:ty),* ) => {
-        $(
-            impl From<$num> for FontUnit<$num> {
-                fn from(u: $num) -> Self { FontUnit(u) }
-            }
-        )*
-    }
-}
-
-implement_fontunit!{ i16, u32 }
 
 // At some point in time, everything will be in Pixels for computer display renderings.
 #[derive(Copy, Debug, Clone, Default, PartialOrd, PartialEq)]
