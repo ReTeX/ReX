@@ -17,7 +17,7 @@ pub use self::offsets::OptionalAtom;
 use parser::AtomType;
 
 pub fn glyph_metrics(code : u32) -> Glyph {
-    **GLYPHS.get(&code)
+    *GLYPHS.get(&code)
         .expect(&format!("Unable to find glyph for code {}", code))
 }
 
