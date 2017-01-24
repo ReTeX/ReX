@@ -7,6 +7,7 @@ use fp;
 
 pub type Float = f64;
 pub type FixedPoint = fp::F24P8;
+pub type FontUnit = FixedPoint;
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Unit {
@@ -20,93 +21,6 @@ pub enum Unit {
     // Relative to the viewport
     Px(Float),
 }
-
-// #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
-pub type FontUnit = FixedPoint;
-
-// impl From<FixedPoint> for FontUnit {
-//     fn from(fp: FixedPoint) -> FontUnit {
-//         FontUnit(fp)
-//     }
-// }
-
-// // Convenience conversion to FontUnit
-// macro_rules! impl_fontunit_conv {
-//     ($($ty:ty),*) => (
-//         $(
-//         impl From<$ty> for FontUnit {
-//             fn from(n: $ty) -> FontUnit {
-//                 FontUnit::from(FixedPoint::from(n as i32))
-//             }
-//         }
-//         )*
-//     )
-// }
-
-// impl_fontunit_conv! (u8, i8, u16, i16, i32);
-
-// impl Add for FontUnit
-// {
-//     type Output = Self;
-//     fn add(self, rhs: Self) -> Self {
-//         FontUnit(self.0 + rhs.0)
-//     }
-// }
-
-// impl AddAssign for FontUnit
-// {
-//     fn add_assign(&mut self, rhs: Self) {
-//         self.0 = self.0 + rhs.0;
-//     }
-// }
-
-// impl Mul for FontUnit
-// {
-//     type Output = Self;
-//     fn mul(self, rhs: Self) -> Self {
-//         FontUnit(self.0 * rhs.0)
-//     }
-// }
-
-// impl MulAssign for FontUnit
-// {
-//     fn mul_assign(&mut self, rhs: Self) {
-//         self.0 = self.0 * rhs.0;
-//     }
-// }
-
-// impl Sub for FontUnit
-// {
-//     type Output = Self;
-//     fn sub(self, rhs: Self) -> Self {
-//         FontUnit(self.0 - rhs.0)
-//     }
-// }
-
-// impl SubAssign for FontUnit
-// {
-//     fn sub_assign(&mut self, rhs: Self) {
-//         self.0 = self.0 - rhs.0;
-//     }
-// }
-
-// impl Display for FontUnit {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         write!(f, "FontUnit({})", self.0)
-//     }
-// }
-
-// impl From<FontUnit> for Unit {
-//     fn from(unit: FontUnit) -> Unit {
-//         Unit::Font(unit.0.into())
-//     }
-// }
-
-// impl From<FontUnit> for f64 {
-//     fn from(unit: FontUnit) -> f64 {
-//         unit.0.into()
-//     }
-// }
 
 // At some point in time, everything will be in Pixels for computer display renderings.
 #[derive(Copy, Debug, Clone, Default, PartialOrd, PartialEq)]
