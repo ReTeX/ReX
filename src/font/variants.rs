@@ -4,6 +4,7 @@ use super::constants::MIN_CONNECTOR_OVERLAP;
 use super::Glyph;
 use super::glyph_metrics;
 use super::variant_tables::{ VERT_VARIANTS, HORZ_VARIANTS };
+use dimensions::FontUnit;
 
 
 #[derive(Debug, Clone)]
@@ -25,41 +26,28 @@ pub enum VariantGlyph {
 #[derive(Debug, Clone)]
 pub struct ReplacementGlyph {
     pub unicode: u32,
-    pub advance: u16,
+    pub advance: FontUnit,
 }
 
 #[derive(Debug, Clone)]
 pub struct ConstructableGlyph {
     pub parts: Vec<GlyphPart>,
-    pub italics_correction: i16,
+    pub italics_correction: FontUnit,
 }
 
 #[derive(Debug, Copy, Clone)]
 pub struct GlyphPart {
     pub unicode: u32,
-    pub start_connector_length: u32,
-    pub end_connector_length: u32,
-    pub full_advance: u32,
+    pub start_connector_length: FontUnit,
+    pub end_connector_length: FontUnit,
+    pub full_advance: FontUnit,
     pub required: bool,
 }
 
 #[derive(Clone, Copy)]
 pub struct GlyphInstruction {
     pub glyph:  Glyph,
-    pub overlap: f64,
-}
-
-pub trait Variant {
-    fn variant(&self, f64, Direction, bool) -> VariantGlyph;
-    fn successor(&self) -> Glyph;
-
-    fn vert_variant(&self, size: f64) -> VariantGlyph {
-        self.variant(size, Direction::Vertical, false)
-    }
-
-    fn horz_variant(&self, size: f64) -> VariantGlyph {
-        self.variant(size, Direction::Horizontal, true)
-    }
+    pub overlap: FontUnit,
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -68,8 +56,21 @@ pub enum Direction {
     Horizontal,
 }
 
+pub trait Variant {
+    fn variant(&self, FontUnit, Direction, bool) -> VariantGlyph;
+    fn successor(&self) -> Glyph;
+
+    fn vert_variant(&self, size: FontUnit) -> VariantGlyph {
+        self.variant(size, Direction::Vertical, false)
+    }
+
+    fn horz_variant(&self, size: FontUnit) -> VariantGlyph {
+        self.variant(size, Direction::Horizontal, true)
+    }
+}
+
 impl Variant for Glyph {
-    fn variant(&self, size: f64, direction: Direction, find_min: bool) -> VariantGlyph {
+    fn variant(&self, size: FontUnit, direction: Direction, find_min: bool) -> VariantGlyph {
         // The size variable describes the minimum advance requirement.  We will
         // take the glpyh with the minimum height that exceeds our requirment.
 
@@ -86,7 +87,7 @@ impl Variant for Glyph {
         // It is assumed that the glyphs are in increasing advance.
         if find_min {
             for idx in 0..variants.replacements.len() {
-                if variants.replacements[idx].advance as f64 >= size {
+                if variants.replacements[idx].advance >= size {
                     if idx == 0 {
                         return VariantGlyph::Replacement(*self)
                     } else {
@@ -97,7 +98,7 @@ impl Variant for Glyph {
             }
         } else {
             for glyph in &variants.replacements {
-                if glyph.advance as f64 >= size {
+                if glyph.advance >= size {
                     let replacement = glyph_metrics(glyph.unicode);
                     return VariantGlyph::Replacement(replacement);
                 }
@@ -120,24 +121,24 @@ impl Variant for Glyph {
 
         // This function will measure the /maximum/ size of a glyph construction
         // with a given number of repeatable glyphs.
-        fn max_size(parts: &[GlyphPart], repeats: u8) -> f64 {
-            let mut advance = 0;
-            let overlap = *MIN_CONNECTOR_OVERLAP;
+        fn max_size(parts: &[GlyphPart], repeats: u8) -> FontUnit {
+            let mut advance = FontUnit::from(0);
+            let overlap = MIN_CONNECTOR_OVERLAP;
 
             for glyph in parts {
                 // If this is an optional glyph, we repeat `repeats` times
-                let count = if !glyph.required { repeats } else { 1 } as u32;
-                advance += count*(glyph.full_advance - overlap);
+                let count = if !glyph.required { repeats } else { 1 } as u8;
+                advance += count * (glyph.full_advance - overlap);
             }
 
-            advance as f64 + overlap as f64
+            advance + overlap
         }
 
         // This function will measure the /smallest/ size of a glyph construction
         // with a given number of repeatable glyphs.
-        fn min_size(parts: &[GlyphPart], repeats: u8) -> f64 {
-            let mut advance = 0;
-            let mut prev_connector = 0;
+        fn min_size(parts: &[GlyphPart], repeats: u8) -> FontUnit {
+            let mut advance = FontUnit::from(0);
+            let mut prev_connector = FontUnit::from(0);
 
             for glyph in parts {
                 let count = if !glyph.required { repeats } else { 1 };
@@ -145,13 +146,13 @@ impl Variant for Glyph {
                     let overlap =
                         min(prev_connector, glyph.start_connector_length);
                     advance += glyph.full_advance
-                        - max(overlap, *MIN_CONNECTOR_OVERLAP);
+                        - max(overlap, MIN_CONNECTOR_OVERLAP);
                     prev_connector = glyph.end_connector_length;
                 }
             }
 
             // We subtracted overlap on the first glyph when we shouldn't
-            advance as f64 + *MIN_CONNECTOR_OVERLAP as f64
+            advance + MIN_CONNECTOR_OVERLAP
         }
 
         // We check for the smallest number of repeatable glyphs
@@ -177,8 +178,8 @@ impl Variant for Glyph {
         // While we are doing this, we will calculate the advance
         // of the entire glyph.
         let mut instructions: Vec<GlyphInstruction> = Vec::new();
-        let mut prev_connector = 0;
-        let mut glyph_advance: f64 = 0.0;
+        let mut prev_connector = FontUnit::from(0);
+        let mut glyph_advance = FontUnit::from(0);
         let mut first = true;
 
         for glyph in &construction.parts {
@@ -186,18 +187,19 @@ impl Variant for Glyph {
             let gly = glyph_metrics(glyph.unicode);
             for _ in 0..repeat {
                 let overlap =
-                    (min(prev_connector, glyph.start_connector_length) as f64)
-                    .max(*MIN_CONNECTOR_OVERLAP as f64);
+                    max(
+                        min(prev_connector, glyph.start_connector_length),
+                        MIN_CONNECTOR_OVERLAP);
 
                 if first {
-                    glyph_advance += glyph.full_advance as f64;
+                    glyph_advance += glyph.full_advance;
                     instructions.push(GlyphInstruction {
                         glyph:   gly,
-                        overlap: 0.0,
+                        overlap: FontUnit::from(0),
                     });
                     first = false;
                 } else {
-                    glyph_advance += glyph.full_advance as f64 - overlap;
+                    glyph_advance += glyph.full_advance - overlap;
                     instructions.push(GlyphInstruction {
                         glyph:   gly,
                         overlap: overlap,
@@ -215,11 +217,11 @@ impl Variant for Glyph {
         // Provided that our constructed glyph is _still_ too large,
         // return this, otherwise distribute the overlap equally
         // amonst each part.
-        if size_difference < 0.0 {
+        if size_difference < FontUnit::from(0) {
             return VariantGlyph::Constructable(direction, instructions)
         }
 
-        let overlap = size_difference / (instructions.len() - 1) as f64;
+        let overlap = size_difference / (instructions.len() as u16 - 1);
         for glyph in instructions.iter_mut().skip(1) {
             glyph.overlap -= overlap
         }

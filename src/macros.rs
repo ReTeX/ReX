@@ -80,9 +80,3 @@ macro_rules! display_errors {
         }
     )
 }
-
-macro_rules! fontunit {
-    ($f:expr) => ($crate::dimensions::FontUnit::from_fp(
-        $crate::dimensions::FixedFloat::from_float($f)
-    ))
-}

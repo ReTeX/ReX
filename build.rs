@@ -1,4 +1,3 @@
-#![feature(proc_macro)]
 extern crate phf_codegen;
 #[macro_use]
 extern crate serde_derive;
@@ -34,12 +33,12 @@ struct Glyphs(pub Vec<Glyph>);
 impl fmt::Display for Glyph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,
-            "Glyph {{ unicode: {}, \
-                        bbox: BBox({}, {}, {}, {}), \
-                        advance: {}, \
-                        lsb: {}, \
-                        italics: {}, \
-                        attachment: {} }}",
+            "Glyph {{ unicode: {}u32, \
+                        bbox: BBox(FontUnit::from({}i32), FontUnit::from({}i32), FontUnit::from({}i32), FontUnit::from({}i32)), \
+                        advance: FontUnit::from({}i32), \
+                        lsb: FontUnit::from({}i32), \
+                        italics: FontUnit::from({}i32), \
+                        attachment: FontUnit::from({}i32) }}",
             self.unicode,
             self.min_x, self.min_y, self.max_x, self.max_y,
             self.advance,
