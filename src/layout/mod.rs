@@ -13,7 +13,7 @@
 //! While rendering in mathmode, most types require an atomtype to determine the kerning
 //! between symbols.  This information must also be present with layout boxes.
 //!
-//! The units used in layout boxes must be in pixels (as defined in CSS).
+//! The units used in layout boxes must be in FontUnit (as defined in CSS).
 
 #[macro_use]
 mod builders;
@@ -21,20 +21,21 @@ mod convert;
 pub mod engine;
 pub mod spacing;
 
-use dimensions::{ Pixels, Unit };
+use dimensions::{ FontUnit, Unit };
 
 use font::constants;
 use std::ops::Deref;
 use std::fmt;
+use std::cmp::{max, min};
 
 // By default this will act as a horizontal box
 #[derive(Clone, Debug)]
 pub struct Layout {
     pub contents:  Vec<LayoutNode>,
-    pub width:     Pixels,
-    pub height:    Pixels,
-    pub depth:     Pixels,
-    pub offset:    Pixels,
+    pub width:     FontUnit,
+    pub height:    FontUnit,
+    pub depth:     FontUnit,
+    pub offset:    FontUnit,
     pub alignment: Alignment,
 }
 
@@ -55,22 +56,22 @@ impl Layout {
     pub fn new() -> Layout {
         Layout {
             contents:  vec![],
-            width:     Pixels(0.0),
-            height:    Pixels(0.0),
-            depth:     Pixels(0.0),
-            offset:    Pixels(0.0),
+            width:     FontUnit::from(0),
+            height:    FontUnit::from(0),
+            depth:     FontUnit::from(0),
+            offset:    FontUnit::from(0),
             alignment: Alignment::default(),
         }
     }
 
     pub fn add_node(&mut self, node: LayoutNode) {
         self.width += node.width;
-        self.height = self.height.max(node.height);
-        self.depth  = self.depth.min(node.depth);
+        self.height = max(self.height, node.height);
+        self.depth  = min(self.depth, node.depth);
         self.contents.push(node);
     }
 
-    pub fn set_offset(&mut self, offset: Pixels) {
+    pub fn set_offset(&mut self, offset: FontUnit) {
         self.offset = offset;
     }
 
@@ -80,7 +81,7 @@ impl Layout {
         self
     }
 
-    pub fn centered(mut self, new_width: Pixels) -> Layout {
+    pub fn centered(mut self, new_width: FontUnit) -> Layout {
         self.alignment = Alignment::Centered(self.width);
         self.width = new_width;
         self
@@ -90,9 +91,9 @@ impl Layout {
 #[derive(Clone)]
 pub struct LayoutNode {
     pub node:   LayoutVariant,
-    pub width:  Pixels,
-    pub height: Pixels,
-    pub depth:  Pixels,
+    pub width:  FontUnit,
+    pub height: FontUnit,
+    pub depth:  FontUnit,
 }
 
 #[derive(Clone)]
@@ -114,14 +115,14 @@ pub struct ColorChange {
 #[derive(Clone, Default)]
 pub struct HorizontalBox {
     pub contents:  Vec<LayoutNode>,
-    pub offset:    Pixels,
+    pub offset:    FontUnit,
     pub alignment: Alignment,
 }
 
 #[derive(Clone, Default)]
 pub struct VerticalBox {
     pub contents:  Vec<LayoutNode>,
-    pub offset:    Pixels,
+    pub offset:    FontUnit,
     pub alignment: Alignment,
 }
 
@@ -129,16 +130,16 @@ pub struct VerticalBox {
 pub struct LayoutGlyph {
     pub unicode:    u32,
     pub scale:      f64,
-    pub offset:     Pixels,
-    pub attachment: Pixels,
-    pub italics:    Pixels,
+    pub offset:     FontUnit,
+    pub attachment: FontUnit,
+    pub italics:    FontUnit,
 }
 
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Alignment {
-    Centered(Pixels),
-    Right(Pixels),
+    Centered(FontUnit),
+    Right(FontUnit),
     Left,
     Inherit,
     Default,
@@ -166,10 +167,10 @@ impl Deref for VerticalBox {
 
 impl fmt::Debug for VerticalBox {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        if self.offset == Pixels(0.0) {
+        if self.offset == FontUnit::from(0) {
             write!(f, "VerticalBox({:?})", self.contents)
         } else {
-            write!(f, "VerticalBox({:?}, offset: {:.1})", self.contents, *self.offset)
+            write!(f, "VerticalBox({:?}, offset: {})", self.contents, self.offset)
         }
     }
 }
@@ -198,7 +199,7 @@ impl fmt::Debug for LayoutNode {
             LayoutVariant::Rule =>
                 write!(f, "Rule()"),
             LayoutVariant::Kern => {
-                let kern = if self.width == Pixels(0.0) {
+                let kern = if self.width == FontUnit::from(0) {
                     self.height
                 } else { self.width };
 
@@ -215,8 +216,8 @@ impl LayoutNode {
     /// Center the vertical about the axis.
     /// For now this ignores offsets if already applied,
     /// and will break if there already are offsets.
-    fn centered(mut self, axis: Pixels) -> LayoutNode {
-        let shift = 0.5 * (self.height + self.depth) - axis;
+    fn centered(mut self, axis: FontUnit) -> LayoutNode {
+        let shift = (self.height + self.depth) / 2 - axis;
 
         match self.node {
             LayoutVariant::VerticalBox(ref mut vb) => {
@@ -306,31 +307,31 @@ impl Style {
         }
     }
 
-    fn font_scale(self) -> f64 {
+    fn font_scale(self) -> FontUnit {
         use font::constants;
         match self {
             Style::Display |
             Style::DisplayCramped |
             Style::Text |
             Style::TextCramped
-                => 1f64,
+                => FontUnit::from(1),
             Style::Script |
             Style::ScriptCramped
-                => f64::from(constants::SCRIPT_PERCENT_SCALE_DOWN) / 100f64,
+                => FontUnit::from(constants::SCRIPT_PERCENT_SCALE_DOWN),
             Style::ScriptScript |
             Style::ScriptScriptCramped
-                => f64::from(constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN) / 100f64,
+                => FontUnit::from(constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN),
         }
     }
 
-    fn sup_shift_up(self) -> Unit {
+    fn sup_shift_up(self) -> FontUnit {
         match self {
             Style::Display |
             Style::Text |
             Style::Script |
             Style::ScriptScript
-                => constants::SUPERSCRIPT_SHIFT_UP.into(),
-            _   => constants::SUPERSCRIPT_SHIFT_UP_CRAMPED.into(),
+                => constants::SUPERSCRIPT_SHIFT_UP,
+            _   => constants::SUPERSCRIPT_SHIFT_UP_CRAMPED,
         }
     }
 

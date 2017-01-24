@@ -57,8 +57,8 @@ impl AsLayoutNode for VariantGlyph {
                         let mut contents = builders::VBox::new();
                         for instr in c.iter().rev() {
                             contents.add_node(instr.glyph.as_layout(config));
-                            if instr.overlap != 0.0 {
-                                let unit = Unit::Font(-instr.overlap);
+                            if instr.overlap != FontUnit::from(0) {
+                                let unit = -instr.overlap;
                                 let kern = unit.scaled(config);
                                 contents.add_node(kern!(vert: kern));
                             }
