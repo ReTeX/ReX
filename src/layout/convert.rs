@@ -1,4 +1,7 @@
 //! This is a collection of tools used for converting ParseNodes into LayoutNodes.
+use std::convert::From;
+use std::ops::Mul;
+
 use font;
 use font::constants;
 use font::variants::VariantGlyph;
@@ -6,6 +9,7 @@ use font::Glyph;
 use dimensions::{ FontUnit, Unit, Pixels };
 use layout::LayoutSettings;
 
+use super::Style;
 use super::builders;
 use super::{ LayoutNode, LayoutVariant, LayoutGlyph };
 use parser::nodes::Rule;
@@ -22,10 +26,10 @@ impl AsLayoutNode for Glyph {
             depth:  self.depth()  .scaled(config),
             node:   LayoutVariant::Glyph(LayoutGlyph {
                 unicode: self.unicode,
-                scale: config.style.font_scale(),
+                scale: scale(1, config),
                 attachment: self.attachment_offset().scaled(config),
                 italics: self.italic_correction().scaled(config),
-                offset:  Pixels(0.0),
+                offset:  FontUnit::from(0),
             })
         }
     }
@@ -35,9 +39,9 @@ impl AsLayoutNode for Rule {
     fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         LayoutNode {
             node:   LayoutVariant::Rule,
-            width:  self.width.scaled(config),
+            width:  self.width .scaled(config),
             height: self.height.scaled(config),
-            depth:  Pixels(0f64),
+            depth:  FontUnit::from(0),
         }
     }
 }
@@ -58,8 +62,7 @@ impl AsLayoutNode for VariantGlyph {
                         for instr in c.iter().rev() {
                             contents.add_node(instr.glyph.as_layout(config));
                             if instr.overlap != FontUnit::from(0) {
-                                let unit = -instr.overlap;
-                                let kern = unit.scaled(config);
+                                let kern = -instr.overlap.scaled(config);
                                 contents.add_node(kern!(vert: kern));
                             }
                         }
@@ -70,9 +73,8 @@ impl AsLayoutNode for VariantGlyph {
                     Direction::Horizontal => {
                         let mut contents = builders::HBox::new();
                         for instr in c.iter() {
-                            if instr.overlap != 0.0 {
-                                let unit = Unit::Font(-instr.overlap);
-                                let kern = unit.scaled(config);
+                            if instr.overlap != FontUnit::from(0) {
+                                let kern = -instr.overlap.scaled(config);
                                 contents.add_node(kern!(horz: kern));
                             }
                             contents.add_node(instr.glyph.as_layout(config));
@@ -86,27 +88,52 @@ impl AsLayoutNode for VariantGlyph {
     }
 }
 
-pub trait ToPixels: Sized {
-    fn as_pixels(self, font_size: f64) -> Pixels;
-    fn scaled(self, config: LayoutSettings) -> Pixels {
-        self.as_pixels(config.font_size) * config.style.font_scale()
+
+fn scale<T>(n: T, config: LayoutSettings) -> FontUnit
+    where FontUnit: From<T>,
+          T: Mul<FontUnit, Output=FontUnit>
+{
+    match config.style {
+        Style::Display |
+        Style::DisplayCramped |
+        Style::Text |
+        Style::TextCramped
+            => FontUnit::from(n),
+
+        Style::Script |
+        Style::ScriptCramped
+            => n * constants::SCRIPT_PERCENT_SCALE_DOWN,
+
+        Style::ScriptScript |
+        Style::ScriptScriptCramped
+            => n * constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN,
     }
 }
 
-impl ToPixels for Unit {
-    // TODO: You can't assign pt values to fonts with given `font_size: f64`
-    fn as_pixels(self, font_size: f64) -> Pixels {
-        Pixels(match self {
-            Unit::Font(u) => u / f64::from(constants::UNITS_PER_EM) * font_size,
-            Unit::Em(u)   => u * font_size,
-            Unit::Ex(u)   => u * font_size, // TODO: measure x width here
-            Unit::Px(u)   => u
-        })
+pub trait Scaled {
+    fn scaled(self, LayoutSettings) -> FontUnit;
+}
+
+impl Scaled for FontUnit {
+    fn scaled(self, config: LayoutSettings) -> FontUnit {
+        scale(self, config)
     }
 }
 
-impl ToPixels for FontUnit {
-    fn as_pixels(self, font_size: f64) -> Pixels {
-        Unit::from(self).as_pixels(font_size)
+impl Scaled for Unit {
+    fn scaled(self, config: LayoutSettings) -> FontUnit {
+        match self {
+            Unit::Font(size) => scale(FontUnit::from(size), config),
+            Unit::Em(size) =>
+                scale(constants::UNITS_PER_EM * FontUnit::from(size), config),
+            Unit::Px(size) => {
+                // We need to convert from Pixels back to font units
+                let unit = FontUnit::from(size)
+                    / constants::UNITS_PER_EM
+                    / config.font_size;
+                scale(FontUnit::from(unit), config)
+            }
+            _ => panic!("Ex units are not yet supported.")
+        }
     }
 }

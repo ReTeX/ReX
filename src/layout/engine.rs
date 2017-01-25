@@ -1,14 +1,15 @@
 #![allow(unused_assignments)]
 #![allow(unused_variables)]
 
+use std::cmp::{ min, max };
+
 use super::Alignment;
 use super::builders;
 use super::{ Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style, ColorChange };
 use super::convert::AsLayoutNode;
-use super::convert::ToPixels;
 use super::LayoutSettings;
 
-use dimensions::{ Pixels, Unit };
+use dimensions::{ FontUnit, Unit };
 use font;
 use font::constants::*;
 use font::glyph_metrics;
@@ -17,6 +18,7 @@ use font::variants::VariantGlyph;
 use font::Symbol;
 use font::kerning::{superscript_kern, subscript_kern};
 use layout::spacing::{atom_spacing, Spacing};
+use layout::convert::Scaled;
 use parser::nodes::BarThickness;
 use parser::nodes::{ ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts, Stack };
 use parser::AtomType;
@@ -128,7 +130,7 @@ fn add_largeop(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
         let axis_offset = AXIS_HEIGHT.scaled(config);
 
         let largeop = glyph.vert_variant(DISPLAY_OPERATOR_MIN_HEIGHT).as_layout(config);
-        let shift = 0.5 * (largeop.height + largeop.depth) - axis_offset;
+        let shift = (largeop.height + largeop.depth) / 2 - axis_offset;
 
         result.add_node(vbox!(offset: shift; largeop));
     } else {
@@ -174,42 +176,39 @@ fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     //      1. Attachment point (if there is one)
     //      2. Otherwise: (width + ic) / 2.0
     let base_offset = if base.contents.len() != 1 {
-            base.width / 2.0
+            base.width / 2
         } else if let Some(ref sym) = base.contents[0].is_symbol() {
             let glyph = glyph_metrics(sym.unicode);
-            if glyph.attachment != 0 {
-                Unit::Font(glyph.attachment as f64).scaled(config)
+            if glyph.attachment != FontUnit::from(0) {
+                glyph.attachment.scaled(config)
             } else {
-                Unit::Font((glyph.advance as i16 + glyph.italics)
-                    as f64 / 2.0).scaled(config)
+                let offset: FontUnit = (glyph.advance + glyph.italics) / 2;
+                offset.scaled(config)
             }
         } else {
-            base.width / 2.0
+            base.width / 2
         };
 
     let acc_offset = match accent_variant {
             VariantGlyph::Replacement(sym) => {
                 let glyph = glyph_metrics(sym.unicode);
-                if glyph.attachment != 0 {
-                    Unit::Font(
-                        glyph.attachment as f64
-                    ).scaled(config)
+                if glyph.attachment != FontUnit::from(0) {
+                    glyph.attachment.scaled(config)
                 } else {
                     // For glyphs without attachmens, we must
                     // also account for combining glyphs
-                    let off = 0.5*(sym.bbox.2 + sym.bbox.0) as f64;
-                    Unit::Font(off).scaled(config)
+                    let offset: FontUnit = (sym.bbox.2 + sym.bbox.0) / 2;
+                    offset.scaled(config)
                 }
             },
 
             VariantGlyph::Constructable(_, _) =>
-                accent.width / 2.0
+                accent.width / 2
         };
 
     // Do not place the accent any _further_ than you would if given
     // an `x` character in the current style.
-    let delta = -1. * base.height
-        .min(ACCENT_BASE_HEIGHT.scaled(config));
+    let delta = -min(base.height, ACCENT_BASE_HEIGHT.scaled(config));
 
     // By not placing an offset on this vbox, we are assured that the
     // baseline will match the baseline of `base.as_node()`
@@ -230,12 +229,12 @@ fn add_delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings)
     // Only extend if we meet a certain size
     // TODO: This quick height check doesn't seem to be strong enough,
     // reference: http://tug.org/pipermail/luatex/2010-July/001745.html
-    if height.max(-1. * depth) > 0.5 * *DELIMITED_SUB_FORMULA_MIN_HEIGHT as f64 {
-        let axis = *AXIS_HEIGHT as f64;
+    if max(height, -depth) > DELIMITED_SUB_FORMULA_MIN_HEIGHT / 2 {
+        let axis = AXIS_HEIGHT;
 
-        let mut clearance = 2. * (height - axis).max(axis - depth);
-        clearance = (DELIMITER_FACTOR * clearance)
-            .max(height - depth - *DELIMITER_SHORT_FALL as f64);
+        let mut clearance = 2 * max(height - axis, axis - depth);
+        clearance = max(DELIMITER_FACTOR * clearance,
+            height - depth - DELIMITER_SHORT_FALL);
 
         let axis = AXIS_HEIGHT.scaled(config);
         let left = match delim.left.unicode {
@@ -306,10 +305,10 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 
     // We calculate the vertical positions of the scripts.  The `adjust_up`
     // variable will describe how far we need to adjust the superscript up.
-    let mut adjust_up   = Pixels(0.0);
-    let mut adjust_down = Pixels(0.0);
-    let mut sup_kern    = Pixels(0.0);
-    let mut sub_kern    = Pixels(0.0);
+    let mut adjust_up   = FontUnit::from(0);
+    let mut adjust_down = FontUnit::from(0);
+    let mut sup_kern    = FontUnit::from(0);
+    let mut sub_kern    = FontUnit::from(0);
 
     if let Some(ref s) = scripts.superscript {
         // Use default font values for first iteration of vertical height.
@@ -340,8 +339,8 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                         let bg = glyph_metrics(base_sym.unicode);
                         let sg = glyph_metrics(sup_sym.unicode);
 
-                        let kern = Unit::Font(superscript_kern(bg, sg,
-                            *adjust_up / config.font_size * *UNITS_PER_EM)).scaled(config);
+                        let kern = superscript_kern(bg, sg, adjust_up)
+                            .scaled(config);
 
                         sup_kern = base_sym.italics + kern;
                     } else {
@@ -352,9 +351,9 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
         }
 
         let drop_max = SUPERSCRIPT_BASELINE_DROP_MAX.scaled(config);
-        adjust_up = adjust_up
-            .max(height - drop_max)
-            .max(SUPERSCRIPT_BOTTOM_MIN.scaled(config) - sup.depth);
+        adjust_up = max!(adjust_up,
+            height - drop_max,
+            SUPERSCRIPT_BOTTOM_MIN.scaled(config) - sup.depth);
     }
 
     // We calculate the vertical position of the subscripts.  The `adjust_down`
@@ -363,12 +362,12 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
         // Use default font values for first iteration of vertical height.
         adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(config);
 
-        let depth = -1. * base.depth;
+        let depth = -base.depth;
         let drop_min = SUBSCRIPT_BASELINE_DROP_MIN.scaled(config);
 
-        adjust_down = adjust_down
-            .max(sub.height - SUBSCRIPT_TOP_MAX.scaled(config))
-            .max(drop_min + depth);
+        adjust_down = max!(adjust_down,
+            sub.height - SUBSCRIPT_TOP_MAX.scaled(config),
+            drop_min + depth);
 
         // Provided that the base and subscript are symbols, we apply
         // kerning values found in the kerning font table
@@ -377,7 +376,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                 if AtomType::Operator(false) == b.atom_type() {
                     // This recently changed in LuaTeX.  See `nolimitsmode`.
                     // This needs to be the glyph information _after_ layout for base.
-                    sub_kern = -1. * glyph_metrics(base_sym.unicode)
+                    sub_kern = -glyph_metrics(base_sym.unicode)
                         .italic_correction()
                         .scaled(config);
                 }
@@ -387,8 +386,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                 let bg = glyph_metrics(bsym.unicode);
                 let sg = glyph_metrics(ssym.unicode);
 
-                sub_kern += Unit::Font(subscript_kern(bg, sg,
-                    *adjust_down / config.font_size * *UNITS_PER_EM)).scaled(config);
+                sub_kern += subscript_kern(bg, sg, adjust_down).scaled(config);
             }
         }
     }
@@ -399,7 +397,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
         let sub_top = sub.height - adjust_down;
         let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled(config);
         if sup_bot - sub_top < gap_min {
-            let adjust = (gap_min - sup_bot + sub_top) / 2.0;
+            let adjust = (gap_min - sup_bot + sub_top) / 2;
             adjust_up   += adjust;
             adjust_down += adjust;
         }
@@ -407,7 +405,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 
     let mut contents = builders::VBox::new();
     if !sup.contents.is_empty() {
-        if sup_kern != Pixels(0.0) {
+        if sup_kern != FontUnit::from(0) {
             sup.contents.insert(0, kern!(horz: sup_kern));
             sup.width += sup_kern;
         }
@@ -421,7 +419,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 
     contents.set_offset(adjust_down);
     if !sub.contents.is_empty() {
-        if sub_kern != Pixels(0.0) {
+        if sub_kern != FontUnit::from(0) {
             sub.contents.insert(0, kern!(horz: sub_kern));
             sub.width += sub_kern;
         }
@@ -441,16 +439,15 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
     let delta = if let Some(gly) = base.is_symbol() {
         gly.italics
     } else {
-        Pixels(0.0)
+        FontUnit::from(0)
     };
 
     // Next we calculate the kerning required to separate the superscript
     // and subscript (respectively) from the base.
-    let sup_kern = UPPER_LIMIT_BASELINE_RISE_MIN.scaled(config)
-        .max(UPPER_LIMIT_GAP_MIN.scaled(config) - sup.depth);
-    let sub_kern =
-        (LOWER_LIMIT_BASELINE_DROP_MIN.scaled(config) - sub.height - base.depth)
-        .max(LOWER_LIMIT_GAP_MIN.scaled(config) - base.depth);
+    let sup_kern = max(UPPER_LIMIT_BASELINE_RISE_MIN.scaled(config),
+        UPPER_LIMIT_GAP_MIN.scaled(config) - sup.depth);
+    let sub_kern = max(LOWER_LIMIT_GAP_MIN.scaled(config),
+        LOWER_LIMIT_BASELINE_DROP_MIN.scaled(config) - sub.height) - base.depth;
 
     // We need to preserve the baseline of the operator when
     // attaching the scripts.  Since the base should already
@@ -460,9 +457,9 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
 
     // We will construct a vbox containing the superscript/base/subscript.
     // We will all of these nodes, so we widen each to the largest.
-    let width = base.width
-        .max(sub.width + delta / 2.0)
-        .max(sup.width + delta / 2.0);
+    let width = max!(base.width,
+        sub.width + delta / 2,
+        sup.width + delta / 2);
 
     // My macro won't take `sup.width` in the alignment for some reason.
     // TODO: Fix that.
@@ -473,7 +470,7 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
         offset: offset;
         hbox![align: Alignment::Centered(sup_width);
             width: width;
-            kern![horz: delta / 2.0],
+            kern![horz: delta / 2],
             sup.as_node()
         ],
 
@@ -483,7 +480,7 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
 
         hbox![align: Alignment::Centered(sub_width);
             width: width;
-            kern![horz: -1. * delta / 2.0],
+            kern![horz: -delta / 2],
             sub.as_node()
         ]
     ));
@@ -492,7 +489,7 @@ fn add_operator_limits(result: &mut Layout, base: Layout,
 fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     let bar = match frac.bar_thickness {
         BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(config),
-        BarThickness::None    => Pixels(0.0),
+        BarThickness::None    => FontUnit::from(0),
         BarThickness::Unit(u) => u.scaled(config),
     };
 
@@ -510,10 +507,10 @@ fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     let numer = n.as_node();
     let denom = d.as_node();
 
-    let mut shift_up   = Pixels(0.0);
-    let mut shift_down = Pixels(0.0);
-    let mut gap_num    = Pixels(0.0);
-    let mut gap_denom  = Pixels(0.0);
+    let mut shift_up   = FontUnit::from(0);
+    let mut shift_down = FontUnit::from(0);
+    let mut gap_num    = FontUnit::from(0);
+    let mut gap_denom  = FontUnit::from(0);
     let axis           = AXIS_HEIGHT.scaled(config);
 
     if config.style > Style::Text {
@@ -528,9 +525,9 @@ fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
         gap_denom = FRACTION_DENOMINATOR_GAP_MIN.scaled(config);
     }
 
-    let kern_num = (shift_up - axis - 0.5*bar).max(gap_num - numer.depth);
-    let kern_den = (shift_down + axis - denom.height - 0.5*bar).max(gap_denom);
-    let offset = denom.height + kern_den + 0.5*bar - axis;
+    let kern_num = max(shift_up - axis - bar / 2, gap_num - numer.depth);
+    let kern_den = max(shift_down + axis - denom.height - bar / 2, gap_denom);
+    let offset = denom.height + kern_den + bar / 2 - axis;
 
     let width = numer.width;
     let inner = vbox!(offset: offset;
@@ -579,18 +576,17 @@ fn add_radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
         false => RADICAL_VERTICAL_GAP,
     };
 
-    let size = (*contents.height - *contents.depth)
-        / config.font_size * 1000.0     // Convert to font units
-        + *gap
-        + *RADICAL_EXTRA_ASCENDER; // Minimum gap
+    let size = (contents.height - contents.depth)
+        + gap
+        + RADICAL_EXTRA_ASCENDER; // Minimum gap
 
     let gap = gap.scaled(config);
 
     let rule_thickness = RADICAL_RULE_THICKNESS.scaled(config);
     let glyph = sqrt.vert_variant(size).as_layout(config);
 
-    let inner_center = 0.5 * (gap + contents.height + contents.depth + rule_thickness);
-    let sym_center   = 0.5 * (glyph.height + glyph.depth);
+    let inner_center = (gap + contents.height + contents.depth + rule_thickness) / 2;
+    let sym_center   = (glyph.height + glyph.depth) / 2;
     let offset = sym_center - inner_center;
 
     let top_padding = RADICAL_EXTRA_ASCENDER.scaled(config)
@@ -644,9 +640,9 @@ fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
     if lines.is_empty() { return }
     stak.add_node(lines.pop().unwrap().as_node());
 
-    let mut prev = Pixels(0.0);
+    let mut prev = FontUnit::from(0);
     for line in rest {
-        let gap = gap_min.max(gap_try - prev);
+        let gap = max(gap_min, gap_try - prev);
         prev = line.depth;
 
         stak.add_node(kern![vert: gap]);
@@ -654,7 +650,7 @@ fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
     }
 
     // center the stack
-    let offset = 0.5 * (stak.height + stak.depth)
+    let offset = (stak.height + stak.depth) / 2
         - AXIS_HEIGHT.scaled(config);
 
     stak.set_offset(offset);

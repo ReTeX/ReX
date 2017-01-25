@@ -5,10 +5,10 @@ use layout::engine::layout;
 
 #[derive(Clone)]
 pub struct RenderSettings {
-    pub font_size:    Float,
+    pub font_size:    u16,
     pub font_src:     String,
-    pub horz_padding: Float,
-    pub vert_padding: Float,
+    pub horz_padding: Pixels,
+    pub vert_padding: Pixels,
     pub strict:       bool,
     pub style:        Style,
     pub debug:        bool
@@ -55,10 +55,10 @@ impl Cursor {
 impl Default for RenderSettings {
     fn default() -> Self {
         RenderSettings {
-            font_size:    48.0,
+            font_size:    48,
             font_src:     "http://rex.breeden.cc/rex-xits.otf".into(),
-            horz_padding: 12.0,
-            vert_padding: 5.0,
+            horz_padding: Pixels(12.0),
+            vert_padding: Pixels(5.0),
             strict:       true,
             style:        Style::Display,
             debug:        false
@@ -67,28 +67,28 @@ impl Default for RenderSettings {
 }
 
 impl RenderSettings {
-    pub fn font_size(self, size: Float) -> Self {
+    pub fn font_size(self, size: u16) -> Self {
         RenderSettings {
             font_size: size,
             ..self
         }
     }
-    
+
     pub fn font_src(self, src: &str) -> Self {
         RenderSettings {
             font_src: src.into(),
             ..self
         }
     }
-    
-    pub fn horz_padding(self, size: Float) -> RenderSettings {
+
+    pub fn horz_padding(self, size: Pixels) -> RenderSettings {
         RenderSettings {
             horz_padding: size,
             ..self
         }
     }
 
-    pub fn vert_padding(self, size: Float) -> RenderSettings {
+    pub fn vert_padding(self, size: Pixels) -> RenderSettings {
         RenderSettings {
             vert_padding: size,
             ..self
@@ -108,7 +108,7 @@ impl RenderSettings {
             ..self
         }
     }
-    
+
     pub fn layout_settings(&self) -> LayoutSettings {
         LayoutSettings {
             font_size: self.font_size,
@@ -123,12 +123,12 @@ pub trait Renderer {
     fn bbox(&self, _out: &mut Self::Out, _pos: Cursor, _width: Pixels, _height: Pixels) {}
 
     fn symbol(&self, out: &mut Self::Out, pos: Cursor, symbol: u32, scale: Float);
-    
+
     fn rule(&self, out: &mut Self::Out, pos: Cursor, width: Pixels, height: Pixels);
 
     fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
     where F: FnMut(&Self, &mut Self::Out);
-    
+
     fn render_hbox(&self,
         out: &mut Self::Out,
         mut pos: Cursor,
@@ -204,11 +204,11 @@ pub trait Renderer {
             pos.y += node.height;
         }
     }
-    
+
     fn prepare(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
     fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
-    
+
     fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), String> {
         let mut parse = parse(&tex)?;
 
@@ -218,12 +218,12 @@ pub trait Renderer {
             println!("Parse: {:?}\n", parse);
             println!("Layout: {:?}", layout);
         }
-        
+
         let padding = (
             self.settings().horz_padding,
             self.settings().vert_padding
         );
-        
+
         self.prepare(out,
             // Left and right padding
             layout.width  + 2.0 * padding.0,
@@ -239,11 +239,11 @@ pub trait Renderer {
             &layout.contents, layout.height,
             layout.width, Alignment::Default
         );
-        
+
         self.finish(out);
         Ok(())
     }
-    
+
     fn render(&self, tex: &str) -> Result<Self::Out, String> where Self::Out: Default {
         let mut out = Self::Out::default();
         self.render_to(&mut out, tex)?;

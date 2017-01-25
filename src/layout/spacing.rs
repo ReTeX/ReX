@@ -1,5 +1,5 @@
 use parser::AtomType;
-use dimensions::Unit;
+use dimensions::FontUnit;
 use layout::Style;
 
 #[allow(unused)]
@@ -59,12 +59,12 @@ pub enum Spacing {
 }
 
 impl Spacing {
-    pub fn to_unit(self) -> Unit {
+    pub fn to_unit(self) -> FontUnit {
         match self {
-            Spacing::None   => Unit::Em(0f64),
-            Spacing::Thin   => Unit::Em(1_f64/6_f64),
-            Spacing::Medium => Unit::Em(2_f64/9_f64),
-            Spacing::Thick  => Unit::Em(3_f64/9_f64),
+            Spacing::None   => FontUnit::from(0),
+            Spacing::Thin   => FontUnit::from(1) / 6,
+            Spacing::Medium => FontUnit::from(2) / 9,
+            Spacing::Thick  => FontUnit::from(3) / 9,
         }
     }
 }

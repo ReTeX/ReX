@@ -129,7 +129,7 @@ pub struct VerticalBox {
 #[derive(Clone, Copy)]
 pub struct LayoutGlyph {
     pub unicode:    u32,
-    pub scale:      f64,
+    pub scale:      FontUnit,
     pub offset:     FontUnit,
     pub attachment: FontUnit,
     pub italics:    FontUnit,
@@ -365,7 +365,7 @@ impl Style {
 
 #[derive(Copy, Clone)]
 pub struct LayoutSettings {
-    pub font_size: f64,
+    pub font_size: u16,
     pub style:     Style,
 }
 

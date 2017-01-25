@@ -1,12 +1,13 @@
 #![allow(dead_code)]
 use super::{ VerticalBox, HorizontalBox, LayoutNode, LayoutVariant, Alignment };
-use dimensions::Pixels;
+use dimensions::FontUnit;
+use std::cmp::{max, min};
 
 #[derive(Default)]
 pub struct VBox {
-    pub width:  Pixels,
-    pub height: Pixels,
-    pub depth:  Pixels,
+    pub width:  FontUnit,
+    pub height: FontUnit,
+    pub depth:  FontUnit,
     node:   VerticalBox,
 }
 
@@ -14,12 +15,12 @@ impl VBox {
     pub fn new() -> VBox { VBox::default() }
 
     pub fn add_node(&mut self, node: LayoutNode) {
-        self.width   = self.width.max(node.width);
+        self.width   = max(self.width, node.width);
         self.height += node.height;
         self.node.contents.push(node);
     }
 
-    pub fn set_offset(&mut self, offset: Pixels) {
+    pub fn set_offset(&mut self, offset: FontUnit) {
         self.node.offset = offset;
     }
 
@@ -59,9 +60,9 @@ macro_rules! vbox {
 
 #[derive(Default)]
 pub struct HBox {
-    width:  Pixels,
-    height: Pixels,
-    depth:  Pixels,
+    width:  FontUnit,
+    height: FontUnit,
+    depth:  FontUnit,
     node:   HorizontalBox,
     alignment: Alignment,
 }
@@ -71,12 +72,12 @@ impl HBox {
 
     pub fn add_node(&mut self, node: LayoutNode) {
         self.width += node.width;
-        self.height = self.height.max(node.height);
-        self.depth  = self.depth.min(node.depth);
+        self.height = max(self.height, node.height);
+        self.depth  = min(self.depth, node.depth);
         self.node.contents.push(node);
     }
 
-    pub fn set_offset(&mut self, offset: Pixels) {
+    pub fn set_offset(&mut self, offset: FontUnit) {
         self.node.offset = offset;
     }
 
@@ -84,7 +85,7 @@ impl HBox {
         self.node.alignment = align;
     }
 
-    pub fn set_width(&mut self, width: Pixels) {
+    pub fn set_width(&mut self, width: FontUnit) {
         self.width = width;
     }
 
@@ -126,7 +127,7 @@ macro_rules! hbox {
 
 macro_rules! rule {
     (width: $width:expr, height: $height:expr) => (
-        rule!(width: $width, height: $height, depth: ::dimensions::Pixels::default())
+        rule!(width: $width, height: $height, depth: ::dimensions::FontUnit::default())
     );
 
     (width: $width:expr, height: $height:expr, depth: $depth:expr) => (
@@ -142,9 +143,9 @@ macro_rules! rule {
 macro_rules! kern {
     (vert: $height:expr) => (
         LayoutNode {
-            width:  ::dimensions::Pixels::default(),
+            width:  ::dimensions::FontUnit::default(),
             height: $height,
-            depth:  ::dimensions::Pixels::default(),
+            depth:  ::dimensions::FontUnit::default(),
             node:   LayoutVariant::Kern,
         }
     );
@@ -152,8 +153,8 @@ macro_rules! kern {
     (horz: $width:expr) => (
         LayoutNode {
             width:   $width,
-            height: ::dimensions::Pixels::default(),
-            depth:  ::dimensions::Pixels::default(),
+            height: ::dimensions::FontUnit::default(),
+            depth:  ::dimensions::FontUnit::default(),
             node:   LayoutVariant::Kern,
         }
     );

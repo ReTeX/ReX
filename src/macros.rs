@@ -80,3 +80,26 @@ macro_rules! display_errors {
         }
     )
 }
+
+// These max/min macros were borrowed
+// from the max_min_macros crate by Emanuel Claesson
+
+macro_rules! min {
+    ($x: expr) => ($x);
+    ($x: expr, $($xs: expr), +) => {
+        {
+            use std::cmp::min;
+            min($x, min!($($xs), +))
+        }
+    }
+}
+
+macro_rules! max {
+    ($x: expr) => ($x);
+    ($x: expr, $($xs: expr), +) => {
+        {
+            use std::cmp::max;
+            max($x, max!($($xs), +))
+        }
+    }
+}
