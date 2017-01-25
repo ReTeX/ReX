@@ -1,8 +1,3 @@
-//#![allow(dead_code)]
-// use parser::nodes::{ ParseNode };
-// use font::{GLYPHS};
-// use spacing::atom_spacing;
-//use layout::boundingbox::Bounded;
 use dimensions::{FontUnit, Float};
 use render::{Renderer, RenderSettings, Cursor};
 use std::fmt::Write;
