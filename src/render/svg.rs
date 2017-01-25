@@ -10,14 +10,6 @@ use std::fs::File;
 use std::path::Path;
 use std::marker::PhantomData;
 
-macro_rules! debug {
-    ($fmt:expr, $($arg:tt)*) => (
-        if cfg!(debug_assertions) {
-            println!($fmt, $($arg)*);
-        }
-    )
-}
-
 pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input: &str) {
     render_to_file(
         &mut File::create(path.as_ref())
