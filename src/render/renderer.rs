@@ -1,4 +1,5 @@
 use std::fmt;
+use dimensions::FontUnit;
 
 /// Used to determine direciton
 /// of the current renderer
@@ -24,9 +25,9 @@ struct SvgRenderer {
     /// places glyphs from top to bottom.
     orientation: Orientation,
 
-    font_size: Pixels,
-    horz_padding: Pixels,
-    vert_padding: Pixels,
+    font_size: FontUnit,
+    horz_padding: FontUnit,
+    vert_padding: FontUnit,
 }
 
 impl Renderer {

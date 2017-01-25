@@ -34,11 +34,11 @@ impl fmt::Display for Glyph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f,
             "Glyph {{ unicode: {}u32, \
-                        bbox: BBox(FontUnit::from({}i32), FontUnit::from({}i32), FontUnit::from({}i32), FontUnit::from({}i32)), \
-                        advance: FontUnit::from({}i32), \
-                        lsb: FontUnit::from({}i32), \
-                        italics: FontUnit::from({}i32), \
-                        attachment: FontUnit::from({}i32) }}",
+                        bbox: BBox(fontunit!({}i32), fontunit!({}i32), fontunit!({}i32), fontunit!({}i32)), \
+                        advance: fontunit!({}i32), \
+                        lsb: fontunit!({}i32), \
+                        italics: fontunit!({}i32), \
+                        attachment: fontunit!({}i32) }}",
             self.unicode,
             self.min_x, self.min_y, self.max_x, self.max_y,
             self.advance,
@@ -94,14 +94,10 @@ fn make_glyphs() {
     let mut glyph_file = File::open("build/glyphs.json")
         .expect("Unable to open build/glyphs.json");
 
-    let mut buffer = String::new();
-    glyph_file.read_to_string(&mut buffer)
-        .expect("Unable to read build/glyphs.json");
-
-    let json: Glyphs = serde_json::from_str(&buffer).unwrap();
-
     let output = Path::new(&env::var_os("OUT_DIR").expect("OUT_DIR")).join("glyphs.rs");
     let mut file = BufWriter::new(File::create(&output).expect("glyphs.rs file"));
+
+    let json: Glyphs = serde_json::from_reader(&glyph_file).unwrap();
 
     write!(&mut file, "pub static GLYPHS: phf::Map<u32, Glyph> = ").unwrap();
 
@@ -119,4 +115,5 @@ fn make_glyphs() {
 
     map.build(&mut file).unwrap();
     write!(&mut file, ";\n").unwrap();
+    file.flush().unwrap();
 }

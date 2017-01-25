@@ -103,3 +103,15 @@ macro_rules! max {
         }
     }
 }
+
+macro_rules! fontunit {
+    ($n:expr) => (
+        ::dimensions::FontUnit { bits: $n<< 8 }
+    )
+}
+
+macro_rules! fontunit_raw {
+    ($n:expr) => (
+        ::dimensions::FontUnit { bits: $n }
+    )
+}

@@ -1,4 +1,7 @@
-use dimensions::{Pixels, Float};
+pub mod svg;
+pub use self::svg::SVGRenderer;
+
+use dimensions::{FontUnit, Float};
 use layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
 use parser::parse;
 use layout::engine::layout;
@@ -7,8 +10,8 @@ use layout::engine::layout;
 pub struct RenderSettings {
     pub font_size:    u16,
     pub font_src:     String,
-    pub horz_padding: Pixels,
-    pub vert_padding: Pixels,
+    pub horz_padding: FontUnit,
+    pub vert_padding: FontUnit,
     pub strict:       bool,
     pub style:        Style,
     pub debug:        bool
@@ -16,35 +19,35 @@ pub struct RenderSettings {
 
 #[derive(Copy, Clone, Default)]
 pub struct Cursor {
-    pub x:  Pixels,
-    pub y:  Pixels
+    pub x:  FontUnit,
+    pub y:  FontUnit
 }
 impl Cursor {
-    pub fn translate(self, dx: Pixels, dy: Pixels) -> Cursor {
+    pub fn translate(self, dx: FontUnit, dy: FontUnit) -> Cursor {
         Cursor {
             x:  self.x + dx,
             y:  self.y + dy
         }
     }
-    pub fn left(self, dx: Pixels) -> Cursor {
+    pub fn left(self, dx: FontUnit) -> Cursor {
         Cursor {
             x:  self.x - dx,
             y:  self.y
         }
     }
-    pub fn right(self, dx: Pixels) -> Cursor {
+    pub fn right(self, dx: FontUnit) -> Cursor {
         Cursor {
             x:  self.x + dx,
             y:  self.y
         }
     }
-    pub fn up(self, dy: Pixels) -> Cursor {
+    pub fn up(self, dy: FontUnit) -> Cursor {
         Cursor {
             x:  self.x,
             y:  self.y - dy
         }
     }
-    pub fn down(self, dy: Pixels) -> Cursor {
+    pub fn down(self, dy: FontUnit) -> Cursor {
         Cursor {
             x:  self.x,
             y:  self.y + dy
@@ -57,8 +60,8 @@ impl Default for RenderSettings {
         RenderSettings {
             font_size:    48,
             font_src:     "http://rex.breeden.cc/rex-xits.otf".into(),
-            horz_padding: Pixels(12.0),
-            vert_padding: Pixels(5.0),
+            horz_padding: FontUnit::from(1),
+            vert_padding: FontUnit::from(0.5),
             strict:       true,
             style:        Style::Display,
             debug:        false
@@ -81,14 +84,14 @@ impl RenderSettings {
         }
     }
 
-    pub fn horz_padding(self, size: Pixels) -> RenderSettings {
+    pub fn horz_padding(self, size: FontUnit) -> RenderSettings {
         RenderSettings {
             horz_padding: size,
             ..self
         }
     }
 
-    pub fn vert_padding(self, size: Pixels) -> RenderSettings {
+    pub fn vert_padding(self, size: FontUnit) -> RenderSettings {
         RenderSettings {
             vert_padding: size,
             ..self
@@ -120,11 +123,11 @@ impl RenderSettings {
 pub trait Renderer {
     type Out;
 
-    fn bbox(&self, _out: &mut Self::Out, _pos: Cursor, _width: Pixels, _height: Pixels) {}
+    fn bbox(&self, _out: &mut Self::Out, _pos: Cursor, _width: FontUnit, _height: FontUnit) {}
 
     fn symbol(&self, out: &mut Self::Out, pos: Cursor, symbol: u32, scale: Float);
 
-    fn rule(&self, out: &mut Self::Out, pos: Cursor, width: Pixels, height: Pixels);
+    fn rule(&self, out: &mut Self::Out, pos: Cursor, width: FontUnit, height: FontUnit);
 
     fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
     where F: FnMut(&Self, &mut Self::Out);
@@ -133,12 +136,12 @@ pub trait Renderer {
         out: &mut Self::Out,
         mut pos: Cursor,
         nodes: &[LayoutNode],
-        height: Pixels,
-        nodes_width: Pixels,
+        height: FontUnit,
+        nodes_width: FontUnit,
         alignment: Alignment)
     {
         if let Alignment::Centered(w) = alignment {
-            pos.x += (nodes_width - w)/2.0;
+            pos.x += (nodes_width - w) / 2;
         }
 
         self.bbox(out, pos, nodes_width, height);
@@ -146,7 +149,7 @@ pub trait Renderer {
         for node in nodes {
             match node.node {
                 LayoutVariant::Glyph(ref gly) =>
-                    self.symbol(out, pos, gly.unicode, gly.scale),
+                    self.symbol(out, pos, gly.unicode, f64::from(gly.scale)),
 
                 LayoutVariant::Rule =>
                     self.rule(out,
@@ -193,7 +196,7 @@ pub trait Renderer {
                     self.render_vbox(out, pos, &vbox.contents),
 
                 LayoutVariant::Glyph(ref gly) =>
-                    self.symbol(out, pos.down(node.height), gly.unicode, gly.scale),
+                    self.symbol(out, pos.down(node.height), gly.unicode, f64::from(gly.scale)),
 
                 LayoutVariant::Color(_) =>
                     panic!("Shouldn't have a color in a vertical box???"),
@@ -205,7 +208,7 @@ pub trait Renderer {
         }
     }
 
-    fn prepare(&self, _out: &mut Self::Out, _width: Pixels, _height: Pixels) {}
+    fn prepare(&self, _out: &mut Self::Out, _width: FontUnit, _height: FontUnit) {}
     fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
 
@@ -226,14 +229,14 @@ pub trait Renderer {
 
         self.prepare(out,
             // Left and right padding
-            layout.width  + 2.0 * padding.0,
+            layout.width  + 2 * padding.0,
             // Top and bot padding
-            layout.height + 2.0 * padding.1 - layout.depth
+            layout.height - layout.depth + 2 * padding.1
         );
 
         let pos = Cursor {
-            x: Pixels(padding.0),
-            y: Pixels(padding.1) + layout.height
+            x: padding.0,
+            y: padding.1 + layout.height
         };
         self.render_hbox(out, pos,
             &layout.contents, layout.height,
@@ -250,6 +253,3 @@ pub trait Renderer {
         Ok(out)
     }
 }
-
-pub mod svg;
-pub use self::svg::SVGRenderer;

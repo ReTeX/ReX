@@ -3,7 +3,7 @@
 // use font::{GLYPHS};
 // use spacing::atom_spacing;
 //use layout::boundingbox::Bounded;
-use dimensions::{Pixels, Float};
+use dimensions::{FontUnit, Float};
 use render::{Renderer, RenderSettings, Cursor};
 use std::fmt::Write;
 use std::fs::File;
@@ -28,7 +28,7 @@ pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input:
 
 pub fn render_to_file(file: &mut File, settings: &RenderSettings, input: &str) {
     use std::io::Write;
-    
+
     let s: String = SVGRenderer::new(&settings).render(input).expect("failed to render");
     file.write(s.as_bytes()).expect("failed to write to file");
 }
@@ -43,32 +43,38 @@ impl<'a, W: Write> SVGRenderer<'a, W> {
     pub fn new(settings: &RenderSettings) -> SVGRenderer<W> {
         SVGRenderer {
             settings:   settings,
-            _marker:    PhantomData 
+            _marker:    PhantomData
         }
     }
-    
+
 }
 
 impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
     type Out = W;
-    
+
     fn settings(&self) -> &RenderSettings {
         self.settings
     }
-    
-    fn prepare(&self, out: &mut W, width: Pixels, height: Pixels) {
+
+    fn prepare(&self, out: &mut W, width: FontUnit, height: FontUnit) {
+        let px_width  = 1000 * self.settings.font_size * width;
+        let px_height = 1000 * self.settings.font_size * height;
+
         writeln!(out,
 r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="{:.2}" height="{:.2}" xmlns="http://www.w3.org/2000/svg">
+<svg width="{}" height="{}" viewbox="0 0 {} {}" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{{font-family:rex;src:url('{}');}}</style>
     </defs>
-    <g font-family="rex" font-size="{:.1}px">"#,
-            *width, *height, self.settings.font_src, self.settings.font_size
+    <g font-family="rex" font-size="{}">"#,
+            px_width, px_height,
+            width, height,
+            self.settings.font_src,
+            1000 * self.settings.font_size
         ).expect("Failed to write to buffer!");
     }
-    
+
     fn finish(&self, out: &mut W) {
         writeln!(out, "\
     </g>
@@ -76,8 +82,8 @@ r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 "
         ).unwrap();
     }
-    
-    fn bbox(&self, out: &mut W, pos: Cursor, width: Pixels, height: Pixels) {
+
+    fn bbox(&self, out: &mut W, pos: Cursor, width: FontUnit, height: FontUnit) {
         if self.settings.debug {
             writeln!(out,
                 r#"<rect x="{}", y="{}", width="{}" height="{}" fill="none" stroke="blue" stroke-width="0.2"/>"#,
@@ -105,7 +111,7 @@ r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         }
     }
 
-    fn rule(&self, out: &mut W, pos: Cursor, width: Pixels, height: Pixels) {
+    fn rule(&self, out: &mut W, pos: Cursor, width: FontUnit, height: FontUnit) {
         writeln!(out,
             r##"<rect x="{}" y ="{}" width="{}" height="{}" fill="#000"/>"##,
             pos.x, pos.y, width, height
