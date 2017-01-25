@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="840.37" height="242.61" xmlns="http://www.w3.org/2000/svg">
+<svg width="832.54875" height="232.704" viewbox="0 0 8672 2424" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 169.45)">𝑥</text>
-<text transform="translate(96.80, 169.45)">=</text>
-<text transform="translate(196.16, 106.84)">−</text>
-<text transform="translate(261.92, 106.84)">𝑏</text>
-<text transform="translate(328.37, 106.84)">±</text>
-<text transform="translate(415.47, 98.41)">√</text>
-<rect x="504.55" y ="5.00" width="322.22" height="6.34" fill="#000"/>
-<text transform="translate(504.55, 106.84)">𝑏</text>
-<text transform="translate(549.67, 78.71) scale(0.68)">2</text>
-<text transform="translate(603.65, 106.84)">−</text>
-<text transform="translate(690.74, 106.84)">4</text>
-<text transform="translate(738.74, 106.84)">𝑎</text>
-<text transform="translate(786.93, 106.84)">𝑐</text>
-<rect x="196.16" y ="142.28" width="630.61" height="6.34" fill="#000"/>
-<text transform="translate(463.37, 236.65)">2</text>
-<text transform="translate(511.37, 236.65)">𝑎</text>
+    <g font-family="rex" font-size="1000">
+<text transform="translate(1, 1713)">𝑥</text>
+<text transform="translate(884, 1713)">=</text>
+<text transform="translate(2002, 1061)">−</text>
+<text transform="translate(2687, 1061)">𝑏</text>
+<text transform="translate(3379, 1061)">±</text>
+<text transform="translate(4287, 973)">√</text>
+<rect x="5215" y ="0" width="3356" height="66" fill="#000"/>
+<text transform="translate(5215, 1061)">𝑏</text>
+<text transform="translate(5685, 768) scale(0.68)">2</text>
+<text transform="translate(6247, 1061)">−</text>
+<text transform="translate(7154, 1061)">4</text>
+<text transform="translate(7654, 1061)">𝑎</text>
+<text transform="translate(8156, 1061)">𝑐</text>
+<rect x="2002" y ="1430" width="6568" height="66" fill="#000"/>
+<text transform="translate(4786, 2413)">2</text>
+<text transform="translate(5286, 2413)">𝑎</text>
 </g>
 </svg>
 

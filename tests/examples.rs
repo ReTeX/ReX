@@ -44,7 +44,7 @@ fn generate_examples() {
         };
 
     let mut readme = String::new();
-    let settings = RenderSettings::default().font_size(96.0).debug(false);
+    let settings = RenderSettings::default().font_size(96).debug(false);
     for example in examples {
         if let &Value::Table(ref table) = example {
             let name = expect_string!(table["name"]);

@@ -62,9 +62,9 @@ impl Spacing {
     pub fn to_unit(self) -> FontUnit {
         match self {
             Spacing::None   => FontUnit::from(0),
-            Spacing::Thin   => FontUnit::from(1) / 6,
-            Spacing::Medium => FontUnit::from(2) / 9,
-            Spacing::Thick  => FontUnit::from(3) / 9,
+            Spacing::Thin   => FontUnit::from(1000) / 6, // 1/6 EM
+            Spacing::Medium => FontUnit::from(2000) / 9, // 2/9 EM
+            Spacing::Thick  => FontUnit::from(1000) / 3, // 1/3 EM
         }
     }
 }

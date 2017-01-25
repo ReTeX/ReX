@@ -51,7 +51,7 @@ const END: &'static str = r"</body></html>";
 
 #[test]
 fn font_styles_render() {
-    let settings = rex::RenderSettings::default().font_src("rex-xits.woff2").font_size(32.0);
+    let settings = rex::RenderSettings::default().font_src("rex-xits.woff2").font_size(32);
     let svg  = rex::SVGRenderer::<String>::new(&settings);
     let mut file = File::create("tests/out/font_styles.html")
         .expect("Unable to create `font_styles.html`");

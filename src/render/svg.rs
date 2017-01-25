@@ -57,13 +57,13 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
     }
 
     fn prepare(&self, out: &mut W, width: FontUnit, height: FontUnit) {
-        let px_width  = 1000 * self.settings.font_size * width;
-        let px_height = 1000 * self.settings.font_size * height;
+        let px_width  = f64::from(width) / (1000 as f64)  * self.settings.font_size as f64;
+        let px_height = f64::from(height) / (1000 as f64) * self.settings.font_size as f64;
 
         writeln!(out,
 r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="{}" height="{}" viewbox="0 0 {} {}" xmlns="http://www.w3.org/2000/svg">
+<svg width="{:2}" height="{:2}" viewbox="0 0 {} {}" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{{font-family:rex;src:url('{}');}}</style>
     </defs>
@@ -71,7 +71,7 @@ r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
             px_width, px_height,
             width, height,
             self.settings.font_src,
-            1000 * self.settings.font_size
+            1000
         ).expect("Failed to write to buffer!");
     }
 

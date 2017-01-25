@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1286.75" height="245.41" xmlns="http://www.w3.org/2000/svg">
+<svg width="1294.37475" height="235.485" viewbox="0 0 13483 2452" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 209.79)"></text>
-<text transform="translate(120.96, 53.79) scale(0.68)">∞</text>
-<text transform="translate(68.16, 240.41) scale(0.68)">−</text>
-<text transform="translate(112.88, 240.41) scale(0.68)">∞</text>
-<text transform="translate(199.01, 87.53)">s</text>
-<text transform="translate(236.35, 87.53)">i</text>
-<text transform="translate(263.04, 87.53)">n</text>
-<text transform="translate(311.04, 87.53)">(</text>
-<text transform="translate(343.01, 87.53)">𝑥</text>
-<text transform="translate(395.81, 87.53)">)</text>
-<rect x="199.01" y ="123.53" width="228.77" height="6.34" fill="#000"/>
-<text transform="translate(286.99, 217.90)">𝑥</text>
-<text transform="translate(461.38, 150.70)">d</text>
-<text transform="translate(509.38, 150.70)">𝑥</text>
-<text transform="translate(594.18, 150.70)">=</text>
-<text transform="translate(691.94, 209.79)"></text>
-<text transform="translate(800.90, 53.79) scale(0.68)">∞</text>
-<text transform="translate(748.10, 240.41) scale(0.68)">−</text>
-<text transform="translate(792.81, 240.41) scale(0.68)">∞</text>
-<text transform="translate(878.95, 87.53)">s</text>
-<text transform="translate(916.29, 87.53)">i</text>
-<text transform="translate(942.98, 87.53)">n</text>
-<text transform="translate(990.98, 49.13) scale(0.68)">2</text>
-<text transform="translate(1023.62, 87.53)">(</text>
-<text transform="translate(1055.59, 87.53)">𝑥</text>
-<text transform="translate(1108.39, 87.53)">)</text>
-<rect x="878.95" y ="123.53" width="261.41" height="6.34" fill="#000"/>
-<text transform="translate(966.93, 219.40)">𝑥</text>
-<text transform="translate(1019.73, 193.00) scale(0.68)">2</text>
-<text transform="translate(1173.95, 150.70)">d</text>
-<text transform="translate(1221.95, 150.70)">𝑥</text>
+    <g font-family="rex" font-size="1000">
+<text transform="translate(1, 2133)"></text>
+<text transform="translate(1136, 508) scale(0.68)">∞</text>
+<text transform="translate(586, 2452) scale(0.68)">−</text>
+<text transform="translate(1051, 2452) scale(0.68)">∞</text>
+<text transform="translate(2032, 859)">s</text>
+<text transform="translate(2421, 859)">i</text>
+<text transform="translate(2699, 859)">n</text>
+<text transform="translate(3199, 859)">(</text>
+<text transform="translate(3532, 859)">𝑥</text>
+<text transform="translate(4082, 859)">)</text>
+<rect x="2032" y ="1234" width="2383" height="66" fill="#000"/>
+<text transform="translate(2948, 2217)">𝑥</text>
+<text transform="translate(4845, 1517)">d</text>
+<text transform="translate(5345, 1517)">𝑥</text>
+<text transform="translate(6229, 1517)">=</text>
+<text transform="translate(7247, 2133)"></text>
+<text transform="translate(8382, 508) scale(0.68)">∞</text>
+<text transform="translate(7832, 2452) scale(0.68)">−</text>
+<text transform="translate(8298, 2452) scale(0.68)">∞</text>
+<text transform="translate(9278, 859)">s</text>
+<text transform="translate(9667, 859)">i</text>
+<text transform="translate(9945, 859)">n</text>
+<text transform="translate(10445, 459) scale(0.68)">2</text>
+<text transform="translate(10785, 859)">(</text>
+<text transform="translate(11118, 859)">𝑥</text>
+<text transform="translate(11668, 859)">)</text>
+<rect x="9278" y ="1234" width="2722" height="66" fill="#000"/>
+<text transform="translate(10195, 2233)">𝑥</text>
+<text transform="translate(10745, 1958) scale(0.68)">2</text>
+<text transform="translate(12432, 1517)">d</text>
+<text transform="translate(12932, 1517)">𝑥</text>
 </g>
 </svg>
 

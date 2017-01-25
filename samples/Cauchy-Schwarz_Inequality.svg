@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1321.85" height="284.19" xmlns="http://www.w3.org/2000/svg">
+<svg width="1329.97275" height="274.24875000000003" viewbox="0 0 13853 2856" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 231.12)"></text>
-<text transform="translate(42.72, 225.17)"></text>
-<text transform="translate(87.05, 278.47) scale(0.68)">𝑘</text>
-<text transform="translate(182.75, 174.86)">𝑎</text>
-<text transform="translate(230.94, 198.86) scale(0.68)">𝑘</text>
-<text transform="translate(266.33, 174.86)">𝑏</text>
-<text transform="translate(311.45, 198.86) scale(0.68)">𝑘</text>
-<text transform="translate(346.83, 231.12)"></text>
-<text transform="translate(409.55, 174.86)">≤</text>
-<text transform="translate(507.31, 231.12)"></text>
-<text transform="translate(579.31, 225.17)"></text>
-<text transform="translate(623.63, 278.47) scale(0.68)">𝑘</text>
-<text transform="translate(719.34, 174.86)">𝑎</text>
-<text transform="translate(767.53, 133.19) scale(0.68)">2</text>
-<text transform="translate(767.53, 202.14) scale(0.68)">𝑘</text>
-<text transform="translate(802.91, 231.12)"></text>
-<text transform="translate(876.51, 37.45) scale(0.50)">1</text>
-<rect x="876.51" y ="50.31" width="24.00" height="4.31" fill="#000"/>
-<text transform="translate(876.51, 100.12) scale(0.50)">2</text>
-<text transform="translate(918.11, 231.12)"></text>
-<text transform="translate(990.11, 225.17)"></text>
-<text transform="translate(1034.44, 278.47) scale(0.68)">𝑘</text>
-<text transform="translate(1130.15, 174.86)">𝑏</text>
-<text transform="translate(1175.27, 133.19) scale(0.68)">2</text>
-<text transform="translate(1175.27, 202.14) scale(0.68)">𝑘</text>
-<text transform="translate(1210.65, 231.12)"></text>
-<text transform="translate(1284.25, 37.45) scale(0.50)">1</text>
-<rect x="1284.25" y ="50.31" width="24.00" height="4.31" fill="#000"/>
-<text transform="translate(1284.25, 100.12) scale(0.50)">2</text>
+    <g font-family="rex" font-size="1000">
+<text transform="translate(1, 2355)"></text>
+<text transform="translate(321, 2293)"></text>
+<text transform="translate(782, 2848) scale(0.68)">𝑘</text>
+<text transform="translate(1779, 1769)">𝑎</text>
+<text transform="translate(2281, 2019) scale(0.68)">𝑘</text>
+<text transform="translate(2650, 1769)">𝑏</text>
+<text transform="translate(3120, 2019) scale(0.68)">𝑘</text>
+<text transform="translate(3488, 2355)"></text>
+<text transform="translate(4141, 1769)">≤</text>
+<text transform="translate(5160, 2355)"></text>
+<text transform="translate(5910, 2293)"></text>
+<text transform="translate(6371, 2848) scale(0.68)">𝑘</text>
+<text transform="translate(7368, 1769)">𝑎</text>
+<text transform="translate(7870, 1335) scale(0.68)">2</text>
+<text transform="translate(7870, 2053) scale(0.68)">𝑘</text>
+<text transform="translate(8239, 2355)"></text>
+<text transform="translate(9089, 338) scale(0.50)">1</text>
+<rect x="9089" y ="472" width="250" height="44" fill="#000"/>
+<text transform="translate(9089, 991) scale(0.50)">2</text>
+<text transform="translate(9605, 2355)"></text>
+<text transform="translate(10355, 2293)"></text>
+<text transform="translate(10817, 2848) scale(0.68)">𝑘</text>
+<text transform="translate(11814, 1769)">𝑏</text>
+<text transform="translate(12284, 1335) scale(0.68)">2</text>
+<text transform="translate(12284, 2053) scale(0.68)">𝑘</text>
+<text transform="translate(12652, 2355)"></text>
+<text transform="translate(13502, 338) scale(0.50)">1</text>
+<rect x="13502" y ="472" width="250" height="44" fill="#000"/>
+<text transform="translate(13502, 991) scale(0.50)">2</text>
 </g>
 </svg>
 

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="749.89" height="246.16" xmlns="http://www.w3.org/2000/svg">
+<svg width="741.999" height="236.25599999999997" viewbox="0 0 7729 2461" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
-    <g font-family="rex" font-size="96.0px">
-<text transform="translate(12.00, 147.08)">𝑒</text>
-<text transform="translate(86.72, 147.08)">=</text>
-<text transform="translate(197.12, 147.08)">l</text>
-<text transform="translate(223.81, 147.08)">i</text>
-<text transform="translate(250.50, 147.08)">m</text>
-<text transform="translate(184.48, 204.68) scale(0.68)">𝑛</text>
-<text transform="translate(216.92, 204.68) scale(0.68)">→</text>
-<text transform="translate(277.37, 204.68) scale(0.68)">∞</text>
-<text transform="translate(353.82, 203.34)"></text>
-<text transform="translate(425.82, 147.08)">1</text>
-<text transform="translate(495.16, 147.08)">+</text>
-<text transform="translate(583.85, 91.40)">1</text>
-<rect x="583.85" y ="119.91" width="48.00" height="6.34" fill="#000"/>
-<text transform="translate(583.99, 214.28)">𝑛</text>
-<text transform="translate(633.45, 203.34)"></text>
-<text transform="translate(705.45, 41.00) scale(0.68)">𝑛</text>
+    <g font-family="rex" font-size="1000">
+<text transform="translate(1, 1480)">𝑒</text>
+<text transform="translate(779, 1480)">=</text>
+<text transform="translate(1928, 1480)">l</text>
+<text transform="translate(2206, 1480)">i</text>
+<text transform="translate(2484, 1480)">m</text>
+<text transform="translate(1797, 2080) scale(0.68)">𝑛</text>
+<text transform="translate(2135, 2080) scale(0.68)">→</text>
+<text transform="translate(2764, 2080) scale(0.68)">∞</text>
+<text transform="translate(3560, 2066)"></text>
+<text transform="translate(4310, 1480)">1</text>
+<text transform="translate(5033, 1480)">+</text>
+<text transform="translate(6040, 900)">1</text>
+<rect x="6040" y ="1197" width="500" height="66" fill="#000"/>
+<text transform="translate(6041, 2180)">𝑛</text>
+<text transform="translate(6640, 2066)"></text>
+<text transform="translate(7390, 375) scale(0.68)">𝑛</text>
 </g>
 </svg>
 

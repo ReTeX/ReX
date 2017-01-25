@@ -106,7 +106,7 @@ macro_rules! max {
 
 macro_rules! fontunit {
     ($n:expr) => (
-        ::dimensions::FontUnit { bits: $n<< 8 }
+        ::dimensions::FontUnit { bits: $n << 8u8 }
     )
 }
 
