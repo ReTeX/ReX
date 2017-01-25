@@ -178,7 +178,7 @@ pub trait Renderer {
                         );
                     }),
 
-                LayoutVariant::Kern => { }
+                LayoutVariant::Kern => { /* NOOP */ }
             } // End macth
 
             pos.x += node.width;
@@ -206,7 +206,7 @@ pub trait Renderer {
                 LayoutVariant::Color(_) =>
                     panic!("Shouldn't have a color in a vertical box???"),
 
-                LayoutVariant::Kern => { }
+                LayoutVariant::Kern => { /* NOOP */ }
             }
 
             pos.y += node.height;
