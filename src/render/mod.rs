@@ -60,8 +60,13 @@ impl Default for RenderSettings {
         RenderSettings {
             font_size:    48,
             font_src:     "http://rex.breeden.cc/rex-xits.otf".into(),
-            horz_padding: FontUnit::from(1),
-            vert_padding: FontUnit::from(0.5),
+
+            // TODO: Think about these defaults.  The 0.250, and 0.100
+            // were taken from a default font_size of 48, and a
+            // UNITS_PER_EM of 1000.  This should probably depend on
+            // UNITS_PER_EM.  Maybe UNITS_PER_EM/4, and UNITS_PER_EM/10?
+            horz_padding: FontUnit::from(250),
+            vert_padding: FontUnit::from(100),
             strict:       true,
             style:        Style::Display,
             debug:        false
