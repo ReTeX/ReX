@@ -266,21 +266,6 @@ mod tests {
     use font::glyph_metrics;
 
     #[test]
-    fn can_extend_parenthesis() {
-        //let paren = glyph_metrics(0x28); // Left parantheses
-        // println!("800:  {:#?}", paren.variant(800 as f64));
-        // println!("1200: {:#?}", paren.variant(1200 as f64));
-        // println!("1800: {:#?}", paren.variant(1800 as f64));
-        // println!("2400: {:#?}", paren.variant(2400 as f64));
-        // println!("3000: {:#?}", paren.variant(3000 as f64));
-        // println!("3100: {:#?}", paren.variant(3100 as f64));
-        // println!("3600: {:#?}", paren.variant(3600 as f64));
-        // println!("3700: {:#?}", paren.variant(3700 as f64));
-        // println!("3800: {:#?}", paren.variant(3800 as f64));
-        // println!("3900: {:#?}", paren.variant(3900 as f64));
-    }
-
-    #[test]
     fn can_find_successor() {
         let int = glyph_metrics(0x222B); // Integral
         println!("Int old: {:?}", int);
