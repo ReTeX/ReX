@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1621.7152499999997" height="83.232" viewBox="0 0 16892 867" xmlns="http://www.w3.org/2000/svg">
+<svg width="1669.52325" height="102.33600000000001" viewBox="0 0 17390 1066" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 683)">s</text>
-<text transform="translate(390, 683)">i</text>
-<text transform="translate(668, 683)">n</text>
-<text transform="translate(1168, 683)">(</text>
-<text transform="translate(1501, 683)">𝜃</text>
-<text transform="translate(2207, 683)">+</text>
-<text transform="translate(3114, 683)">𝜑</text>
-<text transform="translate(3780, 683)">)</text>
-<text transform="translate(4446, 683)">=</text>
-<text transform="translate(5465, 683)">s</text>
-<text transform="translate(5854, 683)">i</text>
-<text transform="translate(6132, 683)">n</text>
-<text transform="translate(6632, 683)">(</text>
-<text transform="translate(6965, 683)">𝜃</text>
-<text transform="translate(7449, 683)">)</text>
-<text transform="translate(7948, 683)">c</text>
-<text transform="translate(8392, 683)">o</text>
-<text transform="translate(8892, 683)">s</text>
-<text transform="translate(9281, 683)">(</text>
-<text transform="translate(9614, 683)">𝜑</text>
-<text transform="translate(10280, 683)">)</text>
-<text transform="translate(10835, 683)">+</text>
-<text transform="translate(11743, 683)">s</text>
-<text transform="translate(12132, 683)">i</text>
-<text transform="translate(12410, 683)">n</text>
-<text transform="translate(12910, 683)">(</text>
-<text transform="translate(13243, 683)">𝜑</text>
-<text transform="translate(13909, 683)">)</text>
-<text transform="translate(14408, 683)">c</text>
-<text transform="translate(14852, 683)">o</text>
-<text transform="translate(15352, 683)">s</text>
-<text transform="translate(15741, 683)">(</text>
-<text transform="translate(16074, 683)">𝜃</text>
-<text transform="translate(16558, 683)">)</text>
+<text transform="translate(250, 783)">s</text>
+<text transform="translate(639, 783)">i</text>
+<text transform="translate(917, 783)">n</text>
+<text transform="translate(1417, 783)">(</text>
+<text transform="translate(1750, 783)">𝜃</text>
+<text transform="translate(2456, 783)">+</text>
+<text transform="translate(3363, 783)">𝜑</text>
+<text transform="translate(4029, 783)">)</text>
+<text transform="translate(4695, 783)">=</text>
+<text transform="translate(5714, 783)">s</text>
+<text transform="translate(6103, 783)">i</text>
+<text transform="translate(6381, 783)">n</text>
+<text transform="translate(6881, 783)">(</text>
+<text transform="translate(7214, 783)">𝜃</text>
+<text transform="translate(7698, 783)">)</text>
+<text transform="translate(8197, 783)">c</text>
+<text transform="translate(8641, 783)">o</text>
+<text transform="translate(9141, 783)">s</text>
+<text transform="translate(9530, 783)">(</text>
+<text transform="translate(9863, 783)">𝜑</text>
+<text transform="translate(10529, 783)">)</text>
+<text transform="translate(11084, 783)">+</text>
+<text transform="translate(11992, 783)">s</text>
+<text transform="translate(12381, 783)">i</text>
+<text transform="translate(12659, 783)">n</text>
+<text transform="translate(13159, 783)">(</text>
+<text transform="translate(13492, 783)">𝜑</text>
+<text transform="translate(14158, 783)">)</text>
+<text transform="translate(14657, 783)">c</text>
+<text transform="translate(15101, 783)">o</text>
+<text transform="translate(15601, 783)">s</text>
+<text transform="translate(15990, 783)">(</text>
+<text transform="translate(16323, 783)">𝜃</text>
+<text transform="translate(16807, 783)">)</text>
 </g>
 </svg>
 

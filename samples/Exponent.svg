@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="741.999" height="236.25599999999997" viewBox="0 0 7729 2461" xmlns="http://www.w3.org/2000/svg">
+<svg width="789.807" height="255.36" viewBox="0 0 8227 2660" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 1480)">𝑒</text>
-<text transform="translate(779, 1480)">=</text>
-<text transform="translate(1928, 1480)">l</text>
-<text transform="translate(2206, 1480)">i</text>
-<text transform="translate(2484, 1480)">m</text>
-<text transform="translate(1797, 2080) scale(0.68)">𝑛</text>
-<text transform="translate(2135, 2080) scale(0.68)">→</text>
-<text transform="translate(2764, 2080) scale(0.68)">∞</text>
-<text transform="translate(3560, 2066)"></text>
-<text transform="translate(4310, 1480)">1</text>
-<text transform="translate(5033, 1480)">+</text>
-<text transform="translate(6040, 900)">1</text>
-<rect x="6040" y ="1197" width="500" height="66" fill="#000"/>
-<text transform="translate(6041, 2180)">𝑛</text>
-<text transform="translate(6640, 2066)"></text>
-<text transform="translate(7390, 375) scale(0.68)">𝑛</text>
+<text transform="translate(250, 1580)">𝑒</text>
+<text transform="translate(1028, 1580)">=</text>
+<text transform="translate(2177, 1580)">l</text>
+<text transform="translate(2455, 1580)">i</text>
+<text transform="translate(2733, 1580)">m</text>
+<text transform="translate(2046, 2180) scale(0.68)">𝑛</text>
+<text transform="translate(2384, 2180) scale(0.68)">→</text>
+<text transform="translate(3013, 2180) scale(0.68)">∞</text>
+<text transform="translate(3809, 2166)"></text>
+<text transform="translate(4559, 1580)">1</text>
+<text transform="translate(5282, 1580)">+</text>
+<text transform="translate(6289, 1000)">1</text>
+<rect x="6289" y ="1297" width="500" height="66" fill="#000"/>
+<text transform="translate(6290, 2280)">𝑛</text>
+<text transform="translate(6889, 2166)"></text>
+<text transform="translate(7639, 475) scale(0.68)">𝑛</text>
 </g>
 </svg>
 

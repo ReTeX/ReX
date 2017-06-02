@@ -3,9 +3,10 @@
 
 #![feature(test)]
 extern crate test;
-// #[macro_use]
-// extern crate nom;
-// extern crate regex;
+
+#[macro_use]
+extern crate log;
+
 extern crate phf;
 extern crate fnv;
 extern crate fp;

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="859.39125" height="295.296" viewBox="0 0 8951 3076" xmlns="http://www.w3.org/2000/svg">
+<svg width="907.1992499999999" height="314.4" viewBox="0 0 9449 3275" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 1977)">𝜎</text>
-<text transform="translate(871, 1977)">=</text>
-<text transform="translate(1889, 2565)"></text>
-<rect x="2965" y ="0" width="5985" height="66" fill="#000"/>
-<text transform="translate(3241, 1397)">1</text>
-<rect x="3065" y ="1694" width="851" height="66" fill="#000"/>
-<text transform="translate(3065, 2677)">𝑁</text>
-<text transform="translate(4540, 702) scale(0.68)">𝑁</text>
-<text transform="translate(4183, 2501)"></text>
-<text transform="translate(4320, 3061) scale(0.68)">𝑖</text>
-<text transform="translate(4532, 3061) scale(0.68)">=</text>
-<text transform="translate(4997, 3061) scale(0.68)">1</text>
-<text transform="translate(5475, 1977)">(</text>
-<text transform="translate(5808, 1977)">𝑥</text>
-<text transform="translate(6358, 2227) scale(0.68)">𝑖</text>
-<text transform="translate(6791, 1977)">−</text>
-<text transform="translate(7699, 1977)">𝜇</text>
-<text transform="translate(8278, 1977)">)</text>
-<text transform="translate(8611, 1676) scale(0.68)">2</text>
+<text transform="translate(250, 2076)">𝜎</text>
+<text transform="translate(1120, 2076)">=</text>
+<text transform="translate(2138, 2665)"></text>
+<rect x="3214" y ="100" width="5985" height="66" fill="#000"/>
+<text transform="translate(3490, 1496)">1</text>
+<rect x="3314" y ="1793" width="851" height="66" fill="#000"/>
+<text transform="translate(3314, 2776)">𝑁</text>
+<text transform="translate(4789, 801) scale(0.68)">𝑁</text>
+<text transform="translate(4432, 2600)"></text>
+<text transform="translate(4569, 3161) scale(0.68)">𝑖</text>
+<text transform="translate(4781, 3161) scale(0.68)">=</text>
+<text transform="translate(5246, 3161) scale(0.68)">1</text>
+<text transform="translate(5724, 2076)">(</text>
+<text transform="translate(6057, 2076)">𝑥</text>
+<text transform="translate(6607, 2326) scale(0.68)">𝑖</text>
+<text transform="translate(7040, 2076)">−</text>
+<text transform="translate(7948, 2076)">𝜇</text>
+<text transform="translate(8527, 2076)">)</text>
+<text transform="translate(8860, 1775) scale(0.68)">2</text>
 </g>
 </svg>
 

@@ -23,3 +23,7 @@ phf_codegen="0.7"
 serde = "0.8"
 serde_json = "0.8"
 serde_derive = "0.8"
+
+[dependencies.log]
+version="^0.3.8"
+features = [ "release_max_level_warn" ]

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="965.127" height="222.71999999999997" viewBox="0 0 10053 2320" xmlns="http://www.w3.org/2000/svg">
+<svg width="1012.935" height="241.824" viewBox="0 0 10551 2519" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 1385)">𝑓</text>
-<text transform="translate(556, 1385)">(</text>
-<text transform="translate(889, 1385)">𝑥</text>
-<text transform="translate(1439, 1385)">)</text>
-<text transform="translate(2105, 1385)">=</text>
-<text transform="translate(3123, 2000)"></text>
-<text transform="translate(4258, 375) scale(0.68)">∞</text>
-<text transform="translate(3708, 2319) scale(0.68)">−</text>
-<text transform="translate(4174, 2319) scale(0.68)">∞</text>
-<text transform="translate(5812, 1167)">̂</text>
-<text transform="translate(5054, 1385)">𝑓</text>
-<text transform="translate(5812, 1385)">(</text>
-<text transform="translate(6145, 1385)">𝜉</text>
-<text transform="translate(6578, 1385)">)</text>
-<text transform="translate(6911, 1385)">𝑒</text>
-<text transform="translate(7356, 985) scale(0.68)">2</text>
-<text transform="translate(7696, 985) scale(0.68)">𝜋</text>
-<text transform="translate(8075, 985) scale(0.68)">𝑖</text>
-<text transform="translate(8287, 985) scale(0.68)">𝜉</text>
-<text transform="translate(8581, 985) scale(0.68)">𝑥</text>
-<text transform="translate(9119, 1385)">d</text>
-<text transform="translate(9619, 1385)">𝜉</text>
+<text transform="translate(250, 1484)">𝑓</text>
+<text transform="translate(805, 1484)">(</text>
+<text transform="translate(1138, 1484)">𝑥</text>
+<text transform="translate(1688, 1484)">)</text>
+<text transform="translate(2354, 1484)">=</text>
+<text transform="translate(3372, 2100)"></text>
+<text transform="translate(4507, 475) scale(0.68)">∞</text>
+<text transform="translate(3957, 2419) scale(0.68)">−</text>
+<text transform="translate(4423, 2419) scale(0.68)">∞</text>
+<text transform="translate(6061, 1266)">̂</text>
+<text transform="translate(5303, 1484)">𝑓</text>
+<text transform="translate(6061, 1484)">(</text>
+<text transform="translate(6394, 1484)">𝜉</text>
+<text transform="translate(6827, 1484)">)</text>
+<text transform="translate(7160, 1484)">𝑒</text>
+<text transform="translate(7605, 1084) scale(0.68)">2</text>
+<text transform="translate(7945, 1084) scale(0.68)">𝜋</text>
+<text transform="translate(8324, 1084) scale(0.68)">𝑖</text>
+<text transform="translate(8536, 1084) scale(0.68)">𝜉</text>
+<text transform="translate(8830, 1084) scale(0.68)">𝑥</text>
+<text transform="translate(9368, 1484)">d</text>
+<text transform="translate(9868, 1484)">𝜉</text>
 </g>
 </svg>
 

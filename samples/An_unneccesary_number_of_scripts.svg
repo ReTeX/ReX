@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="141.67950000000002" height="283.38" viewBox="0 0 1475 2951" xmlns="http://www.w3.org/2000/svg">
+<svg width="189.4875" height="302.48400000000004" viewBox="0 0 1973 3150" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 1738)">𝑥</text>
-<text transform="translate(551, 853) scale(0.68)">𝑥</text>
-<text transform="translate(924, 437) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 221) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 578) scale(0.50)">𝑥</text>
-<text transform="translate(924, 1167) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 982) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 1339) scale(0.50)">𝑥</text>
-<text transform="translate(551, 2439) scale(0.68)">𝑥</text>
-<text transform="translate(924, 2013) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 1828) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 2185) scale(0.50)">𝑥</text>
-<text transform="translate(924, 2774) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 2589) scale(0.50)">𝑥</text>
-<text transform="translate(1199, 2946) scale(0.50)">𝑥</text>
+<text transform="translate(250, 1837)">𝑥</text>
+<text transform="translate(800, 952) scale(0.68)">𝑥</text>
+<text transform="translate(1173, 536) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 320) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 677) scale(0.50)">𝑥</text>
+<text transform="translate(1173, 1266) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 1081) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 1438) scale(0.50)">𝑥</text>
+<text transform="translate(800, 2539) scale(0.68)">𝑥</text>
+<text transform="translate(1173, 2112) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 1927) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 2284) scale(0.50)">𝑥</text>
+<text transform="translate(1173, 2874) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 2689) scale(0.50)">𝑥</text>
+<text transform="translate(1448, 3046) scale(0.50)">𝑥</text>
 </g>
 </svg>
 

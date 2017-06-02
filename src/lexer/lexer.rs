@@ -35,14 +35,18 @@ impl<'a> Lexer<'a> {
     /// return it.
 
     pub fn next(&mut self) -> Token<'a> {
-        self.current = match self.next_char() {
-            Some(c) if c.is_whitespace() => Token::WhiteSpace,
-            Some('\\') => self.control_sequence(),
-            Some(c)    => Token::Symbol(c),
-            None       => Token::EOF,
-        };
+        self.current =
+            match self.next_char() {
+                Some(c) if c.is_whitespace() => {
+                    self.advance_whitespace();
+                    Token::WhiteSpace
+                },
+                Some('\\') => self.control_sequence(),
+                Some(c)    => Token::Symbol(c),
+                None       => Token::EOF,
+            };
 
-        //println!("{:?}", self.current);
+        debug!("{:?}", self.current);
         self.current
     }
 
@@ -53,18 +57,16 @@ impl<'a> Lexer<'a> {
 
     pub fn consume_whitespace(&mut self) {
         if self.current != Token::WhiteSpace { return; }
+        self.advance_whitespace();
+        self.next();
+    }
 
-        // while the current character points to a
-        // whitespace token, advance the position.
+    // TODO: Better name.
+    fn advance_whitespace(&mut self) {
         while let Some(c) = self.current_char() {
             if !c.is_whitespace() { break; }
-            self.pos += 1;
+            self.pos += c.len_utf8();
         }
-
-        // The cursor (self.pos) now points to the first
-        // non-whitespace character.  Lex this token to
-        // place it as current token to process
-        self.next();
     }
 
     /// Lex a control sequence.  This method assumes that
@@ -78,39 +80,24 @@ impl<'a> Lexer<'a> {
     fn control_sequence(&mut self) -> Token<'a> {
         let start = self.pos;
 
-        // The first character is special in that non-alphabetic
-        // characters are valid, but will terminate the search.
-        match self.next_char() {
-            None => return Token::EOF,
-            Some(c) if !c.is_alphabetic() => {
-                let end = self.pos;
-                while let Some(c) = self.current_char() {
-                    if !c.is_whitespace() { break; }
-                    self.pos += 1;
-                }
-                return Token::Command(&self.input[start..end]);
-            },
-            _ => { /* Otherwise we have an alphabetric, stop at next non alphabetic */ },
-        };
+        // The first character is special in that a non-alphabetic
+        // characters is valid, but will terminate the lex.
+        let end =
+            match self.next_char() {
+                None => return Token::EOF,
+                Some(c) if !c.is_alphabetic() => self.pos,
+                _ => {
+                    // Otherwise Proceed until the first non alphabetic.
+                    while let Some(c) = self.current_char() {
+                        if !c.is_alphabetic() { break; }
+                        self.pos += c.len_utf8();
+                    }
+                    self.pos
+                },
+            };
 
-        while let Some(c) = self.next_char()  {
-            if c.is_alphabetic() { continue; }
-
-            // backtrack, this is not part of the cs name
-            self.pos -= c.len_utf8();
-            break;
-        };
-
-        // We can not relay on the `self.consume_whitespace()` method
-        // since it assumes that `self.current` points to the token
-        // that is currently being processed--this control sequence--which
-        // we have not yet placed into `self.current`.
-        let end = self.pos;
-        while let Some(c) = self.current_char() {
-            if !c.is_whitespace() { break; }
-            self.pos += 1;
-        }
-
+        // Consume all whitespace proceeding a control sequence
+        self.advance_whitespace();
         Token::Command(&self.input[start..end])
     }
 
@@ -251,30 +238,32 @@ macro_rules! assert_eq_token_stream {
     }}
 }
 
-macro_rules! print_token_stream {
-    ($expr:expr) => {{
-        let mut lex = Lexer::new($expr);
-        print!("'{:?}': ", $expr);
-        loop {
-            let tok = lex.current;
-            if tok == Token::EOF { break; }
-            print!("{:?}", tok);
-            lex.next();
-        }
-        println!("");
-    }}
-}
-
 #[cfg(test)]
 mod tests {
     use super::super::{Lexer, Token};
 
+    macro_rules! print_token_stream {
+        ($expr:expr) => {{
+            let mut lex = Lexer::new($expr);
+            print!("'{:?}': ", $expr);
+            loop {
+                let tok = lex.current;
+                if tok == Token::EOF { break; }
+                print!("{:?}", tok);
+                lex.next();
+            }
+            println!("");
+        }}
+    }
+
     #[test]
     fn lex_tokens() {
         assert_eq_token_stream!(r"\cs1", r"\cs 1");
-        assert_eq_token_stream!(r"\cs1", r"\cs  1");
-        assert_eq_token_stream!(r"\cs1", "\\cs\n\t\r 1");
-        assert_eq_token_stream!(r"\test\test", r"\test  \test");
+        assert_eq_token_stream!(r"\cs1", r"\cs    1");
+        assert_eq_token_stream!(r"\cs?", "\\cs\n\n\t?");
+        assert_eq_token_stream!(r"\test\test", r"\test   \test");
+        assert_eq_token_stream!(r"1     +       2", r"1 + 2");
+        assert_eq_token_stream!(r"123\", "123");
     }
 
     #[test]

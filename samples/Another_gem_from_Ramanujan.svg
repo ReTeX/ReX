@@ -1,59 +1,59 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1535.21625" height="381.792" viewBox="0 0 15991 3977" xmlns="http://www.w3.org/2000/svg">
+<svg width="1583.02425" height="400.896" viewBox="0 0 16489 4176" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(3794, 859)">1</text>
-<rect x="101" y ="1156" width="7887" height="66" fill="#000"/>
-<text transform="translate(101, 3486)"></text>
-<text transform="translate(851, 3044)"></text>
-<rect x="1908" y ="1492" width="2094" height="66" fill="#000"/>
-<text transform="translate(1908, 2900)">𝜑</text>
-<text transform="translate(2574, 2846)">√</text>
-<rect x="3502" y ="1873" width="500" height="66" fill="#000"/>
-<text transform="translate(3502, 2900)">5</text>
-<text transform="translate(4224, 2900)">−</text>
-<text transform="translate(5131, 2900)">𝜑</text>
-<text transform="translate(5797, 3486)"></text>
-<text transform="translate(6714, 2900)">𝑒</text>
-<text transform="translate(7259, 2116) scale(0.50)">2</text>
-<rect x="7259" y ="2250" width="250" height="44" fill="#000"/>
-<text transform="translate(7259, 2768) scale(0.50)">5</text>
-<text transform="translate(7609, 2442) scale(0.68)">𝜋</text>
-<text transform="translate(8421, 1439)">=</text>
-<text transform="translate(9440, 1439)">1</text>
-<text transform="translate(10162, 1439)">+</text>
-<text transform="translate(12715, 859)">𝑒</text>
-<text transform="translate(13160, 459) scale(0.68)">−</text>
-<text transform="translate(13625, 459) scale(0.68)">2</text>
-<text transform="translate(13965, 459) scale(0.68)">𝜋</text>
-<rect x="11169" y ="1156" width="4721" height="66" fill="#000"/>
-<text transform="translate(11169, 2425)">1</text>
-<text transform="translate(11891, 2425)">+</text>
-<text transform="translate(13757, 1945) scale(0.68)">𝑒</text>
-<text transform="translate(14060, 1758) scale(0.50)">−</text>
-<text transform="translate(14402, 1758) scale(0.50)">4</text>
-<text transform="translate(14652, 1758) scale(0.50)">𝜋</text>
-<rect x="12898" y ="2142" width="2891" height="66" fill="#000"/>
-<text transform="translate(12898, 3080) scale(0.68)">1</text>
-<text transform="translate(13238, 3080) scale(0.68)">+</text>
-<text transform="translate(14200, 2754) scale(0.50)">𝑒</text>
-<text transform="translate(14423, 2616) scale(0.50)">−</text>
-<text transform="translate(14765, 2616) scale(0.50)">6</text>
-<text transform="translate(15015, 2616) scale(0.50)">𝜋</text>
-<rect x="13804" y ="2888" width="1886" height="44" fill="#000"/>
-<text transform="translate(13804, 3693) scale(0.50)">1</text>
-<text transform="translate(14054, 3693) scale(0.50)">+</text>
-<text transform="translate(14496, 3453) scale(0.50)">𝑒</text>
-<text transform="translate(14719, 3316) scale(0.50)">−</text>
-<text transform="translate(15061, 3316) scale(0.50)">8</text>
-<text transform="translate(15311, 3316) scale(0.50)">𝜋</text>
-<rect x="14496" y ="3552" width="1094" height="33" fill="#000"/>
-<text transform="translate(14516, 3956) scale(0.50)">1</text>
-<text transform="translate(14766, 3956) scale(0.50)">+</text>
-<text transform="translate(15108, 3956) scale(0.50)">⋯</text>
+<text transform="translate(4043, 959)">1</text>
+<rect x="350" y ="1256" width="7887" height="66" fill="#000"/>
+<text transform="translate(350, 3586)"></text>
+<text transform="translate(1100, 3143)"></text>
+<rect x="2157" y ="1591" width="2094" height="66" fill="#000"/>
+<text transform="translate(2157, 3000)">𝜑</text>
+<text transform="translate(2823, 2946)">√</text>
+<rect x="3751" y ="1973" width="500" height="66" fill="#000"/>
+<text transform="translate(3751, 3000)">5</text>
+<text transform="translate(4473, 3000)">−</text>
+<text transform="translate(5380, 3000)">𝜑</text>
+<text transform="translate(6046, 3586)"></text>
+<text transform="translate(6963, 3000)">𝑒</text>
+<text transform="translate(7508, 2215) scale(0.50)">2</text>
+<rect x="7508" y ="2349" width="250" height="44" fill="#000"/>
+<text transform="translate(7508, 2868) scale(0.50)">5</text>
+<text transform="translate(7858, 2542) scale(0.68)">𝜋</text>
+<text transform="translate(8670, 1539)">=</text>
+<text transform="translate(9689, 1539)">1</text>
+<text transform="translate(10411, 1539)">+</text>
+<text transform="translate(12964, 959)">𝑒</text>
+<text transform="translate(13409, 559) scale(0.68)">−</text>
+<text transform="translate(13874, 559) scale(0.68)">2</text>
+<text transform="translate(14214, 559) scale(0.68)">𝜋</text>
+<rect x="11418" y ="1256" width="4721" height="66" fill="#000"/>
+<text transform="translate(11418, 2525)">1</text>
+<text transform="translate(12140, 2525)">+</text>
+<text transform="translate(14006, 2045) scale(0.68)">𝑒</text>
+<text transform="translate(14309, 1858) scale(0.50)">−</text>
+<text transform="translate(14651, 1858) scale(0.50)">4</text>
+<text transform="translate(14901, 1858) scale(0.50)">𝜋</text>
+<rect x="13147" y ="2242" width="2891" height="66" fill="#000"/>
+<text transform="translate(13147, 3180) scale(0.68)">1</text>
+<text transform="translate(13487, 3180) scale(0.68)">+</text>
+<text transform="translate(14449, 2853) scale(0.50)">𝑒</text>
+<text transform="translate(14672, 2716) scale(0.50)">−</text>
+<text transform="translate(15014, 2716) scale(0.50)">6</text>
+<text transform="translate(15264, 2716) scale(0.50)">𝜋</text>
+<rect x="14053" y ="2987" width="1886" height="44" fill="#000"/>
+<text transform="translate(14053, 3793) scale(0.50)">1</text>
+<text transform="translate(14303, 3793) scale(0.50)">+</text>
+<text transform="translate(14745, 3553) scale(0.50)">𝑒</text>
+<text transform="translate(14968, 3415) scale(0.50)">−</text>
+<text transform="translate(15310, 3415) scale(0.50)">8</text>
+<text transform="translate(15560, 3415) scale(0.50)">𝜋</text>
+<rect x="14745" y ="3651" width="1094" height="33" fill="#000"/>
+<text transform="translate(14765, 4055) scale(0.50)">1</text>
+<text transform="translate(15015, 4055) scale(0.50)">+</text>
+<text transform="translate(15357, 4055) scale(0.50)">⋯</text>
 </g>
 </svg>
 

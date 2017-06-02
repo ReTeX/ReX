@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1186.16325" height="221.757" viewBox="0 0 12355 2309" xmlns="http://www.w3.org/2000/svg">
+<svg width="1233.97125" height="240.86100000000002" viewBox="0 0 12853 2508" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 1385)">𝑓</text>
-<text transform="translate(676, 985) scale(0.68)">(</text>
-<text transform="translate(902, 985) scale(0.68)">𝑛</text>
-<text transform="translate(1240, 985) scale(0.68)">)</text>
-<text transform="translate(1466, 1385)">(</text>
-<text transform="translate(1799, 1385)">𝑧</text>
-<text transform="translate(2298, 1385)">)</text>
-<text transform="translate(2964, 1385)">=</text>
-<text transform="translate(4352, 805)">𝑛</text>
-<text transform="translate(4849, 805)">!</text>
-<rect x="4083" y ="1102" width="1369" height="66" fill="#000"/>
-<text transform="translate(4083, 2085)">2</text>
-<text transform="translate(4583, 2085)">𝜋</text>
-<text transform="translate(5141, 2085)">𝑖</text>
-<text transform="translate(5718, 2000)"></text>
-<text transform="translate(8228, 717)">𝑓</text>
-<text transform="translate(8783, 717)">(</text>
-<text transform="translate(9116, 717)">𝜉</text>
-<text transform="translate(9549, 717)">)</text>
-<rect x="7120" y ="1102" width="3870" height="66" fill="#000"/>
-<text transform="translate(7120, 2126)">(</text>
-<text transform="translate(7453, 2126)">𝜉</text>
-<text transform="translate(8108, 2126)">−</text>
-<text transform="translate(9015, 2126)">𝑧</text>
-<text transform="translate(9514, 2126)">)</text>
-<text transform="translate(9847, 1825) scale(0.68)">𝑛</text>
-<text transform="translate(10185, 1825) scale(0.68)">+</text>
-<text transform="translate(10651, 1825) scale(0.68)">1</text>
-<text transform="translate(11421, 1385)">d</text>
-<text transform="translate(11921, 1385)">𝜉</text>
+<text transform="translate(250, 1484)">𝑓</text>
+<text transform="translate(925, 1084) scale(0.68)">(</text>
+<text transform="translate(1151, 1084) scale(0.68)">𝑛</text>
+<text transform="translate(1489, 1084) scale(0.68)">)</text>
+<text transform="translate(1715, 1484)">(</text>
+<text transform="translate(2048, 1484)">𝑧</text>
+<text transform="translate(2547, 1484)">)</text>
+<text transform="translate(3213, 1484)">=</text>
+<text transform="translate(4601, 904)">𝑛</text>
+<text transform="translate(5098, 904)">!</text>
+<rect x="4332" y ="1201" width="1369" height="66" fill="#000"/>
+<text transform="translate(4332, 2184)">2</text>
+<text transform="translate(4832, 2184)">𝜋</text>
+<text transform="translate(5390, 2184)">𝑖</text>
+<text transform="translate(5967, 2100)"></text>
+<text transform="translate(8477, 816)">𝑓</text>
+<text transform="translate(9032, 816)">(</text>
+<text transform="translate(9365, 816)">𝜉</text>
+<text transform="translate(9798, 816)">)</text>
+<rect x="7369" y ="1201" width="3870" height="66" fill="#000"/>
+<text transform="translate(7369, 2225)">(</text>
+<text transform="translate(7702, 2225)">𝜉</text>
+<text transform="translate(8357, 2225)">−</text>
+<text transform="translate(9264, 2225)">𝑧</text>
+<text transform="translate(9763, 2225)">)</text>
+<text transform="translate(10096, 1924) scale(0.68)">𝑛</text>
+<text transform="translate(10434, 1924) scale(0.68)">+</text>
+<text transform="translate(10900, 1924) scale(0.68)">1</text>
+<text transform="translate(11670, 1484)">d</text>
+<text transform="translate(12170, 1484)">𝜉</text>
 </g>
 </svg>
 

@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="969.72975" height="87.324" viewBox="0 0 10101 909" xmlns="http://www.w3.org/2000/svg">
+<svg width="1017.5377500000001" height="106.428" viewBox="0 0 10599 1108" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 868)">3</text>
-<text transform="translate(501, 468) scale(0.68)">3</text>
-<text transform="translate(1063, 868)">+</text>
-<text transform="translate(1970, 868)">4</text>
-<text transform="translate(2470, 468) scale(0.68)">4</text>
-<text transform="translate(3032, 868)">+</text>
-<text transform="translate(3939, 868)">3</text>
-<text transform="translate(4439, 468) scale(0.68)">3</text>
-<text transform="translate(5001, 868)">+</text>
-<text transform="translate(5908, 868)">5</text>
-<text transform="translate(6408, 468) scale(0.68)">5</text>
-<text transform="translate(7082, 868)">=</text>
-<text transform="translate(8100, 868)">3</text>
-<text transform="translate(8600, 868)">4</text>
-<text transform="translate(9100, 868)">3</text>
-<text transform="translate(9600, 868)">5</text>
+<text transform="translate(250, 967)">3</text>
+<text transform="translate(750, 567) scale(0.68)">3</text>
+<text transform="translate(1312, 967)">+</text>
+<text transform="translate(2219, 967)">4</text>
+<text transform="translate(2719, 567) scale(0.68)">4</text>
+<text transform="translate(3281, 967)">+</text>
+<text transform="translate(4188, 967)">3</text>
+<text transform="translate(4688, 567) scale(0.68)">3</text>
+<text transform="translate(5250, 967)">+</text>
+<text transform="translate(6157, 967)">5</text>
+<text transform="translate(6657, 567) scale(0.68)">5</text>
+<text transform="translate(7331, 967)">=</text>
+<text transform="translate(8349, 967)">3</text>
+<text transform="translate(8849, 967)">4</text>
+<text transform="translate(9349, 967)">3</text>
+<text transform="translate(9849, 967)">5</text>
 </g>
 </svg>
 

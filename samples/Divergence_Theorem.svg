@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="1076.69625" height="223.43775" viewBox="0 0 11215 2327" xmlns="http://www.w3.org/2000/svg">
+<svg width="1124.50425" height="242.54175" viewBox="0 0 11713 2526" xmlns="http://www.w3.org/2000/svg">
     <defs>
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<text transform="translate(1, 2000)"></text>
-<text transform="translate(586, 2319) scale(0.68)">𝐷</text>
-<text transform="translate(1136, 1385)">(</text>
-<text transform="translate(1469, 1385)">∇</text>
-<text transform="translate(2422, 1385)">⋅</text>
-<text transform="translate(2930, 1385)">𝐹</text>
-<text transform="translate(3548, 1385)">)</text>
-<text transform="translate(4045, 1385)">d</text>
-<text transform="translate(4545, 1385)">𝑉</text>
-<text transform="translate(5453, 1385)">=</text>
-<text transform="translate(6472, 2000)"></text>
-<text transform="translate(7057, 2319) scale(0.68)">∂</text>
-<text transform="translate(7351, 2319) scale(0.68)">𝐷</text>
-<text transform="translate(8055, 1385)">𝐹</text>
-<text transform="translate(8895, 1385)">⋅</text>
-<text transform="translate(9403, 1385)">𝑛</text>
-<text transform="translate(10064, 1385)">d</text>
-<text transform="translate(10564, 1385)">𝑆</text>
+<text transform="translate(250, 2100)"></text>
+<text transform="translate(835, 2419) scale(0.68)">𝐷</text>
+<text transform="translate(1385, 1484)">(</text>
+<text transform="translate(1718, 1484)">∇</text>
+<text transform="translate(2671, 1484)">⋅</text>
+<text transform="translate(3179, 1484)">𝐹</text>
+<text transform="translate(3797, 1484)">)</text>
+<text transform="translate(4294, 1484)">d</text>
+<text transform="translate(4794, 1484)">𝑉</text>
+<text transform="translate(5702, 1484)">=</text>
+<text transform="translate(6721, 2100)"></text>
+<text transform="translate(7306, 2419) scale(0.68)">∂</text>
+<text transform="translate(7600, 2419) scale(0.68)">𝐷</text>
+<text transform="translate(8304, 1484)">𝐹</text>
+<text transform="translate(9144, 1484)">⋅</text>
+<text transform="translate(9652, 1484)">𝑛</text>
+<text transform="translate(10313, 1484)">d</text>
+<text transform="translate(10813, 1484)">𝑆</text>
 </g>
 </svg>
 
