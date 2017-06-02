@@ -1,19 +1,7 @@
-#![allow(dead_code)]
-use super::{ Lexer, Token };
+use lexer::{ Lexer, Token };
 use dimensions::Unit;
 
 /// The Lexer API.  No method here should fail.
-
-
-// lexer::new(input)
-
-// lex.current        current token
-// lex.next()         consume current token, advance to next
-// lex.expect(Token)  assert lex.current = Token, then consume
-// lex.assert(Token)  assert current token is Token (needed?)   ??
-
-// TODO: Implement a replacement unicode for malformed unicode
-//       or issued a EOF
 
 impl<'a> Lexer<'a> {
 
@@ -31,14 +19,14 @@ impl<'a> Lexer<'a> {
         lex
     }
 
-    /// Advanced to the next token to be processed, and
-    /// return it.
+    /// Advanced to the next token to be processed, and return it.
+    /// This will also modify `Lexer.current`.
 
     pub fn next(&mut self) -> Token<'a> {
         self.current =
             match self.next_char() {
                 Some(c) if c.is_whitespace() => {
-                    self.advance_whitespace();
+                    self.advance_while_whitespace();
                     Token::WhiteSpace
                 },
                 Some('\\') => self.control_sequence(),
@@ -50,19 +38,22 @@ impl<'a> Lexer<'a> {
         self.current
     }
 
-    /// If the lexer is currently pointed to a WhiteSpace
-    /// token, then advance until you reach the first
-    /// non-WhiteSpace token.  This method is indepotent, so
-    /// calling this method twice has no effect.
+    /// If the current token being processed from the lexer
+    /// is a `WhiteSpace` then continue to call `.next()`
+    /// until `lex.current` is the first non-whitespace token.
+    /// This method is indepotent, so that calling this method
+    /// twice has no effect.
 
     pub fn consume_whitespace(&mut self) {
         if self.current != Token::WhiteSpace { return; }
-        self.advance_whitespace();
+        self.advance_while_whitespace();
         self.next();
     }
 
-    // TODO: Better name.
-    fn advance_whitespace(&mut self) {
+    /// This method is the same as [consume_whitespace],
+    /// except that it does not process the next token.
+
+    fn advance_while_whitespace(&mut self) {
         while let Some(c) = self.current_char() {
             if !c.is_whitespace() { break; }
             self.pos += c.len_utf8();
@@ -70,12 +61,11 @@ impl<'a> Lexer<'a> {
     }
 
     /// Lex a control sequence.  This method assumes that
-    /// we are currently pointing to the first character
-    /// after `\`.  This method continues advancing the cursor
-    /// until a first non-alphabetic character is reached.
-    /// The first character is special, in that a non-alphabetic
-    /// character is valid, but will terminate the advance.
-    /// Afterwards, this method consumes all whitespace characters.
+    /// `self.pos` points to the first character after `\`.
+    /// The cursor will advance through the control sequence
+    /// name, and consume all whitespace proceeding.  When
+    /// complete `self.pos` will point to the first character
+    /// of the next item to be lexed.
 
     fn control_sequence(&mut self) -> Token<'a> {
         let start = self.pos;
@@ -97,7 +87,7 @@ impl<'a> Lexer<'a> {
             };
 
         // Consume all whitespace proceeding a control sequence
-        self.advance_whitespace();
+        self.advance_while_whitespace();
         Token::Command(&self.input[start..end])
     }
 
@@ -107,87 +97,35 @@ impl<'a> Lexer<'a> {
     /// consume_whitespace() prior to using this method.
 
     pub fn dimension(&mut self) -> Result<Option<Unit>, String> {
-        // Parse optional sign
-        let sign = self.possible_sign() as f64;
-        self.consume_whitespace();
-
-        // We should've hit our first numeric value
-        // Backtrack to parse this favlue.
-        self.backtrack();
-        let pos = self.pos;
-        while let Some(n) = self.next_char() {
-            if n.is_numeric() || n == '.' { continue; }
-            self.pos -= n.len_utf8();
-            break
-        }
-
-        // Unable to find any numeric values
-        // Otherwise parse the result using the standard library.
-        if pos == self.pos { return Ok(None) }
-        let num = sign * self.input[pos..self.pos].parse::<f64>()
-            .or(Err("Unable to parse dimension!".to_string()))?;
-        let result = Some(Unit::Px(num));
-
-        // TODO: Handle dimensions, px, em, etc.
-        self.next();
-        Ok(result)
+        // utter crap, rewrite.
+        unimplemented!()
     }
 
     /// Expect to find an {<inner>}, and return <inner>
 
     pub fn group(&mut self) -> Result<&str, String> {
-       // println!("{:?}", self);
         self.consume_whitespace();
         if self.current != Token::Symbol('{') {
             return Err("Expected to find an open group.".into())
         }
 
         let start = self.pos;
-        let mut end   = self.pos;
-        while let Some(c) = self.next_char() {
-            if c == '{' {
-                self.pos -= 1;
-                end = self.pos - 1;
-                self.next();
+        let mut found = false;
+        while let Some(c) = self.current_char() {
+            self.pos += c.len_utf8();
+            if c == '}' {
+                found = true;
                 break;
             }
         }
 
-        if start == end {
+        if !found {
             return Err("Unable to find closing bracket.".into())
         }
 
-       // println!("{}", &self.input[start..end]);
-        //println!("{:?}", self);
+        self.next();
+        let end = self.pos - 1;
         Ok(&self.input[start..end])
-    }
-
-    /// This method and `current_char` return the same value.
-    /// The only difference is that this method will advance
-    /// the cursor.
-
-    fn possible_sign(&mut self) -> i8 {
-        match self.current {
-            Token::Symbol('-') => { self.next(); -1 },
-            Token::Symbol('+') => { self.next(); 1 },
-            _ => 1,
-        }
-    }
-
-    fn backtrack(&mut self) {
-        match self.current {
-            Token::Symbol(sym) => self.pos -= sym.len_utf8(),
-            Token::WhiteSpace => {
-                self.pos -= 1;
-                while let Token::WhiteSpace = self.current {
-                    self.pos -= 1;
-                }
-            },
-            Token::Command(_) => {
-                /* TODO: Implement me */
-            },
-            _ => { /* EOF? */ }
-        }
     }
 
     fn next_char(&mut self) -> Option<char> {
@@ -205,42 +143,26 @@ impl<'a> Lexer<'a> {
     }
 }
 
-
-trait CanBeWhitespace {
-    fn is_whitespace(&self) -> bool;
-}
-
-impl CanBeWhitespace for char {
-    fn is_whitespace(&self) -> bool {
-        match *self {
-            ' ' | '\t' | '\n' | '\r' => true,
-            _ => false,
-        }
-    }
-}
-
-
-
-macro_rules! assert_eq_token_stream {
-    ($left:expr, $right:expr) => {{
-        let mut left  = Lexer::new($left);
-        let mut right = Lexer::new($right);
-
-        loop {
-            let l_tok = left.next();
-            let r_tok = right.next();
-
-            assert_eq!(l_tok, r_tok);
-            if l_tok == Token::EOF {
-                break
-            }
-        }
-    }}
-}
-
 #[cfg(test)]
 mod tests {
-    use super::super::{Lexer, Token};
+    use lexer::{Lexer, Token};
+
+    macro_rules! assert_eq_token_stream {
+        ($left:expr, $right:expr) => {{
+            let mut left  = Lexer::new($left);
+            let mut right = Lexer::new($right);
+
+            loop {
+                let l_tok = left.next();
+                let r_tok = right.next();
+
+                assert_eq!(l_tok, r_tok);
+                if l_tok == Token::EOF {
+                    break
+                }
+            }
+        }}
+    }
 
     macro_rules! print_token_stream {
         ($expr:expr) => {{
