@@ -190,7 +190,6 @@ macro_rules! required {
 }
 
 impl TexCommand {
-    #[allow(dead_code, unused_variables)]
     pub fn parse(self, lex: &mut Lexer, local: FontStyle) -> Result<Option<ParseNode>, String> {
         Ok(match self {
             TexCommand::Radical =>
