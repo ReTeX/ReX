@@ -75,12 +75,6 @@ fn text(s: &'static str) -> Vec<ParseNode> {
     result
 }
 
-macro_rules! op_nolimits {
-    ($text:expr) => {
-        $text => TexCommand::TextOperator($text, false),
-    }
-}
-
 pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
     "frac"   => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::NoChange },
     "tfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Text },

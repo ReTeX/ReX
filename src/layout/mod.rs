@@ -21,7 +21,7 @@ mod convert;
 pub mod engine;
 pub mod spacing;
 
-use dimensions::{ FontUnit, Unit };
+use dimensions::FontUnit;
 
 use font::constants;
 use std::ops::Deref;
@@ -31,35 +31,35 @@ use std::cmp::{max, min};
 // By default this will act as a horizontal box
 #[derive(Clone, Debug)]
 pub struct Layout {
-    pub contents:  Vec<LayoutNode>,
-    pub width:     FontUnit,
-    pub height:    FontUnit,
-    pub depth:     FontUnit,
-    pub offset:    FontUnit,
+    pub contents: Vec<LayoutNode>,
+    pub width: FontUnit,
+    pub height: FontUnit,
+    pub depth: FontUnit,
+    pub offset: FontUnit,
     pub alignment: Alignment,
 }
 
 impl Layout {
     pub fn as_node(self) -> LayoutNode {
         LayoutNode {
-            width:  self.width,
+            width: self.width,
             height: self.height,
-            depth:  self.depth,
+            depth: self.depth,
             node: LayoutVariant::HorizontalBox(HorizontalBox {
-                contents:  self.contents,
-                offset:    self.offset,
-                alignment: self.alignment,
-            }),
+                                                   contents: self.contents,
+                                                   offset: self.offset,
+                                                   alignment: self.alignment,
+                                               }),
         }
     }
 
     pub fn new() -> Layout {
         Layout {
-            contents:  vec![],
-            width:     FontUnit::from(0),
-            height:    FontUnit::from(0),
-            depth:     FontUnit::from(0),
-            offset:    FontUnit::from(0),
+            contents: vec![],
+            width: FontUnit::from(0),
+            height: FontUnit::from(0),
+            depth: FontUnit::from(0),
+            offset: FontUnit::from(0),
             alignment: Alignment::default(),
         }
     }
@@ -67,7 +67,7 @@ impl Layout {
     pub fn add_node(&mut self, node: LayoutNode) {
         self.width += node.width;
         self.height = max(self.height, node.height);
-        self.depth  = min(self.depth, node.depth);
+        self.depth = min(self.depth, node.depth);
         self.contents.push(node);
     }
 
@@ -76,7 +76,7 @@ impl Layout {
     }
 
     pub fn finalize(mut self) -> Layout {
-        self.depth  -= self.offset;
+        self.depth -= self.offset;
         self.height -= self.offset;
         self
     }
@@ -90,18 +90,18 @@ impl Layout {
 
 #[derive(Clone)]
 pub struct LayoutNode {
-    pub node:   LayoutVariant,
-    pub width:  FontUnit,
+    pub node: LayoutVariant,
+    pub width: FontUnit,
     pub height: FontUnit,
-    pub depth:  FontUnit,
+    pub depth: FontUnit,
 }
 
 #[derive(Clone)]
 pub enum LayoutVariant {
-    HorizontalBox (HorizontalBox),
-    VerticalBox   (VerticalBox),
-    Glyph         (LayoutGlyph),
-    Color         (ColorChange),
+    HorizontalBox(HorizontalBox),
+    VerticalBox(VerticalBox),
+    Glyph(LayoutGlyph),
+    Color(ColorChange),
     Rule,
     Kern,
 }
@@ -114,25 +114,25 @@ pub struct ColorChange {
 
 #[derive(Clone, Default)]
 pub struct HorizontalBox {
-    pub contents:  Vec<LayoutNode>,
-    pub offset:    FontUnit,
+    pub contents: Vec<LayoutNode>,
+    pub offset: FontUnit,
     pub alignment: Alignment,
 }
 
 #[derive(Clone, Default)]
 pub struct VerticalBox {
-    pub contents:  Vec<LayoutNode>,
-    pub offset:    FontUnit,
+    pub contents: Vec<LayoutNode>,
+    pub offset: FontUnit,
     pub alignment: Alignment,
 }
 
 #[derive(Clone, Copy)]
 pub struct LayoutGlyph {
-    pub unicode:    u32,
-    pub scale:      FontUnit,
-    pub offset:     FontUnit,
+    pub unicode: u32,
+    pub scale: FontUnit,
+    pub offset: FontUnit,
     pub attachment: FontUnit,
-    pub italics:    FontUnit,
+    pub italics: FontUnit,
 }
 
 #[allow(dead_code)]
@@ -170,7 +170,10 @@ impl fmt::Debug for VerticalBox {
         if self.offset == FontUnit::from(0) {
             write!(f, "VerticalBox({:?})", self.contents)
         } else {
-            write!(f, "VerticalBox({:?}, offset: {})", self.contents, self.offset)
+            write!(f,
+                   "VerticalBox({:?}, offset: {})",
+                   self.contents,
+                   self.offset)
         }
     }
 }
@@ -190,24 +193,20 @@ impl fmt::Debug for LayoutGlyph {
 impl fmt::Debug for LayoutNode {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self.node {
-            LayoutVariant::HorizontalBox(ref hb) =>
-                write!(f, "HBox({:?})", hb.contents),
-            LayoutVariant::VerticalBox(ref vb) =>
-                write!(f, "VBox({:?})", vb.contents),
-            LayoutVariant::Glyph(ref gly) =>
-                write!(f, "Glyph({:?})", gly),
-            LayoutVariant::Rule =>
-                write!(f, "Rule()"),
+            LayoutVariant::HorizontalBox(ref hb) => write!(f, "HBox({:?})", hb.contents),
+            LayoutVariant::VerticalBox(ref vb) => write!(f, "VBox({:?})", vb.contents),
+            LayoutVariant::Glyph(ref gly) => write!(f, "Glyph({:?})", gly),
+            LayoutVariant::Rule => write!(f, "Rule()"),
             LayoutVariant::Kern => {
                 let kern = if self.width == FontUnit::from(0) {
                     self.height
-                } else { self.width };
+                } else {
+                    self.width
+                };
 
                 write!(f, "Kern({:.1})", kern)
             }
-            LayoutVariant::Color(ref clr) => {
-                write!(f, "Color({}, {:?})", clr.color, clr.inner)
-            }
+            LayoutVariant::Color(ref clr) => write!(f, "Color({}, {:?})", clr.color, clr.inner),
         }
     }
 }
@@ -221,13 +220,12 @@ impl LayoutNode {
 
         match self.node {
             LayoutVariant::VerticalBox(ref mut vb) => {
-                vb.offset    = shift;
+                vb.offset = shift;
                 self.height -= shift;
-                self.depth  -= shift;
-            },
+                self.depth -= shift;
+            }
 
-            LayoutVariant::Glyph(_) =>
-                return vbox!(offset: shift; self),
+            LayoutVariant::Glyph(_) => return vbox!(offset: shift; self),
 
             _ => (),
         }
@@ -238,7 +236,6 @@ impl LayoutNode {
 
 /// Display styles which are used in scaling glyphs.  The associated
 /// methods are taken from pg.441 from the TeXBook
-
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Style {
@@ -253,7 +250,9 @@ pub enum Style {
 }
 
 impl Default for Style {
-    fn default() -> Style { Style::Display }
+    fn default() -> Style {
+        Style::Display
+    }
 }
 
 #[allow(dead_code)]
@@ -261,94 +260,70 @@ impl Style {
     fn cramped(self) -> Style {
         match self {
             Style::ScriptScriptCramped |
-            Style::ScriptScript
-                => Style::ScriptScriptCramped,
-            Style::ScriptCramped |
-            Style::Script
-                => Style::ScriptCramped,
-            Style::TextCramped |
-            Style::Text
-                => Style::TextCramped,
-            Style::DisplayCramped |
-            Style::Display
-                => Style::DisplayCramped,
+            Style::ScriptScript => Style::ScriptScriptCramped,
+            Style::ScriptCramped | Style::Script => Style::ScriptCramped,
+            Style::TextCramped | Style::Text => Style::TextCramped,
+            Style::DisplayCramped | Style::Display => Style::DisplayCramped,
         }
     }
 
     fn superscript_variant(self) -> Style {
         match self {
-            Style::Display |
-            Style::Text
-                => Style::Script,
-            Style::DisplayCramped |
-            Style::TextCramped
-                => Style::ScriptCramped,
-            Style::Script |
-            Style::ScriptScript
-                => Style::ScriptScript,
+            Style::Display | Style::Text => Style::Script,
+            Style::DisplayCramped | Style::TextCramped => Style::ScriptCramped,
+            Style::Script | Style::ScriptScript => Style::ScriptScript,
             Style::ScriptCramped |
-            Style::ScriptScriptCramped
-                => Style::ScriptScriptCramped,
+            Style::ScriptScriptCramped => Style::ScriptScriptCramped,
         }
     }
 
     fn subscript_variant(self) -> Style {
         match self {
-            Style::Display |
-            Style::Text |
-            Style::DisplayCramped |
-            Style::TextCramped
-                => Style::ScriptCramped,
+            Style::Display | Style::Text | Style::DisplayCramped | Style::TextCramped => {
+                Style::ScriptCramped
+            }
             Style::Script |
             Style::ScriptScript |
             Style::ScriptCramped |
-            Style::ScriptScriptCramped
-                => Style::ScriptScriptCramped,
+            Style::ScriptScriptCramped => Style::ScriptScriptCramped,
         }
     }
 
     fn font_scale(self) -> FontUnit {
         use font::constants;
         match self {
-            Style::Display |
-            Style::DisplayCramped |
-            Style::Text |
-            Style::TextCramped
-                => FontUnit::from(1),
-            Style::Script |
-            Style::ScriptCramped
-                => FontUnit::from(constants::SCRIPT_PERCENT_SCALE_DOWN),
+            Style::Display | Style::DisplayCramped | Style::Text | Style::TextCramped => {
+                FontUnit::from(1)
+            }
+            Style::Script | Style::ScriptCramped => {
+                FontUnit::from(constants::SCRIPT_PERCENT_SCALE_DOWN)
+            }
             Style::ScriptScript |
-            Style::ScriptScriptCramped
-                => FontUnit::from(constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN),
+            Style::ScriptScriptCramped => {
+                FontUnit::from(constants::SCRIPT_SCRIPT_PERCENT_SCALE_DOWN)
+            }
         }
     }
 
     fn sup_shift_up(self) -> FontUnit {
         match self {
-            Style::Display |
-            Style::Text |
-            Style::Script |
-            Style::ScriptScript
-                => constants::SUPERSCRIPT_SHIFT_UP,
-            _   => constants::SUPERSCRIPT_SHIFT_UP_CRAMPED,
+            Style::Display | Style::Text | Style::Script | Style::ScriptScript => {
+                constants::SUPERSCRIPT_SHIFT_UP
+            }
+            _ => constants::SUPERSCRIPT_SHIFT_UP_CRAMPED,
         }
     }
 
     fn is_cramped(&self) -> bool {
         match *self {
-            Style::Display |
-            Style::Text |
-            Style::Script |
-            Style::ScriptScript
-                => false,
-            _   => true,
+            Style::Display | Style::Text | Style::Script | Style::ScriptScript => false,
+            _ => true,
         }
     }
 
     fn numerator(self) -> Style {
         match self {
-            Style::Display        => Style::Text,
+            Style::Display => Style::Text,
             Style::DisplayCramped => Style::TextCramped,
             _ => self.superscript_variant(),
         }
@@ -356,8 +331,7 @@ impl Style {
 
     fn denominator(self) -> Style {
         match self {
-            Style::Display |
-            Style::DisplayCramped => Style::TextCramped,
+            Style::Display | Style::DisplayCramped => Style::TextCramped,
             _ => self.subscript_variant(),
         }
     }
@@ -366,7 +340,7 @@ impl Style {
 #[derive(Copy, Clone)]
 pub struct LayoutSettings {
     pub font_size: u16,
-    pub style:     Style,
+    pub style: Style,
 }
 
 impl LayoutSettings {

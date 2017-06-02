@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 use super::{ KernRecord, KernTable };
-use dimensions::FontUnit;
 
 pub static KERNING_TABLE: [(u32, KernRecord); 29] = [
     (0x41, KernRecord { // A

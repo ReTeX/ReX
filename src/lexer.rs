@@ -219,20 +219,6 @@ mod tests {
         }}
     }
 
-    macro_rules! print_token_stream {
-        ($expr:expr) => {{
-            let mut lex = Lexer::new($expr);
-            print!("'{:?}': ", $expr);
-            loop {
-                let tok = lex.current;
-                if tok == Token::EOF { break; }
-                print!("{:?}", tok);
-                lex.next();
-            }
-            println!("");
-        }}
-    }
-
     #[test]
     fn lex_tokens() {
         assert_eq_token_stream!(r"\cs1", r"\cs 1");
