@@ -1,7 +1,7 @@
 use parser::AtomType;
 use dimensions::FontUnit;
 use layout::Style;
-
+ 
 #[allow(unused)]
 pub fn atom_spacing(left: AtomType, right: AtomType, style: Style) -> Spacing {
     if style >= Style::TextCramped {

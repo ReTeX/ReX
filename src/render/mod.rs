@@ -8,49 +8,49 @@ use layout::engine::layout;
 
 #[derive(Clone)]
 pub struct RenderSettings {
-    pub font_size:    u16,
-    pub font_src:     String,
+    pub font_size: u16,
+    pub font_src: String,
     pub horz_padding: FontUnit,
     pub vert_padding: FontUnit,
-    pub strict:       bool,
-    pub style:        Style,
-    pub debug:        bool
+    pub strict: bool,
+    pub style: Style,
+    pub debug: bool,
 }
 
 #[derive(Copy, Clone, Default)]
 pub struct Cursor {
-    pub x:  FontUnit,
-    pub y:  FontUnit
+    pub x: FontUnit,
+    pub y: FontUnit,
 }
 impl Cursor {
     pub fn translate(self, dx: FontUnit, dy: FontUnit) -> Cursor {
         Cursor {
-            x:  self.x + dx,
-            y:  self.y + dy
+            x: self.x + dx,
+            y: self.y + dy,
         }
     }
     pub fn left(self, dx: FontUnit) -> Cursor {
         Cursor {
-            x:  self.x - dx,
-            y:  self.y
+            x: self.x - dx,
+            y: self.y,
         }
     }
     pub fn right(self, dx: FontUnit) -> Cursor {
         Cursor {
-            x:  self.x + dx,
-            y:  self.y
+            x: self.x + dx,
+            y: self.y,
         }
     }
     pub fn up(self, dy: FontUnit) -> Cursor {
         Cursor {
-            x:  self.x,
-            y:  self.y - dy
+            x: self.x,
+            y: self.y - dy,
         }
     }
     pub fn down(self, dy: FontUnit) -> Cursor {
         Cursor {
-            x:  self.x,
-            y:  self.y + dy
+            x: self.x,
+            y: self.y + dy,
         }
     }
 }
@@ -58,8 +58,8 @@ impl Cursor {
 impl Default for RenderSettings {
     fn default() -> Self {
         RenderSettings {
-            font_size:    48,
-            font_src:     "http://rex.breeden.cc/rex-xits.otf".into(),
+            font_size: 48,
+            font_src: "http://rex.breeden.cc/rex-xits.otf".into(),
 
             // TODO: Think about these defaults.  The 0.250, and 0.100
             // were taken from a default font_size of 48, and a
@@ -67,9 +67,9 @@ impl Default for RenderSettings {
             // UNITS_PER_EM.  Maybe UNITS_PER_EM/4, and UNITS_PER_EM/10?
             horz_padding: FontUnit::from(250),
             vert_padding: FontUnit::from(100),
-            strict:       true,
-            style:        Style::Display,
-            debug:        false
+            strict: true,
+            style: Style::Display,
+            debug: false,
         }
     }
 }
@@ -120,7 +120,7 @@ impl RenderSettings {
     pub fn layout_settings(&self) -> LayoutSettings {
         LayoutSettings {
             font_size: self.font_size,
-            style:     self.style
+            style: self.style,
         }
     }
 }
@@ -135,16 +135,15 @@ pub trait Renderer {
     fn rule(&self, out: &mut Self::Out, pos: Cursor, width: FontUnit, height: FontUnit);
 
     fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
-    where F: FnMut(&Self, &mut Self::Out);
+        where F: FnMut(&Self, &mut Self::Out);
 
     fn render_hbox(&self,
-        out: &mut Self::Out,
-        mut pos: Cursor,
-        nodes: &[LayoutNode],
-        height: FontUnit,
-        nodes_width: FontUnit,
-        alignment: Alignment)
-    {
+                   out: &mut Self::Out,
+                   mut pos: Cursor,
+                   nodes: &[LayoutNode],
+                   height: FontUnit,
+                   nodes_width: FontUnit,
+                   alignment: Alignment) {
         if let Alignment::Centered(w) = alignment {
             pos.x += (nodes_width - w) / 2;
         }
@@ -153,30 +152,35 @@ pub trait Renderer {
 
         for node in nodes {
             match node.node {
-                LayoutVariant::Glyph(ref gly) =>
-                    self.symbol(out, pos, gly.unicode, f64::from(gly.scale)),
+                LayoutVariant::Glyph(ref gly) => {
+                    self.symbol(out, pos, gly.unicode, f64::from(gly.scale))
+                }
 
-                LayoutVariant::Rule =>
-                    self.rule(out,
-                        pos.up(node.height),
-                        node.width, node.height
-                    ),
+                LayoutVariant::Rule => self.rule(out, pos.up(node.height), node.width, node.height),
 
-                LayoutVariant::VerticalBox(ref vbox) =>
-                    self.render_vbox(out, pos.up(node.height), &vbox.contents),
+                LayoutVariant::VerticalBox(ref vbox) => {
+                    self.render_vbox(out, pos.up(node.height), &vbox.contents)
+                }
 
-                LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.render_hbox(out, pos,
-                        &hbox.contents, node.height,
-                        node.width, hbox.alignment
-                    ),
+                LayoutVariant::HorizontalBox(ref hbox) => {
+                    self.render_hbox(out,
+                                     pos,
+                                     &hbox.contents,
+                                     node.height,
+                                     node.width,
+                                     hbox.alignment)
+                }
 
-                LayoutVariant::Color(ref clr) =>
+                LayoutVariant::Color(ref clr) => {
                     self.color(out, &clr.color, |r, out| {
-                        r.render_hbox(out, pos, &clr.inner,
-                            node.height, node.width, Alignment::Default
-                        );
-                    }),
+                        r.render_hbox(out,
+                                      pos,
+                                      &clr.inner,
+                                      node.height,
+                                      node.width,
+                                      Alignment::Default);
+                    })
+                }
 
                 LayoutVariant::Kern => { /* NOOP */ }
             } // End macth
@@ -188,23 +192,27 @@ pub trait Renderer {
     fn render_vbox(&self, out: &mut Self::Out, mut pos: Cursor, nodes: &[LayoutNode]) {
         for node in nodes {
             match node.node {
-                LayoutVariant::Rule =>
-                    self.rule(out, pos, node.width, node.height),
+                LayoutVariant::Rule => self.rule(out, pos, node.width, node.height),
 
-                LayoutVariant::HorizontalBox(ref hbox) =>
-                    self.render_hbox(out, pos.down(node.height),
-                        &hbox.contents, node.height,
-                        node.width, hbox.alignment
-                    ),
+                LayoutVariant::HorizontalBox(ref hbox) => {
+                    self.render_hbox(out,
+                                     pos.down(node.height),
+                                     &hbox.contents,
+                                     node.height,
+                                     node.width,
+                                     hbox.alignment)
+                }
 
-                LayoutVariant::VerticalBox(ref vbox) =>
-                    self.render_vbox(out, pos, &vbox.contents),
+                LayoutVariant::VerticalBox(ref vbox) => self.render_vbox(out, pos, &vbox.contents),
 
-                LayoutVariant::Glyph(ref gly) =>
-                    self.symbol(out, pos.down(node.height), gly.unicode, f64::from(gly.scale)),
+                LayoutVariant::Glyph(ref gly) => {
+                    self.symbol(out,
+                                pos.down(node.height),
+                                gly.unicode,
+                                f64::from(gly.scale))
+                }
 
-                LayoutVariant::Color(_) =>
-                    panic!("Shouldn't have a color in a vertical box???"),
+                LayoutVariant::Color(_) => panic!("Shouldn't have a color in a vertical box???"),
 
                 LayoutVariant::Kern => { /* NOOP */ }
             }
@@ -227,32 +235,32 @@ pub trait Renderer {
             println!("Layout: {:?}", layout);
         }
 
-        let padding = (
-            self.settings().horz_padding,
-            self.settings().vert_padding
-        );
+        let padding = (self.settings().horz_padding, self.settings().vert_padding);
 
         self.prepare(out,
-            // Left and right padding
-            layout.width  + 2 * padding.0,
-            // Top and bot padding
-            layout.height - layout.depth + 2 * padding.1
-        );
+                     // Left and right padding
+                     layout.width + 2 * padding.0,
+                     // Top and bot padding
+                     layout.height - layout.depth + 2 * padding.1);
 
         let pos = Cursor {
             x: padding.0,
-            y: padding.1 + layout.height
+            y: padding.1 + layout.height,
         };
-        self.render_hbox(out, pos,
-            &layout.contents, layout.height,
-            layout.width, Alignment::Default
-        );
+        self.render_hbox(out,
+                         pos,
+                         &layout.contents,
+                         layout.height,
+                         layout.width,
+                         Alignment::Default);
 
         self.finish(out);
         Ok(())
     }
 
-    fn render(&self, tex: &str) -> Result<Self::Out, String> where Self::Out: Default {
+    fn render(&self, tex: &str) -> Result<Self::Out, String>
+        where Self::Out: Default
+    {
         let mut out = Self::Out::default();
         self.render_to(&mut out, tex)?;
         Ok(out)

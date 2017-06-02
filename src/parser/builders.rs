@@ -1,6 +1,6 @@
 use super::nodes::Scripts;
 use super::ParseNode;
-
+ 
 // Convenience macro: Opt<T> -> Option<Box<T>>
 macro_rules! opt_box {
     ($expr:expr) => ({

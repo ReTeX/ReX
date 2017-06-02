@@ -1,21 +1,23 @@
 #![allow(dead_code)]
-use super::{ VerticalBox, HorizontalBox, LayoutNode, LayoutVariant, Alignment };
+use super::{VerticalBox, HorizontalBox, LayoutNode, LayoutVariant, Alignment};
 use dimensions::FontUnit;
 use std::cmp::{max, min};
 
 #[derive(Default)]
 pub struct VBox {
-    pub width:  FontUnit,
+    pub width: FontUnit,
     pub height: FontUnit,
-    pub depth:  FontUnit,
-    node:   VerticalBox,
+    pub depth: FontUnit,
+    node: VerticalBox,
 }
 
 impl VBox {
-    pub fn new() -> VBox { VBox::default() }
+    pub fn new() -> VBox {
+        VBox::default()
+    }
 
     pub fn add_node(&mut self, node: LayoutNode) {
-        self.width   = max(self.width, node.width);
+        self.width = max(self.width, node.width);
         self.height += node.height;
         self.node.contents.push(node);
     }
@@ -31,14 +33,14 @@ impl VBox {
             self.depth = node.depth;
         }
 
-        self.depth  -= self.node.offset;
+        self.depth -= self.node.offset;
         self.height -= self.node.offset;
 
         LayoutNode {
-            width:  self.width,
+            width: self.width,
             height: self.height,
-            depth:  self.depth,
-            node:   LayoutVariant::VerticalBox(self.node),
+            depth: self.depth,
+            node: LayoutVariant::VerticalBox(self.node),
         }
     }
 }
@@ -60,20 +62,22 @@ macro_rules! vbox {
 
 #[derive(Default)]
 pub struct HBox {
-    width:  FontUnit,
+    width: FontUnit,
     height: FontUnit,
-    depth:  FontUnit,
-    node:   HorizontalBox,
+    depth: FontUnit,
+    node: HorizontalBox,
     alignment: Alignment,
 }
 
 impl HBox {
-    pub fn new() -> HBox { HBox::default() }
+    pub fn new() -> HBox {
+        HBox::default()
+    }
 
     pub fn add_node(&mut self, node: LayoutNode) {
         self.width += node.width;
         self.height = max(self.height, node.height);
-        self.depth  = min(self.depth, node.depth);
+        self.depth = min(self.depth, node.depth);
         self.node.contents.push(node);
     }
 
@@ -90,14 +94,14 @@ impl HBox {
     }
 
     pub fn build(mut self) -> LayoutNode {
-        self.depth  -= self.node.offset;
+        self.depth -= self.node.offset;
         self.height -= self.node.offset;
 
         LayoutNode {
-            width:  self.width,
+            width: self.width,
             height: self.height,
-            depth:  self.depth,
-            node:   LayoutVariant::HorizontalBox(self.node),
+            depth: self.depth,
+            node: LayoutVariant::HorizontalBox(self.node),
         }
     }
 }

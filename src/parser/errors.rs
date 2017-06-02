@@ -1,4 +1,3 @@
 enum ParseErrorType {
     UnknownCommand(&str),
-
 }

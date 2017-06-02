@@ -9,40 +9,40 @@ use super::atoms::AtomType;
 //   it will be a `Ordinal`.
 #[derive(Debug, PartialEq, Clone)]
 pub enum ParseNode {
-    Symbol      (Symbol),
-    Delimited   (Delimited),
-    Radical     (Radical),
-    GenFraction (GenFraction),
-    Scripts     (Scripts),
-    Rule        (Rule),
-    Kerning     (Unit),
-    Accent      (Accent),
-    Style       (Style),
-    AtomChange  (AtomChange),
-    Color       (Color),
-    Group       (Vec<ParseNode>),
-    Stack       (Stack),
-    Extend      (u32, Unit),
+    Symbol(Symbol),
+    Delimited(Delimited),
+    Radical(Radical),
+    GenFraction(GenFraction),
+    Scripts(Scripts),
+    Rule(Rule),
+    Kerning(Unit),
+    Accent(Accent),
+    Style(Style),
+    AtomChange(AtomChange),
+    Color(Color),
+    Group(Vec<ParseNode>),
+    Stack(Stack),
+    Extend(u32, Unit),
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Stack {
     pub atom_type: AtomType,
-    pub lines:     Vec<Vec<ParseNode>>,
+    pub lines: Vec<Vec<ParseNode>>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Delimited {
-    pub left:  Symbol,
+    pub left: Symbol,
     pub right: Symbol,
     pub inner: Vec<ParseNode>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Scripts {
-    pub base:        Option<Box<ParseNode>>,
+    pub base: Option<Box<ParseNode>>,
     pub superscript: Option<Box<ParseNode>>,
-    pub subscript:   Option<Box<ParseNode>>,
+    pub subscript: Option<Box<ParseNode>>,
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -53,21 +53,21 @@ pub struct AtomChange {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Accent {
-    pub symbol:  Symbol,
+    pub symbol: Symbol,
     pub nucleus: Box<ParseNode>,
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Rule {
-    pub width:  Unit,
+    pub width: Unit,
     pub height: Unit,
     //pub depth:  Unit,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum MathField {
-    Symbol (Symbol),
-    Group  (Vec<ParseNode>),
+    Symbol(Symbol),
+    Group(Vec<ParseNode>),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -78,10 +78,10 @@ pub struct Radical {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct GenFraction {
-    pub numerator:       Vec<ParseNode>,
-    pub denominator:     Vec<ParseNode>,
-    pub bar_thickness:   BarThickness,
-    pub left_delimiter:  Option<Symbol>,
+    pub numerator: Vec<ParseNode>,
+    pub denominator: Vec<ParseNode>,
+    pub bar_thickness: BarThickness,
+    pub left_delimiter: Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
 }
 
@@ -89,25 +89,24 @@ pub struct GenFraction {
 pub enum BarThickness {
     Default,
     None,
-    Unit (Unit),
+    Unit(Unit),
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Color {
     pub color: String,
-    pub inner: Vec<ParseNode>
+    pub inner: Vec<ParseNode>,
 }
 
 impl ParseNode {
     pub fn expect_left(self) -> Result<Symbol, String> {
         if let ParseNode::Symbol(sym) = self {
-            if sym.atom_type == AtomType::Open
-                || sym.atom_type == AtomType::Fence
-                || sym.unicode == 46 {
-                    return Ok(sym)
+            if sym.atom_type == AtomType::Open || sym.atom_type == AtomType::Fence ||
+               sym.unicode == 46 {
+                return Ok(sym);
             } else {
-                return Err(
-                    format!(r#"Expected Open, Fence, or period after `\left`, found {:?}"#, sym))
+                return Err(format!(r#"Expected Open, Fence, or period after `\left`, found {:?}"#,
+                                   sym));
             }
         } else {
             unreachable!()
@@ -116,13 +115,12 @@ impl ParseNode {
 
     pub fn expect_right(self) -> Result<Symbol, String> {
         if let ParseNode::Symbol(sym) = self {
-            if sym.atom_type == AtomType::Close
-                || sym.atom_type == AtomType::Fence
-                || sym.unicode == 46 {
-                    return Ok(sym)
+            if sym.atom_type == AtomType::Close || sym.atom_type == AtomType::Fence ||
+               sym.unicode == 46 {
+                return Ok(sym);
             } else {
-                return Err(
-                    format!(r#"Expected Open, Fence, or period after `\right`, found {:?}"#, sym))
+                return Err(format!(r#"Expected Open, Fence, or period after `\right`, found {:?}"#,
+                                   sym));
             }
         } else {
             unreachable!()
@@ -134,14 +132,13 @@ impl ParseNode {
     pub fn set_atom_type(&mut self, at: AtomType) {
         match *self {
             ParseNode::Symbol(ref mut sym) => sym.atom_type = at,
-            ParseNode::Scripts(Scripts { ref mut base, ..}) =>
+            ParseNode::Scripts(Scripts { ref mut base, .. }) => {
                 if let Some(ref mut b) = *base {
                     b.set_atom_type(at);
-                },
-            ParseNode::AtomChange(ref mut node) =>
-                node.at = at,
-            ParseNode::Stack(Stack { ref mut atom_type, .. }) =>
-                *atom_type = at,
+                }
+            }
+            ParseNode::AtomChange(ref mut node) => node.at = at,
+            ParseNode::Stack(Stack { ref mut atom_type, .. }) => *atom_type = at,
             _ => (),
         }
     }
@@ -151,16 +148,22 @@ impl ParseNode {
             ParseNode::Symbol(sym) => Some(sym),
             ParseNode::Accent(ref acc) => acc.nucleus.is_symbol(),
             ParseNode::AtomChange(AtomChange { ref inner, .. }) => {
-                if inner.len() != 1 { return None }
+                if inner.len() != 1 {
+                    return None;
+                }
                 inner[0].is_symbol()
-            },
-            ParseNode::Scripts(Scripts { ref base, ..}) => {
+            }
+            ParseNode::Scripts(Scripts { ref base, .. }) => {
                 if let Some(ref b) = *base {
                     b.is_symbol()
-                } else { None }
-            },
-            ParseNode::Color(Color { ref inner, ..}) => {
-                if inner.len() != 1 { return None }
+                } else {
+                    None
+                }
+            }
+            ParseNode::Color(Color { ref inner, .. }) => {
+                if inner.len() != 1 {
+                    return None;
+                }
                 inner[0].is_symbol()
             }
             _ => None,

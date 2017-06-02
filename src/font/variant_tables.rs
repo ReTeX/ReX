@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 
 use std::collections::HashMap;
-use super::variants::{ GlyphVariants, ConstructableGlyph, GlyphPart, ReplacementGlyph };
+use super::variants::{GlyphVariants, ConstructableGlyph, GlyphPart, ReplacementGlyph};
 use dimensions::FontUnit;
 
 

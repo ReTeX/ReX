@@ -75,20 +75,15 @@ static LATIN_LOWER_LUT: [u32; 28] = [
 impl Style {
     pub fn style_symbol(&self, unicode: u32) -> u32 {
         match unicode {
-            LOWER_A...LOWER_Z =>
-                self.style_lower_latin(unicode - LOWER_A),
+            LOWER_A...LOWER_Z => self.style_lower_latin(unicode - LOWER_A),
 
-            UPPER_A...UPPER_Z =>
-                self.style_upper_latin(unicode - UPPER_A),
+            UPPER_A...UPPER_Z => self.style_upper_latin(unicode - UPPER_A),
 
-            UPPER_ALPHA...UPPER_OMEGA =>
-                self.style_upper_greek(unicode - UPPER_ALPHA),
+            UPPER_ALPHA...UPPER_OMEGA => self.style_upper_greek(unicode - UPPER_ALPHA),
 
-            LOWER_ALPHA...LOWER_OMEGA =>
-                self.style_lower_greek(unicode - LOWER_ALPHA),
+            LOWER_ALPHA...LOWER_OMEGA => self.style_lower_greek(unicode - LOWER_ALPHA),
 
-            DIGIT_0...DIGIT_9 =>
-                self.style_digit(unicode - DIGIT_0),
+            DIGIT_0...DIGIT_9 => self.style_digit(unicode - DIGIT_0),
 
             _ => self.style_other(unicode),
         }
@@ -97,14 +92,14 @@ impl Style {
     pub fn style_upper_latin(&self, offset: u32) -> u32 {
         let y = self.family as usize;
         let x = self.weight as usize;
-        let base = LATIN_UPPER_LUT[4*y + x];
+        let base = LATIN_UPPER_LUT[4 * y + x];
         base + offset
     }
 
     pub fn style_lower_latin(&self, offset: u32) -> u32 {
         let y = self.family as usize;
         let x = self.weight as usize;
-        let base = LATIN_LOWER_LUT[4*y + x];
+        let base = LATIN_LOWER_LUT[4 * y + x];
         base + offset
     }
 
@@ -112,29 +107,29 @@ impl Style {
         let base = match self.family {
             Normal => {
                 match self.weight {
-                    None       => 0x1D6E2,
-                    Italic     => 0x1D6E2,
-                    Bold       => 0x1D6A8,
+                    None => 0x1D6E2,
+                    Italic => 0x1D6E2,
+                    Bold => 0x1D6A8,
                     BoldItalic => 0x1D71C,
                 }
-            },
+            }
 
             SansSerif => {
                 match self.weight {
-                    Italic     => 0x1D6E2,
-                    Bold       => 0x1D756,
+                    Italic => 0x1D6E2,
+                    Bold => 0x1D756,
                     BoldItalic => 0x1D790,
-                    None       => 0x391,
+                    None => 0x391,
                 }
-            },
+            }
 
             // fallback to Roman
             _ => {
                 match self.weight {
-                    Italic     => 0x1D6E2,
-                    Bold       => 0x1D6A8,
+                    Italic => 0x1D6E2,
+                    Bold => 0x1D6A8,
                     BoldItalic => 0x1D71C,
-                    None       => 0x391,
+                    None => 0x391,
                 }
             }
         };
@@ -146,29 +141,29 @@ impl Style {
         let base = match self.family {
             Normal => {
                 match self.weight {
-                    None       => 0x1D6FC,
-                    Italic     => 0x1D6FC,
-                    Bold       => 0x1D6C2,
+                    None => 0x1D6FC,
+                    Italic => 0x1D6FC,
+                    Bold => 0x1D6C2,
                     BoldItalic => 0x1D736,
                 }
-            },
+            }
 
             SansSerif => {
                 match self.weight {
-                    Italic     => 0x1D6FC,
-                    Bold       => 0x1D770,
+                    Italic => 0x1D6FC,
+                    Bold => 0x1D770,
                     BoldItalic => 0x1D7AA,
-                    None       => 0x3B1,
+                    None => 0x3B1,
                 }
-            },
+            }
 
             // fallback to Roman
             _ => {
                 match self.weight {
-                    Italic     => 0x1D6FC,
-                    Bold       => 0x1D6C2,
+                    Italic => 0x1D6FC,
+                    Bold => 0x1D6C2,
                     BoldItalic => 0x1D736,
-                    None       => 0x3B1,
+                    None => 0x3B1,
                 }
             }
         };
@@ -178,21 +173,21 @@ impl Style {
 
     fn style_digit(&self, offset: u32) -> u32 {
         let base = match self.family {
-            SansSerif  => {
+            SansSerif => {
                 match self.weight {
                     BoldItalic | Bold => 0x1D7EC,
-                    _  => 0x1D7E2,
+                    _ => 0x1D7E2,
                 }
             }
 
             Blackboard => 0x1D7D8,
-            Monospace  => 0x1D7F6,
+            Monospace => 0x1D7F6,
 
             // fallback to Roman
             _ => {
                 match self.weight {
                     BoldItalic | Bold => 0x1D7CE,
-                    _  => 48,
+                    _ => 48,
                 }
             }
         };

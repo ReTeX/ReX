@@ -1,9 +1,9 @@
-use std::cmp::{ min, max };
+use std::cmp::{min, max};
 
 use super::constants::MIN_CONNECTOR_OVERLAP;
 use super::Glyph;
 use super::glyph_metrics;
-use super::variant_tables::{ VERT_VARIANTS, HORZ_VARIANTS };
+use super::variant_tables::{VERT_VARIANTS, HORZ_VARIANTS};
 use dimensions::FontUnit;
 
 
@@ -19,8 +19,8 @@ pub struct GlyphVariants {
 #[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub enum VariantGlyph {
-    Replacement   (Glyph),
-    Constructable (Direction, Vec<GlyphInstruction>)
+    Replacement(Glyph),
+    Constructable(Direction, Vec<GlyphInstruction>),
 }
 
 #[derive(Debug, Clone)]
@@ -46,7 +46,7 @@ pub struct GlyphPart {
 
 #[derive(Clone, Copy)]
 pub struct GlyphInstruction {
-    pub glyph:  Glyph,
+    pub glyph: Glyph,
     pub overlap: FontUnit,
 }
 
@@ -75,13 +75,13 @@ impl Variant for Glyph {
         // take the glpyh with the minimum height that exceeds our requirment.
 
         let variants = if let Some(variant) = match direction {
-                Direction::Vertical   => VERT_VARIANTS.get(&self.unicode),
-                Direction::Horizontal => HORZ_VARIANTS.get(&self.unicode), }
-            {
-                variant
-            } else {
-                return VariantGlyph::Replacement(*self)
-            };
+               Direction::Vertical => VERT_VARIANTS.get(&self.unicode),
+               Direction::Horizontal => HORZ_VARIANTS.get(&self.unicode),
+           } {
+            variant
+        } else {
+            return VariantGlyph::Replacement(*self);
+        };
 
         // First check to see if any of the replacement glyphs meet the requirement.
         // It is assumed that the glyphs are in increasing advance.
@@ -89,10 +89,11 @@ impl Variant for Glyph {
             for idx in 0..variants.replacements.len() {
                 if variants.replacements[idx].advance >= size {
                     if idx == 0 {
-                        return VariantGlyph::Replacement(*self)
+                        return VariantGlyph::Replacement(*self);
                     } else {
-                        return VariantGlyph::Replacement(
-                            glyph_metrics(variants.replacements[idx - 1].unicode));
+                        return VariantGlyph::Replacement(glyph_metrics(variants.replacements[idx -
+                                                                       1]
+                                                                               .unicode));
                     }
                 }
             }
@@ -143,10 +144,8 @@ impl Variant for Glyph {
             for glyph in parts {
                 let count = if !glyph.required { repeats } else { 1 };
                 for _ in 0..count {
-                    let overlap =
-                        min(prev_connector, glyph.start_connector_length);
-                    advance += glyph.full_advance
-                        - max(overlap, MIN_CONNECTOR_OVERLAP);
+                    let overlap = min(prev_connector, glyph.start_connector_length);
+                    advance += glyph.full_advance - max(overlap, MIN_CONNECTOR_OVERLAP);
                     prev_connector = glyph.end_connector_length;
                 }
             }
@@ -160,15 +159,19 @@ impl Variant for Glyph {
         let mut count = 0;
         if find_min {
             while min_size(&construction.parts, count) < size {
-                count +=1 ;
-                if count > 100 { panic!("Unable to construct large glyph! Max iteration hit."); }
+                count += 1;
+                if count > 100 {
+                    panic!("Unable to construct large glyph! Max iteration hit.");
+                }
             }
             // Current glyph is too large, go back one.
             count = ::std::cmp::max(0, count - 1);
         } else {
             while max_size(&construction.parts, count) < size {
                 count += 1;
-                if count > 100 { panic!("Unable to construct large glyph."); }
+                if count > 100 {
+                    panic!("Unable to construct large glyph.");
+                }
             }
         }
 
@@ -186,24 +189,22 @@ impl Variant for Glyph {
             let repeat = if !glyph.required { count } else { 1 };
             let gly = glyph_metrics(glyph.unicode);
             for _ in 0..repeat {
-                let overlap =
-                    max(
-                        min(prev_connector, glyph.start_connector_length),
-                        MIN_CONNECTOR_OVERLAP);
+                let overlap = max(min(prev_connector, glyph.start_connector_length),
+                                  MIN_CONNECTOR_OVERLAP);
 
                 if first {
                     glyph_advance += glyph.full_advance;
                     instructions.push(GlyphInstruction {
-                        glyph:   gly,
-                        overlap: FontUnit::from(0),
-                    });
+                                          glyph: gly,
+                                          overlap: FontUnit::from(0),
+                                      });
                     first = false;
                 } else {
                     glyph_advance += glyph.full_advance - overlap;
                     instructions.push(GlyphInstruction {
-                        glyph:   gly,
-                        overlap: overlap,
-                    });
+                                          glyph: gly,
+                                          overlap: overlap,
+                                      });
                 }
 
                 prev_connector = glyph.end_connector_length;
@@ -218,7 +219,7 @@ impl Variant for Glyph {
         // return this, otherwise distribute the overlap equally
         // amonst each part.
         if size_difference < FontUnit::from(0) {
-            return VariantGlyph::Constructable(direction, instructions)
+            return VariantGlyph::Constructable(direction, instructions);
         }
 
         let overlap = size_difference / (instructions.len() as u16 - 1);
@@ -244,7 +245,7 @@ impl Variant for Glyph {
         // It is assumed that the glyphs are in increasing advance.
         match variants.replacements.get(1) {
             Some(ref g) => glyph_metrics(g.unicode),
-            None        => *self,
+            None => *self,
         }
     }
 }
@@ -252,7 +253,10 @@ impl Variant for Glyph {
 use std::fmt;
 impl fmt::Debug for GlyphInstruction {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "GlyphInst {{ glyph: 0x{:X}, overlap: {} }}", self.glyph.unicode, self.overlap)
+        write!(f,
+               "GlyphInst {{ glyph: 0x{:X}, overlap: {} }}",
+               self.glyph.unicode,
+               self.overlap)
     }
 }
 
