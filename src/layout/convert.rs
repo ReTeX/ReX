@@ -6,7 +6,7 @@ use font;
 use font::constants;
 use font::variants::VariantGlyph;
 use font::Glyph;
-use dimensions::{ FontUnit, Unit, Pixels };
+use dimensions::{ FontUnit, Unit };
 use layout::LayoutSettings;
 
 use super::Style;
