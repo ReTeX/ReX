@@ -1,10 +1,61 @@
-use lexer::{ Lexer, Token };
+use std::fmt;
 use dimensions::Unit;
 
-/// The Lexer API.  No method here should fail.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Token<'a> {
+    Command(&'a str),
+    Symbol(char),
+    WhiteSpace,
+    EOF,
+}
+
+impl<'a> Token<'a> {
+    pub fn ends_expression(&self) -> bool {
+        match *self {
+            Token::EOF |
+            Token::Symbol('}') |
+            Token::Command("right") |
+            Token::Command(r"\") => true,
+            _ => false,
+        }
+    }
+
+    pub fn expect(&self, expected: Token<'a>) -> Result<(), String> {
+        if *self == expected {
+            Ok(())
+        } else {
+            Err(format!("Expected token '{:?}', found the token '{:?}'",
+                        expected,
+                        self))
+        }
+    }
+}
+
+impl<'a> fmt::Display for Token<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Token::Command(cmd) => write!(f, r"\{}", cmd),
+            Token::Symbol(c) => write!(f, r"'{}'", c),
+            Token::WhiteSpace => write!(f, r"' '"),
+            Token::EOF => write!(f, "EOF"),
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct Lexer<'a> {
+    pub input: &'a str,
+
+    /// The position of the _next_ token to be lexed.  So it
+    /// is a true statement that `self.input[0..self.pos]` displays
+    /// all characters that have and is currently being processed.
+    pub pos: usize,
+
+    /// The token currently being processed.
+    pub current: Token<'a>,
+}
 
 impl<'a> Lexer<'a> {
-
     /// Create a new lexer, whose current token is the first token
     /// to be processed.
 
@@ -23,16 +74,15 @@ impl<'a> Lexer<'a> {
     /// This will also modify `Lexer.current`.
 
     pub fn next(&mut self) -> Token<'a> {
-        self.current =
-            match self.next_char() {
-                Some(c) if c.is_whitespace() => {
-                    self.advance_while_whitespace();
-                    Token::WhiteSpace
-                },
-                Some('\\') => self.control_sequence(),
-                Some(c)    => Token::Symbol(c),
-                None       => Token::EOF,
-            };
+        self.current = match self.next_char() {
+            Some(c) if c.is_whitespace() => {
+                self.advance_while_whitespace();
+                Token::WhiteSpace
+            }
+            Some('\\') => self.control_sequence(),
+            Some(c) => Token::Symbol(c),
+            None => Token::EOF,
+        };
 
         debug!("{:?}", self.current);
         self.current
@@ -45,7 +95,9 @@ impl<'a> Lexer<'a> {
     /// twice has no effect.
 
     pub fn consume_whitespace(&mut self) {
-        if self.current != Token::WhiteSpace { return; }
+        if self.current != Token::WhiteSpace {
+            return;
+        }
         self.advance_while_whitespace();
         self.next();
     }
@@ -55,7 +107,9 @@ impl<'a> Lexer<'a> {
 
     fn advance_while_whitespace(&mut self) {
         while let Some(c) = self.current_char() {
-            if !c.is_whitespace() { break; }
+            if !c.is_whitespace() {
+                break;
+            }
             self.pos += c.len_utf8();
         }
     }
@@ -72,19 +126,20 @@ impl<'a> Lexer<'a> {
 
         // The first character is special in that a non-alphabetic
         // characters is valid, but will terminate the lex.
-        let end =
-            match self.next_char() {
-                None => return Token::EOF,
-                Some(c) if !c.is_alphabetic() => self.pos,
-                _ => {
-                    // Otherwise Proceed until the first non alphabetic.
-                    while let Some(c) = self.current_char() {
-                        if !c.is_alphabetic() { break; }
-                        self.pos += c.len_utf8();
+        let end = match self.next_char() {
+            None => return Token::EOF,
+            Some(c) if !c.is_alphabetic() => self.pos,
+            _ => {
+                // Otherwise Proceed until the first non alphabetic.
+                while let Some(c) = self.current_char() {
+                    if !c.is_alphabetic() {
+                        break;
                     }
-                    self.pos
-                },
-            };
+                    self.pos += c.len_utf8();
+                }
+                self.pos
+            }
+        };
 
         // Consume all whitespace proceeding a control sequence
         self.advance_while_whitespace();
@@ -106,7 +161,7 @@ impl<'a> Lexer<'a> {
     pub fn group(&mut self) -> Result<&str, String> {
         self.consume_whitespace();
         if self.current != Token::Symbol('{') {
-            return Err("Expected to find an open group.".into())
+            return Err("Expected to find an open group.".into());
         }
 
         let start = self.pos;
@@ -120,7 +175,7 @@ impl<'a> Lexer<'a> {
         }
 
         if !found {
-            return Err("Unable to find closing bracket.".into())
+            return Err("Unable to find closing bracket.".into());
         }
 
         self.next();
