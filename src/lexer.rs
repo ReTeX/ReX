@@ -31,17 +31,6 @@ impl<'a> Token<'a> {
     }
 }
 
-impl<'a> fmt::Display for Token<'a> {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Token::Command(cmd) => write!(f, r"\{}", cmd),
-            Token::Symbol(c) => write!(f, r"'{}'", c),
-            Token::WhiteSpace => write!(f, r"' '"),
-            Token::EOF => write!(f, "EOF"),
-        }
-    }
-}
-
 #[derive(Clone, Copy, Debug)]
 pub struct Lexer<'a> {
     pub input: &'a str,
@@ -125,7 +114,7 @@ impl<'a> Lexer<'a> {
         let start = self.pos;
 
         // The first character is special in that a non-alphabetic
-        // characters is valid, but will terminate the lex.
+        // character is valid, but will terminate the lex.
         let end = match self.next_char() {
             None => return Token::EOF,
             Some(c) if !c.is_alphabetic() => self.pos,
@@ -195,6 +184,18 @@ impl<'a> Lexer<'a> {
 
     fn current_char(&mut self) -> Option<char> {
         self.input[self.pos..].chars().next()
+    }
+}
+
+
+impl<'a> fmt::Display for Token<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Token::Command(cmd) => write!(f, r"\{}", cmd),
+            Token::Symbol(c) => write!(f, r"'{}'", c),
+            Token::WhiteSpace => write!(f, r"' '"),
+            Token::EOF => write!(f, "EOF"),
+        }
     }
 }
 
