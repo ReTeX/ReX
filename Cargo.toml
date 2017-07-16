@@ -6,6 +6,9 @@ authors = [
     "Sebastian Köln <sebk@rynx.org>"
 ]
 
+[features]
+fast-check = []
+
 [dependencies]
 lazy_static = "0.2"
 fnv = "1.0.3"

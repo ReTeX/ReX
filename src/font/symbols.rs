@@ -11,6 +11,13 @@ use font::Symbol;
 use parser::AtomType;
 use static_map;
 
+#[cfg(feature="fast-check")]
+pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
+    Default: Symbol { unicode: 0x00, atom_type: AtomType::Accent },
+    "" => Symbol { unicode: 0x00, atom_type: AtomType::Accent },
+};
+
+#[cfg(not(feature="fast-check"))]
 pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     Default: Symbol { unicode: 0x00, atom_type: AtomType::Accent },
     // unicode-math.dtx command table

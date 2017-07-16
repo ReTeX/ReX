@@ -5,7 +5,14 @@ use std::collections::HashMap;
 use super::variants::{GlyphVariants, ConstructableGlyph, GlyphPart, ReplacementGlyph};
 use dimensions::FontUnit;
 
+#[cfg(feature="fast-check")]
+lazy_static! {
+    pub static ref VERT_VARIANTS: HashMap<u32, GlyphVariants> = {
+        HashMap::new()
+    };
+}
 
+#[cfg(not(feature="fast-check"))]
 lazy_static! {
     pub static ref VERT_VARIANTS: HashMap<u32, GlyphVariants> = {
         let mut m = HashMap::new();
