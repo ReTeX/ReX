@@ -149,26 +149,17 @@ impl<'a> Lexer<'a> {
 
     pub fn group(&mut self) -> Result<&str, String> {
         self.consume_whitespace();
-        if self.current != Token::Symbol('{') {
-            return Err("Expected to find an open group.".into());
-        }
+        self.current.expect(Token::Symbol('{'))?;
 
         let start = self.pos;
-        let mut found = false;
-        while let Some(c) = self.current_char() {
-            self.pos += c.len_utf8();
-            if c == '}' {
-                found = true;
-                break;
-            }
-        }
+        let end = match self.input[self.pos..].find('}') {
+            Some(pos) => start + pos,
+            None => return Err("failed to find closing bracket".into())
+        };
 
-        if !found {
-            return Err("Unable to find closing bracket.".into());
-        }
-
+        // Place cursor immediately after }
+        self.pos = end + 1;
         self.next();
-        let end = self.pos - 1;
         Ok(&self.input[start..end])
     }
 
@@ -203,31 +194,49 @@ impl<'a> fmt::Display for Token<'a> {
 mod tests {
     use lexer::{Lexer, Token};
 
-    macro_rules! assert_eq_token_stream {
-        ($left:expr, $right:expr) => {{
-            let mut left  = Lexer::new($left);
-            let mut right = Lexer::new($right);
-
-            loop {
-                let l_tok = left.next();
-                let r_tok = right.next();
-
-                assert_eq!(l_tok, r_tok);
-                if l_tok == Token::EOF {
-                    break
-                }
-            }
-        }}
-    }
-
     #[test]
     fn lex_tokens() {
+        macro_rules! assert_eq_token_stream {
+            ($left:expr, $right:expr) => {{
+                let mut left  = Lexer::new($left);
+                let mut right = Lexer::new($right);
+
+                loop {
+                    let l_tok = left.next();
+                    let r_tok = right.next();
+
+                    assert_eq!(l_tok, r_tok);
+                    if l_tok == Token::EOF {
+                        break
+                    }
+                }
+            }}
+        }
+
         assert_eq_token_stream!(r"\cs1", r"\cs 1");
         assert_eq_token_stream!(r"\cs1", r"\cs    1");
         assert_eq_token_stream!(r"\cs?", "\\cs\n\n\t?");
         assert_eq_token_stream!(r"\test\test", r"\test   \test");
         assert_eq_token_stream!(r"1     +       2", r"1 + 2");
         assert_eq_token_stream!(r"123\", "123");
+    }
+
+    #[test]
+    fn lex_group() {
+        macro_rules! assert_group {
+            ($input:expr, $result:expr) => {
+                let mut l = Lexer::new($input);
+                assert_eq!(l.group(), $result);
+                assert!(!(l.current == Token::Symbol('}')));
+            }
+        }
+
+        assert_group!("{1}", Ok("1"));
+        assert_group!("   {  abc } ", Ok("  abc "));
+        assert_group!("{}", Ok(""));
+
+        // This doesn't seem correct:
+        assert_group!("{{}}", Ok("{"));
     }
 
     #[test]
