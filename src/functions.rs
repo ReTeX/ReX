@@ -1,4 +1,4 @@
-use phf;
+use staticmap;
 use font::Symbol;
 use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
 use parser::AtomType;
@@ -75,7 +75,8 @@ fn text(s: &'static str) -> Vec<ParseNode> {
     result
 }
 
-pub static COMMANDS: phf::Map<&'static str, TexCommand> = phf_map! {
+pub static COMMANDS: staticmap::Map<&'static str, TexCommand> = static_map! {
+    Default: TexCommand::Radical,
     "frac"   => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::NoChange },
     "tfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Text },
     "dfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Display },

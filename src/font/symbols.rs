@@ -7,11 +7,12 @@
 // FIXME: We should probably use the official unicode standards source.
 
 #![allow(dead_code)]
-use phf;
+use staticmap;
 use parser::AtomType;
 use font::Symbol;
 
-pub static SYMBOLS: phf::Map<&'static str, Symbol> = phf_map! {
+pub static SYMBOLS: staticmap::Map<&'static str, Symbol> = static_map! {
+    Default: Symbol { unicode: 0x00, atom_type: AtomType::Accent },
     // unicode-math.dtx command table
     // "mathexclam" => Symbol { unicode: 0x21, atom_type: AtomType::Punctuation }, // Unicode: 0x21, exclamation mark
     // "mathoctothorpe" => Symbol { unicode: 0x23, atom_type: AtomType::Alpha }, // Unicode: 0x23, number sign

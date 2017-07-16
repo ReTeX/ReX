@@ -5,24 +5,17 @@ authors = [
     "Christopher Breeden <github@u.breeden.cc>",
     "Sebastian Köln <sebk@rynx.org>"
 ]
-build = "build.rs"
 
 [dependencies]
-phf = "0.7"
-phf_macros = "0.7"
 lazy_static = "0.2"
 fnv = "1.0.3"
 fp = { git = "https://github.com/ReTeX/fp.git" }
+staticmap = { path = "static-map/staticmap" }
+staticmap_macros = { path = "static-map/staticmap_macros" }
 
 [dev-dependencies]
 toml = "0.2"
 json = "0.11"
-
-[build-dependencies]
-phf_codegen = "0.7"
-serde = "1.0"
-serde_json = "1.0"
-serde_derive = "1.0"
 
 [dependencies.log]
 version="0.3"

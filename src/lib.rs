@@ -1,15 +1,16 @@
-#![feature(plugin)]
-#![plugin(phf_macros)]
-
 #![feature(test)]
 extern crate test;
 
 #[macro_use]
 extern crate log;
 
-extern crate phf;
 extern crate fnv;
 extern crate fp;
+
+#[macro_use]
+extern crate staticmap;
+#[macro_use]
+extern crate staticmap_macros;
 
 #[macro_use]
 mod macros;
