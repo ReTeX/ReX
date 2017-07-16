@@ -6,13 +6,6 @@ use super::glyph_metrics;
 use super::variant_tables::{VERT_VARIANTS, HORZ_VARIANTS};
 use dimensions::FontUnit;
 
-
-#[derive(Debug, Clone)]
-pub struct GlyphVariants {
-    pub replacements: Vec<ReplacementGlyph>,
-    pub constructable: Option<ConstructableGlyph>,
-}
-
 // There are two types of variant glyphs:
 //    Replacement glyphs and constructables that require multiple glpyhs.
 
@@ -24,14 +17,20 @@ pub enum VariantGlyph {
 }
 
 #[derive(Debug, Clone)]
+pub struct GlyphVariants {
+    pub replacements: &'static [ReplacementGlyph],
+    pub constructable: Option<ConstructableGlyph>,
+}
+
+#[derive(Debug, Copy, Clone)]
 pub struct ReplacementGlyph {
     pub unicode: u32,
     pub advance: FontUnit,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Copy, Clone)]
 pub struct ConstructableGlyph {
-    pub parts: Vec<GlyphPart>,
+    pub parts: &'static [GlyphPart],
     pub italics_correction: FontUnit,
 }
 
@@ -98,7 +97,7 @@ impl Variant for Glyph {
                 }
             }
         } else {
-            for glyph in &variants.replacements {
+            for &glyph in variants.replacements {
                 if glyph.advance >= size {
                     let replacement = glyph_metrics(glyph.unicode);
                     return VariantGlyph::Replacement(replacement);
@@ -185,7 +184,7 @@ impl Variant for Glyph {
         let mut glyph_advance = FontUnit::from(0);
         let mut first = true;
 
-        for glyph in &construction.parts {
+        for &glyph in construction.parts {
             let repeat = if !glyph.required { count } else { 1 };
             let gly = glyph_metrics(glyph.unicode);
             for _ in 0..repeat {

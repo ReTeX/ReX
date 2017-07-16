@@ -84,7 +84,7 @@ fn kern_from(gly: Glyph, height: FontUnit, side: Corner) -> FontUnit {
 
     // Assert: Correction heights are increasing.
     let mut idx: usize = 0;
-    for &correction in &table.correction_heights {
+    for &correction in table.correction_heights {
         if correction == FontUnit::from(0) || height <= correction {
             break;
         }

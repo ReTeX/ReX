@@ -75,8 +75,8 @@ pub struct KernRecord {
 
 #[derive(Debug, Clone)]
 pub struct KernTable {
-    correction_heights: [FontUnit; 1], // unit::Font::<i16>()
-    kern_values: [FontUnit; 2], // unit::Font::<i16>()
+    correction_heights: &'static [FontUnit], // unit::Font::<i16>()
+    kern_values: &'static [FontUnit],        // unit::Font::<i16>()
 }
 
 #[derive(Default, Debug, Copy, Clone, PartialEq, Eq)]

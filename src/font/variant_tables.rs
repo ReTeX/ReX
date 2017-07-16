@@ -4,3090 +4,3088 @@
 use std::collections::HashMap;
 use super::variants::{GlyphVariants, ConstructableGlyph, GlyphPart, ReplacementGlyph};
 use dimensions::FontUnit;
+use static_map;
 
 #[cfg(feature="fast-check")]
-lazy_static! {
-    pub static ref VERT_VARIANTS: HashMap<u32, GlyphVariants> = {
-        HashMap::new()
-    };
-}
+pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
+    Default: GlyphVariants { constructable: None, replacements: &[] },
+    0 => GlyphVariants { constructable: None, replacements: &[] },
+};
 
 #[cfg(not(feature="fast-check"))]
-lazy_static! {
-    pub static ref VERT_VARIANTS: HashMap<u32, GlyphVariants> = {
-        let mut m = HashMap::new();
-        m.insert(0x28, GlyphVariants { // parenleft
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x239D, // uni239D
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(150),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x239C, // uni239C
-                        start_connector_length: FontUnit::from(150),
-                        end_connector_length:   FontUnit::from(150),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x239B, // uni239B
-                        start_connector_length: FontUnit::from(150),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x28, advance: FontUnit::from(854) }, // parenleft
-                ReplacementGlyph { unicode: 0xE718, advance: FontUnit::from(1231) }, // parenleft.size1
-                ReplacementGlyph { unicode: 0xE719, advance: FontUnit::from(1846) }, // parenleft.size2
-                ReplacementGlyph { unicode: 0xE71A, advance: FontUnit::from(2461) }, // parenleft.size3
-                ReplacementGlyph { unicode: 0xE71B, advance: FontUnit::from(3076) }, // parenleft.size4
-            ],
-        });
-        m.insert(0x29, GlyphVariants { // parenright
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A0, // uni23A0
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(150),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x239F, // uni239F
-                        start_connector_length: FontUnit::from(150),
-                        end_connector_length:   FontUnit::from(150),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x239E, // uni239E
-                        start_connector_length: FontUnit::from(150),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x29, advance: FontUnit::from(854) }, // parenright
-                ReplacementGlyph { unicode: 0xE71C, advance: FontUnit::from(1231) }, // parenright.size1
-                ReplacementGlyph { unicode: 0xE71D, advance: FontUnit::from(1846) }, // parenright.size2
-                ReplacementGlyph { unicode: 0xE71E, advance: FontUnit::from(2461) }, // parenright.size3
-                ReplacementGlyph { unicode: 0xE71F, advance: FontUnit::from(3076) }, // parenright.size4
-            ],
-        });
-        m.insert(0x2F, GlyphVariants { // slash
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2F, advance: FontUnit::from(691) }, // slash
-                ReplacementGlyph { unicode: 0xE720, advance: FontUnit::from(1231) }, // slash.size1
-                ReplacementGlyph { unicode: 0xE721, advance: FontUnit::from(1846) }, // slash.size2
-                ReplacementGlyph { unicode: 0xE722, advance: FontUnit::from(2461) }, // slash.size3
-                ReplacementGlyph { unicode: 0xE723, advance: FontUnit::from(3076) }, // slash.size4
-            ],
-        });
-        m.insert(0x5B, GlyphVariants { // bracketleft
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A3, // uni23A3
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(950),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A2, // uni23A2
-                        start_connector_length: FontUnit::from(500),
-                        end_connector_length:   FontUnit::from(500),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A1, // uni23A1
-                        start_connector_length: FontUnit::from(950),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x5B, advance: FontUnit::from(819) }, // bracketleft
-                ReplacementGlyph { unicode: 0xE710, advance: FontUnit::from(1231) }, // bracketleft.size1
-                ReplacementGlyph { unicode: 0xE711, advance: FontUnit::from(1846) }, // bracketleft.size2
-                ReplacementGlyph { unicode: 0xE712, advance: FontUnit::from(2461) }, // bracketleft.size3
-                ReplacementGlyph { unicode: 0xE713, advance: FontUnit::from(3076) }, // bracketleft.size4
-            ],
-        });
-        m.insert(0x5C, GlyphVariants { // backslash
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x5C, advance: FontUnit::from(691) }, // backslash
-                ReplacementGlyph { unicode: 0xE700, advance: FontUnit::from(1231) }, // backslash.size1
-                ReplacementGlyph { unicode: 0xE701, advance: FontUnit::from(1846) }, // backslash.size2
-                ReplacementGlyph { unicode: 0xE702, advance: FontUnit::from(2461) }, // backslash.size3
-                ReplacementGlyph { unicode: 0xE703, advance: FontUnit::from(3076) }, // backslash.size4
-            ],
-        });
-        m.insert(0x5D, GlyphVariants { // bracketright
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A6, // uni23A6
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(950),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A5, // uni23A5
-                        start_connector_length: FontUnit::from(500),
-                        end_connector_length:   FontUnit::from(500),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A4, // uni23A4
-                        start_connector_length: FontUnit::from(950),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x5D, advance: FontUnit::from(819) }, // bracketright
-                ReplacementGlyph { unicode: 0xE714, advance: FontUnit::from(1231) }, // bracketright.size1
-                ReplacementGlyph { unicode: 0xE715, advance: FontUnit::from(1846) }, // bracketright.size2
-                ReplacementGlyph { unicode: 0xE716, advance: FontUnit::from(2461) }, // bracketright.size3
-                ReplacementGlyph { unicode: 0xE717, advance: FontUnit::from(3076) }, // bracketright.size4
-            ],
-        });
-        m.insert(0x7B, GlyphVariants { // braceleft
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A9, // uni23A9
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(600),
-                        end_connector_length:   FontUnit::from(200),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A8, // uni23A8
-                        start_connector_length: FontUnit::from(200),
-                        end_connector_length:   FontUnit::from(200),
-                        full_advance:           FontUnit::from(1010),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(200),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A7, // uni23A7
-                        start_connector_length: FontUnit::from(600),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x7B, advance: FontUnit::from(862) }, // braceleft
-                ReplacementGlyph { unicode: 0xE708, advance: FontUnit::from(1231) }, // braceleft.size1
-                ReplacementGlyph { unicode: 0xE709, advance: FontUnit::from(1846) }, // braceleft.size2
-                ReplacementGlyph { unicode: 0xE70A, advance: FontUnit::from(2461) }, // braceleft.size3
-                ReplacementGlyph { unicode: 0xE70B, advance: FontUnit::from(3076) }, // braceleft.size4
-            ],
-        });
-        m.insert(0x7C, GlyphVariants { // bar
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x7C, // bar
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(400),
-                        full_advance:           FontUnit::from(879),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x7C, // bar
-                        start_connector_length: FontUnit::from(400),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(879),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x7C, advance: FontUnit::from(880) }, // bar
-                ReplacementGlyph { unicode: 0xE704, advance: FontUnit::from(1231) }, // bar.size1
-                ReplacementGlyph { unicode: 0xE705, advance: FontUnit::from(1846) }, // bar.size2
-                ReplacementGlyph { unicode: 0xE706, advance: FontUnit::from(2461) }, // bar.size3
-                ReplacementGlyph { unicode: 0xE707, advance: FontUnit::from(3076) }, // bar.size4
-            ],
-        });
-        m.insert(0x7D, GlyphVariants { // braceright
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23AD, // uni23AD
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(600),
-                        end_connector_length:   FontUnit::from(200),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AC, // uni23AC
-                        start_connector_length: FontUnit::from(200),
-                        end_connector_length:   FontUnit::from(200),
-                        full_advance:           FontUnit::from(1010),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(200),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AB, // uni23AB
-                        start_connector_length: FontUnit::from(600),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x7D, advance: FontUnit::from(862) }, // braceright
-                ReplacementGlyph { unicode: 0xE70C, advance: FontUnit::from(1231) }, // braceright.size1
-                ReplacementGlyph { unicode: 0xE70D, advance: FontUnit::from(1846) }, // braceright.size2
-                ReplacementGlyph { unicode: 0xE70E, advance: FontUnit::from(2461) }, // braceright.size3
-                ReplacementGlyph { unicode: 0xE70F, advance: FontUnit::from(3076) }, // braceright.size4
-            ],
-        });
-        m.insert(0x338, GlyphVariants { // uni0338
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x338, advance: FontUnit::from(819) }, // uni0338
-                ReplacementGlyph { unicode: 0xE869, advance: FontUnit::from(862) }, // uni0338.size1
-                ReplacementGlyph { unicode: 0xE86A, advance: FontUnit::from(959) }, // uni0338.size2
-                ReplacementGlyph { unicode: 0xE86B, advance: FontUnit::from(1059) }, // uni0338.size3
-                ReplacementGlyph { unicode: 0xE86C, advance: FontUnit::from(1158) }, // uni0338.size4
-                ReplacementGlyph { unicode: 0xE86D, advance: FontUnit::from(1361) }, // uni0338.size5
-                ReplacementGlyph { unicode: 0xE86E, advance: FontUnit::from(1847) }, // uni0338.size6
-            ],
-        });
-        m.insert(0x606, GlyphVariants { // uni0606
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x606, advance: FontUnit::from(1233) }, // uni0606
-                ReplacementGlyph { unicode: 0xE8A6, advance: FontUnit::from(1848) }, // uni0606.size1
-                ReplacementGlyph { unicode: 0xE8A7, advance: FontUnit::from(2461) }, // uni0606.size2
-                ReplacementGlyph { unicode: 0xE8A8, advance: FontUnit::from(3076) }, // uni0606.size3
-            ],
-        });
-        m.insert(0x607, GlyphVariants { // uni0607
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x607, advance: FontUnit::from(1233) }, // uni0607
-                ReplacementGlyph { unicode: 0xE8A9, advance: FontUnit::from(1848) }, // uni0607.size1
-                ReplacementGlyph { unicode: 0xE8AA, advance: FontUnit::from(2461) }, // uni0607.size2
-                ReplacementGlyph { unicode: 0xE8AB, advance: FontUnit::from(3076) }, // uni0607.size3
-            ],
-        });
-        m.insert(0x2016, GlyphVariants { // uni2016
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2016, // uni2016
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(400),
-                        full_advance:           FontUnit::from(879),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x2016, // uni2016
-                        start_connector_length: FontUnit::from(400),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(879),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2016, advance: FontUnit::from(880) }, // uni2016
-                ReplacementGlyph { unicode: 0xE8AC, advance: FontUnit::from(1231) }, // uni2016.size1
-                ReplacementGlyph { unicode: 0xE8AD, advance: FontUnit::from(1846) }, // uni2016.size2
-                ReplacementGlyph { unicode: 0xE8AE, advance: FontUnit::from(2461) }, // uni2016.size3
-                ReplacementGlyph { unicode: 0xE8AF, advance: FontUnit::from(3076) }, // uni2016.size4
-            ],
-        });
-        m.insert(0x2044, GlyphVariants { // fraction
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2044, advance: FontUnit::from(691) }, // fraction
-                ReplacementGlyph { unicode: 0xE720, advance: FontUnit::from(1231) }, // slash.size1
-                ReplacementGlyph { unicode: 0xE721, advance: FontUnit::from(1846) }, // slash.size2
-                ReplacementGlyph { unicode: 0xE722, advance: FontUnit::from(2461) }, // slash.size3
-                ReplacementGlyph { unicode: 0xE723, advance: FontUnit::from(3076) }, // slash.size4
-            ],
-        });
-        m.insert(0x20D2, GlyphVariants { // uni20D2
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20D2, advance: FontUnit::from(819) }, // uni20D2
-                ReplacementGlyph { unicode: 0xE8C3, advance: FontUnit::from(861) }, // uni20D2.size1
-                ReplacementGlyph { unicode: 0xE8C4, advance: FontUnit::from(961) }, // uni20D2.size2
-                ReplacementGlyph { unicode: 0xE8C5, advance: FontUnit::from(1061) }, // uni20D2.size3
-                ReplacementGlyph { unicode: 0xE8C6, advance: FontUnit::from(1161) }, // uni20D2.size4
-                ReplacementGlyph { unicode: 0xE8C7, advance: FontUnit::from(1361) }, // uni20D2.size5
-                ReplacementGlyph { unicode: 0xE8C8, advance: FontUnit::from(1846) }, // uni20D2.size6
-            ],
-        });
-        m.insert(0x2140, GlyphVariants { // uni2140
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2140, advance: FontUnit::from(1023) }, // uni2140
-                ReplacementGlyph { unicode: 0xE8EC, advance: FontUnit::from(1451) }, // uni2140.display
-            ],
-        });
-        m.insert(0x2191, GlyphVariants { // uni2191
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2191, // uni2191
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2193, GlyphVariants { // uni2193
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2193, // uni2193
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2195, GlyphVariants { // uni2195
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2193, // uni2193
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2191, // uni2191
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21BE, GlyphVariants { // uni21BE
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21BE, // uni21BE
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21BF, GlyphVariants { // uni21BF
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21BF, // uni21BF
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21C2, GlyphVariants { // uni21C2
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21C2, // uni21C2
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21C3, GlyphVariants { // uni21C3
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21C3, // uni21C3
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23D0, // uni23D0
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21D1, GlyphVariants { // uni21D1
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21D1, // uni21D1
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21D3, GlyphVariants { // uni21D3
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21D3, // uni21D3
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x21D5, GlyphVariants { // uni21D5
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21D3, // uni21D3
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F3, // uni21D1.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21D1, // uni21D1
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x220F, GlyphVariants { // uni220F
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x220F, advance: FontUnit::from(1023) }, // uni220F
-                ReplacementGlyph { unicode: 0xE8FC, advance: FontUnit::from(1452) }, // uni220F.display
-            ],
-        });
-        m.insert(0x2210, GlyphVariants { // uni2210
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2210, advance: FontUnit::from(1023) }, // uni2210
-                ReplacementGlyph { unicode: 0xE8FD, advance: FontUnit::from(1452) }, // uni2210.display
-            ],
-        });
-        m.insert(0x2211, GlyphVariants { // uni2211
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2211, advance: FontUnit::from(1023) }, // uni2211
-                ReplacementGlyph { unicode: 0xE8FE, advance: FontUnit::from(1451) }, // uni2211.display
-            ],
-        });
-        m.insert(0x221A, GlyphVariants { // uni221A
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23B7, // uni23B7
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE901, // uni221A.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE90C, // uni221A.top
-                        start_connector_length: FontUnit::from(500),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(626),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x221A, advance: FontUnit::from(1233) }, // uni221A
-                ReplacementGlyph { unicode: 0xE909, advance: FontUnit::from(1848) }, // uni221A.size1
-                ReplacementGlyph { unicode: 0xE90A, advance: FontUnit::from(2461) }, // uni221A.size2
-                ReplacementGlyph { unicode: 0xE90B, advance: FontUnit::from(3076) }, // uni221A.size3
-            ],
-        });
-        m.insert(0x221B, GlyphVariants { // uni221B
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE90D, // uni221B.base
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE901, // uni221A.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE90C, // uni221A.top
-                        start_connector_length: FontUnit::from(500),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(626),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x221B, advance: FontUnit::from(1233) }, // uni221B
-                ReplacementGlyph { unicode: 0xE912, advance: FontUnit::from(1848) }, // uni221B.size1
-                ReplacementGlyph { unicode: 0xE913, advance: FontUnit::from(2461) }, // uni221B.size2
-                ReplacementGlyph { unicode: 0xE914, advance: FontUnit::from(3076) }, // uni221B.size3
-            ],
-        });
-        m.insert(0x221C, GlyphVariants { // uni221C
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE915, // uni221C.base
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE901, // uni221A.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE90C, // uni221A.top
-                        start_connector_length: FontUnit::from(600),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(626),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x221C, advance: FontUnit::from(1233) }, // uni221C
-                ReplacementGlyph { unicode: 0xE91A, advance: FontUnit::from(1848) }, // uni221C.size1
-                ReplacementGlyph { unicode: 0xE91B, advance: FontUnit::from(2461) }, // uni221C.size2
-                ReplacementGlyph { unicode: 0xE91C, advance: FontUnit::from(3076) }, // uni221C.size3
-            ],
-        });
-        m.insert(0x2223, GlyphVariants { // uni2223
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2223, // uni2223
-                        start_connector_length: FontUnit::from(293),
-                        end_connector_length:   FontUnit::from(293),
-                        full_advance:           FontUnit::from(879),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x2223, // uni2223
-                        start_connector_length: FontUnit::from(293),
-                        end_connector_length:   FontUnit::from(293),
-                        full_advance:           FontUnit::from(879),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2225, GlyphVariants { // uni2225
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2225, // uni2225
-                        start_connector_length: FontUnit::from(293),
-                        end_connector_length:   FontUnit::from(293),
-                        full_advance:           FontUnit::from(879),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x2225, // uni2225
-                        start_connector_length: FontUnit::from(293),
-                        end_connector_length:   FontUnit::from(293),
-                        full_advance:           FontUnit::from(879),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x222B, GlyphVariants { // uni222B
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x222B, advance: FontUnit::from(1145) }, // uni222B
-                ReplacementGlyph { unicode: 0xE924, advance: FontUnit::from(2270) }, // uni222B.display
-            ],
-        });
-        m.insert(0x222C, GlyphVariants { // uni222C
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x222C, advance: FontUnit::from(1145) }, // uni222C
-                ReplacementGlyph { unicode: 0xE92A, advance: FontUnit::from(2270) }, // uni222C.display
-            ],
-        });
-        m.insert(0x222D, GlyphVariants { // uni222D
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x222D, advance: FontUnit::from(1145) }, // uni222D
-                ReplacementGlyph { unicode: 0xE930, advance: FontUnit::from(2270) }, // uni222D.display
-            ],
-        });
-        m.insert(0x222E, GlyphVariants { // uni222E
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x222E, advance: FontUnit::from(1145) }, // uni222E
-                ReplacementGlyph { unicode: 0xE936, advance: FontUnit::from(2270) }, // uni222E.display
-            ],
-        });
-        m.insert(0x222F, GlyphVariants { // uni222F
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x222F, advance: FontUnit::from(1145) }, // uni222F
-                ReplacementGlyph { unicode: 0xE93C, advance: FontUnit::from(2270) }, // uni222F.display
-            ],
-        });
-        m.insert(0x2230, GlyphVariants { // uni2230
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2230, advance: FontUnit::from(1145) }, // uni2230
-                ReplacementGlyph { unicode: 0xE942, advance: FontUnit::from(2270) }, // uni2230.display
-            ],
-        });
-        m.insert(0x2231, GlyphVariants { // uni2231
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2231, advance: FontUnit::from(1145) }, // uni2231
-                ReplacementGlyph { unicode: 0xE948, advance: FontUnit::from(2270) }, // uni2231.display
-            ],
-        });
-        m.insert(0x2232, GlyphVariants { // uni2232
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2232, advance: FontUnit::from(1145) }, // uni2232
-                ReplacementGlyph { unicode: 0xE94E, advance: FontUnit::from(2270) }, // uni2232.display
-            ],
-        });
-        m.insert(0x2233, GlyphVariants { // uni2233
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2233, advance: FontUnit::from(1145) }, // uni2233
-                ReplacementGlyph { unicode: 0xE954, advance: FontUnit::from(2270) }, // uni2233.display
-            ],
-        });
-        m.insert(0x22C0, GlyphVariants { // uni22C0
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x22C0, advance: FontUnit::from(1023) }, // uni22C0
-                ReplacementGlyph { unicode: 0xE985, advance: FontUnit::from(1452) }, // uni22C0.display
-            ],
-        });
-        m.insert(0x22C1, GlyphVariants { // uni22C1
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x22C1, advance: FontUnit::from(1023) }, // uni22C1
-                ReplacementGlyph { unicode: 0xE986, advance: FontUnit::from(1452) }, // uni22C1.display
-            ],
-        });
-        m.insert(0x22C2, GlyphVariants { // uni22C2
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x22C2, advance: FontUnit::from(1033) }, // uni22C2
-                ReplacementGlyph { unicode: 0xE987, advance: FontUnit::from(1462) }, // uni22C2.display
-            ],
-        });
-        m.insert(0x22C3, GlyphVariants { // uni22C3
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x22C3, advance: FontUnit::from(1033) }, // uni22C3
-                ReplacementGlyph { unicode: 0xE988, advance: FontUnit::from(1462) }, // uni22C3.display
-            ],
-        });
-        m.insert(0x2308, GlyphVariants { // uni2308
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A2, // uni23A2
-                        start_connector_length: FontUnit::from(337),
-                        end_connector_length:   FontUnit::from(337),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A1, // uni23A1
-                        start_connector_length: FontUnit::from(335),
-                        end_connector_length:   FontUnit::from(335),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2308, advance: FontUnit::from(927) }, // uni2308
-                ReplacementGlyph { unicode: 0xE993, advance: FontUnit::from(1231) }, // uni2308.size1
-                ReplacementGlyph { unicode: 0xE994, advance: FontUnit::from(1846) }, // uni2308.size2
-                ReplacementGlyph { unicode: 0xE995, advance: FontUnit::from(2461) }, // uni2308.size3
-                ReplacementGlyph { unicode: 0xE996, advance: FontUnit::from(3076) }, // uni2308.size4
-            ],
-        });
-        m.insert(0x2309, GlyphVariants { // uni2309
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A5, // uni23A5
-                        start_connector_length: FontUnit::from(337),
-                        end_connector_length:   FontUnit::from(337),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A4, // uni23A4
-                        start_connector_length: FontUnit::from(335),
-                        end_connector_length:   FontUnit::from(335),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2309, advance: FontUnit::from(927) }, // uni2309
-                ReplacementGlyph { unicode: 0xE997, advance: FontUnit::from(1231) }, // uni2309.size1
-                ReplacementGlyph { unicode: 0xE998, advance: FontUnit::from(1846) }, // uni2309.size2
-                ReplacementGlyph { unicode: 0xE999, advance: FontUnit::from(2461) }, // uni2309.size3
-                ReplacementGlyph { unicode: 0xE99A, advance: FontUnit::from(3076) }, // uni2309.size4
-            ],
-        });
-        m.insert(0x230A, GlyphVariants { // uni230A
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A3, // uni23A3
-                        start_connector_length: FontUnit::from(335),
-                        end_connector_length:   FontUnit::from(335),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A2, // uni23A2
-                        start_connector_length: FontUnit::from(337),
-                        end_connector_length:   FontUnit::from(337),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x230A, advance: FontUnit::from(927) }, // uni230A
-                ReplacementGlyph { unicode: 0xE99B, advance: FontUnit::from(1231) }, // uni230A.size1
-                ReplacementGlyph { unicode: 0xE99C, advance: FontUnit::from(1846) }, // uni230A.size2
-                ReplacementGlyph { unicode: 0xE99D, advance: FontUnit::from(2461) }, // uni230A.size3
-                ReplacementGlyph { unicode: 0xE99E, advance: FontUnit::from(3076) }, // uni230A.size4
-            ],
-        });
-        m.insert(0x230B, GlyphVariants { // uni230B
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A6, // uni23A6
-                        start_connector_length: FontUnit::from(335),
-                        end_connector_length:   FontUnit::from(335),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A5, // uni23A5
-                        start_connector_length: FontUnit::from(337),
-                        end_connector_length:   FontUnit::from(337),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x230B, advance: FontUnit::from(927) }, // uni230B
-                ReplacementGlyph { unicode: 0xE99F, advance: FontUnit::from(1231) }, // uni230B.size1
-                ReplacementGlyph { unicode: 0xE9A0, advance: FontUnit::from(1846) }, // uni230B.size2
-                ReplacementGlyph { unicode: 0xE9A1, advance: FontUnit::from(2461) }, // uni230B.size3
-                ReplacementGlyph { unicode: 0xE9A2, advance: FontUnit::from(3076) }, // uni230B.size4
-            ],
-        });
-        m.insert(0x23B0, GlyphVariants { // uni23B0
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23AD, // uni23AD
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23A7, // uni23A7
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23B0, advance: FontUnit::from(1002) }, // uni23B0
-            ],
-        });
-        m.insert(0x23B1, GlyphVariants { // uni23B1
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A9, // uni23A9
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AA, // uni23AA
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x23AB, // uni23AB
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23B1, advance: FontUnit::from(1002) }, // uni23B1
-            ],
-        });
-        m.insert(0x2772, GlyphVariants { // uni2772
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2772, advance: FontUnit::from(933) }, // uni2772
-                ReplacementGlyph { unicode: 0xE9E1, advance: FontUnit::from(1231) }, // uni2772.size1
-                ReplacementGlyph { unicode: 0xE9E2, advance: FontUnit::from(1846) }, // uni2772.size2
-                ReplacementGlyph { unicode: 0xE9E3, advance: FontUnit::from(2460) }, // uni2772.size3
-                ReplacementGlyph { unicode: 0xE9E4, advance: FontUnit::from(3076) }, // uni2772.size4
-            ],
-        });
-        m.insert(0x2773, GlyphVariants { // uni2773
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2773, advance: FontUnit::from(933) }, // uni2773
-                ReplacementGlyph { unicode: 0xE9E5, advance: FontUnit::from(1231) }, // uni2773.size1
-                ReplacementGlyph { unicode: 0xE9E6, advance: FontUnit::from(1846) }, // uni2773.size2
-                ReplacementGlyph { unicode: 0xE9E7, advance: FontUnit::from(2460) }, // uni2773.size3
-                ReplacementGlyph { unicode: 0xE9E8, advance: FontUnit::from(3076) }, // uni2773.size4
-            ],
-        });
-        m.insert(0x27E6, GlyphVariants { // uni27E6
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27E6, advance: FontUnit::from(931) }, // uni27E6
-                ReplacementGlyph { unicode: 0xE9EB, advance: FontUnit::from(1231) }, // uni27E6.size1
-                ReplacementGlyph { unicode: 0xE9EC, advance: FontUnit::from(1846) }, // uni27E6.size2
-                ReplacementGlyph { unicode: 0xE9ED, advance: FontUnit::from(2461) }, // uni27E6.size3
-                ReplacementGlyph { unicode: 0xE9EE, advance: FontUnit::from(3076) }, // uni27E6.size4
-            ],
-        });
-        m.insert(0x27E7, GlyphVariants { // uni27E7
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27E7, advance: FontUnit::from(931) }, // uni27E7
-                ReplacementGlyph { unicode: 0xE9EF, advance: FontUnit::from(1231) }, // uni27E7.size1
-                ReplacementGlyph { unicode: 0xE9F0, advance: FontUnit::from(1846) }, // uni27E7.size2
-                ReplacementGlyph { unicode: 0xE9F1, advance: FontUnit::from(2461) }, // uni27E7.size3
-                ReplacementGlyph { unicode: 0xE9F2, advance: FontUnit::from(3076) }, // uni27E7.size4
-            ],
-        });
-        m.insert(0x27E8, GlyphVariants { // uni27E8
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27E8, advance: FontUnit::from(927) }, // uni27E8
-                ReplacementGlyph { unicode: 0xE9F3, advance: FontUnit::from(1231) }, // uni27E8.size1
-                ReplacementGlyph { unicode: 0xE9F4, advance: FontUnit::from(1846) }, // uni27E8.size2
-                ReplacementGlyph { unicode: 0xE9F5, advance: FontUnit::from(2461) }, // uni27E8.size3
-                ReplacementGlyph { unicode: 0xE9F6, advance: FontUnit::from(3076) }, // uni27E8.size4
-            ],
-        });
-        m.insert(0x27E9, GlyphVariants { // uni27E9
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27E9, advance: FontUnit::from(927) }, // uni27E9
-                ReplacementGlyph { unicode: 0xE9F7, advance: FontUnit::from(1231) }, // uni27E9.size1
-                ReplacementGlyph { unicode: 0xE9F8, advance: FontUnit::from(1846) }, // uni27E9.size2
-                ReplacementGlyph { unicode: 0xE9F9, advance: FontUnit::from(2461) }, // uni27E9.size3
-                ReplacementGlyph { unicode: 0xE9FA, advance: FontUnit::from(3076) }, // uni27E9.size4
-            ],
-        });
-        m.insert(0x27EA, GlyphVariants { // uni27EA
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27EA, advance: FontUnit::from(933) }, // uni27EA
-                ReplacementGlyph { unicode: 0xE9FB, advance: FontUnit::from(1231) }, // uni27EA.size1
-                ReplacementGlyph { unicode: 0xE9FC, advance: FontUnit::from(1846) }, // uni27EA.size2
-                ReplacementGlyph { unicode: 0xE9FD, advance: FontUnit::from(2462) }, // uni27EA.size3
-                ReplacementGlyph { unicode: 0xE9FE, advance: FontUnit::from(3076) }, // uni27EA.size4
-            ],
-        });
-        m.insert(0x27EB, GlyphVariants { // uni27EB
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27EB, advance: FontUnit::from(933) }, // uni27EB
-                ReplacementGlyph { unicode: 0xE9FF, advance: FontUnit::from(1231) }, // uni27EB.size1
-                ReplacementGlyph { unicode: 0xEA00, advance: FontUnit::from(1846) }, // uni27EB.size2
-                ReplacementGlyph { unicode: 0xEA01, advance: FontUnit::from(2462) }, // uni27EB.size3
-                ReplacementGlyph { unicode: 0xEA02, advance: FontUnit::from(3076) }, // uni27EB.size4
-            ],
-        });
-        m.insert(0x27EE, GlyphVariants { // uni27EE
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x239D, // uni239D
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x239C, // uni239C
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x239B, // uni239B
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27EE, advance: FontUnit::from(854) }, // uni27EE
-            ],
-        });
-        m.insert(0x27EF, GlyphVariants { // uni27EF
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x23A0, // uni23A0
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x239F, // uni239F
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(90),
-                        full_advance:           FontUnit::from(1010),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x239E, // uni239E
-                        start_connector_length: FontUnit::from(90),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1005),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x27EF, advance: FontUnit::from(854) }, // uni27EF
-            ],
-        });
-        m.insert(0x27F0, GlyphVariants { // uni27F0
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x27F0, // uni27F0
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x27F1, GlyphVariants { // uni27F1
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x27F1, // uni27F1
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xEA03, // uni27F0.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x290A, GlyphVariants { // uni290A
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x290A, // uni290A
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x290B, GlyphVariants { // uni290B
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x290B, // uni290B
-                        start_connector_length: FontUnit::from(273),
-                        end_connector_length:   FontUnit::from(273),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xEA04, // uni290A.ex
-                        start_connector_length: FontUnit::from(101),
-                        end_connector_length:   FontUnit::from(101),
-                        full_advance:           FontUnit::from(304),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2980, GlyphVariants { // uni2980
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2980, // uni2980
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(400),
-                        full_advance:           FontUnit::from(879),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x2980, // uni2980
-                        start_connector_length: FontUnit::from(400),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(879),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2980, advance: FontUnit::from(880) }, // uni2980
-                ReplacementGlyph { unicode: 0xEA05, advance: FontUnit::from(1231) }, // uni2980.size1
-                ReplacementGlyph { unicode: 0xEA06, advance: FontUnit::from(1846) }, // uni2980.size2
-                ReplacementGlyph { unicode: 0xEA07, advance: FontUnit::from(2461) }, // uni2980.size3
-                ReplacementGlyph { unicode: 0xEA08, advance: FontUnit::from(3076) }, // uni2980.size4
-            ],
-        });
-        m.insert(0x2983, GlyphVariants { // uni2983
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2983, advance: FontUnit::from(933) }, // uni2983
-                ReplacementGlyph { unicode: 0xEA09, advance: FontUnit::from(1231) }, // uni2983.size1
-                ReplacementGlyph { unicode: 0xEA0A, advance: FontUnit::from(1846) }, // uni2983.size2
-                ReplacementGlyph { unicode: 0xEA0B, advance: FontUnit::from(2461) }, // uni2983.size3
-                ReplacementGlyph { unicode: 0xEA0C, advance: FontUnit::from(3076) }, // uni2983.size4
-            ],
-        });
-        m.insert(0x2984, GlyphVariants { // uni2984
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2984, advance: FontUnit::from(933) }, // uni2984
-                ReplacementGlyph { unicode: 0xEA0D, advance: FontUnit::from(1231) }, // uni2984.size1
-                ReplacementGlyph { unicode: 0xEA0E, advance: FontUnit::from(1846) }, // uni2984.size2
-                ReplacementGlyph { unicode: 0xEA0F, advance: FontUnit::from(2461) }, // uni2984.size3
-                ReplacementGlyph { unicode: 0xEA10, advance: FontUnit::from(3076) }, // uni2984.size4
-            ],
-        });
-        m.insert(0x2985, GlyphVariants { // uni2985
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2985, advance: FontUnit::from(933) }, // uni2985
-                ReplacementGlyph { unicode: 0xEA11, advance: FontUnit::from(1231) }, // uni2985.size1
-                ReplacementGlyph { unicode: 0xEA12, advance: FontUnit::from(1849) }, // uni2985.size2
-                ReplacementGlyph { unicode: 0xEA13, advance: FontUnit::from(2460) }, // uni2985.size3
-                ReplacementGlyph { unicode: 0xEA14, advance: FontUnit::from(3076) }, // uni2985.size4
-            ],
-        });
-        m.insert(0x2986, GlyphVariants { // uni2986
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2986, advance: FontUnit::from(933) }, // uni2986
-                ReplacementGlyph { unicode: 0xEA15, advance: FontUnit::from(1231) }, // uni2986.size1
-                ReplacementGlyph { unicode: 0xEA16, advance: FontUnit::from(1849) }, // uni2986.size2
-                ReplacementGlyph { unicode: 0xEA17, advance: FontUnit::from(2460) }, // uni2986.size3
-                ReplacementGlyph { unicode: 0xEA18, advance: FontUnit::from(3076) }, // uni2986.size4
-            ],
-        });
-        m.insert(0x29F8, GlyphVariants { // uni29F8
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x29F8, advance: FontUnit::from(1021) }, // uni29F8
-                ReplacementGlyph { unicode: 0xEA1B, advance: FontUnit::from(1846) }, // uni29F8.size1
-            ],
-        });
-        m.insert(0x29F9, GlyphVariants { // uni29F9
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x29F9, advance: FontUnit::from(1021) }, // uni29F9
-                ReplacementGlyph { unicode: 0xEA1C, advance: FontUnit::from(1846) }, // uni29F9.size1
-            ],
-        });
-        m.insert(0x2A00, GlyphVariants { // uni2A00
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A00, advance: FontUnit::from(1023) }, // uni2A00
-                ReplacementGlyph { unicode: 0xEA1D, advance: FontUnit::from(1452) }, // uni2A00.display
-            ],
-        });
-        m.insert(0x2A01, GlyphVariants { // uni2A01
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A01, advance: FontUnit::from(1023) }, // uni2A01
-                ReplacementGlyph { unicode: 0xEA1E, advance: FontUnit::from(1452) }, // uni2A01.display
-            ],
-        });
-        m.insert(0x2A02, GlyphVariants { // uni2A02
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A02, advance: FontUnit::from(1023) }, // uni2A02
-                ReplacementGlyph { unicode: 0xEA1F, advance: FontUnit::from(1452) }, // uni2A02.display
-            ],
-        });
-        m.insert(0x2A03, GlyphVariants { // uni2A03
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A03, advance: FontUnit::from(1033) }, // uni2A03
-                ReplacementGlyph { unicode: 0xEA20, advance: FontUnit::from(1462) }, // uni2A03.display
-            ],
-        });
-        m.insert(0x2A04, GlyphVariants { // uni2A04
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A04, advance: FontUnit::from(1033) }, // uni2A04
-                ReplacementGlyph { unicode: 0xEA21, advance: FontUnit::from(1462) }, // uni2A04.display
-            ],
-        });
-        m.insert(0x2A05, GlyphVariants { // uni2A05
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A05, advance: FontUnit::from(1023) }, // uni2A05
-                ReplacementGlyph { unicode: 0xEA22, advance: FontUnit::from(1452) }, // uni2A05.display
-            ],
-        });
-        m.insert(0x2A06, GlyphVariants { // uni2A06
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A06, advance: FontUnit::from(1023) }, // uni2A06
-                ReplacementGlyph { unicode: 0xEA23, advance: FontUnit::from(1452) }, // uni2A06.display
-            ],
-        });
-        m.insert(0x2A07, GlyphVariants { // uni2A07
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A07, advance: FontUnit::from(1023) }, // uni2A07
-                ReplacementGlyph { unicode: 0xEA24, advance: FontUnit::from(1452) }, // uni2A07.display
-            ],
-        });
-        m.insert(0x2A08, GlyphVariants { // uni2A08
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A08, advance: FontUnit::from(1023) }, // uni2A08
-                ReplacementGlyph { unicode: 0xEA25, advance: FontUnit::from(1452) }, // uni2A08.display
-            ],
-        });
-        m.insert(0x2A09, GlyphVariants { // uni2A09
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A09, advance: FontUnit::from(1023) }, // uni2A09
-                ReplacementGlyph { unicode: 0xEA26, advance: FontUnit::from(1452) }, // uni2A09.display
-            ],
-        });
-        m.insert(0x2A0A, GlyphVariants { // uni2A0A
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0A, advance: FontUnit::from(1023) }, // uni2A0A
-                ReplacementGlyph { unicode: 0xEA27, advance: FontUnit::from(1451) }, // uni2A0A.display
-            ],
-        });
-        m.insert(0x2A0B, GlyphVariants { // uni2A0B
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0B, advance: FontUnit::from(1145) }, // uni2A0B
-                ReplacementGlyph { unicode: 0xEA2A, advance: FontUnit::from(2270) }, // uni2A0B.display
-            ],
-        });
-        m.insert(0x2A0C, GlyphVariants { // uni2A0C
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0C, advance: FontUnit::from(1145) }, // uni2A0C
-                ReplacementGlyph { unicode: 0xEA30, advance: FontUnit::from(2270) }, // uni2A0C.display
-            ],
-        });
-        m.insert(0x2A0D, GlyphVariants { // uni2A0D
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0D, advance: FontUnit::from(1145) }, // uni2A0D
-                ReplacementGlyph { unicode: 0xEA36, advance: FontUnit::from(2270) }, // uni2A0D.display
-            ],
-        });
-        m.insert(0x2A0E, GlyphVariants { // uni2A0E
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0E, advance: FontUnit::from(1145) }, // uni2A0E
-                ReplacementGlyph { unicode: 0xEA3C, advance: FontUnit::from(2270) }, // uni2A0E.display
-            ],
-        });
-        m.insert(0x2A0F, GlyphVariants { // uni2A0F
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A0F, advance: FontUnit::from(1145) }, // uni2A0F
-                ReplacementGlyph { unicode: 0xEA42, advance: FontUnit::from(2270) }, // uni2A0F.display
-            ],
-        });
-        m.insert(0x2A10, GlyphVariants { // uni2A10
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A10, advance: FontUnit::from(1145) }, // uni2A10
-                ReplacementGlyph { unicode: 0xEA48, advance: FontUnit::from(2270) }, // uni2A10.display
-            ],
-        });
-        m.insert(0x2A11, GlyphVariants { // uni2A11
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A11, advance: FontUnit::from(1145) }, // uni2A11
-                ReplacementGlyph { unicode: 0xEA4E, advance: FontUnit::from(2270) }, // uni2A11.display
-            ],
-        });
-        m.insert(0x2A12, GlyphVariants { // uni2A12
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A12, advance: FontUnit::from(1145) }, // uni2A12
-                ReplacementGlyph { unicode: 0xEA54, advance: FontUnit::from(2270) }, // uni2A12.display
-            ],
-        });
-        m.insert(0x2A13, GlyphVariants { // uni2A13
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A13, advance: FontUnit::from(1145) }, // uni2A13
-                ReplacementGlyph { unicode: 0xEA5A, advance: FontUnit::from(2270) }, // uni2A13.display
-            ],
-        });
-        m.insert(0x2A14, GlyphVariants { // uni2A14
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A14, advance: FontUnit::from(1145) }, // uni2A14
-                ReplacementGlyph { unicode: 0xEA60, advance: FontUnit::from(2270) }, // uni2A14.display
-            ],
-        });
-        m.insert(0x2A15, GlyphVariants { // uni2A15
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A15, advance: FontUnit::from(1145) }, // uni2A15
-                ReplacementGlyph { unicode: 0xEA66, advance: FontUnit::from(2270) }, // uni2A15.display
-            ],
-        });
-        m.insert(0x2A16, GlyphVariants { // uni2A16
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A16, advance: FontUnit::from(1145) }, // uni2A16
-                ReplacementGlyph { unicode: 0xEA6C, advance: FontUnit::from(2270) }, // uni2A16.display
-            ],
-        });
-        m.insert(0x2A17, GlyphVariants { // uni2A17
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A17, advance: FontUnit::from(1145) }, // uni2A17
-                ReplacementGlyph { unicode: 0xEA72, advance: FontUnit::from(2270) }, // uni2A17.display
-            ],
-        });
-        m.insert(0x2A18, GlyphVariants { // uni2A18
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A18, advance: FontUnit::from(1145) }, // uni2A18
-                ReplacementGlyph { unicode: 0xEA78, advance: FontUnit::from(2270) }, // uni2A18.display
-            ],
-        });
-        m.insert(0x2A19, GlyphVariants { // uni2A19
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A19, advance: FontUnit::from(1145) }, // uni2A19
-                ReplacementGlyph { unicode: 0xEA7E, advance: FontUnit::from(2270) }, // uni2A19.display
-            ],
-        });
-        m.insert(0x2A1A, GlyphVariants { // uni2A1A
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A1A, advance: FontUnit::from(1145) }, // uni2A1A
-                ReplacementGlyph { unicode: 0xEA84, advance: FontUnit::from(2270) }, // uni2A1A.display
-            ],
-        });
-        m.insert(0x2A1B, GlyphVariants { // uni2A1B
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A1B, advance: FontUnit::from(1268) }, // uni2A1B
-                ReplacementGlyph { unicode: 0xEA8A, advance: FontUnit::from(2427) }, // uni2A1B.display
-            ],
-        });
-        m.insert(0x2A1C, GlyphVariants { // uni2A1C
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2A1C, advance: FontUnit::from(1268) }, // uni2A1C
-                ReplacementGlyph { unicode: 0xEA90, advance: FontUnit::from(2427) }, // uni2A1C.display
-            ],
-        });
-        m.insert(0x2AF4, GlyphVariants { // uni2AF4
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: FontUnit::from(295),
-                        end_connector_length:   FontUnit::from(295),
-                        full_advance:           FontUnit::from(884),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0x2AF4, // uni2AF4
-                        start_connector_length: FontUnit::from(295),
-                        end_connector_length:   FontUnit::from(295),
-                        full_advance:           FontUnit::from(884),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2AFC, GlyphVariants { // uni2AFC
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2AFC, advance: FontUnit::from(1231) }, // uni2AFC
-                ReplacementGlyph { unicode: 0xEAA5, advance: FontUnit::from(1876) }, // uni2AFC.display
-            ],
-        });
-        m.insert(0x2AFF, GlyphVariants { // uni2AFF
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x2AFF, advance: FontUnit::from(1231) }, // uni2AFF
-                ReplacementGlyph { unicode: 0xEAA6, advance: FontUnit::from(1876) }, // uni2AFF.display
-            ],
-        });
-        m.insert(0xE928, GlyphVariants { // uni222B.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE928, advance: FontUnit::from(1145) }, // uni222B.up
-                ReplacementGlyph { unicode: 0xE929, advance: FontUnit::from(2270) }, // uni222B.up.display
-            ],
-        });
-        m.insert(0xE92E, GlyphVariants { // uni222C.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE92E, advance: FontUnit::from(1145) }, // uni222C.up
-                ReplacementGlyph { unicode: 0xE92F, advance: FontUnit::from(2270) }, // uni222C.up.display
-            ],
-        });
-        m.insert(0xE934, GlyphVariants { // uni222D.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE934, advance: FontUnit::from(1145) }, // uni222D.up
-                ReplacementGlyph { unicode: 0xE935, advance: FontUnit::from(2270) }, // uni222D.up.display
-            ],
-        });
-        m.insert(0xE93A, GlyphVariants { // uni222E.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE93A, advance: FontUnit::from(1145) }, // uni222E.up
-                ReplacementGlyph { unicode: 0xE93B, advance: FontUnit::from(2270) }, // uni222E.up.display
-            ],
-        });
-        m.insert(0xE940, GlyphVariants { // uni222F.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE940, advance: FontUnit::from(1145) }, // uni222F.up
-                ReplacementGlyph { unicode: 0xE941, advance: FontUnit::from(2270) }, // uni222F.up.display
-            ],
-        });
-        m.insert(0xE946, GlyphVariants { // uni2230.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE946, advance: FontUnit::from(1145) }, // uni2230.up
-                ReplacementGlyph { unicode: 0xE947, advance: FontUnit::from(2270) }, // uni2230.up.display
-            ],
-        });
-        m.insert(0xE94C, GlyphVariants { // uni2231.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE94C, advance: FontUnit::from(1145) }, // uni2231.up
-                ReplacementGlyph { unicode: 0xE94D, advance: FontUnit::from(2270) }, // uni2231.up.display
-            ],
-        });
-        m.insert(0xE952, GlyphVariants { // uni2232.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE952, advance: FontUnit::from(1145) }, // uni2232.up
-                ReplacementGlyph { unicode: 0xE953, advance: FontUnit::from(2270) }, // uni2232.up.display
-            ],
-        });
-        m.insert(0xE958, GlyphVariants { // uni2233.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE958, advance: FontUnit::from(1145) }, // uni2233.up
-                ReplacementGlyph { unicode: 0xE959, advance: FontUnit::from(2270) }, // uni2233.up.display
-            ],
-        });
-        m.insert(0xEA2E, GlyphVariants { // uni2A0B.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA2E, advance: FontUnit::from(1145) }, // uni2A0B.up
-                ReplacementGlyph { unicode: 0xEA2F, advance: FontUnit::from(2270) }, // uni2A0B.up.display
-            ],
-        });
-        m.insert(0xEA34, GlyphVariants { // uni2A0C.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA34, advance: FontUnit::from(1145) }, // uni2A0C.up
-                ReplacementGlyph { unicode: 0xEA35, advance: FontUnit::from(2270) }, // uni2A0C.up.display
-            ],
-        });
-        m.insert(0xEA3A, GlyphVariants { // uni2A0D.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA3A, advance: FontUnit::from(1145) }, // uni2A0D.up
-                ReplacementGlyph { unicode: 0xEA3B, advance: FontUnit::from(2270) }, // uni2A0D.up.display
-            ],
-        });
-        m.insert(0xEA40, GlyphVariants { // uni2A0E.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA40, advance: FontUnit::from(1145) }, // uni2A0E.up
-                ReplacementGlyph { unicode: 0xEA41, advance: FontUnit::from(2270) }, // uni2A0E.up.display
-            ],
-        });
-        m.insert(0xEA46, GlyphVariants { // uni2A0F.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA46, advance: FontUnit::from(1145) }, // uni2A0F.up
-                ReplacementGlyph { unicode: 0xEA47, advance: FontUnit::from(2270) }, // uni2A0F.up.display
-            ],
-        });
-        m.insert(0xEA4C, GlyphVariants { // uni2A10.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA4C, advance: FontUnit::from(1145) }, // uni2A10.up
-                ReplacementGlyph { unicode: 0xEA4D, advance: FontUnit::from(2270) }, // uni2A10.up.display
-            ],
-        });
-        m.insert(0xEA52, GlyphVariants { // uni2A11.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA52, advance: FontUnit::from(1145) }, // uni2A11.up
-                ReplacementGlyph { unicode: 0xEA53, advance: FontUnit::from(2270) }, // uni2A11.up.display
-            ],
-        });
-        m.insert(0xEA58, GlyphVariants { // uni2A12.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA58, advance: FontUnit::from(1145) }, // uni2A12.up
-                ReplacementGlyph { unicode: 0xEA59, advance: FontUnit::from(2270) }, // uni2A12.up.display
-            ],
-        });
-        m.insert(0xEA5E, GlyphVariants { // uni2A13.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA5E, advance: FontUnit::from(1145) }, // uni2A13.up
-                ReplacementGlyph { unicode: 0xEA5F, advance: FontUnit::from(2270) }, // uni2A13.up.display
-            ],
-        });
-        m.insert(0xEA64, GlyphVariants { // uni2A14.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA64, advance: FontUnit::from(1145) }, // uni2A14.up
-                ReplacementGlyph { unicode: 0xEA65, advance: FontUnit::from(2270) }, // uni2A14.up.display
-            ],
-        });
-        m.insert(0xEA6A, GlyphVariants { // uni2A15.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA6A, advance: FontUnit::from(1145) }, // uni2A15.up
-                ReplacementGlyph { unicode: 0xEA6B, advance: FontUnit::from(2270) }, // uni2A15.up.display
-            ],
-        });
-        m.insert(0xEA70, GlyphVariants { // uni2A16.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA70, advance: FontUnit::from(1145) }, // uni2A16.up
-                ReplacementGlyph { unicode: 0xEA71, advance: FontUnit::from(2270) }, // uni2A16.up.display
-            ],
-        });
-        m.insert(0xEA76, GlyphVariants { // uni2A17.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA76, advance: FontUnit::from(1145) }, // uni2A17.up
-                ReplacementGlyph { unicode: 0xEA77, advance: FontUnit::from(2270) }, // uni2A17.up.display
-            ],
-        });
-        m.insert(0xEA7C, GlyphVariants { // uni2A18.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA7C, advance: FontUnit::from(1145) }, // uni2A18.up
-                ReplacementGlyph { unicode: 0xEA7D, advance: FontUnit::from(2270) }, // uni2A18.up.display
-            ],
-        });
-        m.insert(0xEA82, GlyphVariants { // uni2A19.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA82, advance: FontUnit::from(1145) }, // uni2A19.up
-                ReplacementGlyph { unicode: 0xEA83, advance: FontUnit::from(2270) }, // uni2A19.up.display
-            ],
-        });
-        m.insert(0xEA88, GlyphVariants { // uni2A1A.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA88, advance: FontUnit::from(1145) }, // uni2A1A.up
-                ReplacementGlyph { unicode: 0xEA89, advance: FontUnit::from(2270) }, // uni2A1A.up.display
-            ],
-        });
-        m.insert(0xEA8E, GlyphVariants { // uni2A1B.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA8E, advance: FontUnit::from(1268) }, // uni2A1B.up
-                ReplacementGlyph { unicode: 0xEA8F, advance: FontUnit::from(2427) }, // uni2A1B.up.display
-            ],
-        });
-        m.insert(0xEA94, GlyphVariants { // uni2A1C.up
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA94, advance: FontUnit::from(1268) }, // uni2A1C.up
-                ReplacementGlyph { unicode: 0xEA95, advance: FontUnit::from(2427) }, // uni2A1C.up.display
-            ],
-        });
-        m.insert(0xE925, GlyphVariants { // uni222B.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE926, advance: FontUnit::from(2270) }, // uni222B.rtlm.display
-            ],
-        });
-        m.insert(0xE92B, GlyphVariants { // uni222C.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE92C, advance: FontUnit::from(2270) }, // uni222C.rtlm.display
-            ],
-        });
-        m.insert(0xE931, GlyphVariants { // uni222D.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE932, advance: FontUnit::from(2270) }, // uni222D.rtlm.display
-            ],
-        });
-        m.insert(0xE937, GlyphVariants { // uni222E.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE938, advance: FontUnit::from(2270) }, // uni222E.rtlm.display
-            ],
-        });
-        m.insert(0xE93D, GlyphVariants { // uni222F.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE93E, advance: FontUnit::from(2270) }, // uni222F.rtlm.display
-            ],
-        });
-        m.insert(0xE943, GlyphVariants { // uni2230.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE944, advance: FontUnit::from(2270) }, // uni2230.rtlm.display
-            ],
-        });
-        m.insert(0xE949, GlyphVariants { // uni2231.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE94A, advance: FontUnit::from(2270) }, // uni2231.rtlm.display
-            ],
-        });
-        m.insert(0xE94F, GlyphVariants { // uni2232.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE950, advance: FontUnit::from(2270) }, // uni2232.rtlm.display
-            ],
-        });
-        m.insert(0xE955, GlyphVariants { // uni2233.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE956, advance: FontUnit::from(2270) }, // uni2233.rtlm.display
-            ],
-        });
-        m.insert(0xEA2B, GlyphVariants { // uni2A0B.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA2C, advance: FontUnit::from(2270) }, // uni2A0B.rtlm.display
-            ],
-        });
-        m.insert(0xEA31, GlyphVariants { // uni2A0C.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA32, advance: FontUnit::from(2270) }, // uni2A0C.rtlm.display
-            ],
-        });
-        m.insert(0xEA37, GlyphVariants { // uni2A0D.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA38, advance: FontUnit::from(2270) }, // uni2A0D.rtlm.display
-            ],
-        });
-        m.insert(0xEA3D, GlyphVariants { // uni2A0E.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA3E, advance: FontUnit::from(2270) }, // uni2A0E.rtlm.display
-            ],
-        });
-        m.insert(0xEA43, GlyphVariants { // uni2A0F.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA44, advance: FontUnit::from(2270) }, // uni2A0F.rtlm.display
-            ],
-        });
-        m.insert(0xEA49, GlyphVariants { // uni2A10.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA4A, advance: FontUnit::from(2270) }, // uni2A10.rtlm.display
-            ],
-        });
-        m.insert(0xEA4F, GlyphVariants { // uni2A11.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA50, advance: FontUnit::from(2270) }, // uni2A11.rtlm.display
-            ],
-        });
-        m.insert(0xEA55, GlyphVariants { // uni2A12.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA56, advance: FontUnit::from(2270) }, // uni2A12.rtlm.display
-            ],
-        });
-        m.insert(0xEA5B, GlyphVariants { // uni2A13.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA5C, advance: FontUnit::from(2270) }, // uni2A13.rtlm.display
-            ],
-        });
-        m.insert(0xEA61, GlyphVariants { // uni2A14.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA62, advance: FontUnit::from(2270) }, // uni2A14.rtlm.display
-            ],
-        });
-        m.insert(0xEA67, GlyphVariants { // uni2A15.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA68, advance: FontUnit::from(2270) }, // uni2A15.rtlm.display
-            ],
-        });
-        m.insert(0xEA6D, GlyphVariants { // uni2A16.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA6E, advance: FontUnit::from(2270) }, // uni2A16.rtlm.display
-            ],
-        });
-        m.insert(0xEA73, GlyphVariants { // uni2A17.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA74, advance: FontUnit::from(2270) }, // uni2A17.rtlm.display
-            ],
-        });
-        m.insert(0xEA79, GlyphVariants { // uni2A18.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA7A, advance: FontUnit::from(2270) }, // uni2A18.rtlm.display
-            ],
-        });
-        m.insert(0xEA7F, GlyphVariants { // uni2A19.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA80, advance: FontUnit::from(2270) }, // uni2A19.rtlm.display
-            ],
-        });
-        m.insert(0xEA85, GlyphVariants { // uni2A1A.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA86, advance: FontUnit::from(2270) }, // uni2A1A.rtlm.display
-            ],
-        });
-        m.insert(0xEA8B, GlyphVariants { // uni2A1B.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA8C, advance: FontUnit::from(2427) }, // uni2A1B.rtlm.display
-            ],
-        });
-        m.insert(0xEA91, GlyphVariants { // uni2A1C.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA92, advance: FontUnit::from(2427) }, // uni2A1C.rtlm.display
-            ],
-        });
-        m.insert(0xE902, GlyphVariants { // uni221A.rtlm
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE903, // uni221A.rtlm.bot
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(600),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE904, // uni221A.rtlm.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE908, // uni221A.rtlm.top
-                        start_connector_length: FontUnit::from(500),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(626),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE905, advance: FontUnit::from(1848) }, // uni221A.rtlm.size1
-                ReplacementGlyph { unicode: 0xE906, advance: FontUnit::from(2461) }, // uni221A.rtlm.size2
-                ReplacementGlyph { unicode: 0xE907, advance: FontUnit::from(3076) }, // uni221A.rtlm.size3
-            ],
-        });
-        m.insert(0xE90E, GlyphVariants { // uni221B.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE90F, advance: FontUnit::from(1848) }, // uni221B.rtlm.size1
-                ReplacementGlyph { unicode: 0xE910, advance: FontUnit::from(2461) }, // uni221B.rtlm.size2
-                ReplacementGlyph { unicode: 0xE911, advance: FontUnit::from(3076) }, // uni221B.rtlm.size3
-            ],
-        });
-        m.insert(0xE916, GlyphVariants { // uni221C.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE917, advance: FontUnit::from(1848) }, // uni221C.rtlm.size1
-                ReplacementGlyph { unicode: 0xE918, advance: FontUnit::from(2461) }, // uni221C.rtlm.size2
-                ReplacementGlyph { unicode: 0xE919, advance: FontUnit::from(3076) }, // uni221C.rtlm.size3
-            ],
-        });
-        m.insert(0xE8ED, GlyphVariants { // uni2140.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE8EE, advance: FontUnit::from(1451) }, // uni2140.rtlm.display
-            ],
-        });
-        m.insert(0xE8FF, GlyphVariants { // uni2211.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xE900, advance: FontUnit::from(1451) }, // uni2211.rtlm.display
-            ],
-        });
-        m.insert(0xEA28, GlyphVariants { // uni2A0A.rtlm
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0xEA29, advance: FontUnit::from(1451) }, // uni2A0A.rtlm.display
-            ],
-        });
+pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
+    Default: GlyphVariants { constructable: None, replacements: &[] },
+    0x28 => GlyphVariants { // parenleft
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x239D, // uni239D
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(150),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x239C, // uni239C
+                    start_connector_length: fontunit!(150),
+                    end_connector_length:   fontunit!(150),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x239B, // uni239B
+                    start_connector_length: fontunit!(150),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x28, advance: fontunit!(854) }, // parenleft
+            ReplacementGlyph { unicode: 0xE718, advance: fontunit!(1231) }, // parenleft.size1
+            ReplacementGlyph { unicode: 0xE719, advance: fontunit!(1846) }, // parenleft.size2
+            ReplacementGlyph { unicode: 0xE71A, advance: fontunit!(2461) }, // parenleft.size3
+            ReplacementGlyph { unicode: 0xE71B, advance: fontunit!(3076) }, // parenleft.size4
+        ],
+    },
+    0x29 => GlyphVariants { // parenright
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A0, // uni23A0
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(150),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x239F, // uni239F
+                    start_connector_length: fontunit!(150),
+                    end_connector_length:   fontunit!(150),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x239E, // uni239E
+                    start_connector_length: fontunit!(150),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x29, advance: fontunit!(854) }, // parenright
+            ReplacementGlyph { unicode: 0xE71C, advance: fontunit!(1231) }, // parenright.size1
+            ReplacementGlyph { unicode: 0xE71D, advance: fontunit!(1846) }, // parenright.size2
+            ReplacementGlyph { unicode: 0xE71E, advance: fontunit!(2461) }, // parenright.size3
+            ReplacementGlyph { unicode: 0xE71F, advance: fontunit!(3076) }, // parenright.size4
+        ],
+    },
+    0x2F => GlyphVariants { // slash
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2F, advance: fontunit!(691) }, // slash
+            ReplacementGlyph { unicode: 0xE720, advance: fontunit!(1231) }, // slash.size1
+            ReplacementGlyph { unicode: 0xE721, advance: fontunit!(1846) }, // slash.size2
+            ReplacementGlyph { unicode: 0xE722, advance: fontunit!(2461) }, // slash.size3
+            ReplacementGlyph { unicode: 0xE723, advance: fontunit!(3076) }, // slash.size4
+        ],
+    },
+    0x5B => GlyphVariants { // bracketleft
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A3, // uni23A3
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(950),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23A2, // uni23A2
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A1, // uni23A1
+                    start_connector_length: fontunit!(950),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x5B, advance: fontunit!(819) }, // bracketleft
+            ReplacementGlyph { unicode: 0xE710, advance: fontunit!(1231) }, // bracketleft.size1
+            ReplacementGlyph { unicode: 0xE711, advance: fontunit!(1846) }, // bracketleft.size2
+            ReplacementGlyph { unicode: 0xE712, advance: fontunit!(2461) }, // bracketleft.size3
+            ReplacementGlyph { unicode: 0xE713, advance: fontunit!(3076) }, // bracketleft.size4
+        ],
+    },
+    0x5C => GlyphVariants { // backslash
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x5C, advance: fontunit!(691) }, // backslash
+            ReplacementGlyph { unicode: 0xE700, advance: fontunit!(1231) }, // backslash.size1
+            ReplacementGlyph { unicode: 0xE701, advance: fontunit!(1846) }, // backslash.size2
+            ReplacementGlyph { unicode: 0xE702, advance: fontunit!(2461) }, // backslash.size3
+            ReplacementGlyph { unicode: 0xE703, advance: fontunit!(3076) }, // backslash.size4
+        ],
+    },
+    0x5D => GlyphVariants { // bracketright
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A6, // uni23A6
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(950),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23A5, // uni23A5
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A4, // uni23A4
+                    start_connector_length: fontunit!(950),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x5D, advance: fontunit!(819) }, // bracketright
+            ReplacementGlyph { unicode: 0xE714, advance: fontunit!(1231) }, // bracketright.size1
+            ReplacementGlyph { unicode: 0xE715, advance: fontunit!(1846) }, // bracketright.size2
+            ReplacementGlyph { unicode: 0xE716, advance: fontunit!(2461) }, // bracketright.size3
+            ReplacementGlyph { unicode: 0xE717, advance: fontunit!(3076) }, // bracketright.size4
+        ],
+    },
+    0x7B => GlyphVariants { // braceleft
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A9, // uni23A9
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A8, // uni23A8
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(1010),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A7, // uni23A7
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x7B, advance: fontunit!(862) }, // braceleft
+            ReplacementGlyph { unicode: 0xE708, advance: fontunit!(1231) }, // braceleft.size1
+            ReplacementGlyph { unicode: 0xE709, advance: fontunit!(1846) }, // braceleft.size2
+            ReplacementGlyph { unicode: 0xE70A, advance: fontunit!(2461) }, // braceleft.size3
+            ReplacementGlyph { unicode: 0xE70B, advance: fontunit!(3076) }, // braceleft.size4
+        ],
+    },
+    0x7C => GlyphVariants { // bar
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x7C, // bar
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(879),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x7C, // bar
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(879),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x7C, advance: fontunit!(880) }, // bar
+            ReplacementGlyph { unicode: 0xE704, advance: fontunit!(1231) }, // bar.size1
+            ReplacementGlyph { unicode: 0xE705, advance: fontunit!(1846) }, // bar.size2
+            ReplacementGlyph { unicode: 0xE706, advance: fontunit!(2461) }, // bar.size3
+            ReplacementGlyph { unicode: 0xE707, advance: fontunit!(3076) }, // bar.size4
+        ],
+    },
+    0x7D => GlyphVariants { // braceright
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23AD, // uni23AD
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23AC, // uni23AC
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(1010),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23AB, // uni23AB
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x7D, advance: fontunit!(862) }, // braceright
+            ReplacementGlyph { unicode: 0xE70C, advance: fontunit!(1231) }, // braceright.size1
+            ReplacementGlyph { unicode: 0xE70D, advance: fontunit!(1846) }, // braceright.size2
+            ReplacementGlyph { unicode: 0xE70E, advance: fontunit!(2461) }, // braceright.size3
+            ReplacementGlyph { unicode: 0xE70F, advance: fontunit!(3076) }, // braceright.size4
+        ],
+    },
+    0x338 => GlyphVariants { // uni0338
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x338, advance: fontunit!(819) }, // uni0338
+            ReplacementGlyph { unicode: 0xE869, advance: fontunit!(862) }, // uni0338.size1
+            ReplacementGlyph { unicode: 0xE86A, advance: fontunit!(959) }, // uni0338.size2
+            ReplacementGlyph { unicode: 0xE86B, advance: fontunit!(1059) }, // uni0338.size3
+            ReplacementGlyph { unicode: 0xE86C, advance: fontunit!(1158) }, // uni0338.size4
+            ReplacementGlyph { unicode: 0xE86D, advance: fontunit!(1361) }, // uni0338.size5
+            ReplacementGlyph { unicode: 0xE86E, advance: fontunit!(1847) }, // uni0338.size6
+        ],
+    },
+    0x606 => GlyphVariants { // uni0606
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x606, advance: fontunit!(1233) }, // uni0606
+            ReplacementGlyph { unicode: 0xE8A6, advance: fontunit!(1848) }, // uni0606.size1
+            ReplacementGlyph { unicode: 0xE8A7, advance: fontunit!(2461) }, // uni0606.size2
+            ReplacementGlyph { unicode: 0xE8A8, advance: fontunit!(3076) }, // uni0606.size3
+        ],
+    },
+    0x607 => GlyphVariants { // uni0607
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x607, advance: fontunit!(1233) }, // uni0607
+            ReplacementGlyph { unicode: 0xE8A9, advance: fontunit!(1848) }, // uni0607.size1
+            ReplacementGlyph { unicode: 0xE8AA, advance: fontunit!(2461) }, // uni0607.size2
+            ReplacementGlyph { unicode: 0xE8AB, advance: fontunit!(3076) }, // uni0607.size3
+        ],
+    },
+    0x2016 => GlyphVariants { // uni2016
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2016, // uni2016
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(879),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x2016, // uni2016
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(879),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2016, advance: fontunit!(880) }, // uni2016
+            ReplacementGlyph { unicode: 0xE8AC, advance: fontunit!(1231) }, // uni2016.size1
+            ReplacementGlyph { unicode: 0xE8AD, advance: fontunit!(1846) }, // uni2016.size2
+            ReplacementGlyph { unicode: 0xE8AE, advance: fontunit!(2461) }, // uni2016.size3
+            ReplacementGlyph { unicode: 0xE8AF, advance: fontunit!(3076) }, // uni2016.size4
+        ],
+    },
+    0x2044 => GlyphVariants { // fraction
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2044, advance: fontunit!(691) }, // fraction
+            ReplacementGlyph { unicode: 0xE720, advance: fontunit!(1231) }, // slash.size1
+            ReplacementGlyph { unicode: 0xE721, advance: fontunit!(1846) }, // slash.size2
+            ReplacementGlyph { unicode: 0xE722, advance: fontunit!(2461) }, // slash.size3
+            ReplacementGlyph { unicode: 0xE723, advance: fontunit!(3076) }, // slash.size4
+        ],
+    },
+    0x20D2 => GlyphVariants { // uni20D2
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20D2, advance: fontunit!(819) }, // uni20D2
+            ReplacementGlyph { unicode: 0xE8C3, advance: fontunit!(861) }, // uni20D2.size1
+            ReplacementGlyph { unicode: 0xE8C4, advance: fontunit!(961) }, // uni20D2.size2
+            ReplacementGlyph { unicode: 0xE8C5, advance: fontunit!(1061) }, // uni20D2.size3
+            ReplacementGlyph { unicode: 0xE8C6, advance: fontunit!(1161) }, // uni20D2.size4
+            ReplacementGlyph { unicode: 0xE8C7, advance: fontunit!(1361) }, // uni20D2.size5
+            ReplacementGlyph { unicode: 0xE8C8, advance: fontunit!(1846) }, // uni20D2.size6
+        ],
+    },
+    0x2140 => GlyphVariants { // uni2140
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2140, advance: fontunit!(1023) }, // uni2140
+            ReplacementGlyph { unicode: 0xE8EC, advance: fontunit!(1451) }, // uni2140.display
+        ],
+    },
+    0x2191 => GlyphVariants { // uni2191
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2191, // uni2191
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x2193 => GlyphVariants { // uni2193
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2193, // uni2193
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x2195 => GlyphVariants { // uni2195
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2193, // uni2193
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2191, // uni2191
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21BE => GlyphVariants { // uni21BE
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21BE, // uni21BE
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21BF => GlyphVariants { // uni21BF
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21BF, // uni21BF
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21C2 => GlyphVariants { // uni21C2
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21C2, // uni21C2
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21C3 => GlyphVariants { // uni21C3
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21C3, // uni21C3
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23D0, // uni23D0
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D1 => GlyphVariants { // uni21D1
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8F3, // uni21D1.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21D1, // uni21D1
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D3 => GlyphVariants { // uni21D3
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21D3, // uni21D3
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F3, // uni21D1.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D5 => GlyphVariants { // uni21D5
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21D3, // uni21D3
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F3, // uni21D1.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21D1, // uni21D1
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x220F => GlyphVariants { // uni220F
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x220F, advance: fontunit!(1023) }, // uni220F
+            ReplacementGlyph { unicode: 0xE8FC, advance: fontunit!(1452) }, // uni220F.display
+        ],
+    },
+    0x2210 => GlyphVariants { // uni2210
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2210, advance: fontunit!(1023) }, // uni2210
+            ReplacementGlyph { unicode: 0xE8FD, advance: fontunit!(1452) }, // uni2210.display
+        ],
+    },
+    0x2211 => GlyphVariants { // uni2211
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2211, advance: fontunit!(1023) }, // uni2211
+            ReplacementGlyph { unicode: 0xE8FE, advance: fontunit!(1451) }, // uni2211.display
+        ],
+    },
+    0x221A => GlyphVariants { // uni221A
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23B7, // uni23B7
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE901, // uni221A.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE90C, // uni221A.top
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(626),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x221A, advance: fontunit!(1233) }, // uni221A
+            ReplacementGlyph { unicode: 0xE909, advance: fontunit!(1848) }, // uni221A.size1
+            ReplacementGlyph { unicode: 0xE90A, advance: fontunit!(2461) }, // uni221A.size2
+            ReplacementGlyph { unicode: 0xE90B, advance: fontunit!(3076) }, // uni221A.size3
+        ],
+    },
+    0x221B => GlyphVariants { // uni221B
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE90D, // uni221B.base
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE901, // uni221A.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE90C, // uni221A.top
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(626),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x221B, advance: fontunit!(1233) }, // uni221B
+            ReplacementGlyph { unicode: 0xE912, advance: fontunit!(1848) }, // uni221B.size1
+            ReplacementGlyph { unicode: 0xE913, advance: fontunit!(2461) }, // uni221B.size2
+            ReplacementGlyph { unicode: 0xE914, advance: fontunit!(3076) }, // uni221B.size3
+        ],
+    },
+    0x221C => GlyphVariants { // uni221C
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE915, // uni221C.base
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE901, // uni221A.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE90C, // uni221A.top
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(626),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x221C, advance: fontunit!(1233) }, // uni221C
+            ReplacementGlyph { unicode: 0xE91A, advance: fontunit!(1848) }, // uni221C.size1
+            ReplacementGlyph { unicode: 0xE91B, advance: fontunit!(2461) }, // uni221C.size2
+            ReplacementGlyph { unicode: 0xE91C, advance: fontunit!(3076) }, // uni221C.size3
+        ],
+    },
+    0x2223 => GlyphVariants { // uni2223
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2223, // uni2223
+                    start_connector_length: fontunit!(293),
+                    end_connector_length:   fontunit!(293),
+                    full_advance:           fontunit!(879),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x2223, // uni2223
+                    start_connector_length: fontunit!(293),
+                    end_connector_length:   fontunit!(293),
+                    full_advance:           fontunit!(879),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x2225 => GlyphVariants { // uni2225
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2225, // uni2225
+                    start_connector_length: fontunit!(293),
+                    end_connector_length:   fontunit!(293),
+                    full_advance:           fontunit!(879),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x2225, // uni2225
+                    start_connector_length: fontunit!(293),
+                    end_connector_length:   fontunit!(293),
+                    full_advance:           fontunit!(879),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x222B => GlyphVariants { // uni222B
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x222B, advance: fontunit!(1145) }, // uni222B
+            ReplacementGlyph { unicode: 0xE924, advance: fontunit!(2270) }, // uni222B.display
+        ],
+    },
+    0x222C => GlyphVariants { // uni222C
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x222C, advance: fontunit!(1145) }, // uni222C
+            ReplacementGlyph { unicode: 0xE92A, advance: fontunit!(2270) }, // uni222C.display
+        ],
+    },
+    0x222D => GlyphVariants { // uni222D
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x222D, advance: fontunit!(1145) }, // uni222D
+            ReplacementGlyph { unicode: 0xE930, advance: fontunit!(2270) }, // uni222D.display
+        ],
+    },
+    0x222E => GlyphVariants { // uni222E
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x222E, advance: fontunit!(1145) }, // uni222E
+            ReplacementGlyph { unicode: 0xE936, advance: fontunit!(2270) }, // uni222E.display
+        ],
+    },
+    0x222F => GlyphVariants { // uni222F
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x222F, advance: fontunit!(1145) }, // uni222F
+            ReplacementGlyph { unicode: 0xE93C, advance: fontunit!(2270) }, // uni222F.display
+        ],
+    },
+    0x2230 => GlyphVariants { // uni2230
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2230, advance: fontunit!(1145) }, // uni2230
+            ReplacementGlyph { unicode: 0xE942, advance: fontunit!(2270) }, // uni2230.display
+        ],
+    },
+    0x2231 => GlyphVariants { // uni2231
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2231, advance: fontunit!(1145) }, // uni2231
+            ReplacementGlyph { unicode: 0xE948, advance: fontunit!(2270) }, // uni2231.display
+        ],
+    },
+    0x2232 => GlyphVariants { // uni2232
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2232, advance: fontunit!(1145) }, // uni2232
+            ReplacementGlyph { unicode: 0xE94E, advance: fontunit!(2270) }, // uni2232.display
+        ],
+    },
+    0x2233 => GlyphVariants { // uni2233
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2233, advance: fontunit!(1145) }, // uni2233
+            ReplacementGlyph { unicode: 0xE954, advance: fontunit!(2270) }, // uni2233.display
+        ],
+    },
+    0x22C0 => GlyphVariants { // uni22C0
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x22C0, advance: fontunit!(1023) }, // uni22C0
+            ReplacementGlyph { unicode: 0xE985, advance: fontunit!(1452) }, // uni22C0.display
+        ],
+    },
+    0x22C1 => GlyphVariants { // uni22C1
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x22C1, advance: fontunit!(1023) }, // uni22C1
+            ReplacementGlyph { unicode: 0xE986, advance: fontunit!(1452) }, // uni22C1.display
+        ],
+    },
+    0x22C2 => GlyphVariants { // uni22C2
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x22C2, advance: fontunit!(1033) }, // uni22C2
+            ReplacementGlyph { unicode: 0xE987, advance: fontunit!(1462) }, // uni22C2.display
+        ],
+    },
+    0x22C3 => GlyphVariants { // uni22C3
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x22C3, advance: fontunit!(1033) }, // uni22C3
+            ReplacementGlyph { unicode: 0xE988, advance: fontunit!(1462) }, // uni22C3.display
+        ],
+    },
+    0x2308 => GlyphVariants { // uni2308
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A2, // uni23A2
+                    start_connector_length: fontunit!(337),
+                    end_connector_length:   fontunit!(337),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A1, // uni23A1
+                    start_connector_length: fontunit!(335),
+                    end_connector_length:   fontunit!(335),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2308, advance: fontunit!(927) }, // uni2308
+            ReplacementGlyph { unicode: 0xE993, advance: fontunit!(1231) }, // uni2308.size1
+            ReplacementGlyph { unicode: 0xE994, advance: fontunit!(1846) }, // uni2308.size2
+            ReplacementGlyph { unicode: 0xE995, advance: fontunit!(2461) }, // uni2308.size3
+            ReplacementGlyph { unicode: 0xE996, advance: fontunit!(3076) }, // uni2308.size4
+        ],
+    },
+    0x2309 => GlyphVariants { // uni2309
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A5, // uni23A5
+                    start_connector_length: fontunit!(337),
+                    end_connector_length:   fontunit!(337),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A4, // uni23A4
+                    start_connector_length: fontunit!(335),
+                    end_connector_length:   fontunit!(335),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2309, advance: fontunit!(927) }, // uni2309
+            ReplacementGlyph { unicode: 0xE997, advance: fontunit!(1231) }, // uni2309.size1
+            ReplacementGlyph { unicode: 0xE998, advance: fontunit!(1846) }, // uni2309.size2
+            ReplacementGlyph { unicode: 0xE999, advance: fontunit!(2461) }, // uni2309.size3
+            ReplacementGlyph { unicode: 0xE99A, advance: fontunit!(3076) }, // uni2309.size4
+        ],
+    },
+    0x230A => GlyphVariants { // uni230A
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A3, // uni23A3
+                    start_connector_length: fontunit!(335),
+                    end_connector_length:   fontunit!(335),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23A2, // uni23A2
+                    start_connector_length: fontunit!(337),
+                    end_connector_length:   fontunit!(337),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x230A, advance: fontunit!(927) }, // uni230A
+            ReplacementGlyph { unicode: 0xE99B, advance: fontunit!(1231) }, // uni230A.size1
+            ReplacementGlyph { unicode: 0xE99C, advance: fontunit!(1846) }, // uni230A.size2
+            ReplacementGlyph { unicode: 0xE99D, advance: fontunit!(2461) }, // uni230A.size3
+            ReplacementGlyph { unicode: 0xE99E, advance: fontunit!(3076) }, // uni230A.size4
+        ],
+    },
+    0x230B => GlyphVariants { // uni230B
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A6, // uni23A6
+                    start_connector_length: fontunit!(335),
+                    end_connector_length:   fontunit!(335),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23A5, // uni23A5
+                    start_connector_length: fontunit!(337),
+                    end_connector_length:   fontunit!(337),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x230B, advance: fontunit!(927) }, // uni230B
+            ReplacementGlyph { unicode: 0xE99F, advance: fontunit!(1231) }, // uni230B.size1
+            ReplacementGlyph { unicode: 0xE9A0, advance: fontunit!(1846) }, // uni230B.size2
+            ReplacementGlyph { unicode: 0xE9A1, advance: fontunit!(2461) }, // uni230B.size3
+            ReplacementGlyph { unicode: 0xE9A2, advance: fontunit!(3076) }, // uni230B.size4
+        ],
+    },
+    0x23B0 => GlyphVariants { // uni23B0
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23AD, // uni23AD
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23A7, // uni23A7
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23B0, advance: fontunit!(1002) }, // uni23B0
+        ],
+    },
+    0x23B1 => GlyphVariants { // uni23B1
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A9, // uni23A9
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x23AA, // uni23AA
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x23AB, // uni23AB
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23B1, advance: fontunit!(1002) }, // uni23B1
+        ],
+    },
+    0x2772 => GlyphVariants { // uni2772
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2772, advance: fontunit!(933) }, // uni2772
+            ReplacementGlyph { unicode: 0xE9E1, advance: fontunit!(1231) }, // uni2772.size1
+            ReplacementGlyph { unicode: 0xE9E2, advance: fontunit!(1846) }, // uni2772.size2
+            ReplacementGlyph { unicode: 0xE9E3, advance: fontunit!(2460) }, // uni2772.size3
+            ReplacementGlyph { unicode: 0xE9E4, advance: fontunit!(3076) }, // uni2772.size4
+        ],
+    },
+    0x2773 => GlyphVariants { // uni2773
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2773, advance: fontunit!(933) }, // uni2773
+            ReplacementGlyph { unicode: 0xE9E5, advance: fontunit!(1231) }, // uni2773.size1
+            ReplacementGlyph { unicode: 0xE9E6, advance: fontunit!(1846) }, // uni2773.size2
+            ReplacementGlyph { unicode: 0xE9E7, advance: fontunit!(2460) }, // uni2773.size3
+            ReplacementGlyph { unicode: 0xE9E8, advance: fontunit!(3076) }, // uni2773.size4
+        ],
+    },
+    0x27E6 => GlyphVariants { // uni27E6
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27E6, advance: fontunit!(931) }, // uni27E6
+            ReplacementGlyph { unicode: 0xE9EB, advance: fontunit!(1231) }, // uni27E6.size1
+            ReplacementGlyph { unicode: 0xE9EC, advance: fontunit!(1846) }, // uni27E6.size2
+            ReplacementGlyph { unicode: 0xE9ED, advance: fontunit!(2461) }, // uni27E6.size3
+            ReplacementGlyph { unicode: 0xE9EE, advance: fontunit!(3076) }, // uni27E6.size4
+        ],
+    },
+    0x27E7 => GlyphVariants { // uni27E7
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27E7, advance: fontunit!(931) }, // uni27E7
+            ReplacementGlyph { unicode: 0xE9EF, advance: fontunit!(1231) }, // uni27E7.size1
+            ReplacementGlyph { unicode: 0xE9F0, advance: fontunit!(1846) }, // uni27E7.size2
+            ReplacementGlyph { unicode: 0xE9F1, advance: fontunit!(2461) }, // uni27E7.size3
+            ReplacementGlyph { unicode: 0xE9F2, advance: fontunit!(3076) }, // uni27E7.size4
+        ],
+    },
+    0x27E8 => GlyphVariants { // uni27E8
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27E8, advance: fontunit!(927) }, // uni27E8
+            ReplacementGlyph { unicode: 0xE9F3, advance: fontunit!(1231) }, // uni27E8.size1
+            ReplacementGlyph { unicode: 0xE9F4, advance: fontunit!(1846) }, // uni27E8.size2
+            ReplacementGlyph { unicode: 0xE9F5, advance: fontunit!(2461) }, // uni27E8.size3
+            ReplacementGlyph { unicode: 0xE9F6, advance: fontunit!(3076) }, // uni27E8.size4
+        ],
+    },
+    0x27E9 => GlyphVariants { // uni27E9
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27E9, advance: fontunit!(927) }, // uni27E9
+            ReplacementGlyph { unicode: 0xE9F7, advance: fontunit!(1231) }, // uni27E9.size1
+            ReplacementGlyph { unicode: 0xE9F8, advance: fontunit!(1846) }, // uni27E9.size2
+            ReplacementGlyph { unicode: 0xE9F9, advance: fontunit!(2461) }, // uni27E9.size3
+            ReplacementGlyph { unicode: 0xE9FA, advance: fontunit!(3076) }, // uni27E9.size4
+        ],
+    },
+    0x27EA => GlyphVariants { // uni27EA
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27EA, advance: fontunit!(933) }, // uni27EA
+            ReplacementGlyph { unicode: 0xE9FB, advance: fontunit!(1231) }, // uni27EA.size1
+            ReplacementGlyph { unicode: 0xE9FC, advance: fontunit!(1846) }, // uni27EA.size2
+            ReplacementGlyph { unicode: 0xE9FD, advance: fontunit!(2462) }, // uni27EA.size3
+            ReplacementGlyph { unicode: 0xE9FE, advance: fontunit!(3076) }, // uni27EA.size4
+        ],
+    },
+    0x27EB => GlyphVariants { // uni27EB
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27EB, advance: fontunit!(933) }, // uni27EB
+            ReplacementGlyph { unicode: 0xE9FF, advance: fontunit!(1231) }, // uni27EB.size1
+            ReplacementGlyph { unicode: 0xEA00, advance: fontunit!(1846) }, // uni27EB.size2
+            ReplacementGlyph { unicode: 0xEA01, advance: fontunit!(2462) }, // uni27EB.size3
+            ReplacementGlyph { unicode: 0xEA02, advance: fontunit!(3076) }, // uni27EB.size4
+        ],
+    },
+    0x27EE => GlyphVariants { // uni27EE
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x239D, // uni239D
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x239C, // uni239C
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x239B, // uni239B
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27EE, advance: fontunit!(854) }, // uni27EE
+        ],
+    },
+    0x27EF => GlyphVariants { // uni27EF
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x23A0, // uni23A0
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x239F, // uni239F
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(90),
+                    full_advance:           fontunit!(1010),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x239E, // uni239E
+                    start_connector_length: fontunit!(90),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1005),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x27EF, advance: fontunit!(854) }, // uni27EF
+        ],
+    },
+    0x27F0 => GlyphVariants { // uni27F0
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xEA03, // uni27F0.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x27F0, // uni27F0
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x27F1 => GlyphVariants { // uni27F1
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x27F1, // uni27F1
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xEA03, // uni27F0.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x290A => GlyphVariants { // uni290A
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xEA04, // uni290A.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x290A, // uni290A
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x290B => GlyphVariants { // uni290B
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x290B, // uni290B
+                    start_connector_length: fontunit!(273),
+                    end_connector_length:   fontunit!(273),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xEA04, // uni290A.ex
+                    start_connector_length: fontunit!(101),
+                    end_connector_length:   fontunit!(101),
+                    full_advance:           fontunit!(304),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x2980 => GlyphVariants { // uni2980
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2980, // uni2980
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(879),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x2980, // uni2980
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(879),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2980, advance: fontunit!(880) }, // uni2980
+            ReplacementGlyph { unicode: 0xEA05, advance: fontunit!(1231) }, // uni2980.size1
+            ReplacementGlyph { unicode: 0xEA06, advance: fontunit!(1846) }, // uni2980.size2
+            ReplacementGlyph { unicode: 0xEA07, advance: fontunit!(2461) }, // uni2980.size3
+            ReplacementGlyph { unicode: 0xEA08, advance: fontunit!(3076) }, // uni2980.size4
+        ],
+    },
+    0x2983 => GlyphVariants { // uni2983
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2983, advance: fontunit!(933) }, // uni2983
+            ReplacementGlyph { unicode: 0xEA09, advance: fontunit!(1231) }, // uni2983.size1
+            ReplacementGlyph { unicode: 0xEA0A, advance: fontunit!(1846) }, // uni2983.size2
+            ReplacementGlyph { unicode: 0xEA0B, advance: fontunit!(2461) }, // uni2983.size3
+            ReplacementGlyph { unicode: 0xEA0C, advance: fontunit!(3076) }, // uni2983.size4
+        ],
+    },
+    0x2984 => GlyphVariants { // uni2984
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2984, advance: fontunit!(933) }, // uni2984
+            ReplacementGlyph { unicode: 0xEA0D, advance: fontunit!(1231) }, // uni2984.size1
+            ReplacementGlyph { unicode: 0xEA0E, advance: fontunit!(1846) }, // uni2984.size2
+            ReplacementGlyph { unicode: 0xEA0F, advance: fontunit!(2461) }, // uni2984.size3
+            ReplacementGlyph { unicode: 0xEA10, advance: fontunit!(3076) }, // uni2984.size4
+        ],
+    },
+    0x2985 => GlyphVariants { // uni2985
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2985, advance: fontunit!(933) }, // uni2985
+            ReplacementGlyph { unicode: 0xEA11, advance: fontunit!(1231) }, // uni2985.size1
+            ReplacementGlyph { unicode: 0xEA12, advance: fontunit!(1849) }, // uni2985.size2
+            ReplacementGlyph { unicode: 0xEA13, advance: fontunit!(2460) }, // uni2985.size3
+            ReplacementGlyph { unicode: 0xEA14, advance: fontunit!(3076) }, // uni2985.size4
+        ],
+    },
+    0x2986 => GlyphVariants { // uni2986
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2986, advance: fontunit!(933) }, // uni2986
+            ReplacementGlyph { unicode: 0xEA15, advance: fontunit!(1231) }, // uni2986.size1
+            ReplacementGlyph { unicode: 0xEA16, advance: fontunit!(1849) }, // uni2986.size2
+            ReplacementGlyph { unicode: 0xEA17, advance: fontunit!(2460) }, // uni2986.size3
+            ReplacementGlyph { unicode: 0xEA18, advance: fontunit!(3076) }, // uni2986.size4
+        ],
+    },
+    0x29F8 => GlyphVariants { // uni29F8
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x29F8, advance: fontunit!(1021) }, // uni29F8
+            ReplacementGlyph { unicode: 0xEA1B, advance: fontunit!(1846) }, // uni29F8.size1
+        ],
+    },
+    0x29F9 => GlyphVariants { // uni29F9
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x29F9, advance: fontunit!(1021) }, // uni29F9
+            ReplacementGlyph { unicode: 0xEA1C, advance: fontunit!(1846) }, // uni29F9.size1
+        ],
+    },
+    0x2A00 => GlyphVariants { // uni2A00
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A00, advance: fontunit!(1023) }, // uni2A00
+            ReplacementGlyph { unicode: 0xEA1D, advance: fontunit!(1452) }, // uni2A00.display
+        ],
+    },
+    0x2A01 => GlyphVariants { // uni2A01
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A01, advance: fontunit!(1023) }, // uni2A01
+            ReplacementGlyph { unicode: 0xEA1E, advance: fontunit!(1452) }, // uni2A01.display
+        ],
+    },
+    0x2A02 => GlyphVariants { // uni2A02
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A02, advance: fontunit!(1023) }, // uni2A02
+            ReplacementGlyph { unicode: 0xEA1F, advance: fontunit!(1452) }, // uni2A02.display
+        ],
+    },
+    0x2A03 => GlyphVariants { // uni2A03
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A03, advance: fontunit!(1033) }, // uni2A03
+            ReplacementGlyph { unicode: 0xEA20, advance: fontunit!(1462) }, // uni2A03.display
+        ],
+    },
+    0x2A04 => GlyphVariants { // uni2A04
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A04, advance: fontunit!(1033) }, // uni2A04
+            ReplacementGlyph { unicode: 0xEA21, advance: fontunit!(1462) }, // uni2A04.display
+        ],
+    },
+    0x2A05 => GlyphVariants { // uni2A05
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A05, advance: fontunit!(1023) }, // uni2A05
+            ReplacementGlyph { unicode: 0xEA22, advance: fontunit!(1452) }, // uni2A05.display
+        ],
+    },
+    0x2A06 => GlyphVariants { // uni2A06
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A06, advance: fontunit!(1023) }, // uni2A06
+            ReplacementGlyph { unicode: 0xEA23, advance: fontunit!(1452) }, // uni2A06.display
+        ],
+    },
+    0x2A07 => GlyphVariants { // uni2A07
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A07, advance: fontunit!(1023) }, // uni2A07
+            ReplacementGlyph { unicode: 0xEA24, advance: fontunit!(1452) }, // uni2A07.display
+        ],
+    },
+    0x2A08 => GlyphVariants { // uni2A08
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A08, advance: fontunit!(1023) }, // uni2A08
+            ReplacementGlyph { unicode: 0xEA25, advance: fontunit!(1452) }, // uni2A08.display
+        ],
+    },
+    0x2A09 => GlyphVariants { // uni2A09
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A09, advance: fontunit!(1023) }, // uni2A09
+            ReplacementGlyph { unicode: 0xEA26, advance: fontunit!(1452) }, // uni2A09.display
+        ],
+    },
+    0x2A0A => GlyphVariants { // uni2A0A
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0A, advance: fontunit!(1023) }, // uni2A0A
+            ReplacementGlyph { unicode: 0xEA27, advance: fontunit!(1451) }, // uni2A0A.display
+        ],
+    },
+    0x2A0B => GlyphVariants { // uni2A0B
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0B, advance: fontunit!(1145) }, // uni2A0B
+            ReplacementGlyph { unicode: 0xEA2A, advance: fontunit!(2270) }, // uni2A0B.display
+        ],
+    },
+    0x2A0C => GlyphVariants { // uni2A0C
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0C, advance: fontunit!(1145) }, // uni2A0C
+            ReplacementGlyph { unicode: 0xEA30, advance: fontunit!(2270) }, // uni2A0C.display
+        ],
+    },
+    0x2A0D => GlyphVariants { // uni2A0D
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0D, advance: fontunit!(1145) }, // uni2A0D
+            ReplacementGlyph { unicode: 0xEA36, advance: fontunit!(2270) }, // uni2A0D.display
+        ],
+    },
+    0x2A0E => GlyphVariants { // uni2A0E
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0E, advance: fontunit!(1145) }, // uni2A0E
+            ReplacementGlyph { unicode: 0xEA3C, advance: fontunit!(2270) }, // uni2A0E.display
+        ],
+    },
+    0x2A0F => GlyphVariants { // uni2A0F
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A0F, advance: fontunit!(1145) }, // uni2A0F
+            ReplacementGlyph { unicode: 0xEA42, advance: fontunit!(2270) }, // uni2A0F.display
+        ],
+    },
+    0x2A10 => GlyphVariants { // uni2A10
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A10, advance: fontunit!(1145) }, // uni2A10
+            ReplacementGlyph { unicode: 0xEA48, advance: fontunit!(2270) }, // uni2A10.display
+        ],
+    },
+    0x2A11 => GlyphVariants { // uni2A11
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A11, advance: fontunit!(1145) }, // uni2A11
+            ReplacementGlyph { unicode: 0xEA4E, advance: fontunit!(2270) }, // uni2A11.display
+        ],
+    },
+    0x2A12 => GlyphVariants { // uni2A12
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A12, advance: fontunit!(1145) }, // uni2A12
+            ReplacementGlyph { unicode: 0xEA54, advance: fontunit!(2270) }, // uni2A12.display
+        ],
+    },
+    0x2A13 => GlyphVariants { // uni2A13
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A13, advance: fontunit!(1145) }, // uni2A13
+            ReplacementGlyph { unicode: 0xEA5A, advance: fontunit!(2270) }, // uni2A13.display
+        ],
+    },
+    0x2A14 => GlyphVariants { // uni2A14
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A14, advance: fontunit!(1145) }, // uni2A14
+            ReplacementGlyph { unicode: 0xEA60, advance: fontunit!(2270) }, // uni2A14.display
+        ],
+    },
+    0x2A15 => GlyphVariants { // uni2A15
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A15, advance: fontunit!(1145) }, // uni2A15
+            ReplacementGlyph { unicode: 0xEA66, advance: fontunit!(2270) }, // uni2A15.display
+        ],
+    },
+    0x2A16 => GlyphVariants { // uni2A16
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A16, advance: fontunit!(1145) }, // uni2A16
+            ReplacementGlyph { unicode: 0xEA6C, advance: fontunit!(2270) }, // uni2A16.display
+        ],
+    },
+    0x2A17 => GlyphVariants { // uni2A17
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A17, advance: fontunit!(1145) }, // uni2A17
+            ReplacementGlyph { unicode: 0xEA72, advance: fontunit!(2270) }, // uni2A17.display
+        ],
+    },
+    0x2A18 => GlyphVariants { // uni2A18
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A18, advance: fontunit!(1145) }, // uni2A18
+            ReplacementGlyph { unicode: 0xEA78, advance: fontunit!(2270) }, // uni2A18.display
+        ],
+    },
+    0x2A19 => GlyphVariants { // uni2A19
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A19, advance: fontunit!(1145) }, // uni2A19
+            ReplacementGlyph { unicode: 0xEA7E, advance: fontunit!(2270) }, // uni2A19.display
+        ],
+    },
+    0x2A1A => GlyphVariants { // uni2A1A
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A1A, advance: fontunit!(1145) }, // uni2A1A
+            ReplacementGlyph { unicode: 0xEA84, advance: fontunit!(2270) }, // uni2A1A.display
+        ],
+    },
+    0x2A1B => GlyphVariants { // uni2A1B
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A1B, advance: fontunit!(1268) }, // uni2A1B
+            ReplacementGlyph { unicode: 0xEA8A, advance: fontunit!(2427) }, // uni2A1B.display
+        ],
+    },
+    0x2A1C => GlyphVariants { // uni2A1C
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2A1C, advance: fontunit!(1268) }, // uni2A1C
+            ReplacementGlyph { unicode: 0xEA90, advance: fontunit!(2427) }, // uni2A1C.display
+        ],
+    },
+    0x2AF4 => GlyphVariants { // uni2AF4
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2AF4, // uni2AF4
+                    start_connector_length: fontunit!(295),
+                    end_connector_length:   fontunit!(295),
+                    full_advance:           fontunit!(884),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0x2AF4, // uni2AF4
+                    start_connector_length: fontunit!(295),
+                    end_connector_length:   fontunit!(295),
+                    full_advance:           fontunit!(884),
+                    required:               false,
+                },
+            ],
+        }),
+        replacements: &[
+        ],
+    },
+    0x2AFC => GlyphVariants { // uni2AFC
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2AFC, advance: fontunit!(1231) }, // uni2AFC
+            ReplacementGlyph { unicode: 0xEAA5, advance: fontunit!(1876) }, // uni2AFC.display
+        ],
+    },
+    0x2AFF => GlyphVariants { // uni2AFF
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x2AFF, advance: fontunit!(1231) }, // uni2AFF
+            ReplacementGlyph { unicode: 0xEAA6, advance: fontunit!(1876) }, // uni2AFF.display
+        ],
+    },
+    0xE928 => GlyphVariants { // uni222B.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE928, advance: fontunit!(1145) }, // uni222B.up
+            ReplacementGlyph { unicode: 0xE929, advance: fontunit!(2270) }, // uni222B.up.display
+        ],
+    },
+    0xE92E => GlyphVariants { // uni222C.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE92E, advance: fontunit!(1145) }, // uni222C.up
+            ReplacementGlyph { unicode: 0xE92F, advance: fontunit!(2270) }, // uni222C.up.display
+        ],
+    },
+    0xE934 => GlyphVariants { // uni222D.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE934, advance: fontunit!(1145) }, // uni222D.up
+            ReplacementGlyph { unicode: 0xE935, advance: fontunit!(2270) }, // uni222D.up.display
+        ],
+    },
+    0xE93A => GlyphVariants { // uni222E.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE93A, advance: fontunit!(1145) }, // uni222E.up
+            ReplacementGlyph { unicode: 0xE93B, advance: fontunit!(2270) }, // uni222E.up.display
+        ],
+    },
+    0xE940 => GlyphVariants { // uni222F.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE940, advance: fontunit!(1145) }, // uni222F.up
+            ReplacementGlyph { unicode: 0xE941, advance: fontunit!(2270) }, // uni222F.up.display
+        ],
+    },
+    0xE946 => GlyphVariants { // uni2230.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE946, advance: fontunit!(1145) }, // uni2230.up
+            ReplacementGlyph { unicode: 0xE947, advance: fontunit!(2270) }, // uni2230.up.display
+        ],
+    },
+    0xE94C => GlyphVariants { // uni2231.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE94C, advance: fontunit!(1145) }, // uni2231.up
+            ReplacementGlyph { unicode: 0xE94D, advance: fontunit!(2270) }, // uni2231.up.display
+        ],
+    },
+    0xE952 => GlyphVariants { // uni2232.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE952, advance: fontunit!(1145) }, // uni2232.up
+            ReplacementGlyph { unicode: 0xE953, advance: fontunit!(2270) }, // uni2232.up.display
+        ],
+    },
+    0xE958 => GlyphVariants { // uni2233.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE958, advance: fontunit!(1145) }, // uni2233.up
+            ReplacementGlyph { unicode: 0xE959, advance: fontunit!(2270) }, // uni2233.up.display
+        ],
+    },
+    0xEA2E => GlyphVariants { // uni2A0B.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA2E, advance: fontunit!(1145) }, // uni2A0B.up
+            ReplacementGlyph { unicode: 0xEA2F, advance: fontunit!(2270) }, // uni2A0B.up.display
+        ],
+    },
+    0xEA34 => GlyphVariants { // uni2A0C.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA34, advance: fontunit!(1145) }, // uni2A0C.up
+            ReplacementGlyph { unicode: 0xEA35, advance: fontunit!(2270) }, // uni2A0C.up.display
+        ],
+    },
+    0xEA3A => GlyphVariants { // uni2A0D.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA3A, advance: fontunit!(1145) }, // uni2A0D.up
+            ReplacementGlyph { unicode: 0xEA3B, advance: fontunit!(2270) }, // uni2A0D.up.display
+        ],
+    },
+    0xEA40 => GlyphVariants { // uni2A0E.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA40, advance: fontunit!(1145) }, // uni2A0E.up
+            ReplacementGlyph { unicode: 0xEA41, advance: fontunit!(2270) }, // uni2A0E.up.display
+        ],
+    },
+    0xEA46 => GlyphVariants { // uni2A0F.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA46, advance: fontunit!(1145) }, // uni2A0F.up
+            ReplacementGlyph { unicode: 0xEA47, advance: fontunit!(2270) }, // uni2A0F.up.display
+        ],
+    },
+    0xEA4C => GlyphVariants { // uni2A10.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA4C, advance: fontunit!(1145) }, // uni2A10.up
+            ReplacementGlyph { unicode: 0xEA4D, advance: fontunit!(2270) }, // uni2A10.up.display
+        ],
+    },
+    0xEA52 => GlyphVariants { // uni2A11.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA52, advance: fontunit!(1145) }, // uni2A11.up
+            ReplacementGlyph { unicode: 0xEA53, advance: fontunit!(2270) }, // uni2A11.up.display
+        ],
+    },
+    0xEA58 => GlyphVariants { // uni2A12.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA58, advance: fontunit!(1145) }, // uni2A12.up
+            ReplacementGlyph { unicode: 0xEA59, advance: fontunit!(2270) }, // uni2A12.up.display
+        ],
+    },
+    0xEA5E => GlyphVariants { // uni2A13.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA5E, advance: fontunit!(1145) }, // uni2A13.up
+            ReplacementGlyph { unicode: 0xEA5F, advance: fontunit!(2270) }, // uni2A13.up.display
+        ],
+    },
+    0xEA64 => GlyphVariants { // uni2A14.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA64, advance: fontunit!(1145) }, // uni2A14.up
+            ReplacementGlyph { unicode: 0xEA65, advance: fontunit!(2270) }, // uni2A14.up.display
+        ],
+    },
+    0xEA6A => GlyphVariants { // uni2A15.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA6A, advance: fontunit!(1145) }, // uni2A15.up
+            ReplacementGlyph { unicode: 0xEA6B, advance: fontunit!(2270) }, // uni2A15.up.display
+        ],
+    },
+    0xEA70 => GlyphVariants { // uni2A16.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA70, advance: fontunit!(1145) }, // uni2A16.up
+            ReplacementGlyph { unicode: 0xEA71, advance: fontunit!(2270) }, // uni2A16.up.display
+        ],
+    },
+    0xEA76 => GlyphVariants { // uni2A17.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA76, advance: fontunit!(1145) }, // uni2A17.up
+            ReplacementGlyph { unicode: 0xEA77, advance: fontunit!(2270) }, // uni2A17.up.display
+        ],
+    },
+    0xEA7C => GlyphVariants { // uni2A18.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA7C, advance: fontunit!(1145) }, // uni2A18.up
+            ReplacementGlyph { unicode: 0xEA7D, advance: fontunit!(2270) }, // uni2A18.up.display
+        ],
+    },
+    0xEA82 => GlyphVariants { // uni2A19.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA82, advance: fontunit!(1145) }, // uni2A19.up
+            ReplacementGlyph { unicode: 0xEA83, advance: fontunit!(2270) }, // uni2A19.up.display
+        ],
+    },
+    0xEA88 => GlyphVariants { // uni2A1A.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA88, advance: fontunit!(1145) }, // uni2A1A.up
+            ReplacementGlyph { unicode: 0xEA89, advance: fontunit!(2270) }, // uni2A1A.up.display
+        ],
+    },
+    0xEA8E => GlyphVariants { // uni2A1B.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA8E, advance: fontunit!(1268) }, // uni2A1B.up
+            ReplacementGlyph { unicode: 0xEA8F, advance: fontunit!(2427) }, // uni2A1B.up.display
+        ],
+    },
+    0xEA94 => GlyphVariants { // uni2A1C.up
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA94, advance: fontunit!(1268) }, // uni2A1C.up
+            ReplacementGlyph { unicode: 0xEA95, advance: fontunit!(2427) }, // uni2A1C.up.display
+        ],
+    },
+    0xE925 => GlyphVariants { // uni222B.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE926, advance: fontunit!(2270) }, // uni222B.rtlm.display
+        ],
+    },
+    0xE92B => GlyphVariants { // uni222C.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE92C, advance: fontunit!(2270) }, // uni222C.rtlm.display
+        ],
+    },
+    0xE931 => GlyphVariants { // uni222D.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE932, advance: fontunit!(2270) }, // uni222D.rtlm.display
+        ],
+    },
+    0xE937 => GlyphVariants { // uni222E.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE938, advance: fontunit!(2270) }, // uni222E.rtlm.display
+        ],
+    },
+    0xE93D => GlyphVariants { // uni222F.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE93E, advance: fontunit!(2270) }, // uni222F.rtlm.display
+        ],
+    },
+    0xE943 => GlyphVariants { // uni2230.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE944, advance: fontunit!(2270) }, // uni2230.rtlm.display
+        ],
+    },
+    0xE949 => GlyphVariants { // uni2231.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE94A, advance: fontunit!(2270) }, // uni2231.rtlm.display
+        ],
+    },
+    0xE94F => GlyphVariants { // uni2232.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE950, advance: fontunit!(2270) }, // uni2232.rtlm.display
+        ],
+    },
+    0xE955 => GlyphVariants { // uni2233.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE956, advance: fontunit!(2270) }, // uni2233.rtlm.display
+        ],
+    },
+    0xEA2B => GlyphVariants { // uni2A0B.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA2C, advance: fontunit!(2270) }, // uni2A0B.rtlm.display
+        ],
+    },
+    0xEA31 => GlyphVariants { // uni2A0C.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA32, advance: fontunit!(2270) }, // uni2A0C.rtlm.display
+        ],
+    },
+    0xEA37 => GlyphVariants { // uni2A0D.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA38, advance: fontunit!(2270) }, // uni2A0D.rtlm.display
+        ],
+    },
+    0xEA3D => GlyphVariants { // uni2A0E.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA3E, advance: fontunit!(2270) }, // uni2A0E.rtlm.display
+        ],
+    },
+    0xEA43 => GlyphVariants { // uni2A0F.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA44, advance: fontunit!(2270) }, // uni2A0F.rtlm.display
+        ],
+    },
+    0xEA49 => GlyphVariants { // uni2A10.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA4A, advance: fontunit!(2270) }, // uni2A10.rtlm.display
+        ],
+    },
+    0xEA4F => GlyphVariants { // uni2A11.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA50, advance: fontunit!(2270) }, // uni2A11.rtlm.display
+        ],
+    },
+    0xEA55 => GlyphVariants { // uni2A12.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA56, advance: fontunit!(2270) }, // uni2A12.rtlm.display
+        ],
+    },
+    0xEA5B => GlyphVariants { // uni2A13.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA5C, advance: fontunit!(2270) }, // uni2A13.rtlm.display
+        ],
+    },
+    0xEA61 => GlyphVariants { // uni2A14.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA62, advance: fontunit!(2270) }, // uni2A14.rtlm.display
+        ],
+    },
+    0xEA67 => GlyphVariants { // uni2A15.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA68, advance: fontunit!(2270) }, // uni2A15.rtlm.display
+        ],
+    },
+    0xEA6D => GlyphVariants { // uni2A16.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA6E, advance: fontunit!(2270) }, // uni2A16.rtlm.display
+        ],
+    },
+    0xEA73 => GlyphVariants { // uni2A17.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA74, advance: fontunit!(2270) }, // uni2A17.rtlm.display
+        ],
+    },
+    0xEA79 => GlyphVariants { // uni2A18.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA7A, advance: fontunit!(2270) }, // uni2A18.rtlm.display
+        ],
+    },
+    0xEA7F => GlyphVariants { // uni2A19.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA80, advance: fontunit!(2270) }, // uni2A19.rtlm.display
+        ],
+    },
+    0xEA85 => GlyphVariants { // uni2A1A.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA86, advance: fontunit!(2270) }, // uni2A1A.rtlm.display
+        ],
+    },
+    0xEA8B => GlyphVariants { // uni2A1B.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA8C, advance: fontunit!(2427) }, // uni2A1B.rtlm.display
+        ],
+    },
+    0xEA91 => GlyphVariants { // uni2A1C.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA92, advance: fontunit!(2427) }, // uni2A1C.rtlm.display
+        ],
+    },
+    0xE902 => GlyphVariants { // uni221A.rtlm
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE903, // uni221A.rtlm.bot
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE904, // uni221A.rtlm.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE908, // uni221A.rtlm.top
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(626),
+                    required:               true,
+                },
+            ],
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE905, advance: fontunit!(1848) }, // uni221A.rtlm.size1
+            ReplacementGlyph { unicode: 0xE906, advance: fontunit!(2461) }, // uni221A.rtlm.size2
+            ReplacementGlyph { unicode: 0xE907, advance: fontunit!(3076) }, // uni221A.rtlm.size3
+        ],
+    },
+    0xE90E => GlyphVariants { // uni221B.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE90F, advance: fontunit!(1848) }, // uni221B.rtlm.size1
+            ReplacementGlyph { unicode: 0xE910, advance: fontunit!(2461) }, // uni221B.rtlm.size2
+            ReplacementGlyph { unicode: 0xE911, advance: fontunit!(3076) }, // uni221B.rtlm.size3
+        ],
+    },
+    0xE916 => GlyphVariants { // uni221C.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE917, advance: fontunit!(1848) }, // uni221C.rtlm.size1
+            ReplacementGlyph { unicode: 0xE918, advance: fontunit!(2461) }, // uni221C.rtlm.size2
+            ReplacementGlyph { unicode: 0xE919, advance: fontunit!(3076) }, // uni221C.rtlm.size3
+        ],
+    },
+    0xE8ED => GlyphVariants { // uni2140.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE8EE, advance: fontunit!(1451) }, // uni2140.rtlm.display
+        ],
+    },
+    0xE8FF => GlyphVariants { // uni2211.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xE900, advance: fontunit!(1451) }, // uni2211.rtlm.display
+        ],
+    },
+    0xEA28 => GlyphVariants { // uni2A0A.rtlm
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0xEA29, advance: fontunit!(1451) }, // uni2A0A.rtlm.display
+        ],
+    },
+};
 
-        m
-    };
-}
+#[cfg(feature="fast-check")]
+pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
+    Default: GlyphVariants { constructable: None, replacements: &[] },
+    0 => GlyphVariants { constructable: None, replacements: &[] },
+};
 
-
-lazy_static! {
-    pub static ref HORZ_VARIANTS: HashMap<u32, GlyphVariants> = {
-        let mut m = HashMap::new();
-        m.insert(0x302, GlyphVariants { // uni0302
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x302, advance: FontUnit::from(312) }, // uni0302
-                ReplacementGlyph { unicode: 0xE84B, advance: FontUnit::from(561) }, // uni0302.size1
-                ReplacementGlyph { unicode: 0xE84C, advance: FontUnit::from(980) }, // uni0302.size2
-                ReplacementGlyph { unicode: 0xE84D, advance: FontUnit::from(1461) }, // uni0302.size3
-                ReplacementGlyph { unicode: 0xE84E, advance: FontUnit::from(1887) }, // uni0302.size4
-                ReplacementGlyph { unicode: 0xE84F, advance: FontUnit::from(2329) }, // uni0302.size5
+#[cfg(not(feature="fast-check"))]
+pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
+    Default: GlyphVariants { constructable: None, replacements: &[] },
+    0x302 => GlyphVariants { // uni0302
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x302, advance: fontunit!(312) }, // uni0302
+            ReplacementGlyph { unicode: 0xE84B, advance: fontunit!(561) }, // uni0302.size1
+            ReplacementGlyph { unicode: 0xE84C, advance: fontunit!(980) }, // uni0302.size2
+            ReplacementGlyph { unicode: 0xE84D, advance: fontunit!(1461) }, // uni0302.size3
+            ReplacementGlyph { unicode: 0xE84E, advance: fontunit!(1887) }, // uni0302.size4
+            ReplacementGlyph { unicode: 0xE84F, advance: fontunit!(2329) }, // uni0302.size5
+        ],
+    },
+    0x303 => GlyphVariants { // uni0303
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x303, advance: fontunit!(331) }, // uni0303
+            ReplacementGlyph { unicode: 0xE850, advance: fontunit!(561) }, // uni0303.size1
+            ReplacementGlyph { unicode: 0xE851, advance: fontunit!(980) }, // uni0303.size2
+            ReplacementGlyph { unicode: 0xE852, advance: fontunit!(1461) }, // uni0303.size3
+            ReplacementGlyph { unicode: 0xE853, advance: fontunit!(1887) }, // uni0303.size4
+            ReplacementGlyph { unicode: 0xE854, advance: fontunit!(2329) }, // uni0303.size5
+        ],
+    },
+    0x305 => GlyphVariants { // uni0305
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE855, // uni0305.size1
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1000),
+                    full_advance:           fontunit!(1000),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE855, // uni0305.size1
+                    start_connector_length: fontunit!(1000),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1000),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x303, GlyphVariants { // uni0303
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x303, advance: FontUnit::from(331) }, // uni0303
-                ReplacementGlyph { unicode: 0xE850, advance: FontUnit::from(561) }, // uni0303.size1
-                ReplacementGlyph { unicode: 0xE851, advance: FontUnit::from(980) }, // uni0303.size2
-                ReplacementGlyph { unicode: 0xE852, advance: FontUnit::from(1461) }, // uni0303.size3
-                ReplacementGlyph { unicode: 0xE853, advance: FontUnit::from(1887) }, // uni0303.size4
-                ReplacementGlyph { unicode: 0xE854, advance: FontUnit::from(2329) }, // uni0303.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x305, advance: fontunit!(501) }, // uni0305
+            ReplacementGlyph { unicode: 0xE855, advance: fontunit!(1001) }, // uni0305.size1
+            ReplacementGlyph { unicode: 0xE856, advance: fontunit!(1501) }, // uni0305.size2
+            ReplacementGlyph { unicode: 0xE857, advance: fontunit!(2001) }, // uni0305.size3
+            ReplacementGlyph { unicode: 0xE858, advance: fontunit!(2501) }, // uni0305.size4
+            ReplacementGlyph { unicode: 0xE859, advance: fontunit!(3001) }, // uni0305.size5
+        ],
+    },
+    0x30C => GlyphVariants { // uni030C
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x30C, advance: fontunit!(312) }, // uni030C
+            ReplacementGlyph { unicode: 0xE85A, advance: fontunit!(561) }, // uni030C.size1
+            ReplacementGlyph { unicode: 0xE85B, advance: fontunit!(980) }, // uni030C.size2
+            ReplacementGlyph { unicode: 0xE85C, advance: fontunit!(1461) }, // uni030C.size3
+            ReplacementGlyph { unicode: 0xE85D, advance: fontunit!(1887) }, // uni030C.size4
+            ReplacementGlyph { unicode: 0xE85E, advance: fontunit!(2329) }, // uni030C.size5
+        ],
+    },
+    0x330 => GlyphVariants { // uni0330
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x330, advance: fontunit!(331) }, // uni0330
+            ReplacementGlyph { unicode: 0xE85F, advance: fontunit!(561) }, // uni0330.size1
+            ReplacementGlyph { unicode: 0xE860, advance: fontunit!(980) }, // uni0330.size2
+            ReplacementGlyph { unicode: 0xE861, advance: fontunit!(1461) }, // uni0330.size3
+            ReplacementGlyph { unicode: 0xE862, advance: fontunit!(1887) }, // uni0330.size4
+            ReplacementGlyph { unicode: 0xE863, advance: fontunit!(2329) }, // uni0330.size5
+        ],
+    },
+    0x332 => GlyphVariants { // uni0332
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE864, // uni0332.size1
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1000),
+                    full_advance:           fontunit!(1000),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE864, // uni0332.size1
+                    start_connector_length: fontunit!(1000),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1000),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x305, GlyphVariants { // uni0305
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE855, // uni0305.size1
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(1000),
-                        full_advance:           FontUnit::from(1000),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE855, // uni0305.size1
-                        start_connector_length: FontUnit::from(1000),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1000),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x305, advance: FontUnit::from(501) }, // uni0305
-                ReplacementGlyph { unicode: 0xE855, advance: FontUnit::from(1001) }, // uni0305.size1
-                ReplacementGlyph { unicode: 0xE856, advance: FontUnit::from(1501) }, // uni0305.size2
-                ReplacementGlyph { unicode: 0xE857, advance: FontUnit::from(2001) }, // uni0305.size3
-                ReplacementGlyph { unicode: 0xE858, advance: FontUnit::from(2501) }, // uni0305.size4
-                ReplacementGlyph { unicode: 0xE859, advance: FontUnit::from(3001) }, // uni0305.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x332, advance: fontunit!(501) }, // uni0332
+            ReplacementGlyph { unicode: 0xE864, advance: fontunit!(1001) }, // uni0332.size1
+            ReplacementGlyph { unicode: 0xE865, advance: fontunit!(1501) }, // uni0332.size2
+            ReplacementGlyph { unicode: 0xE866, advance: fontunit!(2001) }, // uni0332.size3
+            ReplacementGlyph { unicode: 0xE867, advance: fontunit!(2501) }, // uni0332.size4
+            ReplacementGlyph { unicode: 0xE868, advance: fontunit!(3001) }, // uni0332.size5
+        ],
+    },
+    0x34D => GlyphVariants { // uni034D
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20EE, // uni20EE
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8CD, // uni20EE.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20EF, // uni20EF
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x30C, GlyphVariants { // uni030C
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x30C, advance: FontUnit::from(312) }, // uni030C
-                ReplacementGlyph { unicode: 0xE85A, advance: FontUnit::from(561) }, // uni030C.size1
-                ReplacementGlyph { unicode: 0xE85B, advance: FontUnit::from(980) }, // uni030C.size2
-                ReplacementGlyph { unicode: 0xE85C, advance: FontUnit::from(1461) }, // uni030C.size3
-                ReplacementGlyph { unicode: 0xE85D, advance: FontUnit::from(1887) }, // uni030C.size4
-                ReplacementGlyph { unicode: 0xE85E, advance: FontUnit::from(2329) }, // uni030C.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x34D, advance: fontunit!(479) }, // uni034D
+        ],
+    },
+    0x203E => GlyphVariants { // uni203E
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x203E, advance: fontunit!(501) }, // uni203E
+            ReplacementGlyph { unicode: 0xE8BC, advance: fontunit!(1001) }, // uni203E.size1
+            ReplacementGlyph { unicode: 0xE8BD, advance: fontunit!(1501) }, // uni203E.size2
+            ReplacementGlyph { unicode: 0xE8BE, advance: fontunit!(2001) }, // uni203E.size3
+            ReplacementGlyph { unicode: 0xE8BF, advance: fontunit!(2501) }, // uni203E.size4
+            ReplacementGlyph { unicode: 0xE8C0, advance: fontunit!(3001) }, // uni203E.size5
+        ],
+    },
+    0x20D0 => GlyphVariants { // uni20D0
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20D0, // uni20D0
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8C9, // uni20D6.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x330, GlyphVariants { // uni0330
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x330, advance: FontUnit::from(331) }, // uni0330
-                ReplacementGlyph { unicode: 0xE85F, advance: FontUnit::from(561) }, // uni0330.size1
-                ReplacementGlyph { unicode: 0xE860, advance: FontUnit::from(980) }, // uni0330.size2
-                ReplacementGlyph { unicode: 0xE861, advance: FontUnit::from(1461) }, // uni0330.size3
-                ReplacementGlyph { unicode: 0xE862, advance: FontUnit::from(1887) }, // uni0330.size4
-                ReplacementGlyph { unicode: 0xE863, advance: FontUnit::from(2329) }, // uni0330.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20D0, advance: fontunit!(437) }, // uni20D0
+        ],
+    },
+    0x20D1 => GlyphVariants { // uni20D1
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8C9, // uni20D6.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20D1, // uni20D1
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x332, GlyphVariants { // uni0332
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE864, // uni0332.size1
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(1000),
-                        full_advance:           FontUnit::from(1000),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE864, // uni0332.size1
-                        start_connector_length: FontUnit::from(1000),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1000),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x332, advance: FontUnit::from(501) }, // uni0332
-                ReplacementGlyph { unicode: 0xE864, advance: FontUnit::from(1001) }, // uni0332.size1
-                ReplacementGlyph { unicode: 0xE865, advance: FontUnit::from(1501) }, // uni0332.size2
-                ReplacementGlyph { unicode: 0xE866, advance: FontUnit::from(2001) }, // uni0332.size3
-                ReplacementGlyph { unicode: 0xE867, advance: FontUnit::from(2501) }, // uni0332.size4
-                ReplacementGlyph { unicode: 0xE868, advance: FontUnit::from(3001) }, // uni0332.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20D1, advance: fontunit!(437) }, // uni20D1
+        ],
+    },
+    0x20D6 => GlyphVariants { // uni20D6
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20D6, // uni20D6
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8C9, // uni20D6.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x34D, GlyphVariants { // uni034D
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20EE, // uni20EE
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20EF, // uni20EF
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x34D, advance: FontUnit::from(479) }, // uni034D
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20D6, advance: fontunit!(437) }, // uni20D6
+        ],
+    },
+    0x20D7 => GlyphVariants { // uni20D7
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8C9, // uni20D6.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20D7, // uni20D7
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x203E, GlyphVariants { // uni203E
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x203E, advance: FontUnit::from(501) }, // uni203E
-                ReplacementGlyph { unicode: 0xE8BC, advance: FontUnit::from(1001) }, // uni203E.size1
-                ReplacementGlyph { unicode: 0xE8BD, advance: FontUnit::from(1501) }, // uni203E.size2
-                ReplacementGlyph { unicode: 0xE8BE, advance: FontUnit::from(2001) }, // uni203E.size3
-                ReplacementGlyph { unicode: 0xE8BF, advance: FontUnit::from(2501) }, // uni203E.size4
-                ReplacementGlyph { unicode: 0xE8C0, advance: FontUnit::from(3001) }, // uni203E.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20D7, advance: fontunit!(437) }, // uni20D7
+        ],
+    },
+    0x20E1 => GlyphVariants { // uni20E1
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20D6, // uni20D6
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8C9, // uni20D6.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20D7, // uni20D7
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20D0, GlyphVariants { // uni20D0
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20D0, // uni20D0
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20D0, advance: FontUnit::from(437) }, // uni20D0
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20E1, advance: fontunit!(479) }, // uni20E1
+        ],
+    },
+    0x20E9 => GlyphVariants { // uni20E9
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8CB, // uni20E9.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(154),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8CA, // uni20E9.ex
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(200),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE8CC, // uni20E9.rt
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(154),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20D1, GlyphVariants { // uni20D1
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20D1, // uni20D1
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20D1, advance: FontUnit::from(437) }, // uni20D1
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20E9, advance: fontunit!(534) }, // uni20E9
+        ],
+    },
+    0x20EC => GlyphVariants { // uni20EC
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8CD, // uni20EE.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20EC, // uni20EC
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20D6, GlyphVariants { // uni20D6
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20D6, // uni20D6
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20D6, advance: FontUnit::from(437) }, // uni20D6
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20EC, advance: fontunit!(437) }, // uni20EC
+        ],
+    },
+    0x20ED => GlyphVariants { // uni20ED
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20ED, // uni20ED
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8CD, // uni20EE.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x20D7, GlyphVariants { // uni20D7
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20D7, // uni20D7
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20D7, advance: FontUnit::from(437) }, // uni20D7
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20ED, advance: fontunit!(437) }, // uni20ED
+        ],
+    },
+    0x20EE => GlyphVariants { // uni20EE
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x20EE, // uni20EE
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(350),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8CD, // uni20EE.ex
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x20E1, GlyphVariants { // uni20E1
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20D6, // uni20D6
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8C9, // uni20D6.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20D7, // uni20D7
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20E1, advance: FontUnit::from(479) }, // uni20E1
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20EE, advance: fontunit!(437) }, // uni20EE
+        ],
+    },
+    0x20EF => GlyphVariants { // uni20EF
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8CD, // uni20EE.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(300),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x20EF, // uni20EF
+                    start_connector_length: fontunit!(350),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(436),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20E9, GlyphVariants { // uni20E9
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8CB, // uni20E9.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(154),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8CA, // uni20E9.ex
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(200),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8CC, // uni20E9.rt
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(154),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20E9, advance: FontUnit::from(534) }, // uni20E9
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x20EF, advance: fontunit!(437) }, // uni20EF
+        ],
+    },
+    0x2190 => GlyphVariants { // uni2190
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2190, // uni2190
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x20EC, GlyphVariants { // uni20EC
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20EC, // uni20EC
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20EC, advance: FontUnit::from(437) }, // uni20EC
+        }),
+        replacements: &[
+        ],
+    },
+    0x2192 => GlyphVariants { // uni2192
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2192, // uni2192
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20ED, GlyphVariants { // uni20ED
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20ED, // uni20ED
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20ED, advance: FontUnit::from(437) }, // uni20ED
+        }),
+        replacements: &[
+        ],
+    },
+    0x2194 => GlyphVariants { // uni2194
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2190, // uni2190
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2192, // uni2192
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20EE, GlyphVariants { // uni20EE
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x20EE, // uni20EE
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(350),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: FontUnit::from(300),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20EE, advance: FontUnit::from(437) }, // uni20EE
+        }),
+        replacements: &[
+        ],
+    },
+    0x21A4 => GlyphVariants { // uni21A4
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2190, // uni2190
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x27DE, // uni27DE
+                    start_connector_length: fontunit!(488),
+                    end_connector_length:   fontunit!(488),
+                    full_advance:           fontunit!(1464),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x20EF, GlyphVariants { // uni20EF
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8CD, // uni20EE.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(300),
-                        full_advance:           FontUnit::from(300),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x20EF, // uni20EF
-                        start_connector_length: FontUnit::from(350),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(436),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x20EF, advance: FontUnit::from(437) }, // uni20EF
+        }),
+        replacements: &[
+        ],
+    },
+    0x21A6 => GlyphVariants { // uni21A6
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x27DD, // uni27DD
+                    start_connector_length: fontunit!(488),
+                    end_connector_length:   fontunit!(488),
+                    full_advance:           fontunit!(1464),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2192, // uni2192
+                    start_connector_length: fontunit!(262),
+                    end_connector_length:   fontunit!(262),
+                    full_advance:           fontunit!(786),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x2190, GlyphVariants { // uni2190
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2190, // uni2190
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21BC => GlyphVariants { // uni21BC
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21BC, // uni21BC
+                    start_connector_length: fontunit!(282),
+                    end_connector_length:   fontunit!(282),
+                    full_advance:           fontunit!(847),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x2192, GlyphVariants { // uni2192
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2192, // uni2192
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21BD => GlyphVariants { // uni21BD
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21BD, // uni21BD
+                    start_connector_length: fontunit!(282),
+                    end_connector_length:   fontunit!(282),
+                    full_advance:           fontunit!(847),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x2194, GlyphVariants { // uni2194
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2190, // uni2190
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2192, // uni2192
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21C0 => GlyphVariants { // uni21C0
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8F1, // uni2190.ex
+                    start_connector_length: fontunit!(105),
+                    end_connector_length:   fontunit!(105),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21C0, // uni21C0
+                    start_connector_length: fontunit!(282),
+                    end_connector_length:   fontunit!(282),
+                    full_advance:           fontunit!(847),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21A4, GlyphVariants { // uni21A4
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2190, // uni2190
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x27DE, // uni27DE
-                        start_connector_length: FontUnit::from(488),
-                        end_connector_length:   FontUnit::from(488),
-                        full_advance:           FontUnit::from(1464),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D0 => GlyphVariants { // uni21D0
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21D0, // uni21D0
+                    start_connector_length: fontunit!(269),
+                    end_connector_length:   fontunit!(269),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F2, // uni21D0.ex
+                    start_connector_length: fontunit!(145),
+                    end_connector_length:   fontunit!(145),
+                    full_advance:           fontunit!(435),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x21A6, GlyphVariants { // uni21A6
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x27DD, // uni27DD
-                        start_connector_length: FontUnit::from(488),
-                        end_connector_length:   FontUnit::from(488),
-                        full_advance:           FontUnit::from(1464),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2192, // uni2192
-                        start_connector_length: FontUnit::from(262),
-                        end_connector_length:   FontUnit::from(262),
-                        full_advance:           FontUnit::from(786),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D2 => GlyphVariants { // uni21D2
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8F2, // uni21D0.ex
+                    start_connector_length: fontunit!(145),
+                    end_connector_length:   fontunit!(145),
+                    full_advance:           fontunit!(435),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21D2, // uni21D2
+                    start_connector_length: fontunit!(269),
+                    end_connector_length:   fontunit!(269),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21BC, GlyphVariants { // uni21BC
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21BC, // uni21BC
-                        start_connector_length: FontUnit::from(282),
-                        end_connector_length:   FontUnit::from(282),
-                        full_advance:           FontUnit::from(847),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21D4 => GlyphVariants { // uni21D4
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21D0, // uni21D0
+                    start_connector_length: fontunit!(269),
+                    end_connector_length:   fontunit!(269),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F2, // uni21D0.ex
+                    start_connector_length: fontunit!(145),
+                    end_connector_length:   fontunit!(145),
+                    full_advance:           fontunit!(435),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21D2, // uni21D2
+                    start_connector_length: fontunit!(269),
+                    end_connector_length:   fontunit!(269),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21BD, GlyphVariants { // uni21BD
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21BD, // uni21BD
-                        start_connector_length: FontUnit::from(282),
-                        end_connector_length:   FontUnit::from(282),
-                        full_advance:           FontUnit::from(847),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21DA => GlyphVariants { // uni21DA
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x21DA, // uni21DA
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE8F4, // uni21DA.ex
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x21C0, GlyphVariants { // uni21C0
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8F1, // uni2190.ex
-                        start_connector_length: FontUnit::from(105),
-                        end_connector_length:   FontUnit::from(105),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21C0, // uni21C0
-                        start_connector_length: FontUnit::from(282),
-                        end_connector_length:   FontUnit::from(282),
-                        full_advance:           FontUnit::from(847),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x21DB => GlyphVariants { // uni21DB
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE8F4, // uni21DA.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x21DB, // uni21DB
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(806),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21D0, GlyphVariants { // uni21D0
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21D0, // uni21D0
-                        start_connector_length: FontUnit::from(269),
-                        end_connector_length:   FontUnit::from(269),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: FontUnit::from(145),
-                        end_connector_length:   FontUnit::from(145),
-                        full_advance:           FontUnit::from(435),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+        ],
+    },
+    0x23B4 => GlyphVariants { // uni23B4
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9A6, // uni23B4.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(618),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9A5, // uni23B4.ex
+                    start_connector_length: fontunit!(212),
+                    end_connector_length:   fontunit!(212),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9A7, // uni23B4.rt
+                    start_connector_length: fontunit!(618),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21D2, GlyphVariants { // uni21D2
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: FontUnit::from(145),
-                        end_connector_length:   FontUnit::from(145),
-                        full_advance:           FontUnit::from(435),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21D2, // uni21D2
-                        start_connector_length: FontUnit::from(269),
-                        end_connector_length:   FontUnit::from(269),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23B4, advance: fontunit!(817) }, // uni23B4
+            ReplacementGlyph { unicode: 0xE9A8, advance: fontunit!(926) }, // uni23B4.size1
+            ReplacementGlyph { unicode: 0xE9A9, advance: fontunit!(1459) }, // uni23B4.size2
+            ReplacementGlyph { unicode: 0xE9AA, advance: fontunit!(1992) }, // uni23B4.size3
+            ReplacementGlyph { unicode: 0xE9AB, advance: fontunit!(2525) }, // uni23B4.size4
+            ReplacementGlyph { unicode: 0xE9AC, advance: fontunit!(3058) }, // uni23B4.size5
+        ],
+    },
+    0x23B5 => GlyphVariants { // uni23B5
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9AE, // uni23B5.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(618),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9AD, // uni23B5.ex
+                    start_connector_length: fontunit!(212),
+                    end_connector_length:   fontunit!(212),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9AF, // uni23B5.rt
+                    start_connector_length: fontunit!(618),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21D4, GlyphVariants { // uni21D4
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21D0, // uni21D0
-                        start_connector_length: FontUnit::from(269),
-                        end_connector_length:   FontUnit::from(269),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F2, // uni21D0.ex
-                        start_connector_length: FontUnit::from(145),
-                        end_connector_length:   FontUnit::from(145),
-                        full_advance:           FontUnit::from(435),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21D2, // uni21D2
-                        start_connector_length: FontUnit::from(269),
-                        end_connector_length:   FontUnit::from(269),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23B5, advance: fontunit!(817) }, // uni23B5
+            ReplacementGlyph { unicode: 0xE9B0, advance: fontunit!(926) }, // uni23B5.size1
+            ReplacementGlyph { unicode: 0xE9B1, advance: fontunit!(1459) }, // uni23B5.size2
+            ReplacementGlyph { unicode: 0xE9B2, advance: fontunit!(1992) }, // uni23B5.size3
+            ReplacementGlyph { unicode: 0xE9B3, advance: fontunit!(2525) }, // uni23B5.size4
+            ReplacementGlyph { unicode: 0xE9B4, advance: fontunit!(3058) }, // uni23B5.size5
+        ],
+    },
+    0x23DC => GlyphVariants { // uni23DC
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9B6, // uni23DC.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(618),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9B5, // uni23DC.ex
+                    start_connector_length: fontunit!(212),
+                    end_connector_length:   fontunit!(212),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9B7, // uni23DC.rt
+                    start_connector_length: fontunit!(618),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21DA, GlyphVariants { // uni21DA
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x21DA, // uni21DA
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23DC, advance: fontunit!(1001) }, // uni23DC
+            ReplacementGlyph { unicode: 0xE9B8, advance: fontunit!(927) }, // uni23DC.size1
+            ReplacementGlyph { unicode: 0xE9B9, advance: fontunit!(1461) }, // uni23DC.size2
+            ReplacementGlyph { unicode: 0xE9BA, advance: fontunit!(1887) }, // uni23DC.size3
+            ReplacementGlyph { unicode: 0xE9BB, advance: fontunit!(2329) }, // uni23DC.size4
+            ReplacementGlyph { unicode: 0xE9BC, advance: fontunit!(3238) }, // uni23DC.size5
+        ],
+    },
+    0x23DD => GlyphVariants { // uni23DD
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9BE, // uni23DD.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(618),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9BD, // uni23DD.ex
+                    start_connector_length: fontunit!(212),
+                    end_connector_length:   fontunit!(212),
+                    full_advance:           fontunit!(635),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9BF, // uni23DD.rt
+                    start_connector_length: fontunit!(618),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1855),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x21DB, GlyphVariants { // uni21DB
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE8F4, // uni21DA.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x21DB, // uni21DB
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(806),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23DD, advance: fontunit!(1001) }, // uni23DD
+            ReplacementGlyph { unicode: 0xE9C0, advance: fontunit!(927) }, // uni23DD.size1
+            ReplacementGlyph { unicode: 0xE9C1, advance: fontunit!(1461) }, // uni23DD.size2
+            ReplacementGlyph { unicode: 0xE9C2, advance: fontunit!(1887) }, // uni23DD.size3
+            ReplacementGlyph { unicode: 0xE9C3, advance: fontunit!(2329) }, // uni23DD.size4
+            ReplacementGlyph { unicode: 0xE9C4, advance: fontunit!(3238) }, // uni23DD.size5
+        ],
+    },
+    0x23DE => GlyphVariants { // uni23DE
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9C6, // uni23DE.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(311),
+                    full_advance:           fontunit!(933),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9C5, // uni23DE.ex
+                    start_connector_length: fontunit!(109),
+                    end_connector_length:   fontunit!(109),
+                    full_advance:           fontunit!(327),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9C7, // uni23DE.mid
+                    start_connector_length: fontunit!(621),
+                    end_connector_length:   fontunit!(621),
+                    full_advance:           fontunit!(1864),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9C5, // uni23DE.ex
+                    start_connector_length: fontunit!(109),
+                    end_connector_length:   fontunit!(109),
+                    full_advance:           fontunit!(327),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9C8, // uni23DE.rt
+                    start_connector_length: fontunit!(311),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(933),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x23B4, GlyphVariants { // uni23B4
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9A6, // uni23B4.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(618),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9A5, // uni23B4.ex
-                        start_connector_length: FontUnit::from(212),
-                        end_connector_length:   FontUnit::from(212),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9A7, // uni23B4.rt
-                        start_connector_length: FontUnit::from(618),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23B4, advance: FontUnit::from(817) }, // uni23B4
-                ReplacementGlyph { unicode: 0xE9A8, advance: FontUnit::from(926) }, // uni23B4.size1
-                ReplacementGlyph { unicode: 0xE9A9, advance: FontUnit::from(1459) }, // uni23B4.size2
-                ReplacementGlyph { unicode: 0xE9AA, advance: FontUnit::from(1992) }, // uni23B4.size3
-                ReplacementGlyph { unicode: 0xE9AB, advance: FontUnit::from(2525) }, // uni23B4.size4
-                ReplacementGlyph { unicode: 0xE9AC, advance: FontUnit::from(3058) }, // uni23B4.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23DE, advance: fontunit!(1001) }, // uni23DE
+            ReplacementGlyph { unicode: 0xE9C9, advance: fontunit!(926) }, // uni23DE.size1
+            ReplacementGlyph { unicode: 0xE9CA, advance: fontunit!(1461) }, // uni23DE.size2
+            ReplacementGlyph { unicode: 0xE9CB, advance: fontunit!(1887) }, // uni23DE.size3
+            ReplacementGlyph { unicode: 0xE9CC, advance: fontunit!(2329) }, // uni23DE.size4
+            ReplacementGlyph { unicode: 0xE9CD, advance: fontunit!(3239) }, // uni23DE.size5
+        ],
+    },
+    0x23DF => GlyphVariants { // uni23DF
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xE9CF, // uni23DF.lt
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(311),
+                    full_advance:           fontunit!(933),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9CE, // uni23DF.ex
+                    start_connector_length: fontunit!(109),
+                    end_connector_length:   fontunit!(109),
+                    full_advance:           fontunit!(327),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9D0, // uni23DF.mid
+                    start_connector_length: fontunit!(621),
+                    end_connector_length:   fontunit!(621),
+                    full_advance:           fontunit!(1864),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xE9CE, // uni23DF.ex
+                    start_connector_length: fontunit!(109),
+                    end_connector_length:   fontunit!(109),
+                    full_advance:           fontunit!(327),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0xE9D1, // uni23DF.rt
+                    start_connector_length: fontunit!(311),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(933),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x23B5, GlyphVariants { // uni23B5
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9AE, // uni23B5.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(618),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9AD, // uni23B5.ex
-                        start_connector_length: FontUnit::from(212),
-                        end_connector_length:   FontUnit::from(212),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9AF, // uni23B5.rt
-                        start_connector_length: FontUnit::from(618),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23B5, advance: FontUnit::from(817) }, // uni23B5
-                ReplacementGlyph { unicode: 0xE9B0, advance: FontUnit::from(926) }, // uni23B5.size1
-                ReplacementGlyph { unicode: 0xE9B1, advance: FontUnit::from(1459) }, // uni23B5.size2
-                ReplacementGlyph { unicode: 0xE9B2, advance: FontUnit::from(1992) }, // uni23B5.size3
-                ReplacementGlyph { unicode: 0xE9B3, advance: FontUnit::from(2525) }, // uni23B5.size4
-                ReplacementGlyph { unicode: 0xE9B4, advance: FontUnit::from(3058) }, // uni23B5.size5
+        }),
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23DF, advance: fontunit!(1001) }, // uni23DF
+            ReplacementGlyph { unicode: 0xE9D2, advance: fontunit!(926) }, // uni23DF.size1
+            ReplacementGlyph { unicode: 0xE9D3, advance: fontunit!(1461) }, // uni23DF.size2
+            ReplacementGlyph { unicode: 0xE9D4, advance: fontunit!(1887) }, // uni23DF.size3
+            ReplacementGlyph { unicode: 0xE9D5, advance: fontunit!(2329) }, // uni23DF.size4
+            ReplacementGlyph { unicode: 0xE9D6, advance: fontunit!(3239) }, // uni23DF.size5
+        ],
+    },
+    0x23E0 => GlyphVariants { // uni23E0
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23E0, advance: fontunit!(1001) }, // uni23E0
+            ReplacementGlyph { unicode: 0xE9D7, advance: fontunit!(1461) }, // uni23E0.size1
+            ReplacementGlyph { unicode: 0xE9D8, advance: fontunit!(1887) }, // uni23E0.size2
+            ReplacementGlyph { unicode: 0xE9D9, advance: fontunit!(2313) }, // uni23E0.size3
+            ReplacementGlyph { unicode: 0xE9DA, advance: fontunit!(2739) }, // uni23E0.size4
+            ReplacementGlyph { unicode: 0xE9DB, advance: fontunit!(3165) }, // uni23E0.size5
+        ],
+    },
+    0x23E1 => GlyphVariants { // uni23E1
+        constructable: None,
+        replacements: &[
+            ReplacementGlyph { unicode: 0x23E1, advance: fontunit!(1001) }, // uni23E1
+            ReplacementGlyph { unicode: 0xE9DC, advance: fontunit!(1461) }, // uni23E1.size1
+            ReplacementGlyph { unicode: 0xE9DD, advance: fontunit!(1887) }, // uni23E1.size2
+            ReplacementGlyph { unicode: 0xE9DE, advance: fontunit!(2313) }, // uni23E1.size3
+            ReplacementGlyph { unicode: 0xE9DF, advance: fontunit!(2739) }, // uni23E1.size4
+            ReplacementGlyph { unicode: 0xE9E0, advance: fontunit!(3165) }, // uni23E1.size5
+        ],
+    },
+    0x2B45 => GlyphVariants { // uni2B45
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0x2B45, // uni2B45
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
+                GlyphPart {
+                    unicode:                0xEAA7, // uni2B45.ex
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
             ],
-        });
-        m.insert(0x23DC, GlyphVariants { // uni23DC
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9B6, // uni23DC.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(618),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9B5, // uni23DC.ex
-                        start_connector_length: FontUnit::from(212),
-                        end_connector_length:   FontUnit::from(212),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9B7, // uni23DC.rt
-                        start_connector_length: FontUnit::from(618),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23DC, advance: FontUnit::from(1001) }, // uni23DC
-                ReplacementGlyph { unicode: 0xE9B8, advance: FontUnit::from(927) }, // uni23DC.size1
-                ReplacementGlyph { unicode: 0xE9B9, advance: FontUnit::from(1461) }, // uni23DC.size2
-                ReplacementGlyph { unicode: 0xE9BA, advance: FontUnit::from(1887) }, // uni23DC.size3
-                ReplacementGlyph { unicode: 0xE9BB, advance: FontUnit::from(2329) }, // uni23DC.size4
-                ReplacementGlyph { unicode: 0xE9BC, advance: FontUnit::from(3238) }, // uni23DC.size5
+        }),
+        replacements: &[
+        ],
+    },
+    0x2B46 => GlyphVariants { // uni2B46
+        constructable: Some(ConstructableGlyph {
+            italics_correction: fontunit!(0),
+            parts: &[
+                GlyphPart {
+                    unicode:                0xEAA7, // uni2B45.ex
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(50),
+                    full_advance:           fontunit!(315),
+                    required:               false,
+                },
+                GlyphPart {
+                    unicode:                0x2B46, // uni2B46
+                    start_connector_length: fontunit!(50),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(818),
+                    required:               true,
+                },
             ],
-        });
-        m.insert(0x23DD, GlyphVariants { // uni23DD
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9BE, // uni23DD.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(618),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9BD, // uni23DD.ex
-                        start_connector_length: FontUnit::from(212),
-                        end_connector_length:   FontUnit::from(212),
-                        full_advance:           FontUnit::from(635),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9BF, // uni23DD.rt
-                        start_connector_length: FontUnit::from(618),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(1855),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23DD, advance: FontUnit::from(1001) }, // uni23DD
-                ReplacementGlyph { unicode: 0xE9C0, advance: FontUnit::from(927) }, // uni23DD.size1
-                ReplacementGlyph { unicode: 0xE9C1, advance: FontUnit::from(1461) }, // uni23DD.size2
-                ReplacementGlyph { unicode: 0xE9C2, advance: FontUnit::from(1887) }, // uni23DD.size3
-                ReplacementGlyph { unicode: 0xE9C3, advance: FontUnit::from(2329) }, // uni23DD.size4
-                ReplacementGlyph { unicode: 0xE9C4, advance: FontUnit::from(3238) }, // uni23DD.size5
-            ],
-        });
-        m.insert(0x23DE, GlyphVariants { // uni23DE
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9C6, // uni23DE.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(311),
-                        full_advance:           FontUnit::from(933),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: FontUnit::from(109),
-                        end_connector_length:   FontUnit::from(109),
-                        full_advance:           FontUnit::from(327),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9C7, // uni23DE.mid
-                        start_connector_length: FontUnit::from(621),
-                        end_connector_length:   FontUnit::from(621),
-                        full_advance:           FontUnit::from(1864),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9C5, // uni23DE.ex
-                        start_connector_length: FontUnit::from(109),
-                        end_connector_length:   FontUnit::from(109),
-                        full_advance:           FontUnit::from(327),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9C8, // uni23DE.rt
-                        start_connector_length: FontUnit::from(311),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(933),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23DE, advance: FontUnit::from(1001) }, // uni23DE
-                ReplacementGlyph { unicode: 0xE9C9, advance: FontUnit::from(926) }, // uni23DE.size1
-                ReplacementGlyph { unicode: 0xE9CA, advance: FontUnit::from(1461) }, // uni23DE.size2
-                ReplacementGlyph { unicode: 0xE9CB, advance: FontUnit::from(1887) }, // uni23DE.size3
-                ReplacementGlyph { unicode: 0xE9CC, advance: FontUnit::from(2329) }, // uni23DE.size4
-                ReplacementGlyph { unicode: 0xE9CD, advance: FontUnit::from(3239) }, // uni23DE.size5
-            ],
-        });
-        m.insert(0x23DF, GlyphVariants { // uni23DF
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xE9CF, // uni23DF.lt
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(311),
-                        full_advance:           FontUnit::from(933),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: FontUnit::from(109),
-                        end_connector_length:   FontUnit::from(109),
-                        full_advance:           FontUnit::from(327),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9D0, // uni23DF.mid
-                        start_connector_length: FontUnit::from(621),
-                        end_connector_length:   FontUnit::from(621),
-                        full_advance:           FontUnit::from(1864),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9CE, // uni23DF.ex
-                        start_connector_length: FontUnit::from(109),
-                        end_connector_length:   FontUnit::from(109),
-                        full_advance:           FontUnit::from(327),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0xE9D1, // uni23DF.rt
-                        start_connector_length: FontUnit::from(311),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(933),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23DF, advance: FontUnit::from(1001) }, // uni23DF
-                ReplacementGlyph { unicode: 0xE9D2, advance: FontUnit::from(926) }, // uni23DF.size1
-                ReplacementGlyph { unicode: 0xE9D3, advance: FontUnit::from(1461) }, // uni23DF.size2
-                ReplacementGlyph { unicode: 0xE9D4, advance: FontUnit::from(1887) }, // uni23DF.size3
-                ReplacementGlyph { unicode: 0xE9D5, advance: FontUnit::from(2329) }, // uni23DF.size4
-                ReplacementGlyph { unicode: 0xE9D6, advance: FontUnit::from(3239) }, // uni23DF.size5
-            ],
-        });
-        m.insert(0x23E0, GlyphVariants { // uni23E0
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23E0, advance: FontUnit::from(1001) }, // uni23E0
-                ReplacementGlyph { unicode: 0xE9D7, advance: FontUnit::from(1461) }, // uni23E0.size1
-                ReplacementGlyph { unicode: 0xE9D8, advance: FontUnit::from(1887) }, // uni23E0.size2
-                ReplacementGlyph { unicode: 0xE9D9, advance: FontUnit::from(2313) }, // uni23E0.size3
-                ReplacementGlyph { unicode: 0xE9DA, advance: FontUnit::from(2739) }, // uni23E0.size4
-                ReplacementGlyph { unicode: 0xE9DB, advance: FontUnit::from(3165) }, // uni23E0.size5
-            ],
-        });
-        m.insert(0x23E1, GlyphVariants { // uni23E1
-            constructable: None,
-            replacements: vec![
-                ReplacementGlyph { unicode: 0x23E1, advance: FontUnit::from(1001) }, // uni23E1
-                ReplacementGlyph { unicode: 0xE9DC, advance: FontUnit::from(1461) }, // uni23E1.size1
-                ReplacementGlyph { unicode: 0xE9DD, advance: FontUnit::from(1887) }, // uni23E1.size2
-                ReplacementGlyph { unicode: 0xE9DE, advance: FontUnit::from(2313) }, // uni23E1.size3
-                ReplacementGlyph { unicode: 0xE9DF, advance: FontUnit::from(2739) }, // uni23E1.size4
-                ReplacementGlyph { unicode: 0xE9E0, advance: FontUnit::from(3165) }, // uni23E1.size5
-            ],
-        });
-        m.insert(0x2B45, GlyphVariants { // uni2B45
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0x2B45, // uni2B45
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                    GlyphPart {
-                        unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-        m.insert(0x2B46, GlyphVariants { // uni2B46
-            constructable: Some(ConstructableGlyph {
-                italics_correction: FontUnit::from(0),
-                parts: vec![
-                    GlyphPart {
-                        unicode:                0xEAA7, // uni2B45.ex
-                        start_connector_length: FontUnit::from(0),
-                        end_connector_length:   FontUnit::from(50),
-                        full_advance:           FontUnit::from(315),
-                        required:               false,
-                    },
-                    GlyphPart {
-                        unicode:                0x2B46, // uni2B46
-                        start_connector_length: FontUnit::from(50),
-                        end_connector_length:   FontUnit::from(0),
-                        full_advance:           FontUnit::from(818),
-                        required:               true,
-                    },
-                ],
-            }),
-            replacements: vec![
-            ],
-        });
-
-        m
-    };
-}
+        }),
+        replacements: &[
+        ],
+    },
+};
