@@ -1,4 +1,4 @@
-# ReX &nbsp; [![](https://travis-ci.org/cbreeden/ReX.svg?branch=master)](build status) [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
+# ReX &nbsp; [![](https://tokei.rs/b1/github/cbreeden/rex)](https://github.com/cbreeden/rex)
 
 <p align="center"><img src="rex.png" alt="ReX logo" width="300px"/></p>
 <h3 align="center">Typesetting Mathematics</h3>
