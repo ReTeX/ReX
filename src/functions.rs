@@ -1,14 +1,14 @@
-use staticmap;
+use dimensions::Unit;
+use font::{Weight, Family};
+use font::Style as FontStyle;
 use font::Symbol;
-use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
-use parser::AtomType;
+use layout::Style;
 use lexer::Lexer;
 use lexer::Token;
 use parser as parse;
-use dimensions::Unit;
-use layout::Style;
-use font::{Weight, Family};
-use font::Style as FontStyle;
+use parser::AtomType;
+use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
+use static_map;
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -75,7 +75,7 @@ fn text(s: &'static str) -> Vec<ParseNode> {
     result
 }
 
-pub static COMMANDS: staticmap::Map<&'static str, TexCommand> = static_map! {
+pub static COMMANDS: static_map::Map<&'static str, TexCommand> = static_map! {
     Default: TexCommand::Radical,
     "frac"   => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::NoChange },
     "tfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Text },

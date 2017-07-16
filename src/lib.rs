@@ -8,9 +8,9 @@ extern crate fnv;
 extern crate fp;
 
 #[macro_use]
-extern crate staticmap;
+extern crate static_map;
 #[macro_use]
-extern crate staticmap_macros;
+extern crate static_map_macros;
 
 #[macro_use]
 mod macros;

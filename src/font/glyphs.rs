@@ -1,8 +1,8 @@
-use font::{Glyph, BBox};
 use dimensions::FontUnit as Fp;
-use staticmap;
+use font::{Glyph, BBox};
+use static_map;
 
-pub static GLYPHS: staticmap::Map<u32, Glyph> = static_map! {
+pub static GLYPHS: static_map::Map<u32, Glyph> = static_map! {
     Default: Glyph { unicode: 0x0_u32, bbox: BBox(Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }), advance: Fp { bits: 0i32 << 8u8 }, lsb: Fp { bits: 0i32 << 8u8 }, italics: Fp { bits: 0i32 << 8u8 }, attachment: Fp { bits: 0i32 << 8u8 } },
     0x0_u32 => Glyph { unicode: 0x0_u32, bbox: BBox(Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }), advance: Fp { bits: 0i32 << 8u8 }, lsb: Fp { bits: 0i32 << 8u8 }, italics: Fp { bits: 0i32 << 8u8 }, attachment: Fp { bits: 0i32 << 8u8 } },
     0x1_u32 => Glyph { unicode: 0x1_u32, bbox: BBox(Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }, Fp { bits: 0i32 << 8u8 }), advance: Fp { bits: 0i32 << 8u8 }, lsb: Fp { bits: 0i32 << 8u8 }, italics: Fp { bits: 0i32 << 8u8 }, attachment: Fp { bits: 0i32 << 8u8 } },

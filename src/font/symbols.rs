@@ -7,11 +7,11 @@
 // FIXME: We should probably use the official unicode standards source.
 
 #![allow(dead_code)]
-use staticmap;
-use parser::AtomType;
 use font::Symbol;
+use parser::AtomType;
+use static_map;
 
-pub static SYMBOLS: staticmap::Map<&'static str, Symbol> = static_map! {
+pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     Default: Symbol { unicode: 0x00, atom_type: AtomType::Accent },
     // unicode-math.dtx command table
     // "mathexclam" => Symbol { unicode: 0x21, atom_type: AtomType::Punctuation }, // Unicode: 0x21, exclamation mark
@@ -27,9 +27,9 @@ pub static SYMBOLS: staticmap::Map<&'static str, Symbol> = static_map! {
     // "mathslash" => Symbol { unicode: 0x2F, atom_type: AtomType::Alpha }, // Unicode: 0x2F, solidus
     // "mathcolon" => Symbol { unicode: 0x3A, atom_type: AtomType::Punctuation }, // Unicode: 0x3A, colon
     // "mathsemicolon" => Symbol { unicode: 0x3B, atom_type: AtomType::Punctuation }, // Unicode: 0x3B, semicolon p:
-    "less" => Symbol { unicode: 0x3C, atom_type: AtomType::Relation }, // Unicode: 0x3C, less-than sign r:
-    "equal" => Symbol { unicode: 0x3D, atom_type: AtomType::Relation }, // Unicode: 0x3D, equals sign r:
-    "greater" => Symbol { unicode: 0x3E, atom_type: AtomType::Relation }, // Unicode: 0x3E, greater-than sign r:
+    // "less" => Symbol { unicode: 0x3C, atom_type: AtomType::Relation }, // Unicode: 0x3C, less-than sign r:
+    // "equal" => Symbol { unicode: 0x3D, atom_type: AtomType::Relation }, // Unicode: 0x3D, equals sign r:
+    // "greater" => Symbol { unicode: 0x3E, atom_type: AtomType::Relation }, // Unicode: 0x3E, greater-than sign r:
     // "mathquestion" => Symbol { unicode: 0x3F, atom_type: AtomType::Alpha }, // Unicode: 0x3F, question mark
     // "mathatsign" => Symbol { unicode: 0x40, atom_type: AtomType::Alpha }, // Unicode: 0x40, commercial at
     "lbrack" => Symbol { unicode: 0x5B, atom_type: AtomType::Open }, // Unicode: 0x5B, left square bracket

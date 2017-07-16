@@ -10,8 +10,8 @@ authors = [
 lazy_static = "0.2"
 fnv = "1.0.3"
 fp = { git = "https://github.com/ReTeX/fp.git" }
-staticmap = { path = "static-map/staticmap" }
-staticmap_macros = { path = "static-map/staticmap_macros" }
+static_map = "0.1"
+static_map_macros = "0.1"
 
 [dev-dependencies]
 toml = "0.2"
