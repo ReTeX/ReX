@@ -279,9 +279,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String
 
 pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseNode>>, String> {
     // Must figure out how to properly handle implicit groups here.
-    while lex.current == Token::WhiteSpace {
-        lex.next();
-    }
+    lex.consume_whitespace();
 
     let opt_node = alt!(
         group(lex, local),
