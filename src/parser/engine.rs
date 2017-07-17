@@ -29,7 +29,8 @@ pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>
             symbol(lex, local),
             implicit_group(lex, local));
 
-        // Handle commands that may change the state of the parser.
+        // Handle commands that may change the state of the parser
+        // ie: fontstyle changes.
         if node.is_none() {
             if let Some(mut nodes) = state_change(lex, local)? {
                 ml.append(&mut nodes);
@@ -39,10 +40,12 @@ pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>
 
         let node = postfix(lex, local, node)?;
 
-        ml.push(match node {
-                    None => return Err(format!("Unable to parse {}", lex.current)),
-                    Some(s) => s,
-                });
+        // If at this point we still haven't parsed a node, then
+        // it's something we don't know how to handle.
+        match node {
+            Some(n) => ml.push(n),
+            None => return Err(format!("unable to parse {}", lex.current)),
+        }
     }
 
     Ok(ml)
