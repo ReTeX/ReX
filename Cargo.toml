@@ -14,7 +14,6 @@ name = "qc"
 path = "bin/qc.rs"
 
 [dependencies]
-lazy_static = "0.2"
 fnv = "1.0.3"
 fp = { git = "https://github.com/ReTeX/fp.git" }
 static_map = "0.1"

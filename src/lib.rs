@@ -15,9 +15,6 @@ extern crate static_map_macros;
 #[macro_use]
 mod macros;
 
-#[macro_use]
-extern crate lazy_static;
-
 pub mod error;
 pub mod dimensions;
 pub mod layout;
