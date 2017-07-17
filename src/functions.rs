@@ -9,6 +9,7 @@ use parser as parse;
 use parser::AtomType;
 use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
 use static_map;
+use error::{Error, Result};
 
 #[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -191,7 +192,7 @@ macro_rules! required {
 }
 
 impl TexCommand {
-    pub fn parse(self, lex: &mut Lexer, local: FontStyle) -> Result<Option<ParseNode>, String> {
+    pub fn parse(self, lex: &mut Lexer, local: FontStyle) -> Result<Option<ParseNode>> {
         Ok(match self {
             TexCommand::Radical =>
                 Some(ParseNode::Radical(Radical {
@@ -291,7 +292,7 @@ impl TexCommand {
 
             TexCommand::Stack(atom) => {
                 if lex.current != Token::Symbol('{') {
-                    return Err("Stack commands must follow a group.".into());
+                    return Err(Error::StackMustFollowGroup)
                 }
 
                 lex.next();
@@ -303,10 +304,7 @@ impl TexCommand {
 
                     if lex.current == Token::Symbol('}') { break }
                     if lex.current != Token::Command(r"\") {
-                        return Err(format!(
-                            "Stack command parsing terminated pre-maturely. \
-                            Perhaps there is an unbalenced bracket? \
-                            Expression terminated with {}", lex.current));
+                        return Err(Error::StackMustFollowGroup)
                     } else {
                         lex.next();
                     }

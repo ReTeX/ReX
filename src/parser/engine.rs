@@ -1,9 +1,9 @@
 #![allow(dead_code)]
-use error::{ParseError, ParseResult};
+use error::{Error, Result};
 use font::Style;
 use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
-use parser::nodes::{Delimited, ParseNode};
+use parser::nodes::{Delimited, ParseNode, Accent};
 use parser::atoms::IsAtom;
 use parser::AtomType;
 use functions::COMMANDS;
@@ -13,9 +13,8 @@ use super::builders as build;
 /// It can also be used to parse sub-expressions (or more formally known)
 /// as `mathlists` which can be found from parsing groups.
 
-pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
+pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
     let mut ml: Vec<ParseNode> = Vec::new();
-
     loop {
         // TODO: Handle INFIX operators here, once we support them.
         lex.consume_whitespace();
@@ -44,19 +43,17 @@ pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>
         // it's something we don't know how to handle.
         match node {
             Some(n) => ml.push(n),
-            None => return Err(format!("unable to parse {}", lex.current)),
+            None => return Err(Error::FailedToParse(lex.current.into())),
         }
     }
-
     Ok(ml)
 }
 
 fn postfix(lex: &mut Lexer,
            local: Style,
            mut prev: Option<ParseNode>)
-           -> Result<Option<ParseNode>, String>
+           -> Result<Option<ParseNode>>
 {
-    const LIMITS_ERR: &'static str = "Limits must follow an operator";
     let mut superscript: Option<ParseNode> = None;
     let mut subscript: Option<ParseNode> = None;
 
@@ -69,7 +66,7 @@ fn postfix(lex: &mut Lexer,
                 lex.next();
                 // If we already have a subscript, bail.
                 if subscript.is_some() {
-                    return Err("Excessive subscripts".into());
+                    return Err(Error::ExcessiveSubscripts);
                 }
                 subscript = Some(math_field(lex, local)?);
             }
@@ -77,31 +74,31 @@ fn postfix(lex: &mut Lexer,
                 lex.next();
                 // If we already have a superscript, bail.
                 if superscript.is_some() {
-                    return Err("Excessive superscripts".into());
+                    return Err(Error::ExcessiveSuperscripts);
                 }
                 superscript = Some(math_field(lex, local)?);
             }
             Token::Command("limits") => {
                 lex.next();
-                let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
+                let op = prev.as_mut().ok_or(Error::LimitsMustFollowOperator)?;
                 if let AtomType::Operator(_) = op.atom_type() {
                     op.set_atom_type(AtomType::Operator(true));
                 } else {
-                    return Err(LIMITS_ERR.into());
+                    return Err(Error::LimitsMustFollowOperator);
                 }
             }
             Token::Command("nolimits") => {
                 lex.next();
-                let op = prev.as_mut().ok_or(LIMITS_ERR.to_string())?;
+                let op = prev.as_mut().ok_or(Error::LimitsMustFollowOperator)?;
                 if let AtomType::Operator(_) = op.atom_type() {
                     op.set_atom_type(AtomType::Operator(false));
                 } else {
-                    return Err(LIMITS_ERR.into());
+                    return Err(Error::LimitsMustFollowOperator);
                 }
             }
             _ => break,
-        } // End match
-    } // End loop
+        }
+    }
 
     if superscript.is_some() || subscript.is_some() {
         Ok(Some(build::scripts(prev, superscript, subscript)))
@@ -114,7 +111,7 @@ fn postfix(lex: &mut Lexer,
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
-pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNode>>, String> {
+pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNode>>> {
     use font::Family;
     if let Token::Command(cmd) = lex.current {
         let new_style = match cmd {
@@ -147,12 +144,12 @@ pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNod
 /// This method will result in an error if either the `Symbol` or
 /// `<mathmode material>` contains an error, or if no match is found.
 
-pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode, String> {
+pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
     alt!(
         command(lex, local),
         group(lex, local),
         symbol(lex, local))
-            .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
+            .ok_or(Error::ExpectedMathField(lex.current.into()))
 }
 
 /// Parse a TeX command. These commands define the "primitive" commands for our
@@ -161,20 +158,19 @@ pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode, String> {
 /// If no matching command is found, this will return `Ok(None)`.  This method
 /// can fail while parsing parameters for a TeX command.
 
-pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
+pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     // TODO: We need to build a framework, that will match commands
-    let cmd = if let Token::Command(cmd) = lex.current {
-        match COMMANDS.get(cmd).cloned() {
-            Some(command) => command,
-            None => return Ok(None),
+    if let Token::Command(cmd) = lex.current {
+        match COMMANDS.get(cmd) {
+            Some(ref cmd) => {
+                lex.next();
+                cmd.parse(lex, local)
+            },
+            None => Ok(None),
         }
     } else {
-        return Ok(None);
-    };
-
-    // A command has been found.  Consume the token and parse for arguments.
-    lex.next();
-    cmd.parse(lex, local)
+        Ok(None)
+    }
 }
 
 /// Parse an implicit group.  An implicit group is often defined by a command
@@ -184,27 +180,29 @@ pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, Strin
 ///
 /// This should be used almost anywhere `group()` is used.
 
-pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
+pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     let token = lex.current;
 
     if token == Token::Command("left") {
-        lex.next(); // consume the `\left` token`
+        lex.next();
         let left = symbol(lex, local)?
-            .ok_or(String::from(r#"No symbol found after `\left`"#))?
+            .ok_or(Error::ExpectedSymbol(lex.current.into()))?
             .expect_left()?;
 
         let inner = expression(lex, local)?;
-        lex.current.expect(Token::Command("right"))?;
+        lex.current.expect_command("right")?;
         lex.next();
         let right = symbol(lex, local)?
-            .ok_or(String::from(r#"No symbol found after '\right'"#))?
+            .ok_or(Error::ExpectedSymbol(lex.current.into()))?
             .expect_right()?;
 
-        Ok(Some(ParseNode::Delimited(Delimited {
-                                         left: left,
-                                         right: right,
-                                         inner: inner,
-                                     })))
+        Ok(Some(
+            ParseNode::Delimited(
+                Delimited {
+                    left: left,
+                    right: right,
+                    inner: inner,
+        })))
     } else {
         Ok(None)
     }
@@ -217,11 +215,11 @@ pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>
 
 // TODO: This should also recognize `\bgroup` if we decide to go that route.
 
-pub fn group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
+pub fn group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     if lex.current == Token::Symbol('{') {
         lex.next();
         let inner = expression(lex, local)?;
-        lex.current.expect(Token::Symbol('}'))?;
+        lex.current.expect_symbol('}')?;
         lex.next();
         Ok(Some(ParseNode::Group(inner)))
     } else {
@@ -239,42 +237,45 @@ pub fn group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String>
 /// the `{` will not be recognized here and will therefore result in an `Err`.
 /// So in general, you should always parse for a group before parsing for a symbol.
 
-pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String> {
+pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     match lex.current {
         Token::Command(cs) => {
-            match SYMBOLS.get(cs).cloned() {
-                None => Ok(None),
-                Some(sym) => {
-                    lex.next();
-                    use parser::nodes::Accent;
-                    // If this symbol is an accent, we need to consume the next math field.
-                    if sym.atom_type == AtomType::Accent {
-                        let nucleus = math_field(lex, local)
-                            .expect("No symbol following an accent!");
-                        Ok(Some(ParseNode::Accent(Accent {
-                                                      symbol: sym,
-                                                      nucleus: Box::new(nucleus),
-                                                  })))
-                    } else {
-                        Ok(Some(ParseNode::Symbol(Symbol {
-                                                      unicode: local.style_symbol(sym.unicode),
-                                                      ..sym
-                                                  })))
-                    }
+            if let Some(sym) = SYMBOLS.get(cs).cloned() {
+                lex.next();
+
+                if sym.atom_type == AtomType::Accent {
+                    let nucleus = math_field(lex, local)
+                        .map_err(|_| Error::AccentMissingArg(cs.into()))?;
+
+                    Ok(Some(
+                        ParseNode::Accent(
+                            Accent {
+                                symbol: sym,
+                                nucleus: Box::new(nucleus),
+                    })))
+                } else {
+                    Ok(Some(
+                        ParseNode::Symbol(
+                            Symbol {
+                                unicode: local.style_symbol(sym.unicode),
+                                ..sym
+                    })))
                 }
+            } else {
+                Ok(None)
             }
         }
         Token::Symbol(c) => {
-            Ok(match c.atom_type() {
-                   None => None,
-                   Some(sym) => {
-                       lex.next();
-                       Some(ParseNode::Symbol(Symbol {
-                                                  unicode: local.style_symbol(c as u32),
-                                                  atom_type: sym,
-                                              }))
-                   }
-               })
+            match c.atom_type() {
+                None => Ok(None),
+                Some(sym) => {
+                    lex.next();
+                    Ok(Some(ParseNode::Symbol(Symbol {
+                                              unicode: local.style_symbol(c as u32),
+                                              atom_type: sym,
+                                          })))
+               }
+            }
         }
         _ => Ok(None),
     }
@@ -291,7 +292,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>, String
 ///   - When can this possible fail?
 ///   - How to handle custom validators/parsers for arguments. ie: Argument is a color.
 
-pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseNode>>, String> {
+pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseNode>>> {
     // Must figure out how to properly handle implicit groups here.
     lex.consume_whitespace();
 
@@ -309,24 +310,12 @@ pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseN
 
 /// This method is like `macro_argument` except that it requires an argument to be present.
 
-pub fn required_macro_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
+pub fn required_macro_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
     let arg = macro_argument(lex, local)?;
     match arg {
-        None => Err(format!("Expected a required macro argument! {:?}", arg)),
+        None => Err(Error::RequiredMacroArg),
         Some(res) => Ok(res),
     }
-}
-
-/// DOCUMENT ME
-#[allow(unused_variables)]
-pub fn optional_macro_argument(lex: &mut Lexer) -> Result<Option<Vec<ParseNode>>, String> {
-    unimplemented!()
-}
-
-/// This method will be used to allow for customized macro argument parsing?
-#[allow(unused_variables)]
-pub fn special_macro_argument(lex: &mut Lexer) -> () {
-    unimplemented!()
 }
 
 /// This method expects that the current token has a given atom type.  This method
@@ -336,40 +325,37 @@ pub fn special_macro_argument(lex: &mut Lexer) -> () {
 ///
 /// This function _will_ advance the lexer.
 
-pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<Symbol, String> {
+pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<Symbol> {
     lex.consume_whitespace();
 
     if let Some(ParseNode::Symbol(sym)) = symbol(lex, local)? {
         if sym.atom_type == expected {
             Ok(sym)
         } else {
-            Err(format!("Expected a symbol of type {:?}, got a symbol of type {:?}",
-                        expected,
-                        sym.atom_type))
+            Err(Error::ExpectedAtomType(expected, sym.atom_type))
         }
     } else {
-        Err(format!("Expected a symbol of type {:?}, got a {:?}",
-                    expected,
-                    lex.current))
+        Err(Error::ExpectedSymbol(lex.current.into()))
     }
 }
 
 /// This function is the API entry point for parsing a macro.  For now, it takes a `&str`
 /// and outputs a vector of parsing nodes, or an error message.
 
-pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
+// TODO: This should return a result.
+pub fn parse(input: &str) -> Vec<ParseNode> {
     let mut lexer = Lexer::new(input);
     let local = Style::new();
 
     let result = expression(&mut lexer, local);
     if lexer.current != Token::EOF {
-        println!("Unexpectedly ended parsing; \
-                  unmatched end of expression? \
-                  Stoped parsing at {}",
-                 lexer.current);
+        panic!("Unexpectedly ended parsing; \
+                unmatched end of expression? \
+                Stoped parsing at {}",
+                lexer.current);
     }
 
-    result
+    result.expect("failed to parse")
 }
 
 

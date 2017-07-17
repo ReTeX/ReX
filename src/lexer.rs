@@ -1,5 +1,7 @@
 use std::fmt;
 use dimensions::Unit;
+use error::Error;
+use std::borrow::ToOwned;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Token<'a> {
@@ -9,9 +11,17 @@ pub enum Token<'a> {
     EOF,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum OwnedToken {
+    Command(String),
+    Symbol(char),
+    WhiteSpace,
+    EOF,
+}
+
 impl<'a> Token<'a> {
-    pub fn ends_expression(&self) -> bool {
-        match *self {
+    pub fn ends_expression(self) -> bool {
+        match self {
             Token::EOF |
             Token::Symbol('}') |
             Token::Command("right") |
@@ -20,14 +30,28 @@ impl<'a> Token<'a> {
         }
     }
 
-    pub fn expect(&self, expected: Token<'a>) -> Result<(), String> {
+    pub fn expect(&self, expected: Token<'a>) -> Result<(), Error> {
         if *self == expected {
             Ok(())
         } else {
-            Err(format!("Expected token '{:?}', found the token '{:?}'",
-                        expected,
-                        self))
+            Err(Error::ExpectedTokenFound(expected.into(), (*self).into()))
         }
+    }
+
+    pub fn expect_command(self, expected: &'static str) -> Result<(), Error> {
+        self.expect(Token::Command(expected))
+    }
+
+    pub fn expect_symbol(self, expected: char) -> Result<(), Error> {
+        self.expect(Token::Symbol(expected))
+    }
+
+    pub fn expect_whitespace(self) -> Result<(), Error> {
+        self.expect(Token::WhiteSpace)
+    }
+
+    pub fn expect_eof(self) -> Result<(), Error> {
+        self.expect(Token::EOF)
     }
 }
 
@@ -35,10 +59,11 @@ impl<'a> Token<'a> {
 pub struct Lexer<'a> {
     pub input: &'a str,
 
-    /// The position of the _next_ token to be lexed.  So it
-    /// is a true statement that `self.input[0..self.pos]` displays
-    /// all characters that have and is currently being processed.
+    /// The position of where _next_ token to be lexed begins.
     pub pos: usize,
+
+    /// The position of where `self.current` begins.
+    pub prev_pos: usize,
 
     /// The token currently being processed.
     pub current: Token<'a>,
@@ -47,12 +72,12 @@ pub struct Lexer<'a> {
 impl<'a> Lexer<'a> {
     /// Create a new lexer, whose current token is the first token
     /// to be processed.
-
     pub fn new(input: &'a str) -> Lexer<'a> {
         let mut lex = Lexer {
             input: input,
-            current: Token::EOF,
             pos: 0,
+            prev_pos: 0,
+            current: Token::EOF,
         };
 
         lex.next();
@@ -61,8 +86,8 @@ impl<'a> Lexer<'a> {
 
     /// Advanced to the next token to be processed, and return it.
     /// This will also modify `Lexer.current`.
-
     pub fn next(&mut self) -> Token<'a> {
+        self.prev_pos = self.pos;
         self.current = match self.next_char() {
             Some(c) if c.is_whitespace() => {
                 self.advance_while_whitespace();
@@ -82,7 +107,6 @@ impl<'a> Lexer<'a> {
     /// until `lex.current` is the first non-whitespace token.
     /// This method is indepotent, so that calling this method
     /// twice has no effect.
-
     pub fn consume_whitespace(&mut self) {
         if self.current != Token::WhiteSpace {
             return;
@@ -93,7 +117,6 @@ impl<'a> Lexer<'a> {
 
     /// This method is the same as [consume_whitespace],
     /// except that it does not process the next token.
-
     fn advance_while_whitespace(&mut self) {
         while let Some(c) = self.current_char() {
             if !c.is_whitespace() {
@@ -109,7 +132,6 @@ impl<'a> Lexer<'a> {
     /// name, and consume all whitespace proceeding.  When
     /// complete `self.pos` will point to the first character
     /// of the next item to be lexed.
-
     fn control_sequence(&mut self) -> Token<'a> {
         let start = self.pos;
 
@@ -139,22 +161,20 @@ impl<'a> Lexer<'a> {
     /// that the lexer is currently pointed to the first valid
     /// character in a dimension.  So it may be necessary to
     /// consume_whitespace() prior to using this method.
-
-    pub fn dimension(&mut self) -> Result<Option<Unit>, String> {
+    pub fn dimension(&mut self) -> Result<Option<Unit>, Error> {
         // utter crap, rewrite.
         unimplemented!()
     }
 
     /// Expect to find an {<inner>}, and return <inner>
-
-    pub fn group(&mut self) -> Result<&str, String> {
+    pub fn group(&mut self) -> Result<&str, Error> {
         self.consume_whitespace();
         self.current.expect(Token::Symbol('{'))?;
 
         let start = self.pos;
         let end = match self.input[self.pos..].find('}') {
             Some(pos) => start + pos,
-            None => return Err("failed to find closing bracket".into())
+            None => return Err(Error::NoClosingBracket)
         };
 
         // Place cursor immediately after }
@@ -182,10 +202,32 @@ impl<'a> Lexer<'a> {
 impl<'a> fmt::Display for Token<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            Token::Command(cmd) => write!(f, r"\{}", cmd),
+            Token::Command(cmd) => write!(f, r#""\{}""#, cmd),
             Token::Symbol(c) => write!(f, r"'{}'", c),
             Token::WhiteSpace => write!(f, r"' '"),
             Token::EOF => write!(f, "EOF"),
+        }
+    }
+}
+
+impl<'a> fmt::Display for OwnedToken {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            OwnedToken::Command(ref cmd) => write!(f, r#""\{}""#, cmd),
+            OwnedToken::Symbol(c) => write!(f, r"'{}'", c),
+            OwnedToken::WhiteSpace => write!(f, r"' '"),
+            OwnedToken::EOF => write!(f, "EOF"),
+        }
+    }
+}
+
+impl<'a> From<Token<'a>> for OwnedToken {
+    fn from(tok: Token<'a>) -> OwnedToken {
+        match tok {
+            Token::Command(cmd) => OwnedToken::Command(cmd.into()),
+            Token::Symbol(c) => OwnedToken::Symbol(c),
+            Token::WhiteSpace => OwnedToken::WhiteSpace,
+            Token::EOF => OwnedToken::EOF,
         }
     }
 }

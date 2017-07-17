@@ -226,7 +226,7 @@ pub trait Renderer {
     fn settings(&self) -> &RenderSettings;
 
     fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), String> {
-        let mut parse = parse(&tex)?;
+        let mut parse = parse(&tex);
 
         let layout = layout(&mut parse, self.settings().layout_settings());
 

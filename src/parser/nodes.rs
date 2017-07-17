@@ -1,6 +1,7 @@
 use dimensions::Unit;
 use layout::Style;
 use font::Symbol;
+use error::Error;
 
 use super::atoms::AtomType;
 
@@ -99,28 +100,26 @@ pub struct Color {
 }
 
 impl ParseNode {
-    pub fn expect_left(self) -> Result<Symbol, String> {
+    pub fn expect_left(self) -> Result<Symbol, Error> {
         if let ParseNode::Symbol(sym) = self {
             if sym.atom_type == AtomType::Open || sym.atom_type == AtomType::Fence ||
                sym.unicode == 46 {
                 return Ok(sym);
             } else {
-                return Err(format!(r#"Expected Open, Fence, or period after `\left`, found {:?}"#,
-                                   sym));
+                return Err(Error::ExpectedOpen(sym));
             }
         } else {
             unreachable!()
         }
     }
 
-    pub fn expect_right(self) -> Result<Symbol, String> {
+    pub fn expect_right(self) -> Result<Symbol, Error> {
         if let ParseNode::Symbol(sym) = self {
             if sym.atom_type == AtomType::Close || sym.atom_type == AtomType::Fence ||
                sym.unicode == 46 {
                 return Ok(sym);
             } else {
-                return Err(format!(r#"Expected Open, Fence, or period after `\right`, found {:?}"#,
-                                   sym));
+                return Err(Error::ExpectedClose(sym));
             }
         } else {
             unreachable!()
