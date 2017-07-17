@@ -347,7 +347,11 @@ pub fn parse(input: &str) -> Vec<ParseNode> {
     let mut lexer = Lexer::new(input);
     let local = Style::new();
 
-    let result = expression(&mut lexer, local);
+    let result = match expression(&mut lexer, local) {
+        Ok(ret) => ret,
+        Err(err) => panic!("Failed to parse with error: {}.", err),
+    };
+
     if lexer.current != Token::EOF {
         panic!("Unexpectedly ended parsing; \
                 unmatched end of expression? \
@@ -355,7 +359,7 @@ pub fn parse(input: &str) -> Vec<ParseNode> {
                 lexer.current);
     }
 
-    result.expect("failed to parse")
+    result
 }
 
 

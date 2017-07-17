@@ -9,6 +9,10 @@ authors = [
 [features]
 fast-check = []
 
+[[bin]]
+name = "qc"
+path = "bin/qc.rs"
+
 [dependencies]
 lazy_static = "0.2"
 fnv = "1.0.3"
