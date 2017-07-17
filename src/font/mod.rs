@@ -90,50 +90,31 @@ impl Style {
         Style::default()
     }
 
-    pub fn with_family(&self, fam: Family) -> Style {
+    pub fn with_family(self, fam: Family) -> Style {
         Style {
             family: fam,
-            ..*self
+            ..self
         }
     }
 
-    pub fn with_weight(&self, weight: Weight) -> Style {
+    pub fn with_weight(self, weight: Weight) -> Style {
         Style {
             weight: weight,
-            ..*self
+            ..self
         }
     }
 
-    pub fn from_cmd(cmd: &str, old: &Style) -> Option<Style> {
-        if let Some(weight) = match cmd {
-               "mathbf" => {
-                   match old.weight {
-                       Weight::Bold | Weight::None => Some(Weight::Bold),
-                       _ => Some(Weight::BoldItalic),
-                   }
-               }
-               "mathit" => {
-                   match old.weight {
-                       Weight::Italic | Weight::None => Some(Weight::Italic),
-                       _ => Some(Weight::BoldItalic),
-                   }
-               }
-               _ => None,
-           } {
-            Some(old.with_weight(weight))
-        } else if let Some(family) = match cmd {
-                      "mathrm" => Some(Family::Roman),
-                      "mathscr" => Some(Family::Script),
-                      "mathfrak" => Some(Family::Fraktur),
-                      "mathbb" => Some(Family::Blackboard),
-                      "mathsf" => Some(Family::SansSerif),
-                      "mathtt" => Some(Family::Monospace),
-                      "mathcal" => Some(Family::Script),
-                      _ => None,
-                  } {
-            Some(old.with_family(family))
-        } else {
-            None
+    pub fn with_bold(self) -> Style {
+        Style {
+            weight: self.weight.with_bold(),
+            ..self
+        }
+    }
+
+    pub fn with_italics(self) -> Style {
+        Style {
+            weight: self.weight.with_italics(),
+            ..self
         }
     }
 }
@@ -159,6 +140,22 @@ pub enum Weight {
     Italic,
     Bold,
     BoldItalic,
+}
+
+impl Weight {
+    fn with_bold(self) -> Self {
+        match self {
+            Weight::Italic | Weight::BoldItalic => Weight::BoldItalic,
+            _ => Weight::Bold,
+        }
+    }
+
+    fn with_italics(self) -> Self {
+        match self {
+            Weight::Bold | Weight::BoldItalic => Weight::BoldItalic,
+            _ => Weight::Italic,
+        }
+    }
 }
 
 impl Default for Family {

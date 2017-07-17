@@ -29,9 +29,12 @@ pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>
             symbol(lex, local),
             implicit_group(lex, local));
 
-        // Handle commands that can change that state of the parser
-        if node.is_none() && state_change(lex, local, &mut ml)? {
-            continue;
+        // Handle commands that may change the state of the parser.
+        if node.is_none() {
+            if let Some(mut nodes) = state_change(lex, local)? {
+                ml.append(&mut nodes);
+                continue;
+            }
         }
 
         let node = postfix(lex, local, node)?;
@@ -48,11 +51,11 @@ pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>
 fn postfix(lex: &mut Lexer,
            local: Style,
            mut prev: Option<ParseNode>)
-           -> Result<Option<ParseNode>, String> {
+           -> Result<Option<ParseNode>, String>
+{
+    const LIMITS_ERR: &'static str = "Limits must follow an operator";
     let mut superscript: Option<ParseNode> = None;
     let mut subscript: Option<ParseNode> = None;
-
-    const LIMITS_ERR: &'static str = "Limits must follow an operator";
 
     loop {
         lex.consume_whitespace();
@@ -97,30 +100,38 @@ fn postfix(lex: &mut Lexer,
         } // End match
     } // End loop
 
-    Ok(if superscript.is_some() || subscript.is_some() {
-           Some(build::scripts(prev, superscript, subscript))
-       } else {
-           prev
-       })
+    if superscript.is_some() || subscript.is_some() {
+        Ok(Some(build::scripts(prev, superscript, subscript)))
+    } else {
+        Ok(prev)
+    }
 }
 
 /// Theses commands may change the state of the parser, and so will
 /// be handled in a special manner.  Changinge the state of the parser
 /// may also require direct access to the current list of parse nodes.
 
-pub fn state_change(lex: &mut Lexer,
-                    local: Style,
-                    nodes: &mut Vec<ParseNode>)
-                    -> Result<bool, String> {
+pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNode>>, String> {
+    use font::Family;
     if let Token::Command(cmd) = lex.current {
-        if let Some(style) = Style::from_cmd(cmd, &local) {
-            lex.next();
-            nodes.append(&mut macro_argument(lex, style)?.unwrap_or(vec![]));
-            return Ok(true);
-        }
+        let new_style = match cmd {
+            "mathbf" =>   style.with_bold(),
+            "mathit" =>   style.with_italics(),
+            "mathrm" =>   style.with_family(Family::Roman),
+            "mathscr" =>  style.with_family(Family::Script),
+            "mathfrak" => style.with_family(Family::Fraktur),
+            "mathbb" =>   style.with_family(Family::Blackboard),
+            "mathsf" =>   style.with_family(Family::SansSerif),
+            "mathtt" =>   style.with_family(Family::Monospace),
+            "mathcal" =>  style.with_family(Family::Script),
+            _ => return Ok(None),
+        };
+
+        lex.next();
+        return macro_argument(lex, new_style)
     }
-    // No state modifying commands found
-    Ok(false)
+
+    Ok(None)
 }
 
 /// Parse a `<Math Field>`.  A math field is defined by
