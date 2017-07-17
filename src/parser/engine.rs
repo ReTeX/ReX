@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 use error::{Error, Result};
 use font::Style;
-use font::{SYMBOLS, Symbol, OptionalAtom};
+use font::{SYMBOLS, Symbol};
 use lexer::{Lexer, Token};
 use parser::nodes::{Delimited, ParseNode, Accent};
 use parser::atoms::IsAtom;
@@ -250,7 +250,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
             }
         }
         Token::Symbol(c) => {
-            match c.atom_type() {
+            match codepoint_atom_type(c) {
                 None => Ok(None),
                 Some(sym) => {
                     lex.next();
@@ -343,6 +343,23 @@ pub fn parse(input: &str) -> Vec<ParseNode> {
     result
 }
 
+/// Helper function for determining an atomtype based on a given codepoint.
+/// This is primarily used for characters while processing, so may give false
+/// negatives when used for other things.
+fn codepoint_atom_type(codepoint: char) -> Option<AtomType> {
+    Some(match codepoint {
+        'a'...'z' | 'A'...'Z' |
+        '0'...'9' | 'Α'...'Ω' | 'α'...'ω'  => AtomType::Alpha,
+
+        '*' | '+' | '-' => AtomType::Binary,
+        '[' | '(' => AtomType::Open,
+        ']' | ')' | '?' | '!' => AtomType::Close,
+        '=' | '<' | '>' | ':' => AtomType::Relation,
+        ',' | ';' => AtomType::Punctuation,
+        '|' |  '/' | '@' | '.' | '"' => AtomType::Alpha,
+        _ => return None,
+    })
+}
 
 // --------------
 //     TESTS
