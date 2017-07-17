@@ -196,13 +196,7 @@ pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>
             .ok_or(Error::ExpectedSymbol(lex.current.into()))?
             .expect_right()?;
 
-        Ok(Some(
-            ParseNode::Delimited(
-                Delimited {
-                    left: left,
-                    right: right,
-                    inner: inner,
-        })))
+        Ok(Some(delimited!(left, right, inner)))
     } else {
         Ok(None)
     }
@@ -247,19 +241,9 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
                     let nucleus = math_field(lex, local)
                         .map_err(|_| Error::AccentMissingArg(cs.into()))?;
 
-                    Ok(Some(
-                        ParseNode::Accent(
-                            Accent {
-                                symbol: sym,
-                                nucleus: Box::new(nucleus),
-                    })))
+                    Ok(Some(accent!(sym, nucleus)))
                 } else {
-                    Ok(Some(
-                        ParseNode::Symbol(
-                            Symbol {
-                                unicode: local.style_symbol(sym.unicode),
-                                ..sym
-                    })))
+                    Ok(Some(ParseNode::Symbol(sym.with_style(local))))
                 }
             } else {
                 Ok(None)
@@ -270,10 +254,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
                 None => Ok(None),
                 Some(sym) => {
                     lex.next();
-                    Ok(Some(ParseNode::Symbol(Symbol {
-                                              unicode: local.style_symbol(c as u32),
-                                              atom_type: sym,
-                                          })))
+                    Ok(Some(symbol!(local.style_symbol(c as u32), sym)))
                }
             }
         }

@@ -65,6 +65,15 @@ pub struct Symbol {
     pub atom_type: AtomType,
 }
 
+impl Symbol {
+    pub fn with_style(self, style: Style) -> Symbol {
+        Symbol {
+            unicode: style.style_symbol(self.unicode),
+            ..self
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct KernRecord {
     top_right: Option<KernTable>,

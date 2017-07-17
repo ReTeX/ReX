@@ -1,6 +1,7 @@
 use super::Style;
 use super::Family::*;
 use super::Weight::*;
+use super::Symbol;
 
 // BMP unicode points of each symbol group.
 const UPPER_A: u32 = 0x41;
@@ -76,15 +77,10 @@ impl Style {
     pub fn style_symbol(&self, unicode: u32) -> u32 {
         match unicode {
             LOWER_A...LOWER_Z => self.style_lower_latin(unicode - LOWER_A),
-
             UPPER_A...UPPER_Z => self.style_upper_latin(unicode - UPPER_A),
-
             UPPER_ALPHA...UPPER_OMEGA => self.style_upper_greek(unicode - UPPER_ALPHA),
-
             LOWER_ALPHA...LOWER_OMEGA => self.style_lower_greek(unicode - LOWER_ALPHA),
-
             DIGIT_0...DIGIT_9 => self.style_digit(unicode - DIGIT_0),
-
             _ => self.style_other(unicode),
         }
     }
