@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-// TODO: Figure out how to handle functions which are in Symbols table.
+use error::{ParseError, ParseResult};
 use font::Style;
 use font::{SYMBOLS, Symbol, OptionalAtom};
 use lexer::{Lexer, Token};
@@ -10,27 +10,24 @@ use functions::COMMANDS;
 use super::builders as build;
 
 /// This method is served as an entry point to parsing the input.
-/// It can also but used to parse sub-expressions (or more formally known)
+/// It can also be used to parse sub-expressions (or more formally known)
 /// as `mathlists` which can be found from parsing groups.
-///
-/// This method will always return something, though it may be an emptylist.
-/// This method itself will not fail, but it is possible that expressions
-/// inside this method will fail and raise and error.
 
-
-pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
+pub fn expression<'l>(lex: &'l mut Lexer, local: Style) -> Result<Vec<ParseNode>, String> {
     let mut ml: Vec<ParseNode> = Vec::new();
 
     loop {
-        // TODO: We need to check parsing mode here for properly handling spaces.
-        // TODO: Handle INFIX operators here.
+        // TODO: Handle INFIX operators here, once we support them.
         lex.consume_whitespace();
         if lex.current.ends_expression() {
             break;
         }
 
-        let node = first_some!(lex, local,
-            command, group, symbol, implicit_group,);
+        let node = alt!(
+            command(lex, local),
+            group(lex, local),
+            symbol(lex, local),
+            implicit_group(lex, local));
 
         // Handle commands that can change that state of the parser
         if node.is_none() && state_change(lex, local, &mut ml)? {
@@ -137,8 +134,10 @@ pub fn state_change(lex: &mut Lexer,
 /// `<mathmode material>` contains an error, or if no match is found.
 
 pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode, String> {
-    first_some!(lex, local,
-            command, group, symbol,)
+    alt!(
+        command(lex, local),
+        group(lex, local),
+        symbol(lex, local))
             .ok_or(format!("Expected a mathfield following: {:?}", lex.current))
 }
 
@@ -284,8 +283,12 @@ pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseN
         lex.next();
     }
 
-    match first_some!(lex, local,
-            group, command, symbol,) {
+    let opt_node = alt!(
+        group(lex, local),
+        command(lex, local),
+        symbol(lex, local));
+
+    match opt_node {
         Some(ParseNode::Group(inner)) => Ok(Some(inner)),
         Some(node) => Ok(Some(vec![node])),
         _ => Ok(None),
@@ -364,55 +367,7 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>, String> {
 
 #[cfg(test)]
 mod tests {
-    // use parser::nodes::{ ParseNode, AtomType, Radical, Delimited };
     use parser::parse;
-    // use font::Symbol;
-
-    // #[test]
-    // fn parser() {
-    //     assert_eq!(parse(r"").unwrap(), vec![]);
-
-    //     assert_eq!(parse(r" 1 + \sqrt   2").unwrap(), parse(r"1+\sqrt2").unwrap());
-    //     assert_eq!(parse(r"\sqrt  {  \sqrt  2 }").unwrap(), parse(r"\sqrt{\sqrt2}").unwrap());
-
-    //     assert_eq!(parse(r"1 + {2 + 3}").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
-    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
-    //             ParseNode::Group(vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha }),
-    //                 ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
-    //                 ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha })
-    //         ])]);
-
-    //     assert_eq!(parse(r"1+\left(3+2\right)=6").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
-    //             ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
-    //             ParseNode::Delimited(Delimited {
-    //                 left: Symbol { id: 40, atom_type: AtomType::Open },
-    //                 right: Symbol { id: 41, atom_type: AtomType::Close },
-    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120805, atom_type: AtomType::Alpha }),
-    //                    ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
-    //                    ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })],
-    //             }),
-    //             ParseNode::Symbol(Symbol { id: 61, atom_type: AtomType::Relation }),
-    //             ParseNode::Symbol(Symbol { id: 120808, atom_type: AtomType::Alpha })]);
-
-    //     assert_eq!(parse(r"1+\sqrt2").unwrap(),
-    //         vec![ParseNode::Symbol(Symbol { id: 120803, atom_type: AtomType::Alpha }),
-    //              ParseNode::Symbol(Symbol { id: 43, atom_type: AtomType::Binary }),
-    //              ParseNode::Radical(Radical {
-    //                 inner: vec![ParseNode::Symbol(Symbol { id: 120804, atom_type: AtomType::Alpha })]
-    //              })]);
-    // }
-
-    // #[test]
-    // fn render() {
-    //     use std::fs::File;
-    //     use std::io::Write;
-
-    //     let output = ::render::render(parse(r"\int f(x,t)dx=\sum \xi(t)").unwrap());
-    //     let mut f = File::create("test.svg").unwrap();
-    //     f.write_all(output.as_bytes()).unwrap();
-    // }
 
     #[test]
     fn fractions() {

@@ -4,20 +4,20 @@
 // Parsing related Macros
 // ----------------------
 
-macro_rules! first_some {
-    ($lex:ident, $locals:ident, $first:ident, $($expr:ident,)* )  => (
-        {
-            if let Some(res) = $first($lex, $locals)? {
-                Some(res)
+macro_rules! alt {
+    ($e:expr $(,)*) => (
+        match $e? {
+            Some(res) => Some(res),
+            None => None,
+        }
+    );
+
+    ($e:expr, $($tt:tt)*) => (
+        match $e? {
+            Some(res) => Some(res),
+            None => {
+                alt!($($tt)*)
             }
-
-            $(
-                else if let Some(res) = $expr($lex, $locals)? {
-                    Some(res)
-                }
-            )*
-
-            else { None }
         }
     )
 }
