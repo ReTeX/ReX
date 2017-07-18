@@ -9,6 +9,7 @@ pub type Result<T> = ::std::result::Result<T, Error>;
 #[derive(Debug, Clone, PartialEq)]
 pub enum Error {
     UnrecognizedCommand(String),
+    UnrecognizedSymbol(char),
     FailedToParse(OwnedToken),
     ExcessiveSubscripts,
     ExcessiveSuperscripts,
@@ -34,7 +35,8 @@ impl error::Error for Error {
     fn description(&self) -> &'static str {
         use self::Error::*;
         match *self {
-            UnrecognizedCommand(_) => "unrecogized tex command",
+            UnrecognizedCommand(_) => "unrecognized tex command",
+            UnrecognizedSymbol(_) => "unrecognized symbol",
             FailedToParse(_) => "failed to parse",
             ExcessiveSubscripts => "excessive number of subscripts",
             ExcessiveSuperscripts => "excessive number of superscripts",
@@ -63,11 +65,13 @@ impl fmt::Display for Error {
         use self::Error::*;
         match *self {
             UnrecognizedCommand(ref cmd) =>
-                write!(f, "Unreocngized command: `{}`", cmd),
+                write!(f, "unrecognized command: \\{}`", cmd),
+            UnrecognizedSymbol(c) =>
+                write!(f, "unrecognized symbol '{}'", c),
             FailedToParse(ref tok) =>
-                write!(f, "Failed to parse `{}`", tok),
+                write!(f, "failed to parse `{}`", tok),
             ExcessiveSubscripts =>
-                write!(f, "An excessive number of subscripts"),
+                write!(f, "an excessive number of subscripts"),
             ExcessiveSuperscripts =>
                 write!(f, "excessive number of superscripts"),
             LimitsMustFollowOperator =>
@@ -79,17 +83,17 @@ impl fmt::Display for Error {
             MissingSymbolAfterAccent =>
                 write!(f, "missing symbol following accent"),
             ExpectedAtomType(left, right) =>
-                write!(f, "expected atom type `{:?}` found `{:?}`", left, right),
+                write!(f, "expected atom type {:?} found {:?}", left, right),
             ExpectedSymbol(ref sym) =>
-                write!(f, "expected symbol, found {:?}", sym),
+                write!(f, "expected symbol, found {}", sym),
             RequiredMacroArg =>
                 write!(f, "missing required macro argument"),
             ExpectedTokenFound(ref expected, ref found) =>
-                write!(f, "expected `{:?}` found `{:?}`", expected, found),
+                write!(f, "expected {} found {}", expected, found),
             ExpectedOpen(sym) =>
-                write!(f, "expected Open, Fence, or period after `\\left`, found `{:?}`", sym),
+                write!(f, "expected Open, Fence, or period after '\\left', found `{:?}`", sym),
             ExpectedClose(sym) =>
-                write!(f, "expected Open, Fence, or period after `\\right`, found `{:?}`", sym),
+                write!(f, "expected Open, Fence, or period after '\\right', found `{:?}`", sym),
             ExpectedOpenGroup =>
                 write!(f, "expected an open group symbol"),
             NoClosingBracket =>
@@ -97,7 +101,7 @@ impl fmt::Display for Error {
             StackMustFollowGroup =>
                 write!(f, "stack commands must follow a group"),
             AccentMissingArg(ref acc) =>
-                write!(f, "the accent `{}` must have an argument", acc),
+                write!(f, "the accent '\\{}' must have an argument", acc),
             UnexpectedEof =>
                 write!(f, "unexpected EOF"),
             UnrecognizedDimension =>

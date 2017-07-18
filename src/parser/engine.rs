@@ -9,9 +9,9 @@ use parser::AtomType;
 use functions::COMMANDS;
 use super::builders as build;
 
-/// This method is served as an entry point to parsing the input.
-/// It can also be used to parse sub-expressions (or more formally known)
-/// as `mathlists` which can be found from parsing groups.
+/// This function is served as an entry point to parsing the input.
+/// It can also be used to parse sub-expressions (or more formally known
+/// as `mathlists`) which occur when parsing groups.
 
 pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
     let mut ml: Vec<ParseNode> = Vec::new();
@@ -35,24 +35,36 @@ pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
                 ml.append(&mut nodes);
                 continue;
             }
+
+            // At this point, if the current `Token` is a Command,
+            // then it must be an unrecognized Command.
+            if let Token::Command(cmd) = lex.current {
+                return Err(Error::UnrecognizedCommand(cmd.into()))
+            }
         }
 
+        // Like state changing functions, post-fix operators are handled
+        // as a special case since they need access to the currently
+        // processed node.
         let node = postfix(lex, local, node)?;
 
-        // If at this point we still haven't parsed a node, then
-        // it's something we don't know how to handle.
+        // If at this point, we still haven't processed a node then we must have
+        // an unrecognized symbol (perhaps from non-english, non-greek).
+        // TODO: We should allow for more dialects.
         match node {
             Some(n) => ml.push(n),
-            None => return Err(Error::FailedToParse(lex.current.into())),
+            None => {
+                match lex.current {
+                    Token::Symbol(c) => return Err(Error::UnrecognizedSymbol(c)),
+                    _ => unreachable!(),
+                }
+            }
         }
     }
     Ok(ml)
 }
 
-fn postfix(lex: &mut Lexer,
-           local: Style,
-           mut prev: Option<ParseNode>)
-           -> Result<Option<ParseNode>>
+fn postfix(lex: &mut Lexer, local: Style, mut prev: Option<ParseNode>) -> Result<Option<ParseNode>>
 {
     let mut superscript: Option<ParseNode> = None;
     let mut subscript: Option<ParseNode> = None;
