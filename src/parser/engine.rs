@@ -171,7 +171,6 @@ pub fn math_field(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
 /// can fail while parsing parameters for a TeX command.
 
 pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
-    // TODO: We need to build a framework, that will match commands
     if let Token::Command(cmd) = lex.current {
         match COMMANDS.get(cmd) {
             Some(ref cmd) => {
@@ -218,8 +217,6 @@ pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>
 /// This function will return `Ok(None)` if it does not find a `{`,
 /// and will `Err` if it finds a `{` with no terminating `}`, or if
 /// there is a syntax error from within `<mathmode material>`.
-
-// TODO: This should also recognize `\bgroup` if we decide to go that route.
 
 pub fn group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     if lex.current == Token::Symbol('{') {
