@@ -1,0 +1,7 @@
+[package]
+name = "font_types"
+version = "0.1.0"
+authors = ["cbreeden <github@u.breeden.cc>"]
+
+[dependencies]
+fp = { git = "https://github.com/ReTeX/fp.git" }

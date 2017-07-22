@@ -1,7 +1,6 @@
 use super::Style;
 use super::Family::*;
 use super::Weight::*;
-use super::Symbol;
 
 // BMP unicode points of each symbol group.
 const UPPER_A: u32 = 0x41;

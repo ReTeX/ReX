@@ -4,8 +4,9 @@ extern crate test;
 #[macro_use]
 extern crate log;
 
-extern crate fnv;
 extern crate fp;
+extern crate stix;
+extern crate font_types;
 
 #[macro_use]
 extern crate static_map;

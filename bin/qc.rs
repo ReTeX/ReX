@@ -13,7 +13,7 @@ fn main() {
 
     let settings = RenderSettings::default()
         .font_size(96)
-        .font_src("rex-xits.otf")
+        .font_src(font)
         .debug(false);
 
     svg::render_to_path(output, &settings, &input);

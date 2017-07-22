@@ -1,7 +1,6 @@
 use std::fmt;
 use dimensions::Unit;
 use error::Error;
-use std::borrow::ToOwned;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Token<'a> {
