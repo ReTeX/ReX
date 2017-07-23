@@ -1,5 +1,6 @@
 use dimensions::Float;
 use font::FontUnit;
+use font::constants::UNITS_PER_EM;
 use parser::color::RGBA;
 use render::{Renderer, RenderSettings, Cursor};
 use std::fmt::Write;
@@ -45,8 +46,8 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
     }
 
     fn prepare(&self, out: &mut W, width: FontUnit, height: FontUnit) {
-        let px_width = f64::from(width) / (1000 as f64) * self.settings.font_size as f64;
-        let px_height = f64::from(height) / (1000 as f64) * self.settings.font_size as f64;
+        let px_width = f64::from(width) / f64::from(UNITS_PER_EM) * self.settings.font_size as f64;
+        let px_height = f64::from(height) / f64::from(UNITS_PER_EM) * self.settings.font_size as f64;
 
         writeln!(out,
                  r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -61,7 +62,7 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
                  width,
                  height,
                  self.settings.font_src,
-                 1000)
+                 f64::from(UNITS_PER_EM))
                 .expect("Failed to write to buffer!");
     }
 
