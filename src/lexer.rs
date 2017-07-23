@@ -10,6 +10,10 @@ pub enum Token<'a> {
     EOF,
 }
 
+/// An owned variant of `Token<'a>`. This is only used for
+/// having lifetime-free errors for now.  Once NLL is implemented
+/// it's likely, we can use errors with lifetimes with minimal
+/// change to the codebase.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum OwnedToken {
     Command(String),

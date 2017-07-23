@@ -125,9 +125,7 @@ impl ParseNode {
             unreachable!()
         }
     }
-}
 
-impl ParseNode {
     pub fn set_atom_type(&mut self, at: AtomType) {
         match *self {
             ParseNode::Symbol(ref mut sym) => sym.atom_type = at,
@@ -146,26 +144,48 @@ impl ParseNode {
         match *self {
             ParseNode::Symbol(sym) => Some(sym),
             ParseNode::Accent(ref acc) => acc.nucleus.is_symbol(),
+            ParseNode::Scripts(Scripts { ref base, .. }) =>
+                base.as_ref().and_then(|b| b.is_symbol()),
             ParseNode::AtomChange(AtomChange { ref inner, .. }) => {
                 if inner.len() != 1 {
-                    return None;
-                }
-                inner[0].is_symbol()
-            }
-            ParseNode::Scripts(Scripts { ref base, .. }) => {
-                if let Some(ref b) = *base {
-                    b.is_symbol()
-                } else {
                     None
+                } else {
+                    inner[0].is_symbol()
                 }
             }
             ParseNode::Color(Color { ref inner, .. }) => {
                 if inner.len() != 1 {
-                    return None;
+                    None
+                } else {
+                    inner[0].is_symbol()
                 }
-                inner[0].is_symbol()
             }
             _ => None,
+        }
+    }
+
+    pub fn atom_type(&self) -> AtomType {
+        match *self {
+            ParseNode::Symbol(ref sym)  => sym.atom_type,
+            ParseNode::Delimited(_)     => AtomType::Inner,
+            ParseNode::Radical(_)       => AtomType::Alpha,
+            ParseNode::GenFraction(_)   => AtomType::Inner,
+            ParseNode::Group(_)         => AtomType::Alpha,
+            ParseNode::Scripts(ref scr) => scr.base.as_ref()
+                .map(|base| base.atom_type())
+                .unwrap_or(AtomType::Alpha),
+
+            ParseNode::Rule(_)          => AtomType::Alpha,
+            ParseNode::Kerning(_)       => AtomType::Transparent,
+            ParseNode::Accent(ref acc)  => acc.nucleus.atom_type(),
+            ParseNode::Style(_)         => AtomType::Transparent,
+            ParseNode::AtomChange(ref ac) => ac.at,
+            ParseNode::Color(ref clr)     => clr.inner.first()
+                .map(|first| first.atom_type())
+                .unwrap_or(AtomType::Alpha),
+
+            ParseNode::Extend(_,_)   => AtomType::Inner,
+            ParseNode::Stack(ref s)  => s.atom_type,
         }
     }
 }

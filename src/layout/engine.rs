@@ -22,7 +22,6 @@ use layout::spacing::{atom_spacing, Spacing};
 use layout::convert::Scaled;
 use parser::nodes::BarThickness;
 use parser::nodes::{ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts, Stack};
-use parser::atoms::IsAtom;
 
 /// Entry point to our recursive algorithm
 pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {

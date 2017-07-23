@@ -6,7 +6,6 @@ use font::Symbol;
 use font::symbols::SYMBOLS;
 use lexer::{Lexer, Token};
 use parser::nodes::{Delimited, ParseNode, Accent};
-use parser::atoms::IsAtom;
 use font::AtomType;
 use functions::COMMANDS;
 use super::builders as build;
