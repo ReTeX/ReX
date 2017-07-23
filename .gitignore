@@ -1,14 +1,20 @@
+# Rust specific files
 target
 Cargo.lock
-.vscode
-.idea/*
+
+# Potential files from TeX while testing
 *.pdf
 *.log
 *.aux
 *.iml
+
+.vscode
+*.html
 *.js
 *.css
-*.notes*
-/test*.*
-!/test/*
+
+test*.*
+tests/out/
+
 README.samples
+*.notes*
