@@ -1,4 +1,5 @@
 use font::AtomType;
+use font::constants::UNITS_PER_EM;
 use dimensions::FontUnit;
 use layout::Style;
 
@@ -39,11 +40,11 @@ pub fn atom_spacing(left: AtomType, right: AtomType, style: Style) -> Spacing {
         }
     } else {
         match (left, right) {
-            (AtomType::Alpha, AtomType::Operator(_)) => Spacing::Thin,
-            (AtomType::Operator(_), AtomType::Alpha) => Spacing::Thin,
+            (AtomType::Alpha, AtomType::Operator(_))       => Spacing::Thin,
+            (AtomType::Operator(_), AtomType::Alpha)       => Spacing::Thin,
             (AtomType::Operator(_), AtomType::Operator(_)) => Spacing::Thin,
-            (AtomType::Close, AtomType::Operator(_)) => Spacing::Thin,
-            (AtomType::Inner, AtomType::Operator(_)) => Spacing::Thin,
+            (AtomType::Close, AtomType::Operator(_))       => Spacing::Thin,
+            (AtomType::Inner, AtomType::Operator(_))       => Spacing::Thin,
             _ => Spacing::None,
         }
     }
@@ -51,19 +52,19 @@ pub fn atom_spacing(left: AtomType, right: AtomType, style: Style) -> Spacing {
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Spacing {
-  None,
-  Thin,
-  Medium,
-  Thick,
+    None,
+    Thin,
+    Medium,
+    Thick,
 }
 
 impl Spacing {
     pub fn to_unit(self) -> FontUnit {
         match self {
-            Spacing::None   => FontUnit::from(0),
-            Spacing::Thin   => FontUnit::from(1000) / 6, // 1/6 EM
-            Spacing::Medium => FontUnit::from(2000) / 9, // 2/9 EM
-            Spacing::Thick  => FontUnit::from(1000) / 3, // 1/3 EM
+            Spacing::None   => 0.into(),
+            Spacing::Thin   => UNITS_PER_EM / 6,     // 1/6 EM
+            Spacing::Medium => 2 * UNITS_PER_EM / 9, // 2/9 EM
+            Spacing::Thick  => UNITS_PER_EM / 3,     // 1/3 EM
         }
     }
 }

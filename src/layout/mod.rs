@@ -29,7 +29,7 @@ use std::fmt;
 use std::cmp::{max, min};
 
 // By default this will act as a horizontal box
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Default)]
 pub struct Layout {
     pub contents: Vec<LayoutNode>,
     pub width: FontUnit,
@@ -54,14 +54,7 @@ impl Layout {
     }
 
     pub fn new() -> Layout {
-        Layout {
-            contents: vec![],
-            width: FontUnit::from(0),
-            height: FontUnit::from(0),
-            depth: FontUnit::from(0),
-            offset: FontUnit::from(0),
-            alignment: Alignment::default(),
-        }
+        Layout::default()
     }
 
     pub fn add_node(&mut self, node: LayoutNode) {

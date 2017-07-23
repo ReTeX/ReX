@@ -4,15 +4,13 @@ use std::ops::Mul;
 
 use font;
 use font::constants;
-use font::VariantGlyph;
-use font::Direction;
-use font::Glyph;
-use dimensions::{ FontUnit, Unit };
+use font::{Direction, Glyph, VariantGlyph};
+use dimensions::{FontUnit, Unit};
 use layout::LayoutSettings;
 
 use super::Style;
 use super::builders;
-use super::{ LayoutNode, LayoutVariant, LayoutGlyph };
+use super::{LayoutNode, LayoutVariant, LayoutGlyph};
 use parser::nodes::Rule;
 
 pub trait AsLayoutNode {
@@ -133,7 +131,7 @@ impl Scaled for Unit {
                     / config.font_size;
                 scale(FontUnit::from(unit), config)
             }
-            _ => panic!("Ex units are not yet supported.")
+            _ => panic!("unsupported unit")
         }
     }
 }
