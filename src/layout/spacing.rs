@@ -49,7 +49,6 @@ pub fn atom_spacing(left: AtomType, right: AtomType, style: Style) -> Spacing {
     }
 }
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Spacing {
   None,
