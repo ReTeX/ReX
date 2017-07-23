@@ -21,9 +21,9 @@ mod convert;
 pub mod engine;
 pub mod spacing;
 
-use dimensions::FontUnit;
-
+use parser::color::RGBA;
 use font::constants;
+use font::FontUnit;
 use std::ops::Deref;
 use std::fmt;
 use std::cmp::{max, min};
@@ -101,7 +101,7 @@ pub enum LayoutVariant {
 
 #[derive(Clone)]
 pub struct ColorChange {
-    pub color: String,
+    pub color: RGBA,
     pub inner: Vec<LayoutNode>,
 }
 
@@ -199,7 +199,7 @@ impl fmt::Debug for LayoutNode {
 
                 write!(f, "Kern({:.1})", kern)
             }
-            LayoutVariant::Color(ref clr) => write!(f, "Color({}, {:?})", clr.color, clr.inner),
+            LayoutVariant::Color(ref clr) => write!(f, "Color({:?}, {:?})", clr.color, clr.inner),
         }
     }
 }

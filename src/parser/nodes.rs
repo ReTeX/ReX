@@ -2,6 +2,7 @@ use dimensions::Unit;
 use layout::Style;
 use font::Symbol;
 use error::Error;
+use super::color::RGBA;
 
 use font::AtomType;
 
@@ -95,7 +96,7 @@ pub enum BarThickness {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Color {
-    pub color: String,
+    pub color: RGBA,
     pub inner: Vec<ParseNode>,
 }
 

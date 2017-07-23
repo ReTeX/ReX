@@ -337,14 +337,11 @@ pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<
 /// and outputs a vector of parsing nodes, or an error message.
 
 // TODO: This should return a result.
-pub fn parse(input: &str) -> Vec<ParseNode> {
+pub fn parse(input: &str) -> Result<Vec<ParseNode>> {
     let mut lexer = Lexer::new(input);
     let local = Style::new();
 
-    let result = match expression(&mut lexer, local) {
-        Ok(ret) => ret,
-        Err(err) => panic!("Failed to parse with error: {}.", err),
-    };
+    let result = expression(&mut lexer, local)?;
 
     if lexer.current != Token::EOF {
         panic!("Unexpectedly ended parsing; \
@@ -353,7 +350,7 @@ pub fn parse(input: &str) -> Vec<ParseNode> {
                 lexer.current);
     }
 
-    result
+    Ok(result)
 }
 
 /// Helper function for determining an atomtype based on a given codepoint.

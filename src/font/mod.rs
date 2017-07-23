@@ -15,6 +15,7 @@ pub use font_types::{
     Style,
     Family,
     Weight,
+    FontUnit
 };
 
 pub use stix::constants;

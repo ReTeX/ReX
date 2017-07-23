@@ -29,6 +29,7 @@ pub enum Error {
     AccentMissingArg(String),
     UnexpectedEof,
     UnrecognizedDimension,
+    UnrecognizedColor(String),
 }
 
 impl error::Error for Error {
@@ -56,6 +57,7 @@ impl error::Error for Error {
             AccentMissingArg(_) => "an argument must follow accent commands",
             UnexpectedEof => "unexpected end of parsing",
             UnrecognizedDimension => "failed to parse dimension",
+            UnrecognizedColor(_) => "failed to parse color",
         }
     }
 }
@@ -106,6 +108,8 @@ impl fmt::Display for Error {
                 write!(f, "unexpected EOF"),
             UnrecognizedDimension =>
                 write!(f, "failed to parse dimension"),
+            UnrecognizedColor(ref color) =>
+                write!(f, "failed to recognize the color '{}'", color),
         }
     }
 }

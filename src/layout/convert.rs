@@ -4,8 +4,8 @@ use std::ops::Mul;
 
 use font;
 use font::constants;
-use font::{Direction, Glyph, VariantGlyph};
-use dimensions::{FontUnit, Unit};
+use font::{Direction, Glyph, VariantGlyph, FontUnit};
+use dimensions::Unit;
 use layout::LayoutSettings;
 
 use super::Style;

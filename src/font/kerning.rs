@@ -1,5 +1,4 @@
-use font::Glyph;
-use dimensions::FontUnit;
+use font::{Glyph, FontUnit};
 use std::cmp::{max, min};
 
 use stix::kernings::KERNING_TABLE;

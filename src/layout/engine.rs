@@ -9,12 +9,11 @@ use super::{Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style, ColorChange};
 use super::convert::AsLayoutNode;
 use super::LayoutSettings;
 
-use dimensions::FontUnit;
 use font;
 use font::constants::*;
 use font::glyph_metrics;
 use font::variant::Variant;
-use font::{AtomType, Symbol, VariantGlyph};
+use font::{AtomType, Symbol, VariantGlyph, FontUnit};
 use font::kerning::{superscript_kern, subscript_kern};
 use layout::spacing::{atom_spacing, Spacing};
 use layout::convert::Scaled;
@@ -89,7 +88,7 @@ fn layout_recurse(nodes: &[ParseNode],
                                     height: layout.height,
                                     depth: layout.depth,
                                     node: LayoutVariant::Color(ColorChange {
-                                                                   color: clr.color.clone(),
+                                                                   color: clr.color,
                                                                    inner: layout.contents,
                                                                }),
                                 })

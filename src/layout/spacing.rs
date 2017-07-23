@@ -1,6 +1,5 @@
-use font::AtomType;
+use font::{AtomType, FontUnit};
 use font::constants::UNITS_PER_EM;
-use dimensions::FontUnit;
 use layout::Style;
 
 #[allow(unused)]

@@ -1,9 +1,11 @@
 pub mod svg;
 pub use self::svg::SVGRenderer;
 
-use dimensions::{FontUnit, Float};
+use font::FontUnit;
+use dimensions::Float;
 use layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
 use parser::parse;
+use parser::color::RGBA;
 use layout::engine::layout;
 
 #[derive(Clone)]
@@ -134,7 +136,7 @@ pub trait Renderer {
 
     fn rule(&self, out: &mut Self::Out, pos: Cursor, width: FontUnit, height: FontUnit);
 
-    fn color<F>(&self, out: &mut Self::Out, color: &str, contents: F)
+    fn color<F>(&self, out: &mut Self::Out, color: RGBA, contents: F)
         where F: FnMut(&Self, &mut Self::Out);
 
     fn render_hbox(&self,
@@ -172,7 +174,7 @@ pub trait Renderer {
                 }
 
                 LayoutVariant::Color(ref clr) => {
-                    self.color(out, &clr.color, |r, out| {
+                    self.color(out, clr.color, |r, out| {
                         r.render_hbox(out,
                                       pos,
                                       &clr.inner,
@@ -226,7 +228,10 @@ pub trait Renderer {
     fn settings(&self) -> &RenderSettings;
 
     fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), String> {
-        let mut parse = parse(&tex);
+        let mut parse = match parse(&tex) {
+            Ok(ret) => ret,
+            Err(err) => panic!("failed to parse with: {}", err),
+        };
 
         let layout = layout(&mut parse, self.settings().layout_settings());
 

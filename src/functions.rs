@@ -1,14 +1,12 @@
 use dimensions::Unit;
-use font::{Weight, Family};
+use font::{Weight, Family, FontUnit, Symbol, AtomType};
 use font::Style as FontStyle;
-use font::Symbol;
-use layout::Style;
-use lexer::Lexer;
-use lexer::Token;
-use parser as parse;
-use font::AtomType;
 use font::style::style_symbol;
-use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
+use layout::Style;
+use lexer::{Lexer, Token};
+use parser as parse;
+use parser::nodes::{ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack};
+use parser::color::RGBA;
 use static_map;
 use error::{Error, Result};
 
@@ -20,7 +18,7 @@ pub enum TexCommand {
     VExtend,
     HExtend,
     Color,
-    ColorLit(&'static str),
+    ColorLit(RGBA),
     GenFraction {
         left:  Option<Symbol>,
         right: Option<Symbol>,
@@ -131,10 +129,10 @@ pub static COMMANDS: static_map::Map<&'static str, TexCommand> = static_map! {
     "mathord" => TexCommand::AtomChange(AtomType::Alpha),
 
     "color"   => TexCommand::Color,
-    "blue"    => TexCommand::ColorLit("blue"),
-    "red"     => TexCommand::ColorLit("red"),
-    "gray"    => TexCommand::ColorLit("gray"),
-    "phantom" => TexCommand::ColorLit("rgba(0,0,0,0)"),
+    "blue"    => TexCommand::ColorLit(RGBA(0,0,0xff,0xff)),
+    "red"     => TexCommand::ColorLit(RGBA(0xff,0,0,0xff)),
+    "gray"    => TexCommand::ColorLit(RGBA(0x80,0x80,0x80,0xff)),
+    "phantom" => TexCommand::ColorLit(RGBA(0,0,0,0)),
 
     "det"     => TexCommand::TextOperator("det", true),
     "gcd"     => TexCommand::TextOperator("gcd", true),
@@ -271,17 +269,22 @@ impl TexCommand {
             },
 
             TexCommand::Color => {
-                let color = lex.group()?.to_string();
+                let rgba = {
+                    let color = lex.group()?;
+                    parse::color::COLOR_MAP
+                        .get(color)
+                        .ok_or_else(|| Error::UnrecognizedColor(color.into()))?
+                };
 
                 Some(ParseNode::Color(Color {
-                    color: color,
+                    color: *rgba,
                     inner: parse::required_macro_argument(lex, local)?
                 }))
             },
 
-            TexCommand::ColorLit(clr) => {
+            TexCommand::ColorLit(rgba) => {
                 Some(ParseNode::Color(Color {
-                    color: clr.to_string(),
+                    color: rgba,
                     inner: parse::required_macro_argument(lex, local)?
                 }))
             },

@@ -284,24 +284,24 @@ mod tests {
         assert_group!("{{}}", Ok("{"));
     }
 
-    #[test]
-    fn lex_dimension() {
-        use dimensions::Unit;
-        macro_rules! assert_dim {
-            ($input:expr, $result:expr) => (
-                let mut _l = Lexer::new($input);
-                assert_eq!(_l.dimension().unwrap(), Some(Unit::Px($result)));
-            )
-        }
+    // #[test]
+    // fn lex_dimension() {
+    //     use dimensions::Unit;
+    //     macro_rules! assert_dim {
+    //         ($input:expr, $result:expr) => (
+    //             let mut _l = Lexer::new($input);
+    //             assert_eq!(_l.dimension().unwrap(), Some(Unit::Px($result)));
+    //         )
+    //     }
 
-        assert_dim!(r"123 abc", 123.0);
-        assert_dim!(r"1.23 abc", 1.23);
-        assert_dim!(r"- 1.23 123", -1.23);
-        assert_dim!(r"+1.34 134", 1.34);
-        assert_dim!("-   12", -12.0);
-        assert_dim!("+   12", 12.0);
-        assert_dim!("-  .12", -0.12);
-        assert_dim!("00.123000", 0.123);
-        assert_dim!("001.10000", 1.1);
-    }
+    //     assert_dim!(r"123 abc", 123.0);
+    //     assert_dim!(r"1.23 abc", 1.23);
+    //     assert_dim!(r"- 1.23 123", -1.23);
+    //     assert_dim!(r"+1.34 134", 1.34);
+    //     assert_dim!("-   12", -12.0);
+    //     assert_dim!("+   12", 12.0);
+    //     assert_dim!("-  .12", -0.12);
+    //     assert_dim!("00.123000", 0.123);
+    //     assert_dim!("001.10000", 1.1);
+    // }
 }

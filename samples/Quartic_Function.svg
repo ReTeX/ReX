@@ -5,7 +5,7 @@
     <style type="text/css">@font-face{font-family:rex;src:url('http://rex.breeden.cc/rex-xits.otf');}</style>
     </defs>
     <g font-family="rex" font-size="1000">
-<g fill="gray">
+<g fill="rgba(128,128,128,255)">
 <text transform="translate(4986, 564) scale(0.68)">Q</text>
 <text transform="translate(5477, 564) scale(0.68)">u</text>
 <text transform="translate(5817, 564) scale(0.68)">a</text>

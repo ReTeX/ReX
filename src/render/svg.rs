@@ -1,4 +1,6 @@
-use dimensions::{FontUnit, Float};
+use dimensions::Float;
+use font::FontUnit;
+use parser::color::RGBA;
 use render::{Renderer, RenderSettings, Cursor};
 use std::fmt::Write;
 use std::fs::File;
@@ -112,10 +114,16 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
                 .expect("Failed to write to buffer!");
     }
 
-    fn color<F>(&self, out: &mut W, color: &str, mut contents: F)
+    fn color<F>(&self, out: &mut W, color: RGBA, mut contents: F)
         where F: FnMut(&Self, &mut W)
     {
-        writeln!(out, r#"<g fill="{}">"#, color).expect("Failed to write to buffer!");
+        if color.has_alpha() {
+            writeln!(out, r##"<g fill="#{}{}{}">"##, color.0, color.1, color.2)
+                .expect("failed to write to buffer!");
+        } else {
+            writeln!(out, r#"<g fill="rgba({},{},{},{})">"#, color.0, color.1, color.2, color.3)
+                .expect("Failed to write to buffer!");
+        }
         contents(self, out);
         writeln!(out, "</g>").expect("Failed to write to buffer!");
     }
