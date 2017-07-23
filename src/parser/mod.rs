@@ -6,4 +6,3 @@ pub mod atoms;
 
 pub use self::engine::*;
 pub use self::nodes::ParseNode;
-pub use self::atoms::AtomType;

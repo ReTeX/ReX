@@ -13,15 +13,15 @@ use dimensions::FontUnit;
 use font;
 use font::constants::*;
 use font::glyph_metrics;
-use font::variants::Variant;
-use font::variants::VariantGlyph;
+use font::variant::Variant;
+use font::VariantGlyph;
 use font::Symbol;
 use font::kerning::{superscript_kern, subscript_kern};
+use font::AtomType;
 use layout::spacing::{atom_spacing, Spacing};
 use layout::convert::Scaled;
 use parser::nodes::BarThickness;
 use parser::nodes::{ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts, Stack};
-use parser::AtomType;
 use parser::atoms::IsAtom;
 
 /// Entry point to our recursive algorithm
@@ -371,7 +371,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                     // This recently changed in LuaTeX.  See `nolimitsmode`.
                     // This needs to be the glyph information _after_ layout for base.
                     sub_kern = -glyph_metrics(base_sym.unicode)
-                                    .italic_correction()
+                                    .italics
                                     .scaled(config);
                 }
             }

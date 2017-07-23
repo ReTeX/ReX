@@ -69,11 +69,12 @@ static DIGIT_LUT: [u32; 28] = [
     0x1D7E2 - DIGIT_0, 0x1D7E2 - DIGIT_0, 0x1D7EC - DIGIT_0, 0x1D7EC - DIGIT_0,   // SansSerif
     0x1D7D8 - DIGIT_0, 0x1D7D8 - DIGIT_0, 0x1D7D8 - DIGIT_0, 0x1D7D8 - DIGIT_0,   // Blackboard
     0x1D7F6 - DIGIT_0, 0x1D7F6 - DIGIT_0, 0x1D7F6 - DIGIT_0, 0x1D7F6 - DIGIT_0,   // Monospace
-    0x1D6FC - DIGIT_0, 0x1D6FC - DIGIT_0, 0x1D6C2 - DIGIT_0, 0x1D736 - DIGIT_0,   // Normal
+    48      - DIGIT_0, 48      - DIGIT_0, 0x1D7CE - DIGIT_0, 0x1D7CE - DIGIT_0,   // Normal
 ];
 
 /// Take a codepoint and a stlye (a weight and family pair), and apply the
 /// current font style to the given codepoint.
+#[inline]
 pub fn style_symbol(codepoint: u32, style: Style) -> u32 {
     match codepoint {
         LOWER_A...LOWER_Z => style_lookup(&LATIN_LOWER_LUT, codepoint, style),
@@ -85,10 +86,10 @@ pub fn style_symbol(codepoint: u32, style: Style) -> u32 {
     }
 }
 
-fn style_lookup(lut: &[u32], offset: u32, style: Style) -> u32 {
+fn style_lookup(lut: &[u32], codepoint: u32, style: Style) -> u32 {
     let y = style.family as usize;
     let x = style.weight as usize;
-    offset + lut[4 * y + x]
+    codepoint + lut[4 * y + x]
 }
 
 // TODO: Investigate these symbols.

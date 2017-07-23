@@ -1,7 +1,8 @@
 use font::Glyph;
 use dimensions::FontUnit;
 use std::cmp::{max, min};
-use super::kerning_table::KERNING_TABLE;
+
+use stix::kernings::KERNING_TABLE;
 
 #[derive(Debug)]
 enum Corner {

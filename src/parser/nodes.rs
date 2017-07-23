@@ -3,7 +3,7 @@ use layout::Style;
 use font::Symbol;
 use error::Error;
 
-use super::atoms::AtomType;
+use font::AtomType;
 
 // TODO: It might be worth letting the `Group` variant
 //   to have an atomtype associated with it.  By default,

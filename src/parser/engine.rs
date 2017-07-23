@@ -1,11 +1,13 @@
 #![allow(dead_code)]
 use error::{Error, Result};
 use font::Style;
-use font::{SYMBOLS, Symbol};
+use font::style::style_symbol;
+use font::Symbol;
+use font::symbols::SYMBOLS;
 use lexer::{Lexer, Token};
 use parser::nodes::{Delimited, ParseNode, Accent};
 use parser::atoms::IsAtom;
-use parser::AtomType;
+use font::AtomType;
 use functions::COMMANDS;
 use super::builders as build;
 
@@ -252,7 +254,10 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
 
                     Ok(Some(accent!(sym, nucleus)))
                 } else {
-                    Ok(Some(ParseNode::Symbol(sym.with_style(local))))
+                    Ok(Some(ParseNode::Symbol(Symbol {
+                        unicode: style_symbol(sym.unicode, local),
+                        ..sym
+                    })))
                 }
             } else {
                 Ok(None)
@@ -263,7 +268,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
                 None => Ok(None),
                 Some(sym) => {
                     lex.next();
-                    Ok(Some(symbol!(local.style_symbol(c as u32), sym)))
+                    Ok(Some(symbol!(style_symbol(c as u32, local), sym)))
                }
             }
         }

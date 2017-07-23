@@ -1,25 +1,5 @@
 use super::ParseNode;
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum AtomType {
-    Punctuation,
-    Ordinal,
-    Open,
-    Close,
-    Binary,
-    Relation,
-    Accent,
-    AccentWide,
-    BotAccent,
-    BotAccentWide,
-    Alpha,
-    Fence,
-    Operator(bool),     // bool := limits or nolimits?
-    Over,
-    Under,
-    Inner,
-    Transparent,
-}
+use font::AtomType;
 
 pub trait IsAtom {
     fn atom_type(&self) -> AtomType;

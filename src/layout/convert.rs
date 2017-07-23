@@ -4,7 +4,8 @@ use std::ops::Mul;
 
 use font;
 use font::constants;
-use font::variants::VariantGlyph;
+use font::VariantGlyph;
+use font::Direction;
 use font::Glyph;
 use dimensions::{ FontUnit, Unit };
 use layout::LayoutSettings;
@@ -21,14 +22,14 @@ pub trait AsLayoutNode {
 impl AsLayoutNode for Glyph {
     fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         LayoutNode {
-            height: self.height() .scaled(config),
-            width:  self.advance().scaled(config),
-            depth:  self.depth()  .scaled(config),
+            height: self.height().scaled(config),
+            width:  self.advance.scaled(config),
+            depth:  self.depth().scaled(config),
             node:   LayoutVariant::Glyph(LayoutGlyph {
                 unicode: self.unicode,
                 scale: scale(1, config),
-                attachment: self.attachment_offset().scaled(config),
-                italics: self.italic_correction().scaled(config),
+                attachment: self.attachment.scaled(config),
+                italics: self.italics.scaled(config),
                 offset:  FontUnit::from(0),
             })
         }
@@ -46,7 +47,6 @@ impl AsLayoutNode for Rule {
     }
 }
 
-use font::variants::Direction;
 impl AsLayoutNode for VariantGlyph {
     fn as_layout(&self, config: LayoutSettings) -> LayoutNode {
         match *self {

@@ -1,10 +1,5 @@
-#![allow(dead_code)]
-use super::{ KernRecord, KernTable };
+use font_types::{KernRecord, KernTable};
 
-#[cfg(feature="fast-check")]
-pub static KERNING_TABLE: [(u32, KernRecord); 0] = [];
-
-#[cfg(not(feature="fast-check"))]
 pub static KERNING_TABLE: [(u32, KernRecord); 29] = [
     (0x41, KernRecord { // A
         top_right: Some(KernTable {

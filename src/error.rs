@@ -1,7 +1,7 @@
 use lexer::OwnedToken;
 use std::error;
 use std::fmt;
-use parser::AtomType;
+use font::AtomType;
 use font::Symbol;
 
 pub type Result<T> = ::std::result::Result<T, Error>;

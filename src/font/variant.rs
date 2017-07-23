@@ -1,59 +1,18 @@
 use std::cmp::{min, max};
 
-use super::constants::MIN_CONNECTOR_OVERLAP;
-use super::Glyph;
-use super::glyph_metrics;
-use super::variant_tables::{VERT_VARIANTS, HORZ_VARIANTS};
-use dimensions::FontUnit;
+use font_types::{
+    FontUnit,
+    Direction,
+    VariantGlyph,
+    Glyph,
+    GlyphPart,
+    GlyphInstruction,
+};
 
-// There are two types of variant glyphs:
-//    Replacement glyphs and constructables that require multiple glpyhs.
-
-#[allow(dead_code)]
-#[derive(Debug, Clone)]
-pub enum VariantGlyph {
-    Replacement(Glyph),
-    Constructable(Direction, Vec<GlyphInstruction>),
-}
-
-#[derive(Debug, Clone)]
-pub struct GlyphVariants {
-    pub replacements: &'static [ReplacementGlyph],
-    pub constructable: Option<ConstructableGlyph>,
-}
-
-#[derive(Debug, Copy, Clone)]
-pub struct ReplacementGlyph {
-    pub unicode: u32,
-    pub advance: FontUnit,
-}
-
-#[derive(Debug, Copy, Clone)]
-pub struct ConstructableGlyph {
-    pub parts: &'static [GlyphPart],
-    pub italics_correction: FontUnit,
-}
-
-#[derive(Debug, Copy, Clone)]
-pub struct GlyphPart {
-    pub unicode: u32,
-    pub start_connector_length: FontUnit,
-    pub end_connector_length: FontUnit,
-    pub full_advance: FontUnit,
-    pub required: bool,
-}
-
-#[derive(Clone, Copy)]
-pub struct GlyphInstruction {
-    pub glyph: Glyph,
-    pub overlap: FontUnit,
-}
-
-#[derive(Debug, Copy, Clone)]
-pub enum Direction {
-    Vertical,
-    Horizontal,
-}
+use stix::variants::VERT_VARIANTS;
+use stix::variants::HORZ_VARIANTS;
+use stix::constants::MIN_CONNECTOR_OVERLAP;
+use stix::glyph_metrics;
 
 pub trait Variant {
     fn variant(&self, FontUnit, Direction, bool) -> VariantGlyph;
@@ -246,16 +205,6 @@ impl Variant for Glyph {
             Some(ref g) => glyph_metrics(g.unicode),
             None => *self,
         }
-    }
-}
-
-use std::fmt;
-impl fmt::Debug for GlyphInstruction {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f,
-               "GlyphInst {{ glyph: 0x{:X}, overlap: {} }}",
-               self.glyph.unicode,
-               self.overlap)
     }
 }
 

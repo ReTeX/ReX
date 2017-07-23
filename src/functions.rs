@@ -6,7 +6,8 @@ use layout::Style;
 use lexer::Lexer;
 use lexer::Token;
 use parser as parse;
-use parser::AtomType;
+use font::AtomType;
+use font::style::style_symbol;
 use parser::nodes::{ ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack };
 use static_map;
 use error::{Error, Result};
@@ -54,11 +55,13 @@ macro_rules! sym {
 
 macro_rules! text {
     ($code:expr) => ({
+
         ParseNode::Symbol(Symbol {
-            unicode: ::font::Style::default()
-                .with_family(Family::Roman)
-                .with_weight(Weight::None)
-                .style_symbol($code as u32),
+            unicode: style_symbol(
+                $code as u32,
+                FontStyle::default()
+                    .with_family(Family::Roman)
+                    .with_weight(Weight::None)),
             atom_type: AtomType::Ordinal,
         })
     })

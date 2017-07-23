@@ -107,16 +107,16 @@ pub struct Symbol {
 
 #[derive(Debug, Clone)]
 pub struct KernRecord {
-    top_right: Option<KernTable>,
-    top_left: Option<KernTable>,
-    bottom_right: Option<KernTable>,
-    bottom_left: Option<KernTable>,
+    pub top_right: Option<KernTable>,
+    pub top_left: Option<KernTable>,
+    pub bottom_right: Option<KernTable>,
+    pub bottom_left: Option<KernTable>,
 }
 
 #[derive(Debug, Clone)]
 pub struct KernTable {
-    correction_heights: &'static [FontUnit], // unit::Font::<i16>()
-    kern_values: &'static [FontUnit],        // unit::Font::<i16>()
+    pub correction_heights: &'static [FontUnit], // unit::Font::<i16>()
+    pub kern_values: &'static [FontUnit],        // unit::Font::<i16>()
 }
 
 #[derive(Default, Debug, Copy, Clone, PartialEq, Eq)]
