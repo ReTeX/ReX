@@ -15,16 +15,18 @@ enum Orientation {
 struct SvgRenderer {
     /// The current `x` position of the cursor.
     x: f64,
+
     /// The current `y` position of the cursor.
     y: f64,
+
     /// The `LayoutNode`s which need to be rendered.
     nodes: Vec<LayoutNode>,
+
     /// The `Orientation` of the rendered.  This changes
     /// whether we are within a `HorizontalBox` which places
     /// glyphs from left to right or a `VerticalBox` which
     /// places glyphs from top to bottom.
     orientation: Orientation,
-
     font_size: FontUnit,
     horz_padding: FontUnit,
     vert_padding: FontUnit,
