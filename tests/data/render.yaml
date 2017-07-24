@@ -38,7 +38,8 @@ Fractions:
 
   - Description: should handle depth
     Snippets:
-    - \frac{g}{x}\frac{x}{x}", r"\frac{x}{g}\frac{x}{x}
+    - \frac{g}{x}\frac{x}{x}
+    - \frac{x}{g}\frac{x}{x}
 
 Accents:
   - Description: should properly scale
