@@ -6,9 +6,6 @@ authors = [
     "Sebastian Köln <sebk@rynx.org>"
 ]
 
-[features]
-fast-check = []
-
 [[bin]]
 name = "qc"
 path = "bin/qc.rs"
@@ -19,8 +16,12 @@ stix = { path = "fonts/stix" }
 font_types = {path = "fonts/types" }
 static_map = "0.1"
 static_map_macros = "0.1"
+serde_derive = "1.0"
+serde = "1.0"
+bincode = "0.8"
 
 [dev-dependencies]
+serde_yaml = "0.7"
 toml = "0.2"
 json = "0.11"
 

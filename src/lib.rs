@@ -2,6 +2,11 @@
 extern crate test;
 
 #[macro_use]
+extern crate serde_derive;
+extern crate serde;
+extern crate bincode;
+
+#[macro_use]
 extern crate log;
 
 extern crate fp;

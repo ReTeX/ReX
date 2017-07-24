@@ -1,5 +1,6 @@
 use static_map;
 
+#[derive(Serialize, Deserialize)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct RGBA(pub u8, pub u8, pub u8, pub u8);
 

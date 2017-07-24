@@ -1,5 +1,5 @@
 use dimensions::Unit;
-use font::{Weight, Family, FontUnit, Symbol, AtomType};
+use font::{Weight, Family, Symbol, AtomType};
 use font::Style as FontStyle;
 use font::style::style_symbol;
 use layout::Style;
