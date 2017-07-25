@@ -1,20 +1,17 @@
-# Rust specific files
+# Rust build artifacts
 target
 Cargo.lock
 
-# Potential files from TeX while testing
+# Potential products from TeX while testing
 *.pdf
 *.log
 *.aux
 *.iml
 
 .vscode
+
+# Product of `qc` binary
+test.svg
+
+# Products from testing
 *.html
-*.js
-*.css
-
-test*.*
-tests/out/
-
-README.samples
-*.notes*
