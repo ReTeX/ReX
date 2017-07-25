@@ -20,6 +20,10 @@ use common::debug_render::Equation;
 use common::debug_render::Object;
 use common::svg_diff;
 
+const LAYOUT_YAML: &str = "tests/data/layout.yaml";
+const LAYOUT_HTML: &str = "tests/out/layout.html";
+const LAYOUT_BINCODE: &str = "tests/data/layout.bincode";
+
 #[derive(Debug, Serialize, Deserialize)]
 struct Tests(BTreeMap<String, Vec<Category>>);
 
@@ -60,12 +64,12 @@ fn render_tests(tests: Tests) -> Vec<Equation> {
                     .expect("failed to parse tex");
                 let description = format!("{}: {}", category, snippets.description);
                 equations.push(Equation {
-                                 tex: equation.to_string(),
-                                 description: description,
-                                 width: renderer.width.take(),
-                                 height: renderer.height.take(),
-                                 render: canvas,
-                             });
+                                   tex: equation.to_string(),
+                                   description: description,
+                                   width: renderer.width.take(),
+                                   height: renderer.height.take(),
+                                   render: canvas,
+                               });
             }
         }
     }
@@ -93,17 +97,17 @@ fn equation_diffs(old: &[Equation], new: &[Equation]) -> Vec<(Equation, Equation
 
 #[test]
 fn layout() {
-    let tests    = collect_tests("tests/data/layout.yaml");
+    let tests = collect_tests(LAYOUT_YAML);
     let rendered = render_tests(tests);
-    let history  = load_history("tests/out/layout.bincode");
-    let diff     = equation_diffs(&history, &rendered);
+    let history = load_history(LAYOUT_BINCODE);
+    let diff = equation_diffs(&history, &rendered);
 
     if diff.len() != 0 {
         let count = diff.len();
-        svg_diff::write_diff(diff);
+        svg_diff::write_diff(LAYOUT_HTML, diff);
         panic!("Detected {} formula changes. \
                 Please review the changes in `tests/out/layout_diff.html`",
-                count);
+               count);
     }
 }
 
@@ -112,11 +116,10 @@ fn layout() {
 fn save_layout() {
     use std::io::BufWriter;
 
-    let tests    = collect_tests("tests/data/layout.yaml");
+    let tests = collect_tests(LAYOUT_YAML);
     let rendered = render_tests(tests);
 
-    let out = File::create("tests/out/layout.bincode")
-        .expect("failed to create bincode file for layout tests");
+    let out = File::create(LAYOUT_BINCODE).expect("failed to create bincode file for layout tests");
     let mut writer = BufWriter::new(out);
     bincode::serialize_into(&mut writer, &rendered, bincode::Infinite)
         .expect("failed to serialize tex results to bincode");
