@@ -141,7 +141,7 @@ pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNod
         };
 
         lex.next();
-        return macro_argument(lex, new_style)
+        return required_argument(lex, new_style).map(Some)
     }
 
     Ok(None)
@@ -285,9 +285,9 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
 ///   - How to properly inline a vector of parsenodes?
 ///   - When can this possible fail?
 ///   - How to handle custom validators/parsers for arguments. ie: Argument is a color.
+/// This method is like `macro_argument` except that it requires an argument to be present.
 
-pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseNode>>> {
-    // Must figure out how to properly handle implicit groups here.
+pub fn required_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
     lex.consume_whitespace();
 
     let opt_node = alt!(
@@ -296,19 +296,9 @@ pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseN
         symbol(lex, local));
 
     match opt_node {
-        Some(ParseNode::Group(inner)) => Ok(Some(inner)),
-        Some(node) => Ok(Some(vec![node])),
-        _ => Ok(None),
-    }
-}
-
-/// This method is like `macro_argument` except that it requires an argument to be present.
-
-pub fn required_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
-    let arg = macro_argument(lex, local)?;
-    match arg {
-        None => Err(Error::RequiredMacroArg),
-        Some(res) => Ok(res),
+        Some(ParseNode::Group(inner)) => Ok(inner),
+        Some(node) => Ok(vec![node]),
+        _ => Err(Error::RequiredMacroArg),
     }
 }
 
