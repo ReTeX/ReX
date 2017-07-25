@@ -304,7 +304,7 @@ pub fn macro_argument(lex: &mut Lexer, local: Style) -> Result<Option<Vec<ParseN
 
 /// This method is like `macro_argument` except that it requires an argument to be present.
 
-pub fn required_macro_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
+pub fn required_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
     let arg = macro_argument(lex, local)?;
     match arg {
         None => Err(Error::RequiredMacroArg),

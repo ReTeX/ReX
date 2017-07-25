@@ -197,7 +197,7 @@ impl TexCommand {
         Ok(match self {
             TexCommand::Radical =>
                 Some(ParseNode::Radical(Radical {
-                    inner: parse::required_macro_argument(lex, local)?,
+                    inner: parse::required_argument(lex, local)?,
                 })),
 
             TexCommand::GenFraction {
@@ -210,8 +210,8 @@ impl TexCommand {
                     left_delimiter:  ld,
                     right_delimiter: rd,
                     bar_thickness:   bt,
-                    numerator: parse::required_macro_argument(lex, local)?,
-                    denominator: parse::required_macro_argument(lex, local)?,
+                    numerator: parse::required_argument(lex, local)?,
+                    denominator: parse::required_argument(lex, local)?,
                 })),
 
             TexCommand::DelimiterSize {
@@ -264,7 +264,7 @@ impl TexCommand {
             TexCommand::AtomChange(sty) => {
                 Some(ParseNode::AtomChange(AtomChange {
                     at: sty,
-                    inner: parse::required_macro_argument(lex, local)?
+                    inner: parse::required_argument(lex, local)?
                 }))
             },
 
@@ -278,14 +278,14 @@ impl TexCommand {
 
                 Some(ParseNode::Color(Color {
                     color: *rgba,
-                    inner: parse::required_macro_argument(lex, local)?
+                    inner: parse::required_argument(lex, local)?
                 }))
             },
 
             TexCommand::ColorLit(rgba) => {
                 Some(ParseNode::Color(Color {
                     color: rgba,
-                    inner: parse::required_macro_argument(lex, local)?
+                    inner: parse::required_argument(lex, local)?
                 }))
             },
 
