@@ -39,9 +39,7 @@ r##"<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Testing Things</title>
-    <link rel="stylesheet" href="prism.css"/>
-    <script src="prism.js"></script>
+    <title>Font Styles</title>
 </head>
 <body>
 <h1><center>Font Styles Rendering Tests</center></h1>
@@ -50,11 +48,11 @@ r##"<!DOCTYPE html>
 const END: &'static str = r"</body></html>";
 
 #[test]
-fn font_styles_render() {
-    let settings = rex::RenderSettings::default().font_src("rex-xits.woff2").font_size(32);
+fn font_styles() {
+    let settings = rex::RenderSettings::default().font_src("rex-xits.otf").font_size(32);
     let svg  = rex::SVGRenderer::<String>::new(&settings);
-    let mut file = File::create("tests/out/font_styles.html")
-        .expect("Unable to create `font_styles.html`");
+    let mut file = File::create("tests/out/styles.html")
+        .expect("Unable to create `styles.html`");
     let mut result = String::from(HEADER);
 
     for &style in styles.iter() {

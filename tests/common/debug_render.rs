@@ -6,19 +6,23 @@
 use font::FontUnit;
 use rex::parser::color::RGBA;
 use rex::render::{Renderer, RenderSettings, Cursor};
+use std::rc::Rc;
+use std::cell::Cell;
 
 type Objects = Vec<Object>;
 
 #[derive(Serialize, Deserialize)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Equation {
     pub tex: String,
     pub description: String,
+    pub width: FontUnit,
+    pub height: FontUnit,
     pub render: Objects
 }
 
 #[derive(Serialize, Deserialize)]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Object {
     Symbol(DebugSymbol),
     Rule(DebugRule),
@@ -26,26 +30,28 @@ pub enum Object {
 }
 
 #[derive(Serialize, Deserialize)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct DebugSymbol {
-    scale: f64,
-    codepoint: u32,
-    x: FontUnit,
-    y: FontUnit,
+    pub scale: f64,
+    pub codepoint: u32,
+    pub x: FontUnit,
+    pub y: FontUnit,
 }
 
 #[derive(Serialize, Deserialize)]
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct DebugRule {
-    width: FontUnit,
-    height: FontUnit,
-    x: FontUnit,
-    y: FontUnit
+    pub width: FontUnit,
+    pub height: FontUnit,
+    pub x: FontUnit,
+    pub y: FontUnit
 }
 
 #[derive(Clone, Default)]
 pub struct DebugRenderer {
     settings: RenderSettings,
+    pub width: Rc<Cell<FontUnit>>,
+    pub height: Rc<Cell<FontUnit>>,
 }
 
 impl Renderer for DebugRenderer {
@@ -53,6 +59,11 @@ impl Renderer for DebugRenderer {
 
     fn settings(&self) -> &RenderSettings {
         &self.settings
+    }
+
+    fn prepare(&self, _: &mut Objects, width: FontUnit, height: FontUnit) {
+        self.width.set(width);
+        self.height.set(height);
     }
 
     fn symbol(&self, out: &mut Objects, pos: Cursor, symbol: u32, scale: f64) {
