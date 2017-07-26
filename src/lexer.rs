@@ -23,12 +23,13 @@ pub enum OwnedToken {
 }
 
 impl<'a> Token<'a> {
+    #[cfg_attr(rustfmt, rustfmt_skip)]
     pub fn ends_expression(self) -> bool {
         match self {
-            Token::EOF |
-            Token::Symbol('}') |
-            Token::Command("right") |
-            Token::Command(r"\") => true,
+            Token::EOF
+            | Token::Symbol('}')
+            | Token::Command("right")
+            | Token::Command(r"\") => true,
             _ => false,
         }
     }
@@ -177,7 +178,7 @@ impl<'a> Lexer<'a> {
         let start = self.pos;
         let end = match self.input[self.pos..].find('}') {
             Some(pos) => start + pos,
-            None => return Err(Error::NoClosingBracket)
+            None => return Err(Error::NoClosingBracket),
         };
 
         // Place cursor immediately after }
@@ -187,14 +188,18 @@ impl<'a> Lexer<'a> {
     }
 
     pub fn alphanumeric(&mut self) -> &str {
-        // TODO: Since current_char points to the first
-        // character /not/ processed.  So once we consume
-        // `{` in a group, the first letter of the color
-        // is consumed.  So, for now, we subtract by one
-        // but this is very bad.
-        let start = self.pos - 1;
+        // This method expects that the next "Token" is a sequence of
+        // alphanumerics.  Since `current_char` points at the first
+        // non-parsed token, we must check the current Token to proceed.
+        let start = match self.current {
+            Token::Symbol(c) => self.pos - c.len_utf8(),
+            _ => return "",
+        };
+
         while let Some(c) = self.current_char() {
-            if !c.is_alphanumeric() { break }
+            if !c.is_alphanumeric() {
+                break;
+            }
             self.pos += c.len_utf8()
         }
         let result = &self.input[start..self.pos];
