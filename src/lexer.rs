@@ -187,12 +187,15 @@ impl<'a> Lexer<'a> {
         Ok(&self.input[start..end])
     }
 
+    /// Match a segment of alphanumeric characters.  This method will
+    /// return an empty string if there are no alphanumeric characters.
     pub fn alphanumeric(&mut self) -> &str {
         // This method expects that the next "Token" is a sequence of
         // alphanumerics.  Since `current_char` points at the first
         // non-parsed token, we must check the current Token to proceed.
+        println!("{:?}", self.current);
         let start = match self.current {
-            Token::Symbol(c) => self.pos - c.len_utf8(),
+            Token::Symbol(c) if c.is_alphanumeric() => self.pos - c.len_utf8(),
             _ => return "",
         };
 
@@ -303,6 +306,32 @@ mod tests {
 
         // This doesn't seem correct:
         // assert_group!("{{}}", Ok("{"));
+    }
+
+    #[test]
+    fn lex_alphanumeric() {
+        macro_rules! assert_alphanumeric {
+            ($input:expr, $result:expr) => {
+                let mut lex = Lexer::new($input);
+                assert_eq!(lex.alphanumeric(), $result);
+            }
+        }
+
+        // Ends on EOF
+        assert_alphanumeric!("abc", "abc");
+        assert_alphanumeric!("", "");
+
+        // Ends on Whitespace
+        assert_alphanumeric!("123 ", "123");
+        assert_alphanumeric!(" 123", "");
+
+        // End on Command
+        assert_alphanumeric!(r"\pi2", "");
+        assert_alphanumeric!(r"2\alpha", "2");
+
+        // End on non-alphanumeric
+        assert_alphanumeric!("{abc}", "");
+        assert_alphanumeric!("abc!", "abc");
     }
 
     // #[test]
