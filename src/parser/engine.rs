@@ -342,11 +342,11 @@ pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<
 
 use dimensions::Unit;
 use parser::color::RGBA;
-pub fn dimension(lex: &mut Lexer, local: Style) -> Result<Unit> {
+pub fn dimension(_: &mut Lexer, _: Style) -> Result<Unit> {
     unimplemented!()
 }
 
-pub fn color(lex: &mut Lexer, local: Style) -> Result<RGBA> {
+pub fn color(lex: &mut Lexer, _: Style) -> Result<RGBA> {
     let color_str = lex.alphanumeric();
     let color = ::parser::color::COLOR_MAP
          .get(color_str)

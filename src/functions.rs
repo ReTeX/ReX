@@ -32,7 +32,6 @@ pub enum MathStyle {
     NoChange,
 }
 
-#[allow(dead_code)]
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum Command {
     Radical,
@@ -49,6 +48,7 @@ pub enum Command {
     Stack(AtomType),
 }
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 impl Command {
     pub fn parse(self, lex: &mut Lexer, local: Style) -> Result<ParseNode> {
         use self::Command::*;
@@ -179,11 +179,15 @@ fn radical(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
     Ok(ParseNode::Radical(Radical { inner }))
 }
 
-fn rule(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
+fn rule(lex: &mut Lexer, _: Style) -> Result<ParseNode> {
     lex.consume_whitespace();
-    let width = lex.dimension()?.expect("Unable to parse dimension for Rule.");
+    let width = lex.dimension()?.expect(
+        "Unable to parse dimension for Rule.",
+    );
     lex.consume_whitespace();
-    let height = lex.dimension()?.expect("Unable to parse dimension for Rule.");
+    let height = lex.dimension()?.expect(
+        "Unable to parse dimension for Rule.",
+    );
     Ok(ParseNode::Rule(Rule { width, height }))
 }
 
@@ -194,7 +198,7 @@ fn v_extend(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
 
         // TODO: add better error
         _ => return Err(Error::ExpectedOpenGroup),
-    } ;
+    };
 
     let height = parse::required_argument_with(lex, local, parse::dimension)?;
     Ok(ParseNode::Extend(sym.unicode, height))
@@ -211,16 +215,23 @@ fn color_lit(lex: &mut Lexer, local: Style, color: RGBA) -> Result<ParseNode> {
     Ok(ParseNode::Color(Color { color, inner }))
 }
 
-fn fraction(lex: &mut Lexer, local: Style, left_delimiter: Option<Symbol>, right_delimiter: Option<Symbol>, bar_thickness: BarThickness, _: MathStyle) -> Result<ParseNode> {
+fn fraction(
+    lex: &mut Lexer,
+    local: Style,
+    left_delimiter: Option<Symbol>,
+    right_delimiter: Option<Symbol>,
+    bar_thickness: BarThickness,
+    _: MathStyle,
+) -> Result<ParseNode> {
     let numerator = parse::required_argument(lex, local)?;
     let denominator = parse::required_argument(lex, local)?;
 
-    Ok(ParseNode::GenFraction(GenFraction{
+    Ok(ParseNode::GenFraction(GenFraction {
         left_delimiter,
         right_delimiter,
         bar_thickness,
         numerator,
-        denominator
+        denominator,
     }))
 }
 
@@ -243,7 +254,7 @@ fn atom_change(lex: &mut Lexer, local: Style, at: AtomType) -> Result<ParseNode>
 }
 
 fn text_operator(_: &mut Lexer, _: Style, text: &str, limits: bool) -> Result<ParseNode> {
-    const SMALL_SKIP: Unit = Unit::Em(3f64/18f64);
+    const SMALL_SKIP: Unit = Unit::Em(3f64 / 18f64);
     let at = AtomType::Operator(limits);
     let mut inner = Vec::with_capacity(text.len());
 
@@ -254,9 +265,10 @@ fn text_operator(_: &mut Lexer, _: Style, text: &str, limits: bool) -> Result<Pa
             inner.push(ParseNode::Symbol(Symbol {
                 unicode: style_symbol(
                     c as u32,
-                    Style::default()
-                        .with_family(Family::Roman)
-                        .with_weight(Weight::None)),
+                    Style::default().with_family(Family::Roman).with_weight(
+                        Weight::None,
+                    ),
+                ),
                 atom_type: AtomType::Ordinal,
             }));
         }
@@ -267,7 +279,7 @@ fn text_operator(_: &mut Lexer, _: Style, text: &str, limits: bool) -> Result<Pa
 
 fn stack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode> {
     if lex.current != Token::Symbol('{') {
-        return Err(Error::StackMustFollowGroup)
+        return Err(Error::StackMustFollowGroup);
     }
 
     lex.next();
@@ -277,9 +289,9 @@ fn stack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode
     loop {
         lines.push(parse::expression(lex, local)?);
         match lex.current {
-            Token::Symbol('}')   => break,
+            Token::Symbol('}') => break,
             Token::Command(r"\") => lex.next(),
-            _ => return  Err(Error::UnexpectedEof),
+            _ => return Err(Error::UnexpectedEof),
         };
     }
 
