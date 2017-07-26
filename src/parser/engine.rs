@@ -302,6 +302,22 @@ pub fn required_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>
     }
 }
 
+pub fn required_argument_with<F, O>(lex: &mut Lexer, local: Style, f: F) -> Result<O>
+    where F: FnOnce(&mut Lexer, Style) -> Result<O>
+{
+    lex.consume_whitespace();
+
+    if lex.current == Token::Symbol('{') {
+        lex.next();
+        let parsed = f(lex, local)?;
+        lex.current.expect_symbol('}')?;
+        lex.next();
+        Ok(parsed)
+    } else {
+        f(lex, local)
+    }
+}
+
 /// This method expects that the current token has a given atom type.  This method
 /// will frist strip all whitespaces first before inspecting the current token.
 /// This function will Err if the expected symbol doesn't have the given type,

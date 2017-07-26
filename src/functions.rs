@@ -19,16 +19,8 @@ pub enum TexCommand {
     HExtend,
     Color,
     ColorLit(RGBA),
-    GenFraction {
-        left:  Option<Symbol>,
-        right: Option<Symbol>,
-        bar:   BarThickness,
-        style: MathStyle,
-    },
-    DelimiterSize {
-        atom_type: AtomType,
-        size:      u8,
-    },
+    GenFraction(Option<Symbol>, Option<Symbol>, BarThickness, MathStyle),
+    DelimiterSize(u8, AtomType),
     Kerning(Unit),
     Style(Style),
     AtomChange(AtomType),
@@ -44,10 +36,10 @@ macro_rules! sym {
     (@at close) => { AtomType::Close };
 
     ($code:expr, $ord:ident) => ({
-        Symbol {
+        Some(Symbol {
             unicode: $code as u32,
             atom_type: sym!(@at $ord),
-        }
+        })
     });
 }
 
@@ -79,33 +71,33 @@ fn text(s: &'static str) -> Vec<ParseNode> {
 
 pub static COMMANDS: static_map::Map<&'static str, TexCommand> = static_map! {
     Default: TexCommand::Radical,
-    "frac"   => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::NoChange },
-    "tfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Text },
-    "dfrac"  => TexCommand::GenFraction { left: None, right: None, bar: BarThickness::Default, style: MathStyle::Display },
-    "binom"  => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::NoChange },
-    "tbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Text },
-    "dbinom" => TexCommand::GenFraction { left: Some(sym!(b'(', open)), right: Some(sym!(b')', close)), bar: BarThickness::None, style: MathStyle::Display },
+    "frac"   => TexCommand::GenFraction(None, None, BarThickness::Default, MathStyle::NoChange),
+    "tfrac"  => TexCommand::GenFraction(None, None, BarThickness::Default, MathStyle::Text),
+    "dfrac"  => TexCommand::GenFraction(None, None, BarThickness::Default, MathStyle::Display),
+    "binom"  => TexCommand::GenFraction(sym!(b'(', open), sym!(b')', close), BarThickness::None, MathStyle::NoChange),
+    "tbinom" => TexCommand::GenFraction(sym!(b'(', open), sym!(b')', close), BarThickness::None, MathStyle::Text),
+    "dbinom" => TexCommand::GenFraction(sym!(b'(', open), sym!(b')', close), BarThickness::None, MathStyle::Display),
 
     "substack" => TexCommand::Stack(AtomType::Inner),
 
     "sqrt" => TexCommand::Radical,
 
-    "bigl"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Open },
-    "Bigl"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Open },
-    "biggl" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Open },
-    "Biggl" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Open },
-    "bigr"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Close },
-    "Bigr"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Close },
-    "biggr" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Close },
-    "Biggr" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Close },
-    "bigm"  => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Relation },
-    "Bigm"  => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Relation },
-    "biggm" => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Relation },
-    "Biggm" => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Relation },
-    "big"   => TexCommand::DelimiterSize { size: 1, atom_type: AtomType::Ordinal },
-    "Big"   => TexCommand::DelimiterSize { size: 2, atom_type: AtomType::Ordinal },
-    "bigg"  => TexCommand::DelimiterSize { size: 3, atom_type: AtomType::Ordinal },
-    "Bigg"  => TexCommand::DelimiterSize { size: 4, atom_type: AtomType::Ordinal },
+    "bigl"  => TexCommand::DelimiterSize(1, AtomType::Open),
+    "Bigl"  => TexCommand::DelimiterSize(2, AtomType::Open),
+    "biggl" => TexCommand::DelimiterSize(3, AtomType::Open),
+    "Biggl" => TexCommand::DelimiterSize(4, AtomType::Open),
+    "bigr"  => TexCommand::DelimiterSize(1, AtomType::Close),
+    "Bigr"  => TexCommand::DelimiterSize(2, AtomType::Close),
+    "biggr" => TexCommand::DelimiterSize(3, AtomType::Close),
+    "Biggr" => TexCommand::DelimiterSize(4, AtomType::Close),
+    "bigm"  => TexCommand::DelimiterSize(1, AtomType::Relation),
+    "Bigm"  => TexCommand::DelimiterSize(2, AtomType::Relation),
+    "biggm" => TexCommand::DelimiterSize(3, AtomType::Relation),
+    "Biggm" => TexCommand::DelimiterSize(4, AtomType::Relation),
+    "big"   => TexCommand::DelimiterSize(1, AtomType::Ordinal),
+    "Big"   => TexCommand::DelimiterSize(2, AtomType::Ordinal),
+    "bigg"  => TexCommand::DelimiterSize(3, AtomType::Ordinal),
+    "Bigg"  => TexCommand::DelimiterSize(4, AtomType::Ordinal),
 
     "!"     => TexCommand::Kerning(Unit::Em(-3f64/18f64)),
     ","     => TexCommand::Kerning(Unit::Em(3f64/18f64)),
@@ -200,12 +192,7 @@ impl TexCommand {
                     inner: parse::required_argument(lex, local)?,
                 })),
 
-            TexCommand::GenFraction {
-                left:  ld,
-                right: rd,
-                bar:   bt,
-                style: ms,
-            } =>
+            TexCommand::GenFraction(ld, rd, bt, ms) =>
                 Some(ParseNode::GenFraction(GenFraction{
                     left_delimiter:  ld,
                     right_delimiter: rd,
@@ -214,10 +201,7 @@ impl TexCommand {
                     denominator: parse::required_argument(lex, local)?,
                 })),
 
-            TexCommand::DelimiterSize {
-                size: s,
-                atom_type: at,
-            } =>
+            TexCommand::DelimiterSize(cs, at) =>
                 Some(ParseNode::Symbol(parse::expect_type(lex, local, at)?)),
             TexCommand::Rule => {
                 lex.consume_whitespace();
