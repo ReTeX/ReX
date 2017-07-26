@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+use dimensions::Unit;
 use error::{Error, Result};
 use font::Style;
 use font::style::style_symbol;
@@ -6,6 +6,7 @@ use font::Symbol;
 use font::symbols::SYMBOLS;
 use lexer::{Lexer, Token};
 use parser::nodes::{Delimited, ParseNode, Accent};
+use parser::color::RGBA;
 use font::AtomType;
 use functions::COMMANDS;
 use super::builders as build;
@@ -340,8 +341,6 @@ pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<
     }
 }
 
-use dimensions::Unit;
-use parser::color::RGBA;
 pub fn dimension(_: &mut Lexer, _: Style) -> Result<Unit> {
     unimplemented!()
 }
