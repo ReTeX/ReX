@@ -1,5 +1,6 @@
 use std::fmt;
 use dimensions::Unit;
+use parser::color::{COLOR_MAP, RGBA};
 use error::Error;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -193,7 +194,6 @@ impl<'a> Lexer<'a> {
         // This method expects that the next "Token" is a sequence of
         // alphanumerics.  Since `current_char` points at the first
         // non-parsed token, we must check the current Token to proceed.
-        println!("{:?}", self.current);
         let start = match self.current {
             Token::Symbol(c) if c.is_alphanumeric() => self.pos - c.len_utf8(),
             _ => return "",
@@ -208,6 +208,15 @@ impl<'a> Lexer<'a> {
         let result = &self.input[start..self.pos];
         self.next();
         result
+    }
+
+    // Match a valid Color.  A color is defined as either:
+    //   1. Alphabetic name for a valid CSS color.
+    //   2. #RRGGBB (that is a # followed by 6 digits)
+    //   3. #RRGGBBAA (that is a # followed by 8 digits)
+
+    pub fn color(&mut self) -> Result<RGBA, Error> {
+        unimplemented!()
     }
 
     fn next_char(&mut self) -> Option<char> {
