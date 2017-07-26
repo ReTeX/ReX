@@ -186,6 +186,22 @@ impl<'a> Lexer<'a> {
         Ok(&self.input[start..end])
     }
 
+    pub fn alphanumeric(&mut self) -> &str {
+        // TODO: Since current_char points to the first
+        // character /not/ processed.  So once we consume
+        // `{` in a group, the first letter of the color
+        // is consumed.  So, for now, we subtract by one
+        // but this is very bad.
+        let start = self.pos - 1;
+        while let Some(c) = self.current_char() {
+            if !c.is_alphanumeric() { break }
+            self.pos += c.len_utf8()
+        }
+        let result = &self.input[start..self.pos];
+        self.next();
+        result
+    }
+
     fn next_char(&mut self) -> Option<char> {
         match self.current_char() {
             None => None,

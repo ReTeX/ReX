@@ -176,7 +176,7 @@ pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
         match COMMANDS.get(cmd) {
             Some(ref cmd) => {
                 lex.next();
-                cmd.parse(lex, local)
+                cmd.parse(lex, local).map(Some)
             },
             None => Ok(None),
         }
@@ -306,10 +306,11 @@ pub fn required_argument_with<F, O>(lex: &mut Lexer, local: Style, f: F) -> Resu
     where F: FnOnce(&mut Lexer, Style) -> Result<O>
 {
     lex.consume_whitespace();
-
     if lex.current == Token::Symbol('{') {
         lex.next();
+        lex.consume_whitespace();
         let parsed = f(lex, local)?;
+        lex.consume_whitespace();
         lex.current.expect_symbol('}')?;
         lex.next();
         Ok(parsed)
@@ -337,6 +338,21 @@ pub fn expect_type(lex: &mut Lexer, local: Style, expected: AtomType) -> Result<
     } else {
         Err(Error::ExpectedSymbol(lex.current.into()))
     }
+}
+
+use dimensions::Unit;
+use parser::color::RGBA;
+pub fn dimension(lex: &mut Lexer, local: Style) -> Result<Unit> {
+    unimplemented!()
+}
+
+pub fn color(lex: &mut Lexer, local: Style) -> Result<RGBA> {
+    let color_str = lex.alphanumeric();
+    let color = ::parser::color::COLOR_MAP
+         .get(color_str)
+         .ok_or_else(|| Error::UnrecognizedColor(color_str.into()))?;
+
+    Ok(*color)
 }
 
 /// This function is the API entry point for parsing a macro.  For now, it takes a `&str`
