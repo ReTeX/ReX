@@ -1,6 +1,6 @@
 use std::fmt;
 use dimensions::Unit;
-use parser::color::{COLOR_MAP, RGBA};
+use parser::color::RGBA;
 use error::Error;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

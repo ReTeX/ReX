@@ -1,3 +1,5 @@
+#![allow(unused_macros)]
+
 // ----------------------
 // Parsing related Macros
 // ----------------------

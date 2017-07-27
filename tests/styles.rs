@@ -1,6 +1,5 @@
 #![allow(non_upper_case_globals)]
 extern crate rex;
-use rex::Renderer;
 use rex::render::svg;
 
 use std::fs::File;
@@ -48,8 +47,7 @@ fn font_styles() {
     let settings = rex::RenderSettings::default()
         .font_src("rex-xits.otf")
         .font_size(32);
-    // let svg = rex::SVGRenderer::<Vec<u8>>::new(&settings);
-    let settings = rex::RenderSettings::default();
+
     let mut file = File::create("tests/out/styles.html").expect("Unable to create `styles.html`");
     let mut result = String::from(HEADER);
 
