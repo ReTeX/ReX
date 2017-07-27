@@ -8,7 +8,7 @@ use std::fs::File;
 use std::io::BufReader;
 //use std::io::Sink;
 
-type SvgSink<'a> = SVGRenderer<'a, String>;
+type SvgSink<'a> = SVGRenderer<'a, Vec<u8>>;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Tests {

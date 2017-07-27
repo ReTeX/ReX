@@ -3,10 +3,11 @@ use font::FontUnit;
 use font::constants::UNITS_PER_EM;
 use parser::color::RGBA;
 use render::{Renderer, RenderSettings, Cursor};
-use std::fmt::Write;
+use std::io::Write;
 use std::fs::File;
 use std::path::Path;
 use std::marker::PhantomData;
+use error::Error;
 
 pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input: &str) {
     render_to_file(&mut File::create(path.as_ref()).expect("could not create file"),
@@ -17,10 +18,15 @@ pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input:
 pub fn render_to_file(file: &mut File, settings: &RenderSettings, input: &str) {
     use std::io::Write;
 
-    let s: String = SVGRenderer::new(&settings)
+    let s: Vec<u8> = SVGRenderer::new(&settings)
         .render(input)
         .expect("failed to render");
-    file.write(s.as_bytes()).expect("failed to write to file");
+    file.write(&s).expect("failed to write to file");
+}
+
+pub fn render_to_string(settings: &RenderSettings, input: &str) -> Result<String, Error> {
+    let s: Vec<u8> = SVGRenderer::new(&settings).render(input)?;
+    Ok(String::from_utf8(s).unwrap())
 }
 
 #[derive(Clone)]
@@ -47,7 +53,8 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
 
     fn prepare(&self, out: &mut W, width: FontUnit, height: FontUnit) {
         let px_width = f64::from(width) / f64::from(UNITS_PER_EM) * self.settings.font_size as f64;
-        let px_height = f64::from(height) / f64::from(UNITS_PER_EM) * self.settings.font_size as f64;
+        let px_height = f64::from(height) / f64::from(UNITS_PER_EM) *
+                        self.settings.font_size as f64;
 
         writeln!(out,
                  r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -122,8 +129,13 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
             writeln!(out, r##"<g fill="#{}{}{}">"##, color.0, color.1, color.2)
                 .expect("failed to write to buffer!");
         } else {
-            writeln!(out, r#"<g fill="rgba({},{},{},{})">"#, color.0, color.1, color.2, color.3)
-                .expect("Failed to write to buffer!");
+            writeln!(out,
+                     r#"<g fill="rgba({},{},{},{})">"#,
+                     color.0,
+                     color.1,
+                     color.2,
+                     color.3)
+                    .expect("Failed to write to buffer!");
         }
         contents(self, out);
         writeln!(out, "</g>").expect("Failed to write to buffer!");

@@ -1,6 +1,7 @@
 pub mod svg;
 pub use self::svg::SVGRenderer;
 
+use error::Error;
 use font::FontUnit;
 use dimensions::Float;
 use layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
@@ -227,12 +228,8 @@ pub trait Renderer {
     fn finish(&self, _out: &mut Self::Out) {}
     fn settings(&self) -> &RenderSettings;
 
-    fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), String> {
-        let mut parse = match parse(&tex) {
-            Ok(ret) => ret,
-            Err(err) => panic!("failed to parse with: {}", err),
-        };
-
+    fn render_to(&self, out: &mut Self::Out, tex: &str) -> Result<(), Error> {
+        let mut parse = parse(&tex)?;
         let layout = layout(&mut parse, self.settings().layout_settings());
 
         if self.settings().debug {
@@ -263,7 +260,7 @@ pub trait Renderer {
         Ok(())
     }
 
-    fn render(&self, tex: &str) -> Result<Self::Out, String>
+    fn render(&self, tex: &str) -> Result<Self::Out, Error>
         where Self::Out: Default
     {
         let mut out = Self::Out::default();
