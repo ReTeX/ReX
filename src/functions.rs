@@ -291,7 +291,7 @@ fn stack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode
         match lex.current {
             Token::Symbol('}') => break,
             Token::Command(r"\") => lex.next(),
-            _ => return Err(Error::UnexpectedEof),
+            _ => return Err(Error::Todo),
         };
     }
 

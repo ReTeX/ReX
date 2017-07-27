@@ -365,10 +365,9 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>> {
     let result = expression(&mut lexer, local)?;
 
     if lexer.current != Token::EOF {
-        panic!("Unexpectedly ended parsing; \
-                unmatched end of expression? \
-                Stoped parsing at {}",
-                lexer.current);
+        return Err(
+            Error::UnexpectedEof(lexer.current.into())
+        )
     }
 
     Ok(result)

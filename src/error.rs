@@ -27,9 +27,10 @@ pub enum Error {
     NoClosingBracket,
     StackMustFollowGroup,
     AccentMissingArg(String),
-    UnexpectedEof,
+    UnexpectedEof(OwnedToken),
     UnrecognizedDimension,
     UnrecognizedColor(String),
+    Todo,
 }
 
 impl error::Error for Error {
@@ -55,9 +56,10 @@ impl error::Error for Error {
             NoClosingBracket => "failed to find a closing bracket",
             StackMustFollowGroup => "stack commands must follow a group",
             AccentMissingArg(_) => "an argument must follow accent commands",
-            UnexpectedEof => "unexpected end of parsing",
+            UnexpectedEof(_) => "unexpected end of parsing",
             UnrecognizedDimension => "failed to parse dimension",
             UnrecognizedColor(_) => "failed to parse color",
+            Todo => "an unfinished error",
         }
     }
 }
@@ -104,12 +106,14 @@ impl fmt::Display for Error {
                 write!(f, "stack commands must follow a group"),
             AccentMissingArg(ref acc) =>
                 write!(f, "the accent '\\{}' must have an argument", acc),
-            UnexpectedEof =>
-                write!(f, "unexpected EOF"),
+            UnexpectedEof(ref tok) =>
+                write!(f, "unexpectedly ended parsing; unmatched end of expression? Stoped parsing at {}", tok),
             UnrecognizedDimension =>
                 write!(f, "failed to parse dimension"),
             UnrecognizedColor(ref color) =>
                 write!(f, "failed to recognize the color '{}'", color),
+            Todo =>
+                write!(f, "failed with an unspecified error that has yet be implemented"),
         }
     }
 }
