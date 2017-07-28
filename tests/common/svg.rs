@@ -1,5 +1,5 @@
+#![allow(dead_code)]
 extern crate rex;
-use rex::Renderer;
 
 use std::io::Write;
 use std::path::Path;

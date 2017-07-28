@@ -14,8 +14,8 @@ path = "bin/qc.rs"
 fp = { git = "https://github.com/ReTeX/fp.git" }
 stix = { path = "fonts/stix" }
 font_types = {path = "fonts/types" }
-static_map = "0.1"
-static_map_macros = "0.1"
+static_map = "0.2.0-beta"
+static_map_macros = "0.2.0-beta"
 serde_derive = "1.0"
 serde = "1.0"
 

@@ -6,7 +6,6 @@
 use font::FontUnit;
 use rex::parser::color::RGBA;
 use rex::render::{Renderer, RenderSettings, Cursor};
-use std::rc::Rc;
 use std::cell::Cell;
 
 type Objects = Vec<Object>;

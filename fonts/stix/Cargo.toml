@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["cbreeden <github@u.breeden.cc>"]
 
 [dependencies]
-static_map = "*"
-static_map_macros = "*"
+static_map = "0.2.0-beta"
+static_map_macros = "0.2.0-beta"
 fp = { git = "https://github.com/ReTeX/fp.git" }
 font_types = { path = "../types" }
