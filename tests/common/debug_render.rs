@@ -18,7 +18,7 @@ pub struct Equation {
     pub description: String,
     pub width: FontUnit,
     pub height: FontUnit,
-    pub render: Objects
+    pub render: Objects,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -44,14 +44,14 @@ pub struct DebugRule {
     pub width: FontUnit,
     pub height: FontUnit,
     pub x: FontUnit,
-    pub y: FontUnit
+    pub y: FontUnit,
 }
 
 #[derive(Clone, Default)]
 pub struct DebugRenderer {
     settings: RenderSettings,
-    pub width: Rc<Cell<FontUnit>>,
-    pub height: Rc<Cell<FontUnit>>,
+    pub width: Cell<FontUnit>,
+    pub height: Cell<FontUnit>,
 }
 
 impl Renderer for DebugRenderer {
@@ -67,27 +67,21 @@ impl Renderer for DebugRenderer {
     }
 
     fn symbol(&self, out: &mut Objects, pos: Cursor, symbol: u32, scale: f64) {
-        out.push(
-            Object::Symbol(
-                DebugSymbol {
-                    codepoint: symbol,
-                    scale: scale,
-                    x: pos.x,
-                    y: pos.y,
-                }
-            ));
+        out.push(Object::Symbol(DebugSymbol {
+                                    codepoint: symbol,
+                                    scale: scale,
+                                    x: pos.x,
+                                    y: pos.y,
+                                }));
     }
 
     fn rule(&self, out: &mut Objects, pos: Cursor, width: FontUnit, height: FontUnit) {
-        out.push(
-            Object::Rule(
-                DebugRule {
-                    width: width,
-                    height: height,
-                    x: pos.x,
-                    y: pos.y,
-                }
-            ));
+        out.push(Object::Rule(DebugRule {
+                                  width: width,
+                                  height: height,
+                                  x: pos.x,
+                                  y: pos.y,
+                              }));
     }
 
     fn color<F>(&self, out: &mut Objects, color: RGBA, mut contents: F)

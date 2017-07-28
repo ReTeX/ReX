@@ -106,8 +106,9 @@ fn layout() {
         let count = diff.len();
         svg_diff::write_diff(LAYOUT_HTML, diff);
         panic!("Detected {} formula changes. \
-                Please review the changes in `tests/out/layout_diff.html`",
-               count);
+                Please review the changes in `{}`",
+               count,
+               LAYOUT_HTML);
     }
 }
 

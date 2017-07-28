@@ -27,10 +27,14 @@ fn write_equation<W: Write>(f: &mut W, eq: &Equation) {
              eq.tex)
             .unwrap();
 
-    let settings = rex::RenderSettings::default().font_src("rex-xits.otf").font_size(48);
-    let svg  = rex::SVGRenderer::<String>::new(&settings);
+    let settings = rex::RenderSettings::default()
+        .font_src("rex-xits.otf")
+        .font_size(48);
 
-    writeln!(f, "{}", svg.render(&eq.tex).unwrap()).unwrap();
+    writeln!(f,
+             "{}",
+             rex::render::svg::render_to_string(&settings, &eq.tex).unwrap())
+            .unwrap();
 }
 
 pub fn write<P: AsRef<Path>>(path: P, eqs: &[Equation]) {
