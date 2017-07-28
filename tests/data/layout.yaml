@@ -64,10 +64,6 @@ Color:
     - a_{\color{red}{2}}\textstyle a_{\color{red}{2}}\scriptstyle a_{\color{red}{2}}\scriptscriptstyle a_{\color{red}{2}}
     - a^{\color{red}{2}}_{\color{blue}{2}}
 
-  - Description: should be transparent to atom spacing
-    Snippets:
-    - \color{red}{a} + b\ a\color{blue}{+}b\ \color{red}{+}\color{blue}{+}\color{red}{+}
-
   - Description: should be transparent to operators and accents
     Snippets:
     - \color{red}{\int}_0^1
@@ -89,3 +85,29 @@ Samples:
       \frac{1}{\left(\sqrt{\phi\sqrt5} - \phi\right) e^{\frac{2}{5}\pi}}
       = 1 + \frac{e^{-2\pi}}{1 + \frac{e^{-4\pi}}{1 + \frac{e^{-6\pi}}{1 + \frac{e^{-8\pi}}{1 + \unicodecdots}}}}
     - \mathop{\mathrm{lim\,sup}}\limits_{x\rightarrow\infty}\ \mathop{\mathrm{sin}}(x)\mathrel{\mathop{=}\limits^?}1
+
+Spacing:
+  - Description: >
+      Rule 5. If the current item is a Bin atom, and if this was the first atom 
+      in the list, or if the most recent previous atom was Bin, Op, Rel, Open,
+      or Punct, change the current Bin to Ord.
+    Snippets:
+    - +2
+    - ++2
+    - \int+2
+    - 1<+2
+    - (+2)
+    - .+2
+  - Description: >
+      Rule 6. If the current item is a Rel or Close or Punct atom, and if the
+      most recent previous atom was Bin, change that previous Bin to Ord.
+    Snippets:
+    - 1+<2
+    - 1+)
+    - 1-.
+  - Description: color should be transparent to atom spacing
+    Snippets:
+    - \color{red}{a} + b\ a\color{blue}{+}b\ \color{red}{+}\color{blue}{+}\color{red}{+}
+    - \blue{\int}+2
+    - 1\red{<}+2
+    - \blue{(}\red{+}2)

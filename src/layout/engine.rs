@@ -27,7 +27,6 @@ pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
 
 /// This method takes the parsing nodes and layouts them to layout nodes.
 #[allow(unconditional_recursion)]
-#[allow(dead_code)]
 fn layout_recurse(nodes: &[ParseNode],
                   mut config: LayoutSettings,
                   parent_next: AtomType)

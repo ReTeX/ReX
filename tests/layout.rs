@@ -115,7 +115,9 @@ fn layout() {
 #[ignore]
 fn save_layout() {
     use std::io::BufWriter;
+    use common::svg;
 
+    // Load the tests in yaml, and render it to bincode
     let tests = collect_tests(LAYOUT_YAML);
     let rendered = render_tests(tests);
 
@@ -123,4 +125,7 @@ fn save_layout() {
     let mut writer = BufWriter::new(out);
     bincode::serialize_into(&mut writer, &rendered, bincode::Infinite)
         .expect("failed to serialize tex results to bincode");
+
+    // With new tests, create a new html
+    svg::write(LAYOUT_HTML, &rendered);
 }
