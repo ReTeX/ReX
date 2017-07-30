@@ -236,27 +236,20 @@ impl LayoutNode {
     fn is_symbol(&self) -> Option<LayoutGlyph> {
         match self.node {
             LayoutVariant::Glyph(gly) => Some(gly),
-            LayoutVariant::HorizontalBox(ref hb) => {
-                if hb.contents.len() != 1 {
-                    return None;
-                }
-                hb.contents[0].is_symbol()
-            }
-            LayoutVariant::VerticalBox(ref vb) => {
-                if vb.contents.len() != 1 {
-                    return None;
-                }
-                vb.contents[0].is_symbol()
-            }
-            LayoutVariant::Color(ref clr) => {
-                if clr.inner.len() != 1 {
-                    return None;
-                }
-                clr.inner[0].is_symbol()
-            }
+            LayoutVariant::HorizontalBox(ref hb) => is_symbol(&hb.contents),
+            LayoutVariant::VerticalBox(ref vb) => is_symbol(&vb.contents),
+            LayoutVariant::Color(ref clr) => is_symbol(&clr.inner),
             _ => None,
         }
     }
+}
+
+pub fn is_symbol(contents: &[LayoutNode]) -> Option<LayoutGlyph> {
+    if contents.len() != 1 {
+        return None;
+    }
+
+    contents[0].is_symbol()
 }
 
 /// Display styles which are used in scaling glyphs.  The associated

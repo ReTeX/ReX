@@ -10,6 +10,7 @@ use font::glyph_metrics;
 use font::kerning::{superscript_kern, subscript_kern};
 use font::variant::Variant;
 use font::{AtomType, Symbol, VariantGlyph, FontUnit};
+use layout;
 use layout::convert::Scaled;
 use layout::spacing::{atom_space, Spacing};
 use parser::nodes::{BarThickness, MathStyle, ParseNode, Accent, Delimited, GenFraction, Radical,
@@ -61,7 +62,6 @@ fn layout_recurse(nodes: &[ParseNode],
         }
 
         prev = current;
-
         match *node {
             ParseNode::Style(sty) => config.style = sty,
             _ => dispatch(&mut result, config, node, next),
@@ -133,7 +133,6 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     // [ ] Bottom accents: vertical placement is directly below nucleus,
     //       no correction takes place.
     // [ ] WideAccent vs Accent: Don't expand Accent types.
-
     let base = layout_node(&acc.nucleus, config.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode).horz_variant(base.width);
     let accent = accent_variant.as_layout(config);
@@ -143,18 +142,17 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     //   (b) Symbol:
     //      1. Attachment point (if there is one)
     //      2. Otherwise: (width + ic) / 2.0
-    let base_offset = if base.contents.len() != 1 {
-        base.width / 2
-    } else if let Some(ref sym) = base.contents[0].is_symbol() {
-        let glyph = glyph_metrics(sym.unicode);
-        if glyph.attachment != FontUnit::from(0) {
-            glyph.attachment.scaled(config)
-        } else {
-            let offset: FontUnit = (glyph.advance + glyph.italics) / 2;
-            offset.scaled(config)
-        }
-    } else {
-        base.width / 2
+    let base_offset = match layout::is_symbol(&base.contents) {
+        Some(sym) => {
+            let glyph = glyph_metrics(sym.unicode);
+            if glyph.attachment != 0.into() {
+                glyph.attachment.scaled(config)
+            } else {
+                let offset: FontUnit = (glyph.advance + glyph.italics) / 2;
+                offset.scaled(config)
+            }
+        },
+        None => base.width / 2,
     };
 
     let acc_offset = match accent_variant {
@@ -173,7 +171,7 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
         VariantGlyph::Constructable(_, _) => accent.width / 2,
     };
 
-    // Do not place the accent any _further_ than you would if given
+    // Do not place the accent any further than you would if given
     // an `x` character in the current style.
     let delta = -min(base.height, ACCENT_BASE_HEIGHT.scaled(config));
 
@@ -265,7 +263,7 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     // This is where he handle Operators with limits.
     if let Some(ref b) = scripts.base {
         if AtomType::Operator(true) == b.atom_type() {
-            add_operator_limits(result, base, sup, sub, config);
+            operator_limits(result, base, sup, sub, config);
             return;
         }
     }
@@ -392,7 +390,7 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     result.add_node(contents.build());
 }
 
-fn add_operator_limits(result: &mut Layout,
+fn operator_limits(result: &mut Layout,
                        base: Layout,
                        sup: Layout,
                        sub: Layout,

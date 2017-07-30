@@ -6,3 +6,4 @@ pub mod color;
 
 pub use self::engine::*;
 pub use self::nodes::ParseNode;
+pub use self::nodes::is_symbol;

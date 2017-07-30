@@ -155,18 +155,8 @@ impl ParseNode {
             ParseNode::Accent(ref acc) => acc.nucleus.is_symbol(),
             ParseNode::Scripts(Scripts { ref base, .. }) =>
                 base.as_ref().and_then(|b| b.is_symbol()),
-            ParseNode::AtomChange(AtomChange { ref inner, .. }) => {
-                if inner.len() != 1 {
-                    return None
-                }
-                inner[0].is_symbol()
-            }
-            ParseNode::Color(Color { ref inner, .. }) => {
-                if inner.len() != 1 {
-                    return None
-                }
-                inner[0].is_symbol()
-            }
+            ParseNode::AtomChange(ref ac) => is_symbol(&ac.inner),
+            ParseNode::Color(ref clr) => is_symbol(&clr.inner),
             _ => None,
         }
     }
@@ -195,4 +185,12 @@ impl ParseNode {
             ParseNode::Stack(ref s)  => s.atom_type,
         }
     }
+}
+
+pub fn is_symbol(contents: &[ParseNode]) -> Option<Symbol> {
+    if contents.len() != 1 {
+        return None;
+    }
+
+    contents[0].is_symbol()
 }
