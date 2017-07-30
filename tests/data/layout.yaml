@@ -17,6 +17,10 @@ Scripts:
     Snippets:
     - x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}
 
+  - Description: (superscripts) if accentee is simple symbol, script should not take accent into account for height.
+    Snippets:
+    - \hat A^2 \hat{A}^2 A^2
+
 Fractions:
   - Description: should properly scale
     Snippets:
@@ -40,7 +44,7 @@ Fractions:
     Snippets:
     - \frac{g}{x}\frac{x}{x}
     - \frac{x}{g}\frac{x}{x}
-  
+
   - Description: should handle delimiters
     Snippets:
     - \binom{k}{p}\tbinom{k}{p}\dbinom{k}{p}
@@ -67,6 +71,10 @@ Accents:
   - Description: should extend when possible
     Snippets:
     - \mathop{\overbrace{1+2+3+4+5+6}}\limits^{\mathrm{Arithmetic}} = 21
+
+  - Description: should typeset nucleus as cramped, and baseline unchanged.
+    Snippets:
+    - \hat{A^2} A^2
 
 Radicals:
   - Description: should properly scale
@@ -105,7 +113,7 @@ Samples:
 
 Spacing:
   - Description: >
-      Rule 5. If the current item is a Bin atom, and if this was the first atom 
+      Rule 5. If the current item is a Bin atom, and if this was the first atom
       in the list, or if the most recent previous atom was Bin, Op, Rel, Open,
       or Punct, change the current Bin to Ord.
     Snippets:

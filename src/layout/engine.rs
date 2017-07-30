@@ -61,31 +61,44 @@ fn layout_recurse(nodes: &[ParseNode],
         }
 
         prev = current;
+
         match *node {
-            ParseNode::Symbol(sym) => symbol(&mut result, sym, config),
-            ParseNode::Scripts(ref script) => scripts(&mut result, script, config),
-            ParseNode::Radical(ref rad) => radical(&mut result, rad, config),
-            ParseNode::Delimited(ref delim) => delimited(&mut result, delim, config),
-            ParseNode::Accent(ref acc) => accent(&mut result, acc, config),
-            ParseNode::GenFraction(ref f) => frac(&mut result, f, config),
-            ParseNode::Stack(ref stack) => substack(&mut result, stack, config),
-
-            ParseNode::AtomChange(ref ac) => result.add_node(layout(&ac.inner, config).as_node()),
-            ParseNode::Group(ref gp) => result.add_node(layout(gp, config).as_node()),
-            ParseNode::Rule(rule) => result.add_node(rule.as_layout(config)),
-            ParseNode::Kerning(kern) => result.add_node(kern!(horz: kern.scaled(config))),
-
             ParseNode::Style(sty) => config.style = sty,
-            ParseNode::Color(ref clr) => {
-                let layout = layout_recurse(&clr.inner, config, next);
-                result.add_node(color!(layout, clr))
-            }
-
-            _ => warn!("ignored ParseNode: {:?}", node),
+            _ => dispatch(&mut result, config, node, next),
         }
     }
 
     result.finalize()
+}
+
+fn layout_node(node: &ParseNode, config: LayoutSettings) -> Layout {
+    let mut result = Layout::new();
+    dispatch(&mut result, config, node, AtomType::Transparent);
+    result.finalize()
+}
+
+fn dispatch(lay: &mut Layout, config: LayoutSettings, node: &ParseNode, next: AtomType) {
+    match *node {
+        ParseNode::Symbol(sym) => symbol(lay, sym, config),
+        ParseNode::Scripts(ref script) => scripts(lay, script, config),
+        ParseNode::Radical(ref rad) => radical(lay, rad, config),
+        ParseNode::Delimited(ref delim) => delimited(lay, delim, config),
+        ParseNode::Accent(ref acc) => accent(lay, acc, config),
+        ParseNode::GenFraction(ref f) => frac(lay, f, config),
+        ParseNode::Stack(ref stack) => substack(lay, stack, config),
+
+        ParseNode::AtomChange(ref ac) => lay.add_node(layout(&ac.inner, config).as_node()),
+        ParseNode::Group(ref gp) => lay.add_node(layout(gp, config).as_node()),
+        ParseNode::Rule(rule) => lay.add_node(rule.as_layout(config)),
+        ParseNode::Kerning(kern) => lay.add_node(kern!(horz: kern.scaled(config))),
+
+        ParseNode::Color(ref clr) => {
+            let inner = layout_recurse(&clr.inner, config, next);
+            lay.add_node(color!(inner, clr))
+        }
+
+        _ => warn!("ignored ParseNode: {:?}", node),
+    }
 }
 
 fn symbol(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
@@ -121,7 +134,7 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     //       no correction takes place.
     // [ ] WideAccent vs Accent: Don't expand Accent types.
 
-    let base = layout(&[*acc.nucleus.clone()], config.cramped());
+    let base = layout_node(&acc.nucleus, config.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode).horz_variant(base.width);
     let accent = accent_variant.as_layout(config);
 
@@ -234,17 +247,17 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
 
     let base = match scripts.base {
-        Some(ref b) => layout(&[*b.clone()], config),
+        Some(ref base) => layout_node(base, config),
         None => Layout::new(),
     };
 
     let mut sup = match scripts.superscript {
-        Some(ref b) => layout(&[*b.clone()], config.superscript_variant()),
+        Some(ref sup) => layout_node(sup, config.superscript_variant()),
         None => Layout::new(),
     };
 
     let mut sub = match scripts.subscript {
-        Some(ref b) => layout(&[*b.clone()], config.subscript_variant()),
+        Some(ref sub) => layout_node(sub, config.subscript_variant()),
         None => Layout::new(),
     };
 
