@@ -403,4 +403,18 @@ impl LayoutSettings {
             ..self
         }
     }
+
+    fn with_display(self) -> LayoutSettings {
+        LayoutSettings {
+            style: Style::Display,
+            ..self
+        }
+    }
+
+    fn with_text(self) -> LayoutSettings {
+        LayoutSettings {
+            style: Style::Text,
+            ..self
+        }
+    }
 }

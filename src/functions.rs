@@ -5,7 +5,8 @@ use font::style::style_symbol;
 use layout::Style as LayoutStyle;
 use lexer::{Lexer, Token};
 use parser as parse;
-use parser::nodes::{ParseNode, Radical, GenFraction, Rule, BarThickness, AtomChange, Color, Stack};
+use parser::nodes::{ParseNode, Radical, MathStyle, GenFraction, Rule, BarThickness, AtomChange,
+                    Color, Stack};
 use parser::color::RGBA;
 use static_map;
 use error::{Error, Result};
@@ -23,13 +24,6 @@ macro_rules! sym {
             atom_type: sym!(@at $ord),
         })
     });
-}
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum MathStyle {
-    Display,
-    Text,
-    NoChange,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -181,13 +175,11 @@ fn radical(lex: &mut Lexer, local: Style) -> Result<ParseNode> {
 
 fn rule(lex: &mut Lexer, _: Style) -> Result<ParseNode> {
     lex.consume_whitespace();
-    let width = lex.dimension()?.expect(
-        "Unable to parse dimension for Rule.",
-    );
+    let width = lex.dimension()?
+        .expect("Unable to parse dimension for Rule.");
     lex.consume_whitespace();
-    let height = lex.dimension()?.expect(
-        "Unable to parse dimension for Rule.",
-    );
+    let height = lex.dimension()?
+        .expect("Unable to parse dimension for Rule.");
     Ok(ParseNode::Rule(Rule { width, height }))
 }
 
@@ -215,24 +207,24 @@ fn color_lit(lex: &mut Lexer, local: Style, color: RGBA) -> Result<ParseNode> {
     Ok(ParseNode::Color(Color { color, inner }))
 }
 
-fn fraction(
-    lex: &mut Lexer,
-    local: Style,
-    left_delimiter: Option<Symbol>,
-    right_delimiter: Option<Symbol>,
-    bar_thickness: BarThickness,
-    _: MathStyle,
-) -> Result<ParseNode> {
+fn fraction(lex: &mut Lexer,
+            local: Style,
+            left_delimiter: Option<Symbol>,
+            right_delimiter: Option<Symbol>,
+            bar_thickness: BarThickness,
+            style: MathStyle)
+            -> Result<ParseNode> {
     let numerator = parse::required_argument(lex, local)?;
     let denominator = parse::required_argument(lex, local)?;
 
     Ok(ParseNode::GenFraction(GenFraction {
-        left_delimiter,
-        right_delimiter,
-        bar_thickness,
-        numerator,
-        denominator,
-    }))
+                                  left_delimiter,
+                                  right_delimiter,
+                                  bar_thickness,
+                                  numerator,
+                                  denominator,
+                                  style,
+                              }))
 }
 
 fn delimiter_size(lex: &mut Lexer, local: Style, _: u8, atom_type: AtomType) -> Result<ParseNode> {
@@ -263,14 +255,13 @@ fn text_operator(_: &mut Lexer, _: Style, text: &str, limits: bool) -> Result<Pa
             inner.push(ParseNode::Kerning(SMALL_SKIP));
         } else {
             inner.push(ParseNode::Symbol(Symbol {
-                unicode: style_symbol(
-                    c as u32,
-                    Style::default().with_family(Family::Roman).with_weight(
-                        Weight::None,
-                    ),
-                ),
-                atom_type: AtomType::Ordinal,
-            }));
+                                             unicode:
+                                                 style_symbol(c as u32,
+                                                              Style::default()
+                                                                  .with_family(Family::Roman)
+                                                                  .with_weight(Weight::None)),
+                                             atom_type: AtomType::Ordinal,
+                                         }));
         }
     }
 

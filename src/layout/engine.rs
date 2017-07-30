@@ -12,8 +12,8 @@ use font::variant::Variant;
 use font::{AtomType, Symbol, VariantGlyph, FontUnit};
 use layout::convert::Scaled;
 use layout::spacing::{atom_space, Spacing};
-use parser::nodes::{BarThickness, ParseNode, Accent, Delimited, GenFraction, Radical, Scripts,
-                    Stack};
+use parser::nodes::{BarThickness, MathStyle, ParseNode, Accent, Delimited, GenFraction, Radical,
+                    Scripts, Stack};
 
 /// Entry point to our recursive algorithm
 pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
@@ -431,6 +431,12 @@ fn add_operator_limits(result: &mut Layout,
 }
 
 fn frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
+    let config = match frac.style {
+        MathStyle::NoChange => config,
+        MathStyle::Display => config.with_display(),
+        MathStyle::Text => config.with_text(),
+    };
+
     let bar = match frac.bar_thickness {
         BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(config),
         BarThickness::None => FontUnit::from(0),

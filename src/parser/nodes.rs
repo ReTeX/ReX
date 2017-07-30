@@ -78,6 +78,13 @@ pub struct Radical {
     // pub superscript: Vec<ParseNode>,
 }
 
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum MathStyle {
+    Display,
+    Text,
+    NoChange,
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct GenFraction {
     pub numerator: Vec<ParseNode>,
@@ -85,6 +92,7 @@ pub struct GenFraction {
     pub bar_thickness: BarThickness,
     pub left_delimiter: Option<Symbol>,
     pub right_delimiter: Option<Symbol>,
+    pub style: MathStyle,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

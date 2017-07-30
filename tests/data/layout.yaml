@@ -53,6 +53,11 @@ Fractions:
     - \displaystyle\tfrac12\textstyle\tfrac12\scriptstyle\tfrac12\scriptscriptstyle\tfrac12
     - \displaystyle\dfrac12\textstyle\dfrac12\scriptstyle\dfrac12\scriptscriptstyle\dfrac12
 
+  - Description: should interact with scripts properly (tests scaling)
+    Snippets:
+    - 2^\frac12 2^\tfrac12 2^\dfrac12
+    - 2^{2^\frac12} 2^{2^\tfrac12} 2^{2^\dfrac12}
+
 Accents:
   - Description: should properly scale
     Snippets:
