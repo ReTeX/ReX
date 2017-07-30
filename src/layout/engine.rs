@@ -488,9 +488,38 @@ fn frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
         denom
     );
 
-    result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
+    // Enclose fraction with delimiters if provided, otherwise with a NULL_DELIMITER_SPACE.
+    let left = match frac.left_delimiter {
+        None => kern!(horz: NULL_DELIMITER_SPACE),
+        Some(sym) => {
+            let clearance = 2 * max(inner.height - AXIS_HEIGHT, AXIS_HEIGHT - inner.depth);
+            let clearance = max(clearance, DELIMITED_SUB_FORMULA_MIN_HEIGHT);
+            let axis = AXIS_HEIGHT.scaled(config);
+
+            glyph_metrics(sym.unicode)
+                .vert_variant(clearance)
+                .as_layout(config)
+                .centered(axis)
+        }
+    };
+
+    let right = match frac.right_delimiter {
+        None => kern!(horz: NULL_DELIMITER_SPACE),
+        Some(sym) => {
+            let clearance = 2 * max(inner.height - AXIS_HEIGHT, AXIS_HEIGHT - inner.depth);
+            let clearance = max(clearance, DELIMITED_SUB_FORMULA_MIN_HEIGHT);
+            let axis = AXIS_HEIGHT.scaled(config);
+
+            glyph_metrics(sym.unicode)
+                .vert_variant(clearance)
+                .as_layout(config)
+                .centered(axis)
+        }
+    };
+
+    result.add_node(left);
     result.add_node(inner);
-    result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
+    result.add_node(right);
 }
 
 fn radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
