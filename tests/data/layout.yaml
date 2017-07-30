@@ -40,6 +40,18 @@ Fractions:
     Snippets:
     - \frac{g}{x}\frac{x}{x}
     - \frac{x}{g}\frac{x}{x}
+  
+  - Description: should handle delimiters
+    Snippets:
+    - \binom{k}{p}\tbinom{k}{p}\dbinom{k}{p}
+    - \displaystyle\tbinom{k}{p}\textstyle\tbinom{k}{p}\scriptstyle\tbinom{k}{p}\scriptscriptstyle\tbinom{k}{p}
+    - \displaystyle\dbinom{k}{p}\textstyle\dbinom{k}{p}\scriptstyle\dbinom{k}{p}\scriptscriptstyle\dbinom{k}{p}
+
+  - Description: should handle display/textstyle
+    Snippets:
+    - \frac12\tfrac12\dfrac12
+    - \displaystyle\tfrac12\textstyle\tfrac12\scriptstyle\tfrac12\scriptscriptstyle\tfrac12
+    - \displaystyle\dfrac12\textstyle\dfrac12\scriptstyle\dfrac12\scriptscriptstyle\dfrac12
 
 Accents:
   - Description: should properly scale
@@ -111,3 +123,9 @@ Spacing:
     - \blue{\int}+2
     - 1\red{<}+2
     - \blue{(}\red{+}2)
+  - Description: atom change items should space properly
+    Snippets:
+    - a\mathop{a}a\ aaa
+    - a\mathord{+}a\ a{+}a\ aaa
+    - a\mathrel{a}a\ aaa
+    - a\mathord{a}a\ aaa
