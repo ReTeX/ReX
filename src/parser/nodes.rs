@@ -149,17 +149,15 @@ impl ParseNode {
                 base.as_ref().and_then(|b| b.is_symbol()),
             ParseNode::AtomChange(AtomChange { ref inner, .. }) => {
                 if inner.len() != 1 {
-                    None
-                } else {
-                    inner[0].is_symbol()
+                    return None
                 }
+                inner[0].is_symbol()
             }
             ParseNode::Color(Color { ref inner, .. }) => {
                 if inner.len() != 1 {
-                    None
-                } else {
-                    inner[0].is_symbol()
+                    return None
                 }
+                inner[0].is_symbol()
             }
             _ => None,
         }

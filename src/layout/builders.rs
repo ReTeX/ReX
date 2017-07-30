@@ -114,17 +114,19 @@ macro_rules! hbox {
         _hbox.build()
     });
 
-    ( $($node:expr),* ) => ({
+    (align: $align:expr; width: $width:expr; $($node:expr),*) => ({
         let mut _hbox = builders::HBox::new();
+        let align = $align;
+        let width = $width;
         $( _hbox.add_node($node); )*
+        _hbox.set_alignment(align);
+        _hbox.set_width(width);
         _hbox.build()
     });
 
-    (align: $align:expr; width: $width:expr; $($node:expr),*) => ({
+    ( $($node:expr),* ) => ({
         let mut _hbox = builders::HBox::new();
         $( _hbox.add_node($node); )*
-        _hbox.set_alignment($align);
-        _hbox.set_width($width);
         _hbox.build()
     });
 }
@@ -162,4 +164,18 @@ macro_rules! kern {
             node:   LayoutVariant::Kern,
         }
     );
+}
+
+macro_rules! color {
+    ($layout:expr, $color:expr) => (
+        LayoutNode {
+            width: $layout.width,
+            height: $layout.height,
+            depth: $layout.depth,
+            node: LayoutVariant::Color(ColorChange {
+                color: $color.color,
+                inner: $layout.contents,
+            }),
+        }
+    )
 }

@@ -1,24 +1,19 @@
-#![allow(unused_assignments)]
-#![allow(unused_variables)]
-
 use std::cmp::{min, max};
 
-use super::Alignment;
 use super::builders;
-use super::{Layout, LayoutNode, LayoutVariant, LayoutGlyph, Style, ColorChange};
 use super::convert::AsLayoutNode;
-use super::LayoutSettings;
+use super::{Alignment, Layout, LayoutNode, LayoutSettings, LayoutVariant, Style, ColorChange};
 
 use font;
 use font::constants::*;
 use font::glyph_metrics;
+use font::kerning::{superscript_kern, subscript_kern};
 use font::variant::Variant;
 use font::{AtomType, Symbol, VariantGlyph, FontUnit};
-use font::kerning::{superscript_kern, subscript_kern};
-use layout::spacing::{atom_spacing, Spacing};
 use layout::convert::Scaled;
-use parser::nodes::BarThickness;
-use parser::nodes::{ParseNode, AtomChange, Accent, Delimited, GenFraction, Radical, Scripts, Stack};
+use layout::spacing::{atom_space, Spacing};
+use parser::nodes::{BarThickness, ParseNode, Accent, Delimited, GenFraction, Radical, Scripts,
+                    Stack};
 
 /// Entry point to our recursive algorithm
 pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
@@ -31,17 +26,18 @@ fn layout_recurse(nodes: &[ParseNode],
                   mut config: LayoutSettings,
                   parent_next: AtomType)
                   -> Layout {
-
     let mut result = Layout::new();
     let mut prev = AtomType::Transparent;
 
     for idx in 0..nodes.len() {
         let node = &nodes[idx];
 
-        let next = if idx + 1 < nodes.len() {
-            nodes[idx + 1].atom_type()
-        } else {
-            parent_next
+        // To determine spacing between glyphs, we look at each pair and their types.
+        // Obtain the atom_type from the next node,  if we are the last in the node
+        // list then we obtain the atomtype from the next node in parent's list.
+        let next = match nodes.get(idx + 1) {
+            Some(node) => node.atom_type(),
+            None => parent_next,
         };
 
         let mut current = node.atom_type();
@@ -58,102 +54,68 @@ fn layout_recurse(nodes: &[ParseNode],
             }
         }
 
-        let sp = atom_spacing(prev, current, config.style);
+        let sp = atom_space(prev, current, config.style);
         if sp != Spacing::None {
             let kern = sp.to_unit().scaled(config);
             result.add_node(kern!(horz: kern));
         }
 
         prev = current;
-
         match *node {
-            ParseNode::Symbol(sym) => add_symbol(&mut result, sym, config),
-            ParseNode::Scripts(ref scripts) => add_scripts(&mut result, scripts, config),
-            ParseNode::Radical(ref rad) => add_radical(&mut result, rad, config),
-            ParseNode::Delimited(ref delim) => add_delimited(&mut result, delim, config),
-            ParseNode::Accent(ref acc) => add_accent(&mut result, acc, config),
-            ParseNode::GenFraction(ref frac) => add_frac(&mut result, frac, config),
-            ParseNode::Stack(ref stack) => add_substack(&mut result, stack, config),
+            ParseNode::Symbol(sym) => symbol(&mut result, sym, config),
+            ParseNode::Scripts(ref script) => scripts(&mut result, script, config),
+            ParseNode::Radical(ref rad) => radical(&mut result, rad, config),
+            ParseNode::Delimited(ref delim) => delimited(&mut result, delim, config),
+            ParseNode::Accent(ref acc) => accent(&mut result, acc, config),
+            ParseNode::GenFraction(ref f) => frac(&mut result, f, config),
+            ParseNode::Stack(ref stack) => substack(&mut result, stack, config),
+
+            ParseNode::AtomChange(ref ac) => result.add_node(layout(&ac.inner, config).as_node()),
             ParseNode::Group(ref gp) => result.add_node(layout(gp, config).as_node()),
             ParseNode::Rule(rule) => result.add_node(rule.as_layout(config)),
             ParseNode::Kerning(kern) => result.add_node(kern!(horz: kern.scaled(config))),
-            ParseNode::Style(sty) => config.style = sty,
 
+            ParseNode::Style(sty) => config.style = sty,
             ParseNode::Color(ref clr) => {
                 let layout = layout_recurse(&clr.inner, config, next);
-
-                result.add_node(LayoutNode {
-                                    width: layout.width,
-                                    height: layout.height,
-                                    depth: layout.depth,
-                                    node: LayoutVariant::Color(ColorChange {
-                                                                   color: clr.color,
-                                                                   inner: layout.contents,
-                                                               }),
-                                })
+                result.add_node(color!(layout, clr))
             }
 
-            ParseNode::AtomChange(AtomChange { at, ref inner }) => {
-                add_atom_change(&mut result, at, inner, config)
-            }
-
-            _ => println!("Warning: Ignored ParseNode: {:?}", node),
+            _ => warn!("ignored ParseNode: {:?}", node),
         }
     }
 
     result.finalize()
 }
 
-fn add_symbol(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
+fn symbol(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
     // Operators are handled specially.  We may need to find a larger
     // symbol and vertical center it.
     if let AtomType::Operator(_) = sym.atom_type {
-        add_largeop(result, sym, config);
+        largeop(result, sym, config);
     } else {
         let glyph = font::glyph_metrics(sym.unicode);
         result.add_node(glyph.as_layout(config));
     }
 }
 
-fn add_largeop(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
+fn largeop(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
     let glyph = font::glyph_metrics(sym.unicode);
-
     if config.style > Style::Text {
         let axis_offset = AXIS_HEIGHT.scaled(config);
-
         let largeop = glyph
             .vert_variant(DISPLAY_OPERATOR_MIN_HEIGHT)
             .as_layout(config);
         let shift = (largeop.height + largeop.depth) / 2 - axis_offset;
-
         result.add_node(vbox!(offset: shift; largeop));
     } else {
         result.add_node(glyph.as_layout(config));
     }
 }
 
-fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
-    // [x] If there is no accent, typeset like normal.
-    // [x] Take largest accent _smaller_ than nucleus.
-
-    // [x] Determine offset of accent:
-    //   (a) Accent has attachment correction:
-    //     [x] If accentee has attachment correction,
-    //         then align attachment corrections of both.
-    //     [x] Otherwise, align attachment correction of
-    //         accentee with center of nucleus, plus
-    //         italics correction of nucleus is a symbol.
-    //
-    //   (b) Accent has no attachment correction:
-    //     [x] If accentee has attachment correction,
-    //         center of accent with accent correction of base.
-    //     [x] Align accent center with base center (plus)
-    //         italics correction if it's a symbol.
-    //
+fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     // [-] For superscripts, if character is simple symbol,
     //     scripts should not take accent into account for height.
-    // [x] Layout nucleus with style crampedelim.
-    // [x] Baseline of result == baseline of base.
     // [ ] The width of the resulting box is the width of the base.
     // [ ] Bottom accents: vertical placement is directly below nucleus,
     //       no correction takes place.
@@ -209,7 +171,7 @@ fn add_accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
                           base.as_node()));
 }
 
-fn add_delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings) {
+fn delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings) {
     let inner = layout(&delim.inner, config).as_node();
 
     // Convert inner group dimensions to font unit
@@ -267,7 +229,7 @@ fn add_delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings)
     }
 }
 
-fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
+fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     // See: https://tug.org/TUGboat/tb27-1/tb86jackowski.pdf
     //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
 
@@ -302,7 +264,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     let mut sup_kern = FontUnit::from(0);
     let mut sub_kern = FontUnit::from(0);
 
-    if let Some(ref s) = scripts.superscript {
+    if scripts.superscript.is_some() {
         // Use default font values for first iteration of vertical height.
         adjust_up = match config.style.is_cramped() {
                 true => SUPERSCRIPT_SHIFT_UP_CRAMPED,
@@ -347,7 +309,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 
     // We calculate the vertical position of the subscripts.  The `adjust_down`
     // variable will describe how far we need to adjust the subscript down.
-    if let Some(ref s) = scripts.subscript {
+    if scripts.subscript.is_some() {
         // Use default font values for first iteration of vertical height.
         adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(config);
 
@@ -365,9 +327,7 @@ fn add_scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                 if AtomType::Operator(false) == b.atom_type() {
                     // This recently changed in LuaTeX.  See `nolimitsmode`.
                     // This needs to be the glyph information _after_ layout for base.
-                    sub_kern = -glyph_metrics(base_sym.unicode)
-                                    .italics
-                                    .scaled(config);
+                    sub_kern = -glyph_metrics(base_sym.unicode).italics.scaled(config);
                 }
             }
 
@@ -427,10 +387,9 @@ fn add_operator_limits(result: &mut Layout,
     // Provided that the operator is a simple symbol, we need to account
     // for the italics correction of the symbol.  This how we "center"
     // the superscript and subscript of the limits.
-    let delta = if let Some(gly) = base.is_symbol() {
-        gly.italics
-    } else {
-        FontUnit::from(0)
+    let delta = match base.is_symbol() {
+        Some(gly) => gly.italics,
+        None => FontUnit::from(0),
     };
 
     // Next we calculate the kerning required to separate the superscript
@@ -451,14 +410,9 @@ fn add_operator_limits(result: &mut Layout,
     // We will all of these nodes, so we widen each to the largest.
     let width = max!(base.width, sub.width + delta / 2, sup.width + delta / 2);
 
-    // My macro won't take `sup.width` in the alignment for some reason.
-    // TODO: Fix that.
-    let sup_width = sup.width;
-    let sub_width = sub.width;
-
-    result.add_node(vbox!(
+    result.add_node(vbox![
         offset: offset;
-        hbox![align: Alignment::Centered(sup_width);
+        hbox![align: Alignment::Centered(sup.width);
             width: width;
             kern![horz: delta / 2],
             sup.as_node()
@@ -468,15 +422,15 @@ fn add_operator_limits(result: &mut Layout,
         base.centered(width).as_node(),
         kern!(vert: sub_kern),
 
-        hbox![align: Alignment::Centered(sub_width);
+        hbox![align: Alignment::Centered(sub.width);
             width: width;
             kern![horz: -delta / 2],
             sub.as_node()
         ]
-    ));
+    ]);
 }
 
-fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
+fn frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     let bar = match frac.bar_thickness {
         BarThickness::Default => FRACTION_RULE_THICKNESS.scaled(config),
         BarThickness::None => FontUnit::from(0),
@@ -497,11 +451,11 @@ fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     let numer = n.as_node();
     let denom = d.as_node();
 
-    let mut shift_up = FontUnit::from(0);
-    let mut shift_down = FontUnit::from(0);
-    let mut gap_num = FontUnit::from(0);
-    let mut gap_denom = FontUnit::from(0);
     let axis = AXIS_HEIGHT.scaled(config);
+    let shift_up: FontUnit;
+    let shift_down: FontUnit;
+    let gap_num: FontUnit;
+    let gap_denom: FontUnit;
 
     if config.style > Style::Text {
         shift_up = FRACTION_NUMERATOR_DISPLAY_STYLE_SHIFT_UP.scaled(config);
@@ -533,33 +487,7 @@ fn add_frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
     result.add_node(kern!(horz: NULL_DELIMITER_SPACE));
 }
 
-fn add_atom_change(result: &mut Layout,
-                   at: AtomType,
-                   inner: &[ParseNode],
-                   config: LayoutSettings) {
-    // Atom Types can change control flow for operators.
-    // We handle this change in control flow here,
-    // otherwise we do nothing.
-
-    // TODO: This adds an unnecessary hbox.  Remove them.
-    if inner.len() != 1 {
-        result.add_node(layout(inner, config).as_node());
-        return;
-    }
-
-    match at {
-        AtomType::Operator(_) => {
-            // if let Some(sym) = inner[0].is_symbol() {
-            //     inner[0].set_atom_type(at);
-            // }
-        }
-        _ => (),
-    }
-
-    result.add_node(layout(inner, config).as_node());
-}
-
-fn add_radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
+fn radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
     //Reference rule 11 from pg 443 of TeXBook
     let contents = layout(&rad.inner, config.cramped()).as_node();
     let sqrt = glyph_metrics(0x221A); // The sqrt symbol.
@@ -570,30 +498,23 @@ fn add_radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
     };
 
     let size = (contents.height - contents.depth) + gap + RADICAL_EXTRA_ASCENDER; // Minimum gap
-
     let gap = gap.scaled(config);
-
     let rule_thickness = RADICAL_RULE_THICKNESS.scaled(config);
     let glyph = sqrt.vert_variant(size).as_layout(config);
-
     let inner_center = (gap + contents.height + contents.depth + rule_thickness) / 2;
     let sym_center = (glyph.height + glyph.depth) / 2;
     let offset = sym_center - inner_center;
-
     let top_padding = RADICAL_EXTRA_ASCENDER.scaled(config) - RADICAL_RULE_THICKNESS.scaled(config);
-
     let kerning = (glyph.height - offset) - RADICAL_EXTRA_ASCENDER.scaled(config) - contents.height;
 
     result.add_node(vbox!(offset: offset; glyph));
-    result.add_node(vbox!(kern!(vert: top_padding),
-                          rule!(
-                width:  contents.width,
-                height: rule_thickness),
+    result.add_node(vbox![kern!(vert: top_padding),
+                          rule!(width:  contents.width, height: rule_thickness),
                           kern!(vert: kerning),
-                          contents));
+                          contents]);
 }
 
-fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
+fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
     let mut lines: Vec<Layout> = Vec::with_capacity(stack.lines.len());
     for line in &stack.lines {
         lines.push(layout(line, config));
@@ -611,17 +532,13 @@ fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
             STACK_TOP_DISPLAY_STYLE_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN -
             ACCENT_BASE_HEIGHT - ACCENT_BASE_HEIGHT
         } else {
-            STACK_TOP_SHIFT_UP         //   480
-            - AXIS_HEIGHT              // - 250
-            + STACK_BOTTOM_SHIFT_DOWN  // + 800
-            - ACCENT_BASE_HEIGHT - ACCENT_BASE_HEIGHT // - 900
+            STACK_TOP_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN - ACCENT_BASE_HEIGHT -
+            ACCENT_BASE_HEIGHT
         }
         .scaled(config);
 
     let mut stak = builders::VBox::new();
-
     let rest = lines.split_off(1);
-
     if lines.is_empty() {
         return;
     }
@@ -641,70 +558,4 @@ fn add_substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
 
     stak.set_offset(offset);
     result.add_node(stak.build());
-}
-
-trait IsSymbol {
-    fn is_symbol(&self) -> Option<LayoutGlyph>;
-}
-
-impl IsSymbol for Layout {
-    fn is_symbol(&self) -> Option<LayoutGlyph> {
-        if self.contents.len() != 1 {
-            return None;
-        }
-        let node = &self.contents[0];
-        match node.node {
-            LayoutVariant::Glyph(lg) => Some(lg),
-            LayoutVariant::HorizontalBox(ref hb) => {
-                if hb.contents.len() != 1 {
-                    None
-                } else {
-                    hb.contents[0].is_symbol()
-                }
-            }
-            LayoutVariant::VerticalBox(ref vb) => {
-                if vb.contents.len() != 1 {
-                    None
-                } else {
-                    vb.contents[0].is_symbol()
-                }
-            }
-            LayoutVariant::Color(ref clr) => {
-                if clr.inner.len() != 1 {
-                    return None;
-                }
-                clr.inner[0].is_symbol()
-            }
-            _ => None,
-        }
-    }
-}
-
-impl IsSymbol for LayoutNode {
-    fn is_symbol(&self) -> Option<LayoutGlyph> {
-        match self.node {
-            LayoutVariant::Glyph(gly) => Some(gly),
-            LayoutVariant::HorizontalBox(ref hb) => {
-                if hb.contents.len() != 1 {
-                    None
-                } else {
-                    hb.contents[0].is_symbol()
-                }
-            }
-            LayoutVariant::VerticalBox(ref vb) => {
-                if vb.contents.len() != 1 {
-                    None
-                } else {
-                    vb.contents[0].is_symbol()
-                }
-            }
-            LayoutVariant::Color(ref clr) => {
-                if clr.inner.len() != 1 {
-                    return None;
-                }
-                clr.inner[0].is_symbol()
-            }
-            _ => None,
-        }
-    }
 }

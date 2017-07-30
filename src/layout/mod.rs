@@ -79,6 +79,13 @@ impl Layout {
         self.width = new_width;
         self
     }
+
+    fn is_symbol(&self) -> Option<LayoutGlyph> {
+        if self.contents.len() != 1 {
+            return None;
+        }
+        self.contents[0].is_symbol()
+    }
 }
 
 #[derive(Clone)]
@@ -224,6 +231,31 @@ impl LayoutNode {
         }
 
         self
+    }
+
+    fn is_symbol(&self) -> Option<LayoutGlyph> {
+        match self.node {
+            LayoutVariant::Glyph(gly) => Some(gly),
+            LayoutVariant::HorizontalBox(ref hb) => {
+                if hb.contents.len() != 1 {
+                    return None;
+                }
+                hb.contents[0].is_symbol()
+            }
+            LayoutVariant::VerticalBox(ref vb) => {
+                if vb.contents.len() != 1 {
+                    return None;
+                }
+                vb.contents[0].is_symbol()
+            }
+            LayoutVariant::Color(ref clr) => {
+                if clr.inner.len() != 1 {
+                    return None;
+                }
+                clr.inner[0].is_symbol()
+            }
+            _ => None,
+        }
     }
 }
 

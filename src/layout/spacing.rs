@@ -2,8 +2,7 @@ use font::{AtomType, FontUnit};
 use font::constants::UNITS_PER_EM;
 use layout::Style;
 
-#[allow(unused)]
-pub fn atom_spacing(left: AtomType, right: AtomType, style: Style) -> Spacing {
+pub fn atom_space(left: AtomType, right: AtomType, style: Style) -> Spacing {
     if style >= Style::TextCramped {
         match (left, right) {
             (AtomType::Alpha,       AtomType::Operator(_)) => Spacing::Thin,
