@@ -28,7 +28,7 @@ macro_rules! accent {
         ParseNode::Accent(
             Accent {
                 symbol: $sym,
-                nucleus: Box::new($nucleus)
+                nucleus: $nucleus
             }
         )
     )

@@ -249,9 +249,7 @@ pub fn symbol(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
                 lex.next();
 
                 if sym.atom_type == AtomType::Accent {
-                    let nucleus = math_field(lex, local)
-                        .map_err(|_| Error::AccentMissingArg(cs.into()))?;
-
+                    let nucleus = required_argument(lex, local)?;
                     Ok(Some(accent!(sym, nucleus)))
                 } else {
                     Ok(Some(ParseNode::Symbol(Symbol {

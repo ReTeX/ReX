@@ -56,7 +56,7 @@ pub struct AtomChange {
 #[derive(Clone, Debug, PartialEq)]
 pub struct Accent {
     pub symbol: Symbol,
-    pub nucleus: Box<ParseNode>,
+    pub nucleus: Vec<ParseNode>,
 }
 
 #[derive(Copy, Clone, PartialEq, Debug)]
@@ -67,22 +67,9 @@ pub struct Rule {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum MathField {
-    Symbol(Symbol),
-    Group(Vec<ParseNode>),
-}
-
-#[derive(Debug, PartialEq, Clone)]
 pub struct Radical {
     pub inner: Vec<ParseNode>,
     // pub superscript: Vec<ParseNode>,
-}
-
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
-pub enum MathStyle {
-    Display,
-    Text,
-    NoChange,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -95,6 +82,12 @@ pub struct GenFraction {
     pub style: MathStyle,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub struct Color {
+    pub color: RGBA,
+    pub inner: Vec<ParseNode>,
+}
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum BarThickness {
     Default,
@@ -102,10 +95,11 @@ pub enum BarThickness {
     Unit(Unit),
 }
 
-#[derive(Debug, Clone, PartialEq)]
-pub struct Color {
-    pub color: RGBA,
-    pub inner: Vec<ParseNode>,
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum MathStyle {
+    Display,
+    Text,
+    NoChange,
 }
 
 impl ParseNode {
@@ -152,9 +146,9 @@ impl ParseNode {
     pub fn is_symbol(&self) -> Option<Symbol> {
         match *self {
             ParseNode::Symbol(sym) => Some(sym),
-            ParseNode::Accent(ref acc) => acc.nucleus.is_symbol(),
             ParseNode::Scripts(Scripts { ref base, .. }) =>
                 base.as_ref().and_then(|b| b.is_symbol()),
+            ParseNode::Accent(ref acc) => is_symbol(&acc.nucleus),
             ParseNode::AtomChange(ref ac) => is_symbol(&ac.inner),
             ParseNode::Color(ref clr) => is_symbol(&clr.inner),
             _ => None,
@@ -174,7 +168,10 @@ impl ParseNode {
 
             ParseNode::Rule(_)          => AtomType::Alpha,
             ParseNode::Kerning(_)       => AtomType::Transparent,
-            ParseNode::Accent(ref acc)  => acc.nucleus.atom_type(),
+            ParseNode::Accent(ref acc)  => acc.nucleus.first()
+                .map(|acc| acc.atom_type())
+                .unwrap_or(AtomType::Alpha),
+
             ParseNode::Style(_)         => AtomType::Transparent,
             ParseNode::AtomChange(ref ac) => ac.at,
             ParseNode::Color(ref clr)     => clr.inner.first()

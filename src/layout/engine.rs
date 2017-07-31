@@ -133,7 +133,7 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
     // [ ] Bottom accents: vertical placement is directly below nucleus,
     //       no correction takes place.
     // [ ] WideAccent vs Accent: Don't expand Accent types.
-    let base = layout_node(&acc.nucleus, config.cramped());
+    let base = layout(&acc.nucleus, config.cramped());
     let accent_variant = glyph_metrics(acc.symbol.unicode).horz_variant(base.width);
     let accent = accent_variant.as_layout(config);
 
@@ -291,7 +291,8 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                 // For accents, whose base is a simple symbol, we do not take
                 // the accent into account while positioning the superscript.
                 if let ParseNode::Accent(ref acc) = **b {
-                    if let Some(sym) = acc.nucleus.is_symbol() {
+                    use parser;
+                    if let Some(sym) = parser::is_symbol(&acc.nucleus) {
                         height = glyph_metrics(sym.unicode).height().scaled(config);
                     }
                 }
