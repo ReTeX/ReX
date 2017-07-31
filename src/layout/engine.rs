@@ -127,8 +127,6 @@ fn largeop(result: &mut Layout, sym: Symbol, config: LayoutSettings) {
 }
 
 fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
-    // [-] For superscripts, if character is simple symbol,
-    //     scripts should not take accent into account for height.
     // [ ] The width of the resulting box is the width of the base.
     // [ ] Bottom accents: vertical placement is directly below nucleus,
     //       no correction takes place.
@@ -151,7 +149,7 @@ fn accent(result: &mut Layout, acc: &Accent, config: LayoutSettings) {
                 let offset: FontUnit = (glyph.advance + glyph.italics) / 2;
                 offset.scaled(config)
             }
-        },
+        }
         None => base.width / 2,
     };
 
@@ -392,10 +390,10 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
 }
 
 fn operator_limits(result: &mut Layout,
-                       base: Layout,
-                       sup: Layout,
-                       sub: Layout,
-                       config: LayoutSettings) {
+                   base: Layout,
+                   sup: Layout,
+                   sub: Layout,
+                   config: LayoutSettings) {
     // Provided that the operator is a simple symbol, we need to account
     // for the italics correction of the symbol.  This how we "center"
     // the superscript and subscript of the limits.
