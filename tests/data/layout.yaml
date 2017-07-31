@@ -5,10 +5,6 @@ Scripts:
     - a_2\textstyle a_2\scriptstyle a_2 \scriptscriptstyle a_2
     - a_2^2\textstyle a_2^2\scriptstyle a_2^2 \scriptscriptstyle a_2^2
 
-  - Description: should properly scale with `\nolimits`
-    Snippets:
-    - \int_0^1\textstyle\int_0^1\scriptstyle\int_0^1\scriptscriptstyle\int_0^1
-
   - Description: should properly scale operators with limits
     Snippets:
     - \sum_0^k\textstyle\sum_0^k\scriptstyle\sum_0^k\scriptscriptstyle\sum_0^k
@@ -61,6 +57,25 @@ Fractions:
     Snippets:
     - 2^\frac12 2^\tfrac12 2^\dfrac12
     - 2^{2^\frac12} 2^{2^\tfrac12} 2^{2^\dfrac12}
+
+Operators:
+  - Description: should display appropriate limits
+    Snippets:
+    - \displaystyle\int_0^1\int\nolimits_0^1\int\limits_0^1
+    - \textstyle\int_0^1\int\nolimits_0^1\int\limits_0^1
+    - \displaystyle\sum_0^1\sum\nolimits_0^1\sum\limits_0^1
+    - \textstyle\sum_0^1\sum\nolimits_0^1\sum\limits_0^1
+    - \scriptstyle\int_0^1\scriptscriptstyle\int_0^1
+
+  - Description: should be centered with respect to scripts
+    Snippets:
+    - \displaystyle\mathop{\mathrm{lim}}\limits_{x \to \infty}
+    - \displaystyle\sum_{a+b+c+d}^{a+b+c+d+e+f}
+
+  - Description: have same baseline with small scripts
+    Snippets:
+    - \mathop{\mathrm{lim}}\limits_{x \to \infty}\mathop{\mathrm{lim}}\limits_{M \to \infty}
+    - \mathop{\mathrm{lim\,sup}}\limits_{x \to \infty}\mathop{\mathrm{lim\,sup}}\limits_{M \to \infty}
 
 Accents:
   - Description: should properly scale
