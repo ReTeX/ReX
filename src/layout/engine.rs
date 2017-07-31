@@ -250,12 +250,12 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     };
 
     let mut sup = match scripts.superscript {
-        Some(ref sup) => layout_node(sup, config.superscript_variant()),
+        Some(ref sup) => layout(&sup, config.superscript_variant()),
         None => Layout::new(),
     };
 
     let mut sub = match scripts.subscript {
-        Some(ref sub) => layout_node(sub, config.subscript_variant()),
+        Some(ref sub) => layout(&sub, config.subscript_variant()),
         None => Layout::new(),
     };
 

@@ -43,8 +43,8 @@ pub struct Delimited {
 #[derive(Debug, PartialEq, Clone)]
 pub struct Scripts {
     pub base: Option<Box<ParseNode>>,
-    pub superscript: Option<Box<ParseNode>>,
-    pub subscript: Option<Box<ParseNode>>,
+    pub superscript: Option<Vec<ParseNode>>,
+    pub subscript: Option<Vec<ParseNode>>,
 }
 
 #[derive(Clone, Debug, PartialEq)]

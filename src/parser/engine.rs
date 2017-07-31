@@ -5,11 +5,10 @@ use font::style::style_symbol;
 use font::Symbol;
 use font::symbols::SYMBOLS;
 use lexer::{Lexer, Token};
-use parser::nodes::{Delimited, ParseNode, Accent};
+use parser::nodes::{Delimited, ParseNode, Accent, Scripts};
 use parser::color::RGBA;
 use font::AtomType;
 use functions::COMMANDS;
-use super::builders as build;
 
 /// This function is served as an entry point to parsing the input.
 /// It can also be used to parse sub-expressions (or more formally known
@@ -68,8 +67,8 @@ pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
 
 fn postfix(lex: &mut Lexer, local: Style, mut prev: Option<ParseNode>) -> Result<Option<ParseNode>>
 {
-    let mut superscript: Option<ParseNode> = None;
-    let mut subscript: Option<ParseNode> = None;
+    let mut superscript = None;
+    let mut subscript = None;
 
     loop {
         lex.consume_whitespace();
@@ -82,7 +81,7 @@ fn postfix(lex: &mut Lexer, local: Style, mut prev: Option<ParseNode>) -> Result
                 if subscript.is_some() {
                     return Err(Error::ExcessiveSubscripts);
                 }
-                subscript = Some(math_field(lex, local)?);
+                subscript = Some(required_argument(lex, local)?);
             }
             Token::Symbol('^') => {
                 lex.next();
@@ -90,7 +89,7 @@ fn postfix(lex: &mut Lexer, local: Style, mut prev: Option<ParseNode>) -> Result
                 if superscript.is_some() {
                     return Err(Error::ExcessiveSuperscripts);
                 }
-                superscript = Some(math_field(lex, local)?);
+                superscript = Some(required_argument(lex, local)?);
             }
             Token::Command("limits") => {
                 lex.next();
@@ -115,7 +114,11 @@ fn postfix(lex: &mut Lexer, local: Style, mut prev: Option<ParseNode>) -> Result
     }
 
     if superscript.is_some() || subscript.is_some() {
-        Ok(Some(build::scripts(prev, superscript, subscript)))
+        Ok(Some(ParseNode::Scripts(Scripts {
+                base: prev.map(|b| Box::new(b)),
+                superscript: superscript,
+                subscript: subscript,
+            })))
     } else {
         Ok(prev)
     }
@@ -297,7 +300,13 @@ pub fn required_argument(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>
     match opt_node {
         Some(ParseNode::Group(inner)) => Ok(inner),
         Some(node) => Ok(vec![node]),
-        _ => Err(Error::RequiredMacroArg),
+        _ => {
+            // Check for a state change perhaps, otherwise we don't know.
+            match state_change(lex, local)? {
+                Some(nodes) => Ok(nodes),
+                _ => Err(Error::RequiredMacroArg),
+            }
+        }
     }
 }
 
