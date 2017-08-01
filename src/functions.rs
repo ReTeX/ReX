@@ -39,7 +39,7 @@ pub enum Command {
     Style(LayoutStyle),
     AtomChange(AtomType),
     TextOperator(&'static str, bool),
-    Stack(AtomType),
+    SubStack(AtomType),
 }
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -58,7 +58,7 @@ impl Command {
             Style(a)             => style(lex, local, a),
             AtomChange(a)        => atom_change(lex, local, a),
             TextOperator(a, b)   => text_operator(lex, local, a, b),
-            Stack(a)             => stack(lex, local, a),
+            SubStack(a)          => substack(lex, local, a),
         }
     }
 }
@@ -76,7 +76,7 @@ pub static COMMANDS: static_map::Map<&'static str, Command> = static_map! {
     "dbinom" => Command::Fraction(sym!(b'(', open), sym!(b')', close), BarThickness::None, MathStyle::Display),
 
     // Stacking commands
-    "substack" => Command::Stack(AtomType::Inner),
+    "substack" => Command::SubStack(AtomType::Inner),
 
     // Radical commands
     "sqrt" => Command::Radical,
@@ -268,13 +268,13 @@ fn text_operator(_: &mut Lexer, _: Style, text: &str, limits: bool) -> Result<Pa
     Ok(ParseNode::AtomChange(AtomChange { at, inner }))
 }
 
-fn stack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode> {
+fn substack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode> {
     if lex.current != Token::Symbol('{') {
         return Err(Error::StackMustFollowGroup);
     }
 
-    lex.next();
     let mut lines: Vec<Vec<ParseNode>> = Vec::new();
+    lex.next();
 
     // Continue parsing expressions, until we reach '}'
     loop {
@@ -284,6 +284,11 @@ fn stack(lex: &mut Lexer, local: Style, atom_type: AtomType) -> Result<ParseNode
             Token::Command(r"\") => lex.next(),
             _ => return Err(Error::Todo),
         };
+    }
+
+    // Remove the last line if it's empty.  This is `\crcr`.
+    if Some(true) == lines.last().map(|l| l.is_empty()) {
+        lines.pop();
     }
 
     lex.next();
