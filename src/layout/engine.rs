@@ -560,47 +560,64 @@ fn radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
 }
 
 fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
+    // Don't bother constructing a new node if there is nothing.
+    if stack.lines.len() == 0 {
+        return
+    }
+
+    // Layout each line in the substack, and track which line is the widest
     let mut lines: Vec<Layout> = Vec::with_capacity(stack.lines.len());
-    for line in &stack.lines {
-        lines.push(layout(line, config));
+    let mut widest = FontUnit::from(0);
+    let mut widest_idx = 0;
+    for (n, line) in stack.lines.iter().enumerate() {
+        let line = layout(line, config);
+        if line.width > widest {
+            widest = line.width;
+            widest_idx = n;
+        }
+        lines.push(line);
+    }
+
+    // Center lines according to widest variant
+    for (n, line) in lines.iter_mut().enumerate() {
+        if n == widest_idx { continue }
+        line.alignment = Alignment::Centered(line.width);
+        line.width = widest;
     }
 
     // The line gap will be taken from STACK_GAP constants
     let gap_min = if config.style > Style::Text {
-            STACK_DISPLAY_STYLE_GAP_MIN
+            STACK_DISPLAY_STYLE_GAP_MIN.scaled(config)
         } else {
-            STACK_GAP_MIN
-        }
-        .scaled(config);
+            STACK_GAP_MIN.scaled(config)
+        };
 
+    // No idea.
     let gap_try = if config.style > Style::Text {
             STACK_TOP_DISPLAY_STYLE_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN -
-            ACCENT_BASE_HEIGHT - ACCENT_BASE_HEIGHT
+            2*ACCENT_BASE_HEIGHT
         } else {
-            STACK_TOP_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN - ACCENT_BASE_HEIGHT -
-            ACCENT_BASE_HEIGHT
+            STACK_TOP_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN - 2*ACCENT_BASE_HEIGHT
         }
         .scaled(config);
 
-    let mut stak = builders::VBox::new();
-    let rest = lines.split_off(1);
-    if lines.is_empty() {
-        return;
-    }
-    stak.add_node(lines.pop().unwrap().as_node());
-
-    let mut prev = FontUnit::from(0);
-    for line in rest {
-        let gap = max(gap_min, gap_try - prev);
+    // Join the lines with appropriate spacing inbetween
+    let mut vbox = builders::VBox::new();
+    let length = lines.len();
+    let mut prev: FontUnit;
+    for (idx, line) in lines.into_iter().enumerate() {
         prev = line.depth;
+        vbox.add_node(line.as_node());
 
-        stak.add_node(kern![vert: gap]);
-        stak.add_node(line.as_node());
+        // Try for an ideal gap, otherwise use the minimum
+        if idx < length {
+            let gap = max(gap_min, gap_try - prev);
+            vbox.add_node(kern![vert: gap]);
+        }
     }
 
-    // center the stack
-    let offset = (stak.height + stak.depth) / 2 - AXIS_HEIGHT.scaled(config);
-
-    stak.set_offset(offset);
-    result.add_node(stak.build());
+    // Vertically center the stack to the axis
+    let offset = (vbox.height + vbox.depth) / 2 - AXIS_HEIGHT.scaled(config);
+    vbox.set_offset(offset);
+    result.add_node(vbox.build());
 }
