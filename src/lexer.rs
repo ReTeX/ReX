@@ -30,7 +30,9 @@ impl<'a> Token<'a> {
             Token::EOF
             | Token::Symbol('}')
             | Token::Command("right")
-            | Token::Command(r"\") => true,
+            | Token::Command(r"\")
+            | Token::Command(r"end")
+            | Token::Command(r"cr") => true,
             _ => false,
         }
     }

@@ -17,6 +17,7 @@ extern crate static_map_macros;
 #[macro_use]
 mod macros;
 
+pub mod environments;
 pub mod error;
 pub mod dimensions;
 pub mod layout;

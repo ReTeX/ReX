@@ -15,6 +15,7 @@ use layout::convert::Scaled;
 use layout::spacing::{atom_space, Spacing};
 use parser::nodes::{BarThickness, MathStyle, ParseNode, Accent, Delimited, GenFraction, Radical,
                     Scripts, Stack};
+use environments::Array;
 
 /// Entry point to our recursive algorithm
 pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
@@ -86,6 +87,7 @@ fn dispatch(lay: &mut Layout, config: LayoutSettings, node: &ParseNode, next: At
         ParseNode::Accent(ref acc) => accent(lay, acc, config),
         ParseNode::GenFraction(ref f) => frac(lay, f, config),
         ParseNode::Stack(ref stack) => substack(lay, stack, config),
+        ParseNode::Array(ref arr) => array(lay, arr, config),
 
         ParseNode::AtomChange(ref ac) => lay.add_node(layout(&ac.inner, config).as_node()),
         ParseNode::Group(ref gp) => lay.add_node(layout(gp, config).as_node()),
@@ -619,5 +621,99 @@ fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
     // Vertically center the stack to the axis
     let offset = (vbox.height + vbox.depth) / 2 - AXIS_HEIGHT.scaled(config);
     vbox.set_offset(offset);
+    result.add_node(vbox.build());
+}
+
+fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
+    // TODO: In some enviornments, like aligned, an additional \jot is added.
+    //let jot          = UNITS_PER_EM / 4;
+    let strut_height = UNITS_PER_EM / 10 * 7; // \strutbox height = 0.7\baseline
+    let strut_depth  = UNITS_PER_EM / 10 * 3; // \strutbox depth  = 0.3\baseline
+    let column_sep   = UNITS_PER_EM / 12 * 5;
+
+    // Don't bother constructing a new node if there is nothing.
+    let num_rows = array.rows.len();
+    let num_columns = array.rows.iter().map(Vec::len).max().unwrap_or(0);
+    if num_columns == 0 {
+        return
+    }
+
+    // TODO: investiage making this one large matrix?
+    // Layout each line in the substack, and track which line is the widest
+    let mut columns = Vec::with_capacity(num_columns);
+    for _ in 0..num_columns {
+        columns.push(Vec::with_capacity(num_rows));
+    }
+
+    // Layout each node in each row, while keeping track of the largest row/col
+    let mut row_heights = Vec::with_capacity(num_rows);
+    let mut col_widths  = vec![FontUnit::from(0); num_columns];
+    let mut row_max = strut_height;
+    for row in &array.rows {
+        for col_idx in 0..num_columns {
+            // layout row element if it exists
+            let square = match row.get(col_idx) {
+                Some(r) => layout(r, config),
+                _ => Layout::new(),
+            };
+
+            // record max height/width for row/col respectively
+            row_max = max(square.height, row_max);
+            col_widths[col_idx] = max(col_widths[col_idx], square.width);
+            columns[col_idx].push(square);
+        }
+
+        // ensure row height >= strut_height
+        row_heights.push(row_max);
+        row_max = strut_height;
+    }
+
+    // TODO: reference row layout here: crl
+    // Construct an hbox of columns, while adding appropriate spacing required
+    // to keep rows aligned and columns centered.
+    let mut hbox = builders::HBox::new();
+
+    // TODO: verify the proper spacing before/after arrays.
+    hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+    for (col_idx, col) in columns.into_iter().enumerate() {
+        let mut vbox = builders::VBox::new();
+        for (row_idx, mut row) in col.into_iter().enumerate() {
+            // Center columns as necessary
+            if row.width < col_widths[col_idx] {
+                row.alignment = Alignment::Centered(row.width);
+                row.width = col_widths[col_idx];
+            }
+
+            // Add additional strut if required to align rows
+            if row.height < row_heights[row_idx] {
+                let diff = row_heights[row_idx] - row.height;
+                vbox.add_node(kern![vert: diff]);
+            }
+
+            // Add a jot (interrow spacing) between rows.
+            let row_space = max(0.into(), strut_depth + row.depth);
+            vbox.add_node(row.as_node());
+            if row_idx < num_rows {
+                vbox.add_node(kern![vert: row_space]);
+            }
+        }
+        // TODO: verify intercolumn spacing, including first/last lines.
+        // Add column to hbox and insert inter-row spacing as required.
+        hbox.add_node(vbox.build());
+        if col_idx + 1 < num_columns {
+            hbox.add_node(kern![horz: column_sep]);
+        }
+    }
+    hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+
+    // TODO: We should make this as a method for LayoutNodes.
+    // TODO: Investigate adding padding to HBox to prevent alloc from new VBox here.
+    // TODO: Reference array vertical alignment (optional [bt] arguments)
+    // Vertically center the array on axis.
+    let mut vbox = builders::VBox::new();
+    vbox.add_node(hbox.build());
+    let offset = (vbox.height + vbox.depth) / 2 - AXIS_HEIGHT.scaled(config);
+    vbox.set_offset(offset);
+
     result.add_node(vbox.build());
 }

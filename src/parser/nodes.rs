@@ -3,6 +3,7 @@ use layout::Style;
 use font::Symbol;
 use error::Error;
 use super::color::RGBA;
+use environments::Array;
 
 use font::AtomType;
 
@@ -25,6 +26,7 @@ pub enum ParseNode {
     Group(Vec<ParseNode>),
     Stack(Stack),
     Extend(u32, Unit),
+    Array(Array),
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -179,6 +181,7 @@ impl ParseNode {
                 .unwrap_or(AtomType::Alpha),
 
             ParseNode::Extend(_,_)   => AtomType::Inner,
+            ParseNode::Array(_)      => AtomType::Inner,
             ParseNode::Stack(ref s)  => s.atom_type,
         }
     }

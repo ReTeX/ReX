@@ -9,16 +9,14 @@ use parser::nodes::{Delimited, ParseNode, Accent, Scripts};
 use parser::color::RGBA;
 use font::AtomType;
 use functions::COMMANDS;
+use environments::Environment;
 
-/// This function is served as an entry point to parsing input.
-/// It can also be used to parse sub-expressions (or more formally known
-/// as `mathlists`) which occur when parsing groups; ie: `{<expression>}`.
-pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
+pub fn expression_until_opt(lex: &mut Lexer, local: Style, end: Option<Token>) -> Result<Vec<ParseNode>> {
     let mut ml: Vec<ParseNode> = Vec::new();
     loop {
         // TODO: Handle INFIX operators here, once we support them.
         lex.consume_whitespace();
-        if lex.current.ends_expression() {
+        if Some(lex.current) == end || lex.current.ends_expression() {
             break;
         }
 
@@ -60,6 +58,17 @@ pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
         }
     }
     Ok(ml)
+}
+
+pub fn expression_until(lex: &mut Lexer, local: Style, end: Token) -> Result<Vec<ParseNode>> {
+    expression_until_opt(lex, local, Some(end))
+}
+
+/// This function is served as an entry point to parsing input.
+/// It can also be used to parse sub-expressions (or more formally known
+/// as `mathlists`) which occur when parsing groups; ie: `{<expression>}`.
+pub fn expression(lex: &mut Lexer, local: Style) -> Result<Vec<ParseNode>> {
+    expression_until_opt(lex, local, None)
 }
 
 /// Process post-fix operators.  Post-fix operators require the previous (optional)
@@ -188,6 +197,21 @@ pub fn implicit_group(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>
             .expect_right()?;
 
         Ok(Some(delimited!(left, right, inner)))
+    } else if token == Token::Command("begin") {
+        lex.next();
+        let env = required_group_with(lex, local, environment_name)?;
+        let node = env.parse(lex, local)?;
+        // Environment parsers are required to quit parsing on `\end`.
+        // The current token should be this `\end`.
+        lex.next();
+        let end = required_group_with(lex, local, environment_name)?;
+
+        if env != end {
+            panic!("env: {:?} != end: {:?}", env, end);
+            // return Err(Error::Todo);
+        }
+
+        Ok(Some(node))
     } else {
         Ok(None)
     }
@@ -284,6 +308,40 @@ pub fn required_argument_with<F, O>(lex: &mut Lexer, local: Style, f: F) -> Resu
     }
 }
 
+pub fn required_group_with<F, O>(lex: &mut Lexer, local: Style, f: F) -> Result<O>
+    where F: FnOnce(&mut Lexer, Style) -> Result<O>
+{
+    lex.consume_whitespace();
+    if lex.current == Token::Symbol('{') {
+        lex.next();
+        lex.consume_whitespace();
+        let parsed = f(lex, local)?;
+        lex.consume_whitespace();
+        lex.current.expect_symbol('}')?;
+        lex.next();
+        Ok(parsed)
+    } else {
+        Err(Error::RequiredMacroArg)
+    }
+}
+
+pub fn optional_argument_with<F, O>(lex: &mut Lexer, local: Style, f: F) -> Result<Option<O>>
+    where F: for<'l> FnOnce(&'l mut Lexer, Style) -> Result<Option<O>>
+{
+    lex.consume_whitespace();
+    if lex.current == Token::Symbol('[') {
+        lex.next();
+        lex.consume_whitespace();
+        let parsed = f(lex, local)?;
+        lex.consume_whitespace();
+        lex.current.expect_symbol(']')?;
+        lex.next();
+        Ok(parsed)
+    } else {
+        Ok(None)
+    }
+}
+
 /// This method expects that the current token has a given atom type.  This method
 /// will frist strip all whitespaces first before inspecting the current token.
 /// This function will Err if the expected symbol doesn't have the given type,
@@ -320,6 +378,12 @@ pub fn color(lex: &mut Lexer, _: Style) -> Result<RGBA> {
         .get(color_str)
         .ok_or_else(|| Error::UnrecognizedColor(color_str.into()))?;
     Ok(*color)
+}
+
+pub fn environment_name(lex: &mut Lexer, _: Style) -> Result<Environment> {
+    let name = lex.alphanumeric();
+    Environment::try_from_str(name)
+        .ok_or(Error::Todo)
 }
 
 /// This function is the API entry point for parsing tex.

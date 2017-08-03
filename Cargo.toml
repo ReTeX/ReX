@@ -25,4 +25,4 @@ bincode = "0.8"
 
 [dependencies.log]
 version="0.3"
-features = [ "release_max_level_warn" ]
+features = [ "release_max_level_debug" ]

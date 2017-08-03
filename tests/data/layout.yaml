@@ -176,3 +176,45 @@ Spacing:
     - a\mathord{+}a\ a{+}a\ aaa
     - a\mathrel{a}a\ aaa
     - a\mathord{a}a\ aaa
+
+Arrays:
+  - Description: should render
+    Snippets:
+    - |
+      \begin{array}{ccc}
+        1 & 2 & 3\\
+        4 & 5 & 6
+      \end{array}
+    - |
+      \begin{array}{c}
+        1 \\
+        2 \\
+        3 \\
+      \end{array}
+    - |
+      \begin{array}{cc}
+      \end{array}
+    - |
+      \left(
+      \begin{array}{cc}
+        0 & 1 \\
+        -1 & 0
+      \end{array}
+      \right)
+    - |
+      \begin{array}{c}
+        x \\
+        abcdef
+      \end{array}
+    - |
+      \begin{array}{cc}
+        x & abcdef \\
+        abcdef & x
+      \end{array}
+    - |
+      \left(
+      \begin{array}{cc}
+        a & b \\
+        c & d
+      \end{array}
+      \right)
