@@ -257,3 +257,19 @@ Arrays:
         c & d
       \end{array}
       \right)
+    - |
+      \frac{
+        \left(
+        \begin{array}{cc}
+          a & b \\
+          c & d
+        \end{array}
+        \right)
+      }{
+        \left(
+        \begin{array}{cc}
+          a & b \\
+          c & d
+        \end{array}
+        \right)
+      }
