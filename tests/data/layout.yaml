@@ -218,3 +218,30 @@ Arrays:
         c & d
       \end{array}
       \right)
+    - |
+      2 \left(\begin{array}{c}1\\ 2\\ 3\end{array}\right)
+      \cdot\left(\begin{array}{c}1\\ 1\\ -1\end{array}\right)
+      = \left(\begin{array}{c}0\\ 0\\ 0\end{array}\right)
+    - |
+      \left(
+      \begin{array}{cc}
+        a_1 & b_1 \\
+        c_1 & d_1
+      \end{array}
+      \right)
+
+      \left(
+      \begin{array}{cc}
+        a_2 & b_2 \\
+        c_2 & d_2
+      \end{array}
+      \right)
+
+      =
+
+      \left(
+      \begin{array}{cc}
+        a_1 a_2 + b_1 c_2 & a_1 b_2 + b_1 d_2 \\
+        c_1 a_2 + d_1 c_2 & c_1 b_2 + d_1 d_2
+      \end{array}
+      \right)
