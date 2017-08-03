@@ -245,3 +245,15 @@ Arrays:
         c_1 a_2 + d_1 c_2 & c_1 b_2 + d_1 d_2
       \end{array}
       \right)
+    - |
+      \left(
+      \begin{array}{cc}
+        a & \left(
+      \begin{array}{cc}
+        a & b \\
+        c & d
+      \end{array}
+      \right) \\
+        c & d
+      \end{array}
+      \right)

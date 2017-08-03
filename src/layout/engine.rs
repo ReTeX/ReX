@@ -629,6 +629,7 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
     //let jot          = UNITS_PER_EM / 4;
     let strut_height = UNITS_PER_EM / 10 * 7; // \strutbox height = 0.7\baseline
     let strut_depth  = UNITS_PER_EM / 10 * 3; // \strutbox depth  = 0.3\baseline
+    let row_sep      = UNITS_PER_EM / 4;
     let column_sep   = UNITS_PER_EM / 12 * 5;
 
     // Don't bother constructing a new node if there is nothing.
@@ -646,10 +647,12 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
     }
 
     // Layout each node in each row, while keeping track of the largest row/col
+    let mut col_widths = vec![FontUnit::from(0); num_columns];
     let mut row_heights = Vec::with_capacity(num_rows);
-    let mut col_widths  = vec![FontUnit::from(0); num_columns];
+    let mut prev_depth = FontUnit::from(0);
     let mut row_max = strut_height;
     for row in &array.rows {
+        let mut max_depth = FontUnit::from(0);
         for col_idx in 0..num_columns {
             // layout row element if it exists
             let square = match row.get(col_idx) {
@@ -659,13 +662,15 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
 
             // record max height/width for row/col respectively
             row_max = max(square.height, row_max);
+            max_depth = max(max_depth, -square.depth);
             col_widths[col_idx] = max(col_widths[col_idx], square.width);
             columns[col_idx].push(square);
         }
 
         // ensure row height >= strut_height
-        row_heights.push(row_max);
+        row_heights.push(row_max + max(0.into(), prev_depth - strut_depth));
         row_max = strut_height;
+        prev_depth = max_depth;
     }
 
     // TODO: reference row layout here: crl
@@ -691,10 +696,10 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
             }
 
             // Add a jot (interrow spacing) between rows.
-            let row_space = max(0.into(), strut_depth + row.depth);
+            // let row_space = strut_depth;
             vbox.add_node(row.as_node());
             if row_idx < num_rows {
-                vbox.add_node(kern![vert: row_space]);
+                vbox.add_node(kern![vert: row_sep]);
             }
         }
         // TODO: verify intercolumn spacing, including first/last lines.
