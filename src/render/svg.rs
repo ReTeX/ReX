@@ -82,14 +82,13 @@ impl<'a, W: Write> Renderer for SVGRenderer<'a, W> {
                 .unwrap();
     }
 
-    fn bbox(&self, out: &mut W, pos: Cursor, width: FontUnit, height: FontUnit) {
-        if self.settings.debug {
-            writeln!(out,
-                r#"<rect x="{}", y="{}", width="{}" height="{}" fill="none" stroke="blue" stroke-width="0.2"/>"#,
-                pos.x, pos.y,
-                width, height
-            ).expect("Failed to write to buffer!");
-        }
+    fn bbox(&self, out: &mut W, pos: Cursor, width: FontUnit, height: FontUnit, color: &str) {
+        writeln!(out,
+            r#"<rect x="{}" y="{}" width="{}" height="{}" fill="none" stroke="{}" stroke-width="8"/>"#,
+            pos.x, pos.y,
+            width, height,
+            color
+        ).expect("Failed to write to buffer!");
     }
 
     fn symbol(&self, out: &mut W, pos: Cursor, symbol: u32, scale: Float) {

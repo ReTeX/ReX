@@ -14,7 +14,7 @@ fn main() {
     let settings = RenderSettings::default()
         .font_size(96)
         .font_src(font)
-        .debug(false);
+        .debug(true);
 
     svg::render_to_path(output, &settings, &input);
 }
