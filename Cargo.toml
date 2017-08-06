@@ -13,6 +13,7 @@ path = "bin/qc.rs"
 [dependencies]
 fp = { git = "https://github.com/ReTeX/fp.git" }
 stix = { path = "fonts/stix" }
+stix2 = { path = "fonts/stix2" }
 font_types = {path = "fonts/types" }
 static_map = "0.2.0-beta"
 static_map_macros = "0.2.0-beta"

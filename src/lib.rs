@@ -6,7 +6,7 @@ extern crate serde;
 extern crate log;
 
 extern crate fp;
-extern crate stix;
+extern crate stix2 as stix;
 extern crate font_types;
 
 #[macro_use]
