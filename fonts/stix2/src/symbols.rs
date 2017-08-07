@@ -2497,6 +2497,15 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "chi" => Symbol { unicode: 0x3C7, atom_type: AtomType::Alpha }, // 967
     "psi" => Symbol { unicode: 0x3C8, atom_type: AtomType::Alpha }, // 968
     "omega" => Symbol { unicode: 0x3C9, atom_type: AtomType::Alpha }, // 969
-    
+
+    "varphi" => Symbol { unicode: 0x3C6, atom_type: AtomType::Alpha }, // Unicode: 0x3C6, curly or open small phi, greek
+    "varsigma" => Symbol { unicode: 0x3C2, atom_type: AtomType::Alpha }, // Unicode: 0x3C2, terminal sigma, greek
+    "varbeta" => Symbol { unicode: 0x3D0, atom_type: AtomType::Alpha }, // Unicode: 0x3D0, rounded small beta, greek
+    "vartheta" => Symbol { unicode: 0x3D1, atom_type: AtomType::Alpha }, // Unicode: 0x3D1, /vartheta - curly or open theta
+    "varpi" => Symbol { unicode: 0x3D6, atom_type: AtomType::Alpha }, // Unicode: 0x3D6, rounded small pi (pomega), greek
+    "varkappa" => Symbol { unicode: 0x3F0, atom_type: AtomType::Alpha }, // Unicode: 0x3F0, rounded small kappa, greek
+    "varrho" => Symbol { unicode: 0x3F1, atom_type: AtomType::Alpha }, // Unicode: 0x3F1, rounded small rho, greek
+    "varTheta" => Symbol { unicode: 0x3F4, atom_type: AtomType::Alpha }, // Unicode: 0x3F4, greek capital theta symbol
+    "varepsilon" => Symbol { unicode: 0x3F5, atom_type: AtomType::Alpha }, // Unicode: 0x3F5, greek lunate epsilon symbol
     "to" => Symbol { unicode: 0x2192, atom_type: AtomType::Relation }, // Unicode: 0x2192, /rightarrow /to a: rightward arrow
 };
