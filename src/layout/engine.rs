@@ -564,7 +564,7 @@ fn radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
 fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
     // Don't bother constructing a new node if there is nothing.
     if stack.lines.len() == 0 {
-        return
+        return;
     }
 
     // Layout each line in the substack, and track which line is the widest
@@ -582,24 +582,26 @@ fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
 
     // Center lines according to widest variant
     for (n, line) in lines.iter_mut().enumerate() {
-        if n == widest_idx { continue }
+        if n == widest_idx {
+            continue;
+        }
         line.alignment = Alignment::Centered(line.width);
         line.width = widest;
     }
 
     // The line gap will be taken from STACK_GAP constants
     let gap_min = if config.style > Style::Text {
-            STACK_DISPLAY_STYLE_GAP_MIN.scaled(config)
-        } else {
-            STACK_GAP_MIN.scaled(config)
-        };
+        STACK_DISPLAY_STYLE_GAP_MIN.scaled(config)
+    } else {
+        STACK_GAP_MIN.scaled(config)
+    };
 
     // No idea.
     let gap_try = if config.style > Style::Text {
             STACK_TOP_DISPLAY_STYLE_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN -
-            2*ACCENT_BASE_HEIGHT
+            2 * ACCENT_BASE_HEIGHT
         } else {
-            STACK_TOP_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN - 2*ACCENT_BASE_HEIGHT
+            STACK_TOP_SHIFT_UP - AXIS_HEIGHT + STACK_BOTTOM_SHIFT_DOWN - 2 * ACCENT_BASE_HEIGHT
         }
         .scaled(config);
 
@@ -628,15 +630,15 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
     // TODO: In some enviornments, like aligned, an additional \jot is added.
     //let jot          = UNITS_PER_EM / 4;
     let strut_height = UNITS_PER_EM / 10 * 7; // \strutbox height = 0.7\baseline
-    let strut_depth  = UNITS_PER_EM / 10 * 3; // \strutbox depth  = 0.3\baseline
-    let row_sep      = UNITS_PER_EM / 4;
-    let column_sep   = UNITS_PER_EM / 12 * 5;
+    let strut_depth = UNITS_PER_EM / 10 * 3; // \strutbox depth  = 0.3\baseline
+    let row_sep = UNITS_PER_EM / 4;
+    let column_sep = UNITS_PER_EM / 12 * 5;
 
     // Don't bother constructing a new node if there is nothing.
     let num_rows = array.rows.len();
     let num_columns = array.rows.iter().map(Vec::len).max().unwrap_or(0);
     if num_columns == 0 {
-        return
+        return;
     }
 
     // TODO: investiage making this one large matrix?
@@ -678,8 +680,13 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
     // to keep rows aligned and columns centered.
     let mut hbox = builders::HBox::new();
 
-    // TODO: verify the proper spacing before/after arrays.
-    hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+
+    // Insert the correct delimiters.  If there is none, we insert a null dimiter space here.
+    // Otherwise we will use a scaled variant and add them after we layout the matrix body.
+    if array.left_delimiter.is_none() {
+        hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+    }
+
     for (col_idx, col) in columns.into_iter().enumerate() {
         let mut vbox = builders::VBox::new();
         for (row_idx, mut row) in col.into_iter().enumerate() {
@@ -709,7 +716,10 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
             hbox.add_node(kern![horz: column_sep]);
         }
     }
-    hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+
+    if array.right_delimiter.is_none() {
+        hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
+    }
 
     // TODO: We should make this as a method for LayoutNodes.
     // TODO: Investigate adding padding to HBox to prevent alloc from new VBox here.
@@ -720,5 +730,54 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
     let offset = (vbox.height + vbox.depth) / 2 - AXIS_HEIGHT.scaled(config);
     vbox.set_offset(offset);
 
-    result.add_node(vbox.build());
+    let vbox = vbox.build();
+
+    // Now that we know the layout of the matrix body we can place scaled delimiters
+    // First check if there are any delimiters to add, if not just return.
+    if array.left_delimiter.is_none() && array.right_delimiter.is_none() {
+        result.add_node(vbox);
+        return;
+    }
+
+    // TODO: Much of this is taken from `fn delimited`.  Make this DRY.
+    let height = vbox.height;
+    let depth = vbox.depth;
+    let mut hbox = builders::HBox::new();
+    if max(height, -depth) > DELIMITED_SUB_FORMULA_MIN_HEIGHT / 2 {
+        let axis = AXIS_HEIGHT;
+        let mut clearance = 2 * max(height - axis, axis - depth);
+        clearance = max(DELIMITER_FACTOR * clearance,
+                        height - depth - DELIMITER_SHORT_FALL);
+
+        let axis = AXIS_HEIGHT.scaled(config);
+
+        if let Some(left) = array.left_delimiter {
+            let left = glyph_metrics(left.unicode)
+                .vert_variant(clearance)
+                .as_layout(config)
+                .centered(axis);
+            hbox.add_node(left);
+        }
+
+        hbox.add_node(vbox);
+        if let Some(right) = array.right_delimiter {
+            let right = glyph_metrics(right.unicode)
+                .vert_variant(clearance)
+                .as_layout(config)
+                .centered(axis);
+            hbox.add_node(right);
+        }
+    } else {
+        if let Some(left) = array.left_delimiter {
+            let left = glyph_metrics(left.unicode).as_layout(config);
+            hbox.add_node(left);
+        }
+
+        hbox.add_node(vbox);
+        if let Some(right) = array.right_delimiter {
+            let right = glyph_metrics(right.unicode).as_layout(config);
+            hbox.add_node(right);
+        }
+    }
+    result.add_node(hbox.build());
 }
