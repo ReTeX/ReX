@@ -651,7 +651,7 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "varcarriagereturn" => Symbol { unicode: 0x23CE, atom_type: AtomType::Ordinal }, // 9166
     "overparen" => Symbol { unicode: 0x23DC, atom_type: AtomType::Over }, // 9180
     "underparen" => Symbol { unicode: 0x23DD, atom_type: AtomType::Under }, // 9181
-    "overbrace" => Symbol { unicode: 0x23DE, atom_type: AtomType::Over }, // 9182
+    "overbrace" => Symbol { unicode: 0x23DE, atom_type: AtomType::Accent }, // 9182
     "underbrace" => Symbol { unicode: 0x23DF, atom_type: AtomType::Under }, // 9183
     "obrbrak" => Symbol { unicode: 0x23E0, atom_type: AtomType::Ordinal }, // 9184
     "ubrbrak" => Symbol { unicode: 0x23E1, atom_type: AtomType::Ordinal }, // 9185
@@ -2498,6 +2498,7 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "psi" => Symbol { unicode: 0x3C8, atom_type: AtomType::Alpha }, // 968
     "omega" => Symbol { unicode: 0x3C9, atom_type: AtomType::Alpha }, // 969
 
+<<<<<<< HEAD
     "varphi" => Symbol { unicode: 0x3C6, atom_type: AtomType::Alpha }, // Unicode: 0x3C6, curly or open small phi, greek
     "varsigma" => Symbol { unicode: 0x3C2, atom_type: AtomType::Alpha }, // Unicode: 0x3C2, terminal sigma, greek
     "varbeta" => Symbol { unicode: 0x3D0, atom_type: AtomType::Alpha }, // Unicode: 0x3D0, rounded small beta, greek
@@ -2507,5 +2508,7 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "varrho" => Symbol { unicode: 0x3F1, atom_type: AtomType::Alpha }, // Unicode: 0x3F1, rounded small rho, greek
     "varTheta" => Symbol { unicode: 0x3F4, atom_type: AtomType::Alpha }, // Unicode: 0x3F4, greek capital theta symbol
     "varepsilon" => Symbol { unicode: 0x3F5, atom_type: AtomType::Alpha }, // Unicode: 0x3F5, greek lunate epsilon symbol
+=======
+>>>>>>> 60636701c8c08d1c8ac4535393f6881af5fbff45
     "to" => Symbol { unicode: 0x2192, atom_type: AtomType::Relation }, // Unicode: 0x2192, /rightarrow /to a: rightward arrow
 };

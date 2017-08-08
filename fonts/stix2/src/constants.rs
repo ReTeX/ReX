@@ -2,16 +2,16 @@
 // in the rex-font repo.
 //
 // Font: TODO
-// Modified: 2017-08-06 17:34:11
+// Modified: 2017-08-07 00:05:14
 
 use font_types::FontUnit;
+
+pub const UNITS_PER_EM: FontUnit = fontunit!(1000);
+pub const MIN_CONNECTOR_OVERLAP: FontUnit = fontunit!(100);
 
 pub const NULL_DELIMITER_SPACE: FontUnit = fontunit!(100);
 pub const DELIMITER_SHORT_FALL: FontUnit = fontunit!(100);
 pub const DELIMITER_FACTOR: FontUnit = fontunit_raw!(0xE6); // 90.1%
-
-pub const UNITS_PER_EM: FontUnit = fontunit!(1000);
-pub const MIN_CONNECTOR_OVERLAP: FontUnit = fontunit!(100);
 
 pub const ACCENT_BASE_HEIGHT: FontUnit = fontunit!(480);
 pub const AXIS_HEIGHT: FontUnit = fontunit!(258);

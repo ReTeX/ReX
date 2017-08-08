@@ -30,16 +30,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x7C, // bar
-                    start_connector_length: fontunit!(941),
+                    start_connector_length: fontunit!(800),
                     end_connector_length:   fontunit!(800),
-                    full_advance:           fontunit!(800),
+                    full_advance:           fontunit!(941),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x7C, // bar
-                    start_connector_length: fontunit!(941),
+                    start_connector_length: fontunit!(800),
                     end_connector_length:   fontunit!(800),
-                    full_advance:           fontunit!(800),
+                    full_advance:           fontunit!(941),
                     required:               true,
                 },
             ],
@@ -54,16 +54,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2016, // uni2016
-                    start_connector_length: fontunit!(941),
+                    start_connector_length: fontunit!(800),
                     end_connector_length:   fontunit!(800),
-                    full_advance:           fontunit!(800),
+                    full_advance:           fontunit!(941),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2016, // uni2016
-                    start_connector_length: fontunit!(941),
+                    start_connector_length: fontunit!(100),
                     end_connector_length:   fontunit!(100),
-                    full_advance:           fontunit!(100),
+                    full_advance:           fontunit!(941),
                     required:               true,
                 },
             ],
@@ -78,23 +78,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x239D, // uni239D
-                    start_connector_length: fontunit!(1273),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(250),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(250),
+                    full_advance:           fontunit!(1273),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x239C, // uni239C
-                    start_connector_length: fontunit!(1252),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1252),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x239B, // uni239B
-                    start_connector_length: fontunit!(1273),
-                    end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(250),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1273),
                     required:               true,
                 },
             ],
@@ -121,23 +121,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A0, // uni23A0
-                    start_connector_length: fontunit!(1273),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(250),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(250),
+                    full_advance:           fontunit!(1273),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x239F, // uni239F
-                    start_connector_length: fontunit!(1252),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1252),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x239E, // uni239E
-                    start_connector_length: fontunit!(1273),
-                    end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(250),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1273),
                     required:               true,
                 },
             ],
@@ -164,23 +164,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A3, // uni23A3
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(1200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1200),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23A2, // uni23A2
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A1, // uni23A1
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(1200),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(1200),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -207,23 +207,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A6, // uni23A6
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(1200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1200),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23A5, // uni23A5
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A4, // uni23A4
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(1200),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(1200),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -250,37 +250,37 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A9, // uni23A9
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A8, // uni23A8
-                    start_connector_length: fontunit!(1947),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(1947),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A7, // uni23A7
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(600),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -307,37 +307,37 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23AD, // uni23AD
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23AC, // uni23AC
-                    start_connector_length: fontunit!(1947),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(1947),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23AB, // uni23AB
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -371,16 +371,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88B, // uni2191.x
-                    start_connector_length: fontunit!(601),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(601),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2191, // uni2191
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(700),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(700),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -395,16 +395,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2193, // uni2193
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(600),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE88B, // uni2191.x
-                    start_connector_length: fontunit!(601),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(601),
                     required:               false,
                 },
             ],
@@ -419,23 +419,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2193, // uni2193
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(700),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(700),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE88B, // uni2191.x
-                    start_connector_length: fontunit!(601),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(601),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2191, // uni2191
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(700),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(700),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -450,16 +450,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4D4, // uni21D1.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(300),
                     end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(300),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x21D1, // uni21D1
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -474,16 +474,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x21D3, // uni21D3
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D4, // uni21D1.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(300),
                     end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(300),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
             ],
@@ -498,23 +498,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x21D3, // uni21D3
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D4, // uni21D1.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(300),
                     end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(300),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x21D1, // uni21D1
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -550,23 +550,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4E8, // uni221A.s4
-                    start_connector_length: fontunit!(1905),
+                    start_connector_length: fontunit!(200),
                     end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(200),
+                    full_advance:           fontunit!(1905),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4EB, // uni221A.x
-                    start_connector_length: fontunit!(651),
+                    start_connector_length: fontunit!(650),
                     end_connector_length:   fontunit!(650),
-                    full_advance:           fontunit!(650),
+                    full_advance:           fontunit!(651),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4E9, // uni221A.t
-                    start_connector_length: fontunit!(642),
-                    end_connector_length:   fontunit!(550),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(550),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(642),
                     required:               true,
                 },
             ],
@@ -584,23 +584,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4EF, // uni221B.s4
-                    start_connector_length: fontunit!(2201),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(600),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(2201),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4EB, // uni221A.x
-                    start_connector_length: fontunit!(651),
+                    start_connector_length: fontunit!(650),
                     end_connector_length:   fontunit!(650),
-                    full_advance:           fontunit!(650),
+                    full_advance:           fontunit!(651),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4E9, // uni221A.t
-                    start_connector_length: fontunit!(642),
-                    end_connector_length:   fontunit!(550),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(550),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(642),
                     required:               true,
                 },
             ],
@@ -618,23 +618,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4F4, // uni221C.s4
-                    start_connector_length: fontunit!(2198),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(600),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(600),
+                    full_advance:           fontunit!(2198),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4EB, // uni221A.x
-                    start_connector_length: fontunit!(651),
+                    start_connector_length: fontunit!(650),
                     end_connector_length:   fontunit!(650),
-                    full_advance:           fontunit!(650),
+                    full_advance:           fontunit!(651),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4E9, // uni221A.t
-                    start_connector_length: fontunit!(642),
-                    end_connector_length:   fontunit!(550),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(550),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(642),
                     required:               true,
                 },
             ],
@@ -652,16 +652,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2223, // uni2223
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x2223, // uni2223
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               false,
                 },
             ],
@@ -676,16 +676,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2225, // uni2225
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2225, // uni2225
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               true,
                 },
             ],
@@ -700,23 +700,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2321, // uni2321
-                    start_connector_length: fontunit!(1896),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(800),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(800),
+                    full_advance:           fontunit!(1896),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE88A, // integral.x
-                    start_connector_length: fontunit!(1251),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(1251),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2320, // uni2320
-                    start_connector_length: fontunit!(1630),
-                    end_connector_length:   fontunit!(800),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(800),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1630),
                     required:               true,
                 },
             ],
@@ -732,23 +732,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2321, // uni2321
-                    start_connector_length: fontunit!(1896),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(800),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(800),
+                    full_advance:           fontunit!(1896),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE88A, // integral.x
-                    start_connector_length: fontunit!(1251),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(1251),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2320, // uni2320
-                    start_connector_length: fontunit!(1630),
-                    end_connector_length:   fontunit!(800),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(800),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1630),
                     required:               true,
                 },
             ],
@@ -904,16 +904,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A2, // uni23A2
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A1, // uni23A1
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(1200),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(1200),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -932,16 +932,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A5, // uni23A5
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A4, // uni23A4
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(1200),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(1200),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -960,16 +960,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A3, // uni23A3
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(1200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1200),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23A2, // uni23A2
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
             ],
@@ -988,16 +988,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A6, // uni23A6
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(1200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(1200),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23A5, // uni23A5
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
             ],
@@ -1098,16 +1098,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE5C8, // uni27F0.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x27F0, // uni27F0
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(420),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(420),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -1122,16 +1122,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x27F1, // uni27F1
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(420),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(420),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE5C8, // uni27F0.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
             ],
@@ -1146,16 +1146,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE5C9, // uni290A.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x290A, // uni290A
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(420),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(420),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
             ],
@@ -1170,16 +1170,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x290B, // uni290B
-                    start_connector_length: fontunit!(839),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(420),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(420),
+                    full_advance:           fontunit!(839),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE5C9, // uni290A.x
-                    start_connector_length: fontunit!(312),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(312),
                     required:               false,
                 },
             ],
@@ -1563,16 +1563,16 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x2AFC, // uni2AFC
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x2AFC, // uni2AFC
-                    start_connector_length: fontunit!(901),
+                    start_connector_length: fontunit!(900),
                     end_connector_length:   fontunit!(900),
-                    full_advance:           fontunit!(900),
+                    full_advance:           fontunit!(901),
                     required:               true,
                 },
             ],
@@ -1597,23 +1597,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23AD, // uni23AD
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23A7, // uni23A7
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -1628,23 +1628,23 @@ pub static VERT_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x23A9, // uni23A9
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x23AA, // uni23AA
-                    start_connector_length: fontunit!(1001),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(1001),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x23AB, // uni23AB
-                    start_connector_length: fontunit!(1275),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(1275),
                     required:               true,
                 },
             ],
@@ -1687,16 +1687,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE47D, // overlinecomb.s1
-                    start_connector_length: fontunit!(451),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(451),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE47D, // overlinecomb.s1
-                    start_connector_length: fontunit!(451),
+                    start_connector_length: fontunit!(1000),
                     end_connector_length:   fontunit!(1000),
-                    full_advance:           fontunit!(1000),
+                    full_advance:           fontunit!(451),
                     required:               true,
                 },
             ],
@@ -1738,16 +1738,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x5F, // underscore
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x5F, // underscore
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               true,
                 },
             ],
@@ -1767,16 +1767,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x5F, // underscore
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x5F, // underscore
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
             ],
@@ -1791,16 +1791,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x203E, // uni203E
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0x203E, // uni203E
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(500),
                     end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(500),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
             ],
@@ -1837,16 +1837,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4AC, // uni20D6.s1
-                    start_connector_length: fontunit!(893),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(700),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(700),
+                    full_advance:           fontunit!(893),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4B1, // uni20D6.x
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(200),
                     end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(200),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
             ],
@@ -1866,16 +1866,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4B1, // uni20D6.x
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4B2, // uni20D7.s1
-                    start_connector_length: fontunit!(893),
-                    end_connector_length:   fontunit!(700),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(700),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(893),
                     required:               true,
                 },
             ],
@@ -1917,16 +1917,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4C1, // uni20EE.s1
-                    start_connector_length: fontunit!(893),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(700),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(700),
+                    full_advance:           fontunit!(893),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4C6, // uni20EE.x
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(200),
                     end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(200),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
             ],
@@ -1946,16 +1946,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4C6, // uni20EE.x
-                    start_connector_length: fontunit!(513),
+                    start_connector_length: fontunit!(200),
                     end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(200),
+                    full_advance:           fontunit!(513),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4C7, // uni20EF.s1
-                    start_connector_length: fontunit!(893),
-                    end_connector_length:   fontunit!(700),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(700),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(893),
                     required:               true,
                 },
             ],
@@ -1975,16 +1975,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4CE, // uni2190.var
-                    start_connector_length: fontunit!(506),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(506),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
             ],
@@ -1999,16 +1999,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4D0, // uni2192.var
-                    start_connector_length: fontunit!(505),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(505),
                     required:               true,
                 },
             ],
@@ -2023,23 +2023,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4CE, // uni2190.var
-                    start_connector_length: fontunit!(506),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(506),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4D0, // uni2192.var
-                    start_connector_length: fontunit!(505),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(505),
                     required:               true,
                 },
             ],
@@ -2054,23 +2054,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4CE, // uni2190.var
-                    start_connector_length: fontunit!(506),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(506),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE894, // uni21A4.endr
-                    start_connector_length: fontunit!(572),
-                    end_connector_length:   fontunit!(400),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(572),
                     required:               true,
                 },
             ],
@@ -2085,23 +2085,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE895, // uni21A6.endl
-                    start_connector_length: fontunit!(573),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(400),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(573),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4D0, // uni2192.var
-                    start_connector_length: fontunit!(505),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(505),
                     required:               true,
                 },
             ],
@@ -2116,23 +2116,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4CE, // uni2190.var
-                    start_connector_length: fontunit!(506),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(506),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE896, // uni21A9.endr
-                    start_connector_length: fontunit!(657),
-                    end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(250),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(657),
                     required:               true,
                 },
             ],
@@ -2147,23 +2147,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE897, // uni21AA.endl
-                    start_connector_length: fontunit!(658),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(250),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(250),
+                    full_advance:           fontunit!(658),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE4D0, // uni2192.var
-                    start_connector_length: fontunit!(505),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(505),
                     required:               true,
                 },
             ],
@@ -2178,16 +2178,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88C, // uni21BC.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
             ],
@@ -2202,16 +2202,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88D, // uni21BD.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
             ],
@@ -2226,16 +2226,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88E, // uni21C0.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
@@ -2250,16 +2250,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88F, // uni21C1.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
@@ -2274,23 +2274,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x21D0, // uni21D0
-                    start_connector_length: fontunit!(888),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(888),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D2, // uni21D0.x
-                    start_connector_length: fontunit!(323),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(323),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE891, // uni21D0.endr
-                    start_connector_length: fontunit!(383),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(383),
                     required:               true,
                 },
             ],
@@ -2305,23 +2305,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE890, // uni21D0.endl
-                    start_connector_length: fontunit!(384),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(384),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D2, // uni21D0.x
-                    start_connector_length: fontunit!(323),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(323),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x21D2, // uni21D2
-                    start_connector_length: fontunit!(887),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(887),
                     required:               true,
                 },
             ],
@@ -2336,23 +2336,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x21D0, // uni21D0
-                    start_connector_length: fontunit!(888),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(888),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D2, // uni21D0.x
-                    start_connector_length: fontunit!(323),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(323),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x21D2, // uni21D2
-                    start_connector_length: fontunit!(887),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(887),
                     required:               true,
                 },
             ],
@@ -2367,16 +2367,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0x21DA, // uni21DA
-                    start_connector_length: fontunit!(873),
-                    end_connector_length:   fontunit!(200),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(200),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(873),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE4D6, // uni21DA.x
-                    start_connector_length: fontunit!(323),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(323),
                     required:               false,
                 },
             ],
@@ -2391,16 +2391,16 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE4D6, // uni21DA.x
-                    start_connector_length: fontunit!(323),
+                    start_connector_length: fontunit!(150),
                     end_connector_length:   fontunit!(150),
-                    full_advance:           fontunit!(150),
+                    full_advance:           fontunit!(323),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0x21DB, // uni21DB
-                    start_connector_length: fontunit!(872),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(200),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(200),
+                    full_advance:           fontunit!(872),
                     required:               true,
                 },
             ],
@@ -2415,23 +2415,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE56B, // uni23B4.l
-                    start_connector_length: fontunit!(751),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(751),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE572, // uni23B4.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE56C, // uni23B4.r
-                    start_connector_length: fontunit!(751),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(751),
                     required:               true,
                 },
             ],
@@ -2451,23 +2451,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE573, // uni23B5.l
-                    start_connector_length: fontunit!(751),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(500),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(500),
+                    full_advance:           fontunit!(751),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE57A, // uni23B5.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE574, // uni23B5.r
-                    start_connector_length: fontunit!(751),
-                    end_connector_length:   fontunit!(500),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(500),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(751),
                     required:               true,
                 },
             ],
@@ -2487,23 +2487,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE57E, // uni23DC.l
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(400),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE572, // uni23B4.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE57F, // uni23DC.r
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(400),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
             ],
@@ -2523,23 +2523,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE585, // uni23DD.l
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(400),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE57A, // uni23B5.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE586, // uni23DD.r
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(400),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
             ],
@@ -2559,37 +2559,37 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE58C, // uni23DE.l
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(300),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE572, // uni23B4.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE58D, // uni23DE.m
-                    start_connector_length: fontunit!(943),
+                    start_connector_length: fontunit!(300),
                     end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(300),
+                    full_advance:           fontunit!(943),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE572, // uni23B4.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE58E, // uni23DE.r
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
             ],
@@ -2609,37 +2609,37 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE594, // uni23DF.l
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(300),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(300),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE57A, // uni23B5.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE595, // uni23DF.m
-                    start_connector_length: fontunit!(943),
+                    start_connector_length: fontunit!(300),
                     end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(300),
+                    full_advance:           fontunit!(943),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE57A, // uni23B5.x
-                    start_connector_length: fontunit!(751),
+                    start_connector_length: fontunit!(600),
                     end_connector_length:   fontunit!(600),
-                    full_advance:           fontunit!(600),
+                    full_advance:           fontunit!(751),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE596, // uni23DF.r
-                    start_connector_length: fontunit!(957),
-                    end_connector_length:   fontunit!(300),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(300),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(957),
                     required:               true,
                 },
             ],
@@ -2681,23 +2681,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88C, // uni21BC.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88E, // uni21C0.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
@@ -2712,23 +2712,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88D, // uni21BD.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88F, // uni21C1.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
@@ -2743,23 +2743,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88C, // uni21BC.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE894, // uni21A4.endr
-                    start_connector_length: fontunit!(572),
-                    end_connector_length:   fontunit!(400),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(572),
                     required:               true,
                 },
             ],
@@ -2774,23 +2774,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE895, // uni21A6.endl
-                    start_connector_length: fontunit!(573),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(400),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(573),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88E, // uni21C0.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
@@ -2805,23 +2805,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE88D, // uni21BD.r0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(450),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(450),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE894, // uni21A4.endr
-                    start_connector_length: fontunit!(572),
-                    end_connector_length:   fontunit!(400),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(400),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(572),
                     required:               true,
                 },
             ],
@@ -2836,23 +2836,23 @@ pub static HORZ_VARIANTS: static_map::Map<u32, GlyphVariants> = static_map! {
             parts: &[
                 GlyphPart {
                     unicode:                0xE895, // uni21A6.endl
-                    start_connector_length: fontunit!(573),
-                    end_connector_length:   fontunit!(0),
-                    full_advance:           fontunit!(400),
+                    start_connector_length: fontunit!(0),
+                    end_connector_length:   fontunit!(400),
+                    full_advance:           fontunit!(573),
                     required:               true,
                 },
                 GlyphPart {
                     unicode:                0xE889, // horizontal.x
-                    start_connector_length: fontunit!(597),
+                    start_connector_length: fontunit!(250),
                     end_connector_length:   fontunit!(250),
-                    full_advance:           fontunit!(250),
+                    full_advance:           fontunit!(597),
                     required:               false,
                 },
                 GlyphPart {
                     unicode:                0xE88F, // uni21C1.l0
-                    start_connector_length: fontunit!(923),
-                    end_connector_length:   fontunit!(450),
-                    full_advance:           fontunit!(0),
+                    start_connector_length: fontunit!(450),
+                    end_connector_length:   fontunit!(0),
+                    full_advance:           fontunit!(923),
                     required:               true,
                 },
             ],
