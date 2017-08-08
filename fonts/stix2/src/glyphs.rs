@@ -8,12 +8,13 @@
 // FIXME: Switch to PHF when avialable on stable.  Benchmarks shows it is slightly
 //   faster with this dataset.
 //
-// Font: // Modified: 2017-08-06 17:34:13
+// Font: // Modified: 2017-08-07 00:05:16
 use static_map;
 use font_types::{Glyph, BBox};
 
 pub static GLYPHS: static_map::Map<u32, Glyph> = static_map! {
     Default: Glyph { unicode: 0x0000_u32, bbox: BBox(fontunit!(0), fontunit!(0), fontunit!(0), fontunit!(0)), attachment: fontunit!(0), advance: fontunit!(0), lsb: fontunit!(0), italics: fontunit!(0) },
+
     0x0020_u32 => Glyph { unicode: 0x0020_u32, bbox: BBox(fontunit!(0), fontunit!(0), fontunit!(0), fontunit!(0)), attachment: fontunit!(0), advance: fontunit!(235), lsb: fontunit!(0), italics: fontunit!(0) },
     0x0021_u32 => Glyph { unicode: 0x0021_u32, bbox: BBox(fontunit!(82), fontunit!(-8), fontunit!(201), fontunit!(669)), attachment: fontunit!(0), advance: fontunit!(283), lsb: fontunit!(82), italics: fontunit!(0) },
     0x0022_u32 => Glyph { unicode: 0x0022_u32, bbox: BBox(fontunit!(52), fontunit!(504), fontunit!(287), fontunit!(706)), attachment: fontunit!(0), advance: fontunit!(334), lsb: fontunit!(52), italics: fontunit!(0) },

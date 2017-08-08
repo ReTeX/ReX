@@ -651,7 +651,7 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "varcarriagereturn" => Symbol { unicode: 0x23CE, atom_type: AtomType::Ordinal }, // 9166
     "overparen" => Symbol { unicode: 0x23DC, atom_type: AtomType::Over }, // 9180
     "underparen" => Symbol { unicode: 0x23DD, atom_type: AtomType::Under }, // 9181
-    "overbrace" => Symbol { unicode: 0x23DE, atom_type: AtomType::Over }, // 9182
+    "overbrace" => Symbol { unicode: 0x23DE, atom_type: AtomType::Accent }, // 9182
     "underbrace" => Symbol { unicode: 0x23DF, atom_type: AtomType::Under }, // 9183
     "obrbrak" => Symbol { unicode: 0x23E0, atom_type: AtomType::Ordinal }, // 9184
     "ubrbrak" => Symbol { unicode: 0x23E1, atom_type: AtomType::Ordinal }, // 9185
@@ -2497,6 +2497,6 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "chi" => Symbol { unicode: 0x3C7, atom_type: AtomType::Alpha }, // 967
     "psi" => Symbol { unicode: 0x3C8, atom_type: AtomType::Alpha }, // 968
     "omega" => Symbol { unicode: 0x3C9, atom_type: AtomType::Alpha }, // 969
-    
+
     "to" => Symbol { unicode: 0x2192, atom_type: AtomType::Relation }, // Unicode: 0x2192, /rightarrow /to a: rightward arrow
 };
