@@ -107,7 +107,7 @@ impl_fixed_conv! ( u8, i8, u16, i16, u32, i32 );
 impl From<f64> for F24P8 {
     fn from(f: f64) -> F24P8 {
         assert!(f >= 0.);
-        F24P8 { bits: (f * FRACTION_VALUE as f64) as i32 }
+        F24P8 { bits: (f * (1 << 8) as f64) as i32 }
     }
 }
 
