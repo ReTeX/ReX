@@ -1,7 +1,10 @@
 /// Font types used internally by ReX.  There is little concern for maintaining
 /// backwards compatible changes and may regularly have major version changes.
 /// Use with cautions.
-extern crate fp;
+#[macro_use]
+extern crate serde_derive;
+
+pub mod fp;
 
 pub type FixedPoint = fp::F24P8;
 pub type FontUnit = FixedPoint;

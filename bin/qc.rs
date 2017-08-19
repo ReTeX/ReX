@@ -5,7 +5,6 @@ extern crate rex;
 use rex::*;
 
 fn main() {
-
     let input = std::env::args()
         .skip(1)
         .next()

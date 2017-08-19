@@ -2498,7 +2498,6 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "psi" => Symbol { unicode: 0x3C8, atom_type: AtomType::Alpha }, // 968
     "omega" => Symbol { unicode: 0x3C9, atom_type: AtomType::Alpha }, // 969
 
-<<<<<<< HEAD
     "varphi" => Symbol { unicode: 0x3C6, atom_type: AtomType::Alpha }, // Unicode: 0x3C6, curly or open small phi, greek
     "varsigma" => Symbol { unicode: 0x3C2, atom_type: AtomType::Alpha }, // Unicode: 0x3C2, terminal sigma, greek
     "varbeta" => Symbol { unicode: 0x3D0, atom_type: AtomType::Alpha }, // Unicode: 0x3D0, rounded small beta, greek
@@ -2508,7 +2507,5 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "varrho" => Symbol { unicode: 0x3F1, atom_type: AtomType::Alpha }, // Unicode: 0x3F1, rounded small rho, greek
     "varTheta" => Symbol { unicode: 0x3F4, atom_type: AtomType::Alpha }, // Unicode: 0x3F4, greek capital theta symbol
     "varepsilon" => Symbol { unicode: 0x3F5, atom_type: AtomType::Alpha }, // Unicode: 0x3F5, greek lunate epsilon symbol
-=======
->>>>>>> 60636701c8c08d1c8ac4535393f6881af5fbff45
     "to" => Symbol { unicode: 0x2192, atom_type: AtomType::Relation }, // Unicode: 0x2192, /rightarrow /to a: rightward arrow
 };

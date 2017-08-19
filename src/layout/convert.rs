@@ -60,7 +60,7 @@ impl AsLayoutNode for VariantGlyph {
                         for instr in c.iter().rev() {
                             contents.add_node(instr.glyph.as_layout(config));
                             if instr.overlap != FontUnit::from(0) {
-                                let kern = -instr.overlap.scaled(config);
+                                let kern = -instr.overlap.scaled(config) - instr.glyph.depth();
                                 contents.add_node(kern!(vert: kern));
                             }
                         }

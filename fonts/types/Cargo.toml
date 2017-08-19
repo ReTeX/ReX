@@ -4,4 +4,5 @@ version = "0.1.0"
 authors = ["cbreeden <github@u.breeden.cc>"]
 
 [dependencies]
-fp = { git = "https://github.com/ReTeX/fp.git" }
+serde_derive = "1.0"
+serde = "1.0"
