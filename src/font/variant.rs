@@ -16,10 +16,11 @@ pub trait Variant {
 
 impl Variant for Glyph {
     fn vert_variant(&self, size: FontUnit) -> VariantGlyph {
+        trace!("finding variant for 0x:{:X}, size: {}", self.unicode, size);
         let variants = match VERT_VARIANTS.get(&self.unicode) {
             Some(variants) => variants,
             None => {
-                debug!("unable to find variant for 0x{:X}", self.unicode);
+                debug!("unable to find variants for 0x{:X}", self.unicode);
                 return VariantGlyph::Replacement(*self);
             }
         };
@@ -46,13 +47,12 @@ impl Variant for Glyph {
                         .last()
                         .map(|g| g.unicode)
                         .unwrap_or(self.unicode));
-                trace!("no constructable glyphs, \
-                        using largest replacement: 0x{:X} with size {}",
-                        replacement.unicode,
-                        replacement.advance);
+                trace!("no constructable glyphs found"); 
+                trace!("using largest replacement 0x{:X}, size {}",
+                        replacement.unicode, replacement.advance);
                 return VariantGlyph::Replacement(replacement);
             },
-            Some(ref c) => c,
+            Some(ref constructable) => constructable,
         };
 
         // Calculate the metrics for a variant at least as large as size.
@@ -62,6 +62,7 @@ impl Variant for Glyph {
     }
 
     fn horz_variant(&self, size: FontUnit) -> VariantGlyph {
+        trace!("finding variant for 0x:{:X}, size: {}", self.unicode, size);
         let variants = match HORZ_VARIANTS.get(&self.unicode) {
             Some(variants) => variants,
             None => {
@@ -70,11 +71,12 @@ impl Variant for Glyph {
             }
         };
 
-        // Check if any replacement glyphs meet the requirement.
+        // Check for replacement glyphs that meet the desired size first.
+        // We want the largest variant that is _smaller_ than the given size.
         for idx in 0..variants.replacements.len() {
             if variants.replacements[idx].advance >= size {
                 if idx <= 0 {
-                    trace!("all replacements are too large, using original.");
+                    trace!("replacement glyphs are too large");
                     return VariantGlyph::Replacement(*self);
                 } else {
                     let replacement = variants.replacements[idx-1];
@@ -86,46 +88,40 @@ impl Variant for Glyph {
             }
         }
 
+        // In case all constructable glyphs are too large or non-existant,
+        // fall back to the largest replacement glyph if possible.
+        let backup = variants.replacements
+                .last()
+                .map(|g| g.unicode)
+                .unwrap_or(self.unicode);
+
         // otherwise check for constructable glyphs.
         let construction = match variants.constructable {
             None => {
-                let replacement =
-                    glyph_metrics(variants
-                        .replacements
-                        .last()
-                        .map(|g| g.unicode)
-                        .unwrap_or(self.unicode));
-
-                trace!("no constructable glyphs, \
-                        using largest replacement: 0x{:X} with size {}",
+                let replacement = glyph_metrics(backup);
+                trace!("no constructable glyphs");
+                trace!("using largest replacement 0x{:X}, size {}",
                         replacement.unicode,
                         replacement.advance);
                 return VariantGlyph::Replacement(replacement);
             }
-            Some(ref c) => c,
+            Some(ref constructable) => constructable,
         };
 
         // Calculate the metrics for a variant at least as large as size.
-        let (repeats, diff_ratio) =
-            match greatest_lower_bound(&construction.parts, size) {
-                Some(ret) => ret,
-                None => {
-                    let replacement =
-                        glyph_metrics(variants
-                            .replacements
-                            .last()
-                            .map(|g| g.unicode)
-                            .unwrap_or(self.unicode));
+        let (repeats, diff) = match greatest_lower_bound(&construction.parts, size) {
+            Some(ret) => ret,
+            None => {
+                let replacement = glyph_metrics(backup);
+                trace!("constructable glyphs are too large");
+                trace!("using largest replacement 0x{:X}, size {}",
+                        replacement.unicode,
+                        replacement.advance);
+                return VariantGlyph::Replacement(replacement);
+            }
+        };
 
-                    trace!("no constructable glyphs, \
-                            using largest replacement: 0x{:X} with size {}",
-                            replacement.unicode,
-                            replacement.advance);
-                    return VariantGlyph::Replacement(replacement);
-                }
-            };
-
-        let instructions = construct_glyphs(&construction.parts, repeats, diff_ratio);
+        let instructions = construct_glyphs(&construction.parts, repeats, diff);
         VariantGlyph::Constructable(Direction::Horizontal, instructions)
    }
 
@@ -193,7 +189,6 @@ fn construct_glyphs(
 /// With the number of glyphs required to construct the variant is larger
 /// than `ITERATION_LIMIT` we return `None`.
 fn smallest_upper_bound(parts: &[GlyphPart], size: FontUnit) -> (u16, FontUnit) {
-    trace!("Finding smallest variant larger than {}", size);
     let (small, large) = advance_without_optional(parts);
     if large >= size {
         trace!("using smallest variant glyph, {} <= smallest <= {}", small, large);
@@ -234,58 +229,59 @@ fn smallest_upper_bound(parts: &[GlyphPart], size: FontUnit) -> (u16, FontUnit) 
     (k as u16 + 1, difference_ratio.into())
 }
 
-/// Measure the _smallest_ size of a glyph construction with the given number
-/// of repeatable glyphs.  This method returns the number of connectors required
-/// and the largest size of the variant with that number of glyphs.
+/// Measure the _largest_ a glyph construction _smaller_ than the given size. 
+/// If all constructions are larger than the given size, return `None`.
+/// Otherwise return the number of optional glyphs required and the difference
+/// ratio to obtain the desired size.
 fn greatest_lower_bound(
     parts: &[GlyphPart], 
     size: FontUnit) 
 -> Option<(u16, FontUnit)> {
-    trace!("Finding largest variant smaller than {}", size);
-
-    // If the smallest extendable variant is too large, we should instead take
-    // the largest replacement glyph.  We return `None` to indicate this.
     let (small, large) = advance_without_optional(parts);
     if small >= size {
         trace!("all constructable glyphs are too large, smallest: {}", small);
         return None;
     }
 
-    // Otherwise calculate the size of including a set of optional glyphs.
+    // Otherwise calculate the size of including one set of optional glyphs.
     let (mut ssmall, mut llarge, opt_small, opt_large) = advance_with_optional(parts);
-    let k = u32::from((size - ssmall) / opt_small);
-    if ssmall >= size || k == 0 {
+
+    // If the smallest constructable with optional glyphs is too large we
+    // use no optional glyphs.
+    // TODO: Do something better if `large == small`.
+    if ssmall >= size {
         let diff_ratio = f64::from(size - small) / f64::from(large - small);
         let diff_ratio = diff_ratio.min(1.0);
         trace!("optional glyphs make construction too large, using none");
+        trace!("diff_ratio = {:.2}", diff_ratio);
         return Some((0, diff_ratio.into()));
     }
 
-    // Otherwise determine the number of optional glyphs required to reach desired size.
+    // Determine the number of additional optional glyphs required to achieve size.
     // We need to find the smallest integer k such that:
-    //     small + k*opt_small >= size
+    //     ssmall + k*opt_small >= size
     // This is solved by:
-    //     (size - advance_small) / connector_advance <= k
-    // The result will have k connectors with size: small + (k-1)*connector_advance
-    // Since we round towards zero, k below is k-1 mentioned above.
+    //     (size - ssmall) / opt_small <= k
+    // Which is solved by: k = floor[ (size - smmal) / opt_small ]
+    // Since we round towards zero, floor is not necessary.
+    let k = u32::from((size - ssmall) / opt_small);
     trace!("k = ({} - {})/ {} = {}", size, ssmall, opt_small, k);
-    if k > 0 {
-        ssmall += (k - 1) * opt_small;
-        llarge += (k - 1) * opt_large;
-    }
+
+    ssmall += k * opt_small;
+    llarge += k * opt_large;
+    let diff_ratio = f64::from(size - ssmall) / f64::from(llarge - ssmall);
+    let diff_ratio = FontUnit::from(diff_ratio.min(1.0).max(0.0));
 
     trace!("{} <= advance <= {}", ssmall, llarge);
-    let diff_ratio = f64::from(size - ssmall) / f64::from(llarge - ssmall);
-    let diff_ratio = FontUnit::from(diff_ratio.min(1.0));
     trace!("Difference ratio: {}", diff_ratio);
-    Some((k as u16, diff_ratio))
+    Some((k as u16 + 1, diff_ratio))
 }
 
 /// Calculate the advance of the smallest variant with exactly one set of optional
 /// connectors. This returns a tuple: the first element states the advance of a
 /// variant with one set of optional connectors, the second element states the
 /// increase in advance for each additional connector.
-fn advance_with_optional(parts: &[GlyphPart]) -> (FontUnit, FontUnit, FontUnit, FontUnit) {
+fn advance_with_optional( parts: &[GlyphPart]) -> (FontUnit, FontUnit, FontUnit, FontUnit) {
     let mut advance_small = FontUnit::from(0);
     let mut advance_large = MIN_CONNECTOR_OVERLAP;
     let mut connector_small = FontUnit::from(0);
