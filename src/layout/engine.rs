@@ -535,29 +535,39 @@ fn frac(result: &mut Layout, frac: &GenFraction, config: LayoutSettings) {
 }
 
 fn radical(result: &mut Layout, rad: &Radical, config: LayoutSettings) {
-    //Reference rule 11 from pg 443 of TeXBook
+    // reference rule 11 from pg 443 of TeXBook
     let contents = layout(&rad.inner, config.cramped()).as_node();
-    let sqrt = glyph_metrics(0x221A); // The sqrt symbol.
 
+    // obtain minimum clearange between radicand and radical bar
+    // and cache other sizes that will be needed
     let gap = match config.style >= Style::Display {
-        true => RADICAL_DISPLAY_STYLE_VERTICAL_GAP,
-        false => RADICAL_VERTICAL_GAP,
+        true => RADICAL_DISPLAY_STYLE_VERTICAL_GAP.scaled(config),
+        false => RADICAL_VERTICAL_GAP.scaled(config),
     };
 
-    let size = (contents.height - contents.depth) + gap + RADICAL_EXTRA_ASCENDER; // Minimum gap
-    let gap = gap.scaled(config);
     let rule_thickness = RADICAL_RULE_THICKNESS.scaled(config);
-    let glyph = sqrt.vert_variant(size).as_layout(config);
-    let inner_center = (gap + contents.height + contents.depth + rule_thickness) / 2;
-    let sym_center = (glyph.height + glyph.depth) / 2;
-    let offset = sym_center - inner_center;
-    let top_padding = RADICAL_EXTRA_ASCENDER.scaled(config) - RADICAL_RULE_THICKNESS.scaled(config);
-    let kerning = (glyph.height - offset) - RADICAL_EXTRA_ASCENDER.scaled(config) - contents.height;
+    let rule_ascender = RADICAL_EXTRA_ASCENDER.scaled(config);
 
-    result.add_node(vbox!(offset: offset; glyph));
+    // determine size of radical glyph
+    let inner_height = (contents.height - contents.depth) + gap + rule_thickness;
+    let sqrt = glyph_metrics(0x221A).vert_variant(inner_height).as_layout(config);
+
+    // pad between radicand and radical bar
+    let delta = (sqrt.height - sqrt.depth - inner_height) / 2 + rule_thickness;
+    let gap = max(delta, gap);
+
+    // offset radical symbol
+    let offset = rule_thickness + gap + contents.height;
+    let offset = sqrt.height - offset;
+
+    // padding above sqrt
+    // TODO: This is unclear
+    let top_padding = rule_ascender - rule_thickness;
+
+    result.add_node(vbox![offset: offset; sqrt]);
     result.add_node(vbox![kern!(vert: top_padding),
                           rule!(width:  contents.width, height: rule_thickness),
-                          kern!(vert: kerning),
+                          kern!(vert: gap),
                           contents]);
 }
 

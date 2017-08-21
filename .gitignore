@@ -18,3 +18,4 @@ test.svg
 # Products from testing
 *.html
 callgrind*
+*.rustfmt
