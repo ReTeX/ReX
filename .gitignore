@@ -16,6 +16,7 @@ Cargo.lock
 test.svg
 
 # Products from testing
+*.tex
 *.html
 callgrind*
 *.rustfmt

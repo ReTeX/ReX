@@ -243,19 +243,18 @@ fn delimited(result: &mut Layout, delim: &Delimited, config: LayoutSettings) {
 fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     // See: https://tug.org/TUGboat/tb27-1/tb86jackowski.pdf
     //      https://www.tug.org/tugboat/tb30-1/tb94vieth.pdf
-
     let base = match scripts.base {
         Some(ref base) => layout_node(base, config),
         None => Layout::new(),
     };
 
     let mut sup = match scripts.superscript {
-        Some(ref sup) => layout(&sup, config.superscript_variant()),
+        Some(ref sup) => layout(sup, config.superscript_variant()),
         None => Layout::new(),
     };
 
     let mut sub = match scripts.subscript {
-        Some(ref sub) => layout(&sub, config.subscript_variant()),
+        Some(ref sub) => layout(sub, config.subscript_variant()),
         None => Layout::new(),
     };
 
@@ -264,7 +263,7 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     if let Some(ref b) = scripts.base {
         if AtomType::Operator(true) == b.atom_type() {
             operator_limits(result, base, sup, sub, config);
-            return;
+            return
         }
     }
 
@@ -283,16 +282,15 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
             }
             .scaled(config);
 
-        let mut height = base.height;
-
         // TODO: These checks should be recursive?
+        let mut height = base.height;
         if let Some(ref b) = scripts.base {
             if b.atom_type() != AtomType::Operator(false) {
-                // For accents, whose base is a simple symbol, we do not take
+                // For accents whose base is a simple symbol we do not take
                 // the accent into account while positioning the superscript.
                 if let ParseNode::Accent(ref acc) = **b {
-                    use parser;
-                    if let Some(sym) = parser::is_symbol(&acc.nucleus) {
+                    use parser::is_symbol;
+                    if let Some(sym) = is_symbol(&acc.nucleus) {
                         height = glyph_metrics(sym.unicode).height().scaled(config);
                     }
                 }
@@ -302,9 +300,7 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                     if let Some(sup_sym) = sup.is_symbol() {
                         let bg = glyph_metrics(base_sym.unicode);
                         let sg = glyph_metrics(sup_sym.unicode);
-
                         let kern = superscript_kern(bg, sg, adjust_up).scaled(config);
-
                         sup_kern = base_sym.italics + kern;
                     } else {
                         sup_kern = base_sym.italics;
@@ -323,14 +319,9 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     // variable will describe how far we need to adjust the subscript down.
     if scripts.subscript.is_some() {
         // Use default font values for first iteration of vertical height.
-        adjust_down = SUBSCRIPT_SHIFT_DOWN.scaled(config);
-
-        let depth = -base.depth;
-        let drop_min = SUBSCRIPT_BASELINE_DROP_MIN.scaled(config);
-
-        adjust_down = max!(adjust_down,
-                           sub.height - SUBSCRIPT_TOP_MAX.scaled(config),
-                           drop_min + depth);
+        adjust_down = max!(SUBSCRIPT_SHIFT_DOWN.scaled(config),
+                            sub.height - SUBSCRIPT_TOP_MAX.scaled(config),
+                            SUBSCRIPT_BASELINE_DROP_MIN.scaled(config) - base.depth);
 
         // Provided that the base and subscript are symbols, we apply
         // kerning values found in the kerning font table
@@ -346,14 +337,13 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
             if let (Some(ssym), Some(bsym)) = (sub.is_symbol(), base.is_symbol()) {
                 let bg = glyph_metrics(bsym.unicode);
                 let sg = glyph_metrics(ssym.unicode);
-
                 sub_kern += subscript_kern(bg, sg, adjust_down).scaled(config);
             }
         }
     }
 
     // TODO: lazy gap fix; see BottomMaxWithSubscript
-    if !sub.contents.is_empty() && !sup.contents.is_empty() {
+    if scripts.subscript.is_some() && scripts.superscript.is_some() {
         let sup_bot = adjust_up + sup.depth;
         let sub_top = sub.height - adjust_down;
         let gap_min = SUB_SUPERSCRIPT_GAP_MIN.scaled(config);
@@ -365,25 +355,23 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
     }
 
     let mut contents = builders::VBox::new();
-    if !sup.contents.is_empty() {
+    if scripts.superscript.is_some() {
         if sup_kern != FontUnit::from(0) {
             sup.contents.insert(0, kern!(horz: sup_kern));
             sup.width += sup_kern;
         }
 
         let corrected_adjust = adjust_up - sub.height + adjust_down;
-
         contents.add_node(sup.as_node());
         contents.add_node(kern!(vert: corrected_adjust));
     }
 
     contents.set_offset(adjust_down);
-    if !sub.contents.is_empty() {
+    if scripts.subscript.is_some() { 
         if sub_kern != FontUnit::from(0) {
             sub.contents.insert(0, kern!(horz: sub_kern));
             sub.width += sub_kern;
         }
-
         contents.add_node(sub.as_node());
     }
 
