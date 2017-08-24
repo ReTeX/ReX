@@ -11,7 +11,6 @@ name = "qc"
 path = "bin/qc.rs"
 
 [dependencies]
-stix = { path = "fonts/stix" }
 stix2 = { path = "fonts/stix2" }
 font_types = {path = "fonts/types" }
 static_map = "0.2.0-beta"
