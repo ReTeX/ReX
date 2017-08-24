@@ -625,8 +625,7 @@ fn substack(result: &mut Layout, stack: &Stack, config: LayoutSettings) {
 }
 
 fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
-    // TODO: In some enviornments, like aligned, an additional \jot is added.
-    //let jot          = UNITS_PER_EM / 4;
+    // TODO: let jot = UNITS_PER_EM / 4;
     let strut_height = UNITS_PER_EM / 10 * 7; // \strutbox height = 0.7\baseline
     let strut_depth = UNITS_PER_EM / 10 * 3; // \strutbox depth  = 0.3\baseline
     let row_sep = UNITS_PER_EM / 4;
@@ -639,8 +638,6 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
         return;
     }
 
-    // TODO: investiage making this one large matrix?
-    // Layout each line in the substack, and track which line is the widest
     let mut columns = Vec::with_capacity(num_columns);
     for _ in 0..num_columns {
         columns.push(Vec::with_capacity(num_rows));
@@ -656,35 +653,37 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
         for col_idx in 0..num_columns {
             // layout row element if it exists
             let square = match row.get(col_idx) {
-                Some(r) => layout(r, config),
+                Some(r) => {
+                    // record the max height/width for current row/col
+                    let square = layout(r, config);
+                    row_max = max(square.height, row_max);
+                    max_depth = max(max_depth, -square.depth);
+                    col_widths[col_idx] = max(col_widths[col_idx], square.width);
+                    square
+                },
                 _ => Layout::new(),
             };
 
-            // record max height/width for row/col respectively
-            row_max = max(square.height, row_max);
-            max_depth = max(max_depth, -square.depth);
-            col_widths[col_idx] = max(col_widths[col_idx], square.width);
             columns[col_idx].push(square);
         }
 
         // ensure row height >= strut_height
-        row_heights.push(row_max + max(0.into(), prev_depth - strut_depth));
+        row_heights.push(row_max + prev_depth);
         row_max = strut_height;
-        prev_depth = max_depth;
+        prev_depth = max(0.into(), max_depth - strut_depth);
     }
 
     // TODO: reference row layout here: crl
-    // Construct an hbox of columns, while adding appropriate spacing required
-    // to keep rows aligned and columns centered.
+    // the body of the matrix is an hbox of column vectors.
     let mut hbox = builders::HBox::new();
 
-
-    // Insert the correct delimiters.  If there is none, we insert a null dimiter space here.
-    // Otherwise we will use a scaled variant and add them after we layout the matrix body.
+    // If there are no delimiters, insert a null space.  Otherwise we insert
+    // the delimiters _after_ we have laidout the body of the matrix.
     if array.left_delimiter.is_none() {
         hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
     }
 
+    // layout the body of the matrix
     for (col_idx, col) in columns.into_iter().enumerate() {
         let mut vbox = builders::VBox::new();
         for (row_idx, mut row) in col.into_iter().enumerate() {
@@ -700,15 +699,22 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
                 vbox.add_node(kern![vert: diff]);
             }
 
-            // Add a jot (interrow spacing) between rows.
-            // let row_space = strut_depth;
-            vbox.add_node(row.as_node());
-            if row_idx < num_rows {
+            // add inter-row spacing.  Since vboxes get their depth from the their
+            // last entry, we manually add the depth from the last row if it exceeds
+            // the row_seperation.
+            // FIXME: This should be actual depth, not additional kerning
+            let node = row.as_node();
+            if row_idx + 1 == num_rows {
+                let depth = max(-node.depth, row_sep);
+                vbox.add_node(node);
+                vbox.add_node(kern![vert: depth]);
+            } else {
+                vbox.add_node(node);
                 vbox.add_node(kern![vert: row_sep]);
             }
         }
-        // TODO: verify intercolumn spacing, including first/last lines.
-        // Add column to hbox and insert inter-row spacing as required.
+
+        // add column to matrix body and column seperation spacing except for last one.
         hbox.add_node(vbox.build());
         if col_idx + 1 < num_columns {
             hbox.add_node(kern![horz: column_sep]);
@@ -719,15 +725,14 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
         hbox.add_node(kern![horz: NULL_DELIMITER_SPACE]);
     }
 
-    // TODO: We should make this as a method for LayoutNodes.
-    // TODO: Investigate adding padding to HBox to prevent alloc from new VBox here.
     // TODO: Reference array vertical alignment (optional [bt] arguments)
     // Vertically center the array on axis.
+    // Note: hbox has no depth, so hbox.height is total height.
+    let height = hbox.height;
     let mut vbox = builders::VBox::new();
-    vbox.add_node(hbox.build());
-    let offset = (vbox.height + vbox.depth) / 2 - AXIS_HEIGHT.scaled(config);
+    let offset = height / 2 - AXIS_HEIGHT.scaled(config);
     vbox.set_offset(offset);
-
+    vbox.add_node(hbox.build());
     let vbox = vbox.build();
 
     // Now that we know the layout of the matrix body we can place scaled delimiters
@@ -737,45 +742,27 @@ fn array(result: &mut Layout, array: &Array, config: LayoutSettings) {
         return;
     }
 
-    // TODO: Much of this is taken from `fn delimited`.  Make this DRY.
-    let height = vbox.height;
-    let depth = vbox.depth;
+    // place delimiters in an hbox surrounding the matrix body
     let mut hbox = builders::HBox::new();
-    if max(height, -depth) > DELIMITED_SUB_FORMULA_MIN_HEIGHT / 2 {
-        let axis = AXIS_HEIGHT;
-        let mut clearance = 2 * max(height - axis, axis - depth);
-        clearance = max(DELIMITER_FACTOR * clearance,
-                        height - depth - DELIMITER_SHORT_FALL);
+    let axis = AXIS_HEIGHT.scaled(config);
+    let clearance = max(DELIMITER_FACTOR * height,
+                        height - DELIMITER_SHORT_FALL);
 
-        let axis = AXIS_HEIGHT.scaled(config);
+    if let Some(left) = array.left_delimiter {
+        let left = glyph_metrics(left.unicode)
+            .vert_variant(clearance)
+            .as_layout(config)
+            .centered(axis);
+        hbox.add_node(left);
+    }
 
-        if let Some(left) = array.left_delimiter {
-            let left = glyph_metrics(left.unicode)
-                .vert_variant(clearance)
-                .as_layout(config)
-                .centered(axis);
-            hbox.add_node(left);
-        }
-
-        hbox.add_node(vbox);
-        if let Some(right) = array.right_delimiter {
-            let right = glyph_metrics(right.unicode)
-                .vert_variant(clearance)
-                .as_layout(config)
-                .centered(axis);
-            hbox.add_node(right);
-        }
-    } else {
-        if let Some(left) = array.left_delimiter {
-            let left = glyph_metrics(left.unicode).as_layout(config);
-            hbox.add_node(left);
-        }
-
-        hbox.add_node(vbox);
-        if let Some(right) = array.right_delimiter {
-            let right = glyph_metrics(right.unicode).as_layout(config);
-            hbox.add_node(right);
-        }
+    hbox.add_node(vbox);
+    if let Some(right) = array.right_delimiter {
+        let right = glyph_metrics(right.unicode)
+            .vert_variant(clearance)
+            .as_layout(config)
+            .centered(axis);
+        hbox.add_node(right);
     }
     result.add_node(hbox.build());
 }

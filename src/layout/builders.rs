@@ -62,11 +62,11 @@ macro_rules! vbox {
 
 #[derive(Default)]
 pub struct HBox {
-    width: FontUnit,
-    height: FontUnit,
-    depth: FontUnit,
-    node: HorizontalBox,
-    alignment: Alignment,
+    pub width: FontUnit,
+    pub height: FontUnit,
+    pub depth: FontUnit,
+    pub node: HorizontalBox,
+    pub alignment: Alignment,
 }
 
 impl HBox {
