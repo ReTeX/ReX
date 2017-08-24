@@ -178,101 +178,85 @@ Arrays:
     - \substack{a\\xyz}
   - Description: delimiters should size correctly
     Snippets:
-    - \left(\begin{array}{c}1\\ 1\\ 1\\ 1\\ 1\end{array}\right)
-    - \left\vert\begin{array}{c}1\\ 1\\ 1\\ 1\\ 1\end{array}\right\vert
-    - \left\lbrace\begin{array}{c}1\\ 1\\ 1\\ 1\\ 1\end{array}\right\rbrace
+    - \begin{pmatrix}1\\ 1\\ 1\\ 1\\ 1\end{pmatrix}
+    - \begin{vmatrix}1\\ 1\\ 1\\ 1\\ 1\end{vmatrix}
+    - \begin{Bmatrix}1\\ 1\\ 1\\ 1\\ 1\end{Bmatrix}
+    - \begin{bmatrix}1\\ 1\\ 1\\ 1\\ 1\end{bmatrix}
   - Description: should render
     Snippets:
     - |
-      \begin{array}{ccc}
+      \begin{pmatrix}
         1 & 2 & 3\\
         4 & 5 & 6
-      \end{array}
+      \end{pmatrix}
     - |
-      \begin{array}{c}
+      \begin{pmatrix}
         1 \\
         2 \\
         3 \\
-      \end{array}
+      \end{pmatrix}
     - |
-      \begin{array}{cc}
-      \end{array}
+      \begin{pmatrix}
+      \end{pmatrix}
     - |
-      \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
         0 & 1 \\
         -1 & 0
-      \end{array}
-      \right)
+      \end{pmatrix}
     - |
-      \begin{array}{c}
+      \begin{pmatrix}
         x \\
         abcdef
-      \end{array}
+      \end{pmatrix}
     - |
-      \begin{array}{cc}
+      \begin{pmatrix}
         x & abcdef \\
         abcdef & x
-      \end{array}
+      \end{pmatrix}
     - |
-      \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
         a & b \\
         c & d
-      \end{array}
-      \right)
+      \end{pmatrix}
     - |
-      2 \left(\begin{array}{c}1\\ 2\\ 3\end{array}\right)
-      \cdot\left(\begin{array}{c}1\\ 1\\ -1\end{array}\right)
-      = \left(\begin{array}{c}0\\ 0\\ 0\end{array}\right)
+      2 \begin{pmatrix}1\\ 2\\ 3\end{pmatrix}
+      \cdot\begin{pmatrix}1\\ 1\\ -1\end{pmatrix}
+      = \begin{pmatrix}0\\ 0\\ 0\end{pmatrix}
     - |
-      \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
         a_1 & b_1 \\
         c_1 & d_1
-      \end{array}
-      \right)
+      \end{pmatrix}
 
-      \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
         a_2 & b_2 \\
         c_2 & d_2
-      \end{array}
-      \right)
+      \end{pmatrix}
 
       =
 
-      \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
         a_1 a_2 + b_1 c_2 & a_1 b_2 + b_1 d_2 \\
         c_1 a_2 + d_1 c_2 & c_1 b_2 + d_1 d_2
-      \end{array}
-      \right)
+      \end{pmatrix}
     - |
-      \left(
-      \begin{array}{cc}
-        a & \left(
-      \begin{array}{cc}
+      \begin{pmatrix}
+        a &
+      \begin{pmatrix}
         a & b \\
         c & d
-      \end{array}
-      \right) \\
+      \end{pmatrix} \\
         c & d
-      \end{array}
-      \right)
+      \end{pmatrix}
     - |
       \frac{
-        \left(
-        \begin{array}{cc}
+        \begin{pmatrix}
           a & b \\
           c & d
-        \end{array}
-        \right)
+        \end{pmatrix}
       }{
-        \left(
-        \begin{array}{cc}
+        \begin{pmatrix}
           a & b \\
           c & d
-        \end{array}
-        \right)
+        \end{pmatrix}
       }
