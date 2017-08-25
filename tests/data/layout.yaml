@@ -123,7 +123,7 @@ Samples:
     Snippets:
     - \iint \sqrt{1 + f^2(x,t,t)}\,\mathrm{d}x\mathrm{d}y\mathrm{d}t = \sum \xi(t)
     - \Vert f \Vert_2 = \sqrt{\int f^2(x)\,\mathrm{d}x}
-    - \left.x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}\right\rbrace \mathrm{wat?}
+    - \left.x^{x^{x^x_x}_{x^x_x}}_{x^{x^x_x}_{x^x_x}}\right\} \mathrm{wat?}
     - \hat A\grave A\bar A\tilde A\hat x \grave x\bar x\tilde x\hat y\grave y\bar y\tilde y
     - \mathop{\overbrace{1+2+3+\unicodecdots+n}}\limits^{\mathrm{Arithmatic}} = \frac{n(n+1)}{2}
     - \sigma = \left(\int f^2(x)\,\mathrm{d}x\right)^{1/2}
