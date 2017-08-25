@@ -2524,4 +2524,15 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "\"" => Symbol { unicode: 0x308, atom_type: AtomType::Accent }, // 776
     "~" => Symbol { unicode: 0x303, atom_type: AtomType::Accent }, // 771
     "." => Symbol { unicode: 0x307, atom_type: AtomType::Accent }, // 775 
+
+    // Binary operators shim
+    "circ" => Symbol { unicode: 0x2218, atom_type: AtomType::Binary }, // 8728
+    "bullet" => Symbol { unicode: 0x2219, atom_type: AtomType::Binary }, // 8729
+    "diamond" => Symbol { unicode: 0x22C4, atom_type: AtomType::Binary }, // 8900
+
+    // dots shim
+    "cdots" => Symbol { unicode: 0x22EF, atom_type: AtomType::Alpha }, // 8943
+
+    // Misc symbols shim
+    "|" => Symbol { unicode: 0x2016, atom_type: AtomType::Fence }, // 8214
 };
