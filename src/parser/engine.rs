@@ -409,7 +409,8 @@ fn codepoint_atom_type(codepoint: char) -> Option<AtomType> {
              ']' | ')' | '?' | '!' => AtomType::Close,
              '=' | '<' | '>' | ':' => AtomType::Relation,
              ',' | ';' => AtomType::Punctuation,
-             '|' | '/' | '@' | '.' | '"' => AtomType::Alpha,
+             '|' => AtomType::Fence,
+             '/' | '@' | '.' | '"' => AtomType::Alpha,
              _ => return None,
          })
 }
