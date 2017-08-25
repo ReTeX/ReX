@@ -28,3 +28,5 @@ mod font;
 mod functions;
 
 pub use render::*;
+pub use font_types::fp;
+
