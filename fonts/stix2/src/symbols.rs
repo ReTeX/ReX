@@ -2509,11 +2509,19 @@ pub static SYMBOLS: static_map::Map<&'static str, Symbol> = static_map! {
     "varepsilon" => Symbol { unicode: 0x3F5, atom_type: AtomType::Alpha }, // Unicode: 0x3F5, greek lunate epsilon symbol
     "to" => Symbol { unicode: 0x2192, atom_type: AtomType::Relation }, // Unicode: 0x2192, /rightarrow /to a: rightward arrow
 
-    // SHIM
+    // Symbol escape shim
     "{" => Symbol { unicode: 0x7B, atom_type: AtomType::Open }, // 123
     "}" => Symbol { unicode: 0x7D, atom_type: AtomType::Close }, // 125
     "%" => Symbol { unicode: 0x25, atom_type: AtomType::Ordinal }, // 37
     "&" => Symbol { unicode: 0x26, atom_type: AtomType::Ordinal }, // 38
     "$" => Symbol { unicode: 0x24, atom_type: AtomType::Ordinal }, // 36
     "#" => Symbol { unicode: 0x23, atom_type: AtomType::Ordinal }, // 35
+
+    // Accents shim
+    "`" => Symbol { unicode: 0x300, atom_type: AtomType::Accent }, // 768
+    "'" => Symbol { unicode: 0x301, atom_type: AtomType::Accent }, // 769
+    "^" => Symbol { unicode: 0x302, atom_type: AtomType::Accent }, // 770
+    "\"" => Symbol { unicode: 0x308, atom_type: AtomType::Accent }, // 776
+    "~" => Symbol { unicode: 0x303, atom_type: AtomType::Accent }, // 771
+    "." => Symbol { unicode: 0x307, atom_type: AtomType::Accent }, // 775 
 };

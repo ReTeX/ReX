@@ -99,6 +99,10 @@ Accents:
     Snippets:
     - \hat{A^2} A^2
 
+  - Description: should recognize character escapes
+    Snippets:
+    - \`o\'o\^o\"o\~o\.o
+
 Radicals:
   - Description: should properly scale
     Snippets:
