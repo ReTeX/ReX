@@ -13,7 +13,7 @@ fn main() {
     let font = "rex-xits.otf";
     let output = "test.svg";
 
-    env_logger::init().unwrap();
+    env_logger::init();
     let settings = RenderSettings::default()
         .font_size(96)
         .font_src(font)

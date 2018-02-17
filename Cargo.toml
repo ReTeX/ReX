@@ -6,10 +6,6 @@ authors = [
     "Sebastian Köln <sebk@rynx.org>"
 ]
 
-[[bin]]
-name = "qc"
-path = "bin/qc.rs"
-
 [dependencies]
 stix2 = { path = "fonts/stix2" }
 font_types = {path = "fonts/types" }
@@ -17,11 +13,11 @@ static_map = "0.2.0-beta"
 static_map_macros = "0.2.0-beta"
 serde_derive = "1.0"
 serde = "1.0"
-env_logger = "*"
 
 [dev-dependencies]
 serde_yaml = "0.7"
 bincode = "0.8"
+env_logger = "*"
 
 [dependencies.log]
 version="0.3"
