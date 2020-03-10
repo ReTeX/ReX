@@ -308,7 +308,6 @@ impl Style {
     }
 
     fn font_scale(self) -> FontUnit {
-        use font::constants;
         match self {
             Style::Display | Style::DisplayCramped | Style::Text | Style::TextCramped => {
                 FontUnit::from(1)

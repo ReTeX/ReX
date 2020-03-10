@@ -176,7 +176,7 @@ pub fn command(lex: &mut Lexer, local: Style) -> Result<Option<ParseNode>> {
     }
 }
 
-/// Parse an implicit group.  For example `\left ... \right` is an implicit group.
+/// Parse an implicit group.  For example `\left ..= \right` is an implicit group.
 /// This is one point where we will deviate from TeX a little bit.  We won't
 /// characterize every command that will start a new implicit group
 /// (for instance, `\frac`).
@@ -403,7 +403,7 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>> {
 /// negatives when used for other things.
 fn codepoint_atom_type(codepoint: char) -> Option<AtomType> {
     Some(match codepoint {
-             'a'...'z' | 'A'...'Z' | '0'...'9' | 'Α'...'Ω' | 'α'...'ω' => AtomType::Alpha,
+             'a'..='z' | 'A'..='Z' | '0'..='9' | 'Α'..='Ω' | 'α'..='ω' => AtomType::Alpha,
              '*' | '+' | '-' => AtomType::Binary,
              '[' | '(' => AtomType::Open,
              ']' | ')' | '?' | '!' => AtomType::Close,
