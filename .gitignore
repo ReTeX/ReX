@@ -4,13 +4,15 @@ Cargo.lock
 
 *.swp
 
+# IDE configs
+.idea/
+.vscode/
+
 # Potential products from TeX while testing
 *.pdf
 *.log
 *.aux
 *.iml
-
-.vscode
 
 # Product of `qc` binary
 test.svg
