@@ -1,11 +1,11 @@
-use dimensions::Unit;
-use layout::Style;
-use font::Symbol;
-use error::Error;
-use super::color::RGBA;
-use environments::Array;
+use crate::dimensions::Unit;
+use crate::layout::Style;
+use crate::font::Symbol;
+use crate::font::AtomType;
 
-use font::AtomType;
+use crate::error::Error;
+use super::color::RGBA;
+use crate::environments::Array;
 
 // TODO: It might be worth letting the `Group` variant
 //   to have an atomtype associated with it.  By default,

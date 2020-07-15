@@ -1,13 +1,13 @@
 pub mod svg;
 pub use self::svg::SVGRenderer;
 
-use error::Error;
-use font::FontUnit;
-use dimensions::Float;
-use layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
-use parser::parse;
-use parser::color::RGBA;
-use layout::engine::layout;
+use crate::error::Error;
+use crate::font::FontUnit;
+use crate::dimensions::Float;
+use crate::layout::{LayoutNode, LayoutVariant, Alignment, Style, LayoutSettings};
+use crate::parser::parse;
+use crate::parser::color::RGBA;
+use crate::layout::engine::layout;
 
 const HBOX_COLOR: &str = "blue";
 const VBOX_COLOR: &str = "red";

@@ -1,8 +1,8 @@
-use lexer::OwnedToken;
 use std::error;
 use std::fmt;
-use font::AtomType;
-use font::Symbol;
+use crate::lexer::OwnedToken;
+use crate::font::AtomType;
+use crate::font::Symbol;
 
 pub type Result<T> = ::std::result::Result<T, Error>;
 

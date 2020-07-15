@@ -1,6 +1,6 @@
-use font::{AtomType, FontUnit};
-use font::constants::UNITS_PER_EM;
-use layout::Style;
+use crate::font::{AtomType, FontUnit};
+use crate::font::constants::UNITS_PER_EM;
+use crate::layout::Style;
 
 pub fn atom_space(left: AtomType, right: AtomType, style: Style) -> Spacing {
     if style >= Style::TextCramped {

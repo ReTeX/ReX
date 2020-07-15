@@ -1,13 +1,13 @@
-use lexer::Lexer;
-use lexer::Token;
-use font::Style;
-use parser;
+use crate::lexer::Lexer;
+use crate::lexer::Token;
+use crate::font::Style;
+use crate::parser;
 use parser::optional_argument_with;
 use parser::required_argument_with;
 use parser::ParseNode;
-use error::{Result, Error};
-use font::Symbol;
-use font::AtomType;
+use crate::error::{Result, Error};
+use crate::font::Symbol;
+use crate::font::AtomType;
 
 /// An enumeration of recognized enviornmnets.
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
