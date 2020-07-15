@@ -1,7 +1,7 @@
 use std::fmt;
-use dimensions::Unit;
-use parser::color::RGBA;
-use error::Error;
+use crate::dimensions::Unit;
+use crate::parser::color::RGBA;
+use crate::error::Error;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Token<'a> {
@@ -272,7 +272,7 @@ impl<'a> From<Token<'a>> for OwnedToken {
 
 #[cfg(test)]
 mod tests {
-    use lexer::{Lexer, Token};
+    use crate::lexer::{Lexer, Token};
 
     #[test]
     fn lex_tokens() {

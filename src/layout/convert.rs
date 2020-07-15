@@ -2,16 +2,16 @@
 use std::convert::From;
 use std::ops::Mul;
 
-use font;
+use crate::font;
 use font::constants;
 use font::{Direction, Glyph, VariantGlyph, FontUnit};
-use dimensions::Unit;
-use layout::LayoutSettings;
+use crate::dimensions::Unit;
+use crate::layout::LayoutSettings;
 
 use super::Style;
 use super::builders;
 use super::{LayoutNode, LayoutVariant, LayoutGlyph};
-use parser::nodes::Rule;
+use crate::parser::nodes::Rule;
 
 pub trait AsLayoutNode {
     fn as_layout(&self, config: LayoutSettings) -> LayoutNode;
@@ -109,7 +109,7 @@ fn scale<T>(n: T, config: LayoutSettings) -> FontUnit
 }
 
 pub trait Scaled {
-    fn scaled(self, LayoutSettings) -> FontUnit;
+    fn scaled(self, config: LayoutSettings) -> FontUnit;
 }
 
 impl Scaled for FontUnit {

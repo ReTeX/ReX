@@ -21,9 +21,9 @@ mod convert;
 pub mod engine;
 pub mod spacing;
 
-use parser::color::RGBA;
-use font::constants;
-use font::FontUnit;
+use crate::parser::color::RGBA;
+use crate::font::constants;
+use crate::font::FontUnit;
 use std::ops::Deref;
 use std::fmt;
 use std::cmp::{max, min};
@@ -308,7 +308,6 @@ impl Style {
     }
 
     fn font_scale(self) -> FontUnit {
-        use font::constants;
         match self {
             Style::Display | Style::DisplayCramped | Style::Text | Style::TextCramped => {
                 FontUnit::from(1)

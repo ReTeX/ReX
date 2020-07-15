@@ -334,7 +334,7 @@ fn max_overlap(left: FontUnit, right: &GlyphPart) -> FontUnit {
 #[cfg(test)]
 mod tests {
     use super::Variant;
-    use font::glyph_metrics;
+    use crate::font::glyph_metrics;
 
     #[test]
     fn can_find_successor() {

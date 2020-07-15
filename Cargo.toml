@@ -5,6 +5,8 @@ authors = [
     "Christopher Breeden <github@u.breeden.cc>",
     "Sebastian Köln <sebk@rynx.org>"
 ]
+edition = '2018'
+
 
 [dependencies]
 stix2 = { path = "fonts/stix2" }
@@ -13,6 +15,7 @@ static_map = "0.2.0-beta"
 static_map_macros = "0.2.0-beta"
 serde_derive = "1.0"
 serde = "1.0"
+env_logger = "0.7"
 
 [dev-dependencies]
 serde_yaml = "0.7"
@@ -22,3 +25,6 @@ env_logger = "*"
 [dependencies.log]
 version="0.3"
 features = [ "release_max_level_warn" ]
+
+[[bin]]	
+name = "rex"

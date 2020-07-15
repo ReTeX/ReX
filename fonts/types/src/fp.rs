@@ -2,9 +2,12 @@ use std::ops::*;
 use std::fmt::{Formatter, Display, Debug, Error};
 
 const FRACTION_BITS: u8 = 8;
+#[allow(dead_code)]
 const FRACTION_MASK: i32 = 0xFF;
 const FRACTION_VALUE: i32 = 256;
+#[allow(dead_code)]
 const SIGN_MASK: u32 = 0x8000_0000;
+#[allow(dead_code)]
 const INT_BITS: u8 = 24;
 const BIT_VALUE: f64 = 0.00390625;
 

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 use super::{VerticalBox, HorizontalBox, LayoutNode, LayoutVariant, Alignment};
-use font::FontUnit;
+use crate::font::FontUnit;
 use std::cmp::{max, min};
 
 #[derive(Default)]
@@ -133,7 +133,7 @@ macro_rules! hbox {
 
 macro_rules! rule {
     (width: $width:expr, height: $height:expr) => (
-        rule!(width: $width, height: $height, depth: ::font::FontUnit::default())
+        rule!(width: $width, height: $height, depth: crate::font::FontUnit::default())
     );
 
     (width: $width:expr, height: $height:expr, depth: $depth:expr) => (
@@ -149,9 +149,9 @@ macro_rules! rule {
 macro_rules! kern {
     (vert: $height:expr) => (
         LayoutNode {
-            width:  ::font::FontUnit::default(),
+            width:  crate::font::FontUnit::default(),
             height: $height,
-            depth:  ::font::FontUnit::default(),
+            depth:  crate::font::FontUnit::default(),
             node:   LayoutVariant::Kern,
         }
     );
@@ -159,8 +159,8 @@ macro_rules! kern {
     (horz: $width:expr) => (
         LayoutNode {
             width:   $width,
-            height: ::font::FontUnit::default(),
-            depth:  ::font::FontUnit::default(),
+            height: crate::font::FontUnit::default(),
+            depth:  crate::font::FontUnit::default(),
             node:   LayoutVariant::Kern,
         }
     );

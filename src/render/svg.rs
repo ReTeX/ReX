@@ -1,13 +1,13 @@
-use dimensions::Float;
-use font::FontUnit;
-use font::constants::UNITS_PER_EM;
-use parser::color::RGBA;
-use render::{Renderer, RenderSettings, Cursor};
+use crate::dimensions::Float;
+use crate::font::FontUnit;
+use crate::font::constants::UNITS_PER_EM;
+use crate::parser::color::RGBA;
+use crate::render::{Renderer, RenderSettings, Cursor};
 use std::io::Write;
 use std::fs::File;
 use std::path::Path;
 use std::marker::PhantomData;
-use error::Error;
+use crate::error::Error;
 
 pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input: &str) {
     render_to_file(&mut File::create(path.as_ref()).expect("could not create file"),
@@ -16,8 +16,6 @@ pub fn render_to_path<P: AsRef<Path>>(path: P, settings: &RenderSettings, input:
 }
 
 pub fn render_to_file(file: &mut File, settings: &RenderSettings, input: &str) {
-    use std::io::Write;
-
     let s: Vec<u8> = SVGRenderer::new(&settings)
         .render(input)
         .expect("failed to render");

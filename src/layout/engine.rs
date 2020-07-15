@@ -4,18 +4,18 @@ use super::builders;
 use super::convert::AsLayoutNode;
 use super::{Alignment, Layout, LayoutNode, LayoutSettings, LayoutVariant, Style, ColorChange};
 
-use font;
-use font::constants::*;
-use font::glyph_metrics;
-use font::kerning::{superscript_kern, subscript_kern};
-use font::variant::Variant;
-use font::{AtomType, Symbol, VariantGlyph, FontUnit};
-use layout;
-use layout::convert::Scaled;
-use layout::spacing::{atom_space, Spacing};
-use parser::nodes::{BarThickness, MathStyle, ParseNode, Accent, Delimited, GenFraction, Radical,
+use crate::font;
+use crate::font::constants::*;
+use crate::font::glyph_metrics;
+use crate::font::kerning::{superscript_kern, subscript_kern};
+use crate::font::variant::Variant;
+use crate::font::{AtomType, Symbol, VariantGlyph, FontUnit};
+use crate::layout;
+use crate::layout::convert::Scaled;
+use crate::layout::spacing::{atom_space, Spacing};
+use crate::parser::nodes::{BarThickness, MathStyle, ParseNode, Accent, Delimited, GenFraction, Radical,
                     Scripts, Stack};
-use environments::Array;
+use crate::environments::Array;
 
 /// Entry point to our recursive algorithm
 pub fn layout(nodes: &[ParseNode], config: LayoutSettings) -> Layout {
@@ -289,7 +289,7 @@ fn scripts(result: &mut Layout, scripts: &Scripts, config: LayoutSettings) {
                 // For accents whose base is a simple symbol we do not take
                 // the accent into account while positioning the superscript.
                 if let ParseNode::Accent(ref acc) = **b {
-                    use parser::is_symbol;
+                    use crate::parser::is_symbol;
                     if let Some(sym) = is_symbol(&acc.nucleus) {
                         height = glyph_metrics(sym.unicode).height().scaled(config);
                     }

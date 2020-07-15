@@ -1,15 +1,17 @@
-use dimensions::Unit;
-use font::{Weight, Family, Symbol, AtomType};
-use font::Style;
-use font::style::style_symbol;
-use layout::Style as LayoutStyle;
-use lexer::{Lexer, Token};
-use parser as parse;
-use parser::nodes::{ParseNode, Radical, MathStyle, GenFraction, Rule, BarThickness, AtomChange,
+use crate::dimensions::Unit;
+use crate::font::{Weight, Family, Symbol, AtomType};
+use crate::font::Style;
+use crate::font::style::style_symbol;
+use crate::layout::Style as LayoutStyle;
+use crate::lexer::{Lexer, Token};
+use crate::parser as parse;
+use crate::parser::nodes::{ParseNode, Radical, MathStyle, GenFraction, Rule, BarThickness, AtomChange,
                     Color, Stack};
-use parser::color::RGBA;
+use crate::parser::color::RGBA;
+use crate::error::{Error, Result};
+
 use static_map;
-use error::{Error, Result};
+
 
 macro_rules! sym {
     (@at ord) => { AtomType::Ordinal };

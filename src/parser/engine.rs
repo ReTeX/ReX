@@ -1,15 +1,15 @@
-use dimensions::Unit;
-use error::{Error, Result};
-use font::Style;
-use font::style::style_symbol;
-use font::Symbol;
-use font::symbols::SYMBOLS;
-use lexer::{Lexer, Token};
-use parser::nodes::{Delimited, ParseNode, Accent, Scripts};
-use parser::color::RGBA;
-use font::AtomType;
-use functions::COMMANDS;
-use environments::Environment;
+use crate::dimensions::Unit;
+use crate::error::{Error, Result};
+use crate::font::Style;
+use crate::font::style::style_symbol;
+use crate::font::Symbol;
+use crate::font::symbols::SYMBOLS;
+use crate::lexer::{Lexer, Token};
+use crate::parser::nodes::{Delimited, ParseNode, Accent, Scripts};
+use crate::parser::color::RGBA;
+use crate::font::AtomType;
+use crate::functions::COMMANDS;
+use crate::environments::Environment;
 
 pub fn expression_until_opt(lex: &mut Lexer, local: Style, end: Option<Token>) -> Result<Vec<ParseNode>> {
     let mut ml: Vec<ParseNode> = Vec::new();
@@ -136,7 +136,7 @@ fn postfix(lex: &mut Lexer,
 /// Theses commands may change the state of the parser.  This includes
 /// font style and weight changes.
 pub fn state_change(lex: &mut Lexer, style: Style) -> Result<Option<Vec<ParseNode>>> {
-    use font::Family;
+    use crate::font::Family;
     if let Token::Command(cmd) = lex.current {
         let new_style = match cmd {
             "mathbf" => style.with_bold(),
@@ -374,7 +374,7 @@ pub fn dimension(_: &mut Lexer, _: Style) -> Result<Unit> {
 // TODO: implement parsing for other formats.
 pub fn color(lex: &mut Lexer, _: Style) -> Result<RGBA> {
     let color_str = lex.alphanumeric();
-    let color = ::parser::color::COLOR_MAP
+    let color = crate::parser::color::COLOR_MAP
         .get(color_str)
         .ok_or_else(|| Error::UnrecognizedColor(color_str.into()))?;
     Ok(*color)
@@ -403,7 +403,7 @@ pub fn parse(input: &str) -> Result<Vec<ParseNode>> {
 /// negatives when used for other things.
 fn codepoint_atom_type(codepoint: char) -> Option<AtomType> {
     Some(match codepoint {
-             'a'...'z' | 'A'...'Z' | '0'...'9' | 'Α'...'Ω' | 'α'...'ω' => AtomType::Alpha,
+             'a'..='z' | 'A'..='Z' | '0'..='9' | 'Α'..='Ω' | 'α'..='ω' => AtomType::Alpha,
              '*' | '+' | '-' => AtomType::Binary,
              '[' | '(' => AtomType::Open,
              ']' | ')' | '?' | '!' => AtomType::Close,
@@ -421,7 +421,7 @@ fn codepoint_atom_type(codepoint: char) -> Option<AtomType> {
 
 #[cfg(test)]
 mod tests {
-    use parser::parse;
+    use crate::parser::parse;
 
     #[test]
     fn fractions() {
